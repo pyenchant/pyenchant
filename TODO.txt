@@ -1,10 +1,20 @@
 
 
-  * find a way to avoid using the registry to record dict locations
-  * move to aspell for windows installer backend if possible
+PyEnchant:
+
   * test unicode support, hopefully get help from a user who speaks
     a language requiring Unicode
   * implement a tkSpellCheckerDialog to compliment the wx one
   * Expand CmdLineChecker and make it ispell-compatible
   * regression tests: Dict, Broker, DictWithPWL
+  * add __version__ attribute
+
+  
+Enchant:
+
+  * watch for new release of enchant, which will extend the API to
+    include "list_dicts" functionality (this is in CVS already)
+  * find a way to avoid using the registry to record dict locations
+  * move to aspell for windows installer backend if possible
+   
 
