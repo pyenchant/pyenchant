@@ -196,7 +196,7 @@ class Broker(_EnchantObject):
     def _raise_error(self,default="Unspecified Error: No Information Available"):
         """Overrides _EnchantObject._raise_error to check broker errors."""
         err = _e.enchant_broker_get_error(self._this)
-        if err == "":
+        if err == "" or err is None:
             raise Error(default)
         raise Error(err)
 
@@ -426,7 +426,7 @@ class Dict(_EnchantObject):
     def _raise_error(self,default="Unspecified Error: No Information Available"):
         """Overrides _EnchantObject._raise_error to check dict errors."""
         err = _e.enchant_dict_get_error(self._this)
-        if err == "":
+        if err == "" or err is None:
             raise Error(default)
         raise Error(err)
 
