@@ -158,6 +158,31 @@ class SpellChecker:
         if text.typecode == 'u':
             return text.tounicode()
         return text.tostring()
+
+    def wants_unicode(self):
+        """Check whether the checker wants unicode strings.
+        This method will return True if the checker wants unicode strings
+        as input, False if it wants normal strings.  It's important to
+	provide the correct type of string to the checker.
+	"""
+        if self._text.typecode == 'u':
+            return True
+        return False
+
+    def coerce_string(self,text,enc="utf-8"):
+        """Coerce string into the required type.
+        This method can be used to automatically ensure that strings
+        are of the correct type required by this checker - either unicode
+        or standard.  If there is a mis-match, conversion is done using
+        utf-8 encoding unless another encoding is specified.
+        """
+        if self.wants_unicode():
+            if not isinstance(text,unicode):
+                return text.decode(enc)
+            return text
+        if not isinstance(text,str):
+            return text.encode(enc)
+        return text
         
     def next(self):
         """Process text up to the next spelling error.
