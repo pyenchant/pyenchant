@@ -756,7 +756,10 @@ def _test():
     pwlFile = file(pwlFileNm,"r")
     assert("Flagen\n" in pwlFile.readlines())
     pwlFile.close()
-    os.remove(pwlFileNm)
+    try:
+        os.remove(pwlFileNm)
+    except:
+        pass
         
     print "ALL TESTS PASSED"
     
