@@ -1,6 +1,6 @@
 # pyenchant
 #
-# Copyright (C) 2004 Ryan Kelly
+# Copyright (C) 2004-2005, Ryan Kelly
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -41,7 +41,7 @@
     example:
 
         >>> import enchant
-        >>> d = enchant.Dict("en")   # create dictionary for English language
+        >>> d = enchant.Dict("en_US")   # create dictionary for US English
         >>> d.check("enchant")
         True
         >>> d.check("enchnt")
@@ -52,15 +52,13 @@
     Languages are identified by standard string tags such as "en" (English)
     and "fr" (French).  Specific language dialects can be specified by
     including an additional code - for example, "en_AU" refers to Australian
-    English.
+    English.  The later form is preferred as it is more widely supported.
 
     To check whether a dictionary exists for a given language, the function
     'dict_exists' is available.  Dictionaries may also be created using the
-    function 'request_dict', and the associated system resources freed when
-    they are no longer required by using 'free_dict'.  This is of course
-    done automatically when 'Dict' objects are garbage collected.
+    function 'request_dict'.
 
-    A finer degree of control over the dictionaries and how they are used
+    A finer degree of control over the dictionaries and how they are created
     can be obtained using one or more 'Broker' objects.  These objects are
     responsible for locating dictionaries for a specific language.
     
@@ -159,6 +157,13 @@ class Broker(_EnchantObject):
 
     """
 
+    # Because of the way the underlying enchant library caches dictionary
+    # objects, it's dangerous to free dictionaries when more than one has
+    # been created for the same language.  To work around this transparently,
+    # keep track of how many Dicts have been created for each language.
+    # Only call the underlying dict_free when this reaches zero.  This is
+    # done in the __live_dicts attribute.
+
     def __init__(self):
         """Broker object constructor.
         
@@ -169,12 +174,13 @@ class Broker(_EnchantObject):
         self._this = _e.enchant_broker_init()
         if not self._this:
             raise Error("Could not initialise an enchant broker.")
+        self.__live_dicts = {}
 
     def __del__(self):
         """Broker object destructor."""
-        # Calling free() might fail if python is shutting down
+        # Calling _free() might fail if python is shutting down
         try:
-            self.free()
+            self._free()
         except AttributeError:
             pass
             
@@ -184,9 +190,8 @@ class Broker(_EnchantObject):
         if err == "":
             raise Error(default)
         raise Error(err)
-    
 
-    def free(self):
+    def _free(self):
         """Free system resource associated with a Broker object.
         
         This method can be called to free the underlying system resources
@@ -197,7 +202,30 @@ class Broker(_EnchantObject):
         if self._this is not None:
             _e.enchant_broker_free(self._this)
             self._this = None
+            self.__live_dicts.clear()
+            
+    def __inc_live_dicts(self,tag):
+        """Increment the count of live Dict objects for the given tag.
+        Returns the new count of live Dicts.
+        """
+        try:
+            self.__live_dicts[tag] += 1
+        except KeyError:
+            self.__live_dicts[tag] = 1
+        assert(self.__live_dicts[tag] > 0)
+        return self.__live_dicts[tag]
 
+    def __dec_live_dicts(self,tag):
+        """Decrement the count of live Dict objects for the given tag.
+        Returns the new count of live Dicts.
+        """
+        try:
+            self.__live_dicts[tag] -= 1
+        except KeyError:
+            self.__live_dicts[tag] = 0
+        assert(self.__live_dicts[tag] >= 0)
+        return self.__live_dicts[tag]
+        
     def request_dict(self,tag):
         """Request a Dict object for the language specified by 'tag'.
         
@@ -207,12 +235,21 @@ class Broker(_EnchantObject):
         (Australian English).  The existence of a specific language can
         be tested using the 'dict_exists' method.
         """
+        new_dict = self._request_dict_data(tag)
+        return Dict(None,self,new_dict)
+
+    def _request_dict_data(self,tag):
+        """Request raw C-object data for a dictionary.
+        This method passed on the call to the C library, and does
+        some internal bookkeeping.
+        """
         self._check_this()
         new_dict = _e.enchant_broker_request_dict(self._this,tag)
         if new_dict is None:
             eStr = "Dictionary for language '%s' could not be found"
             self._raise_error(eStr % (tag,))
-        return Dict(None,self,new_dict)
+        self.__inc_live_dicts(tag)
+        return new_dict
 
     def request_pwl_dict(self,pwl):
         """Request a Dict object for a personal word list.
@@ -228,20 +265,19 @@ class Broker(_EnchantObject):
             eStr = "Personal Word List file '%s' could not be loaded"
             self._raise_error(eStr % (pwl,))
             self._raise_error(eStr)
+        self.__inc_live_dicts(tag)
         return Dict(None,self,new_dict)
 
-    def free_dict(self,dict):
+    def _free_dict(self,dict):
         """Free memory associated with a dictionary.
         
         This method frees system resources associated with a Dict object.
         It is equivalent to calling the object's 'free' method.  Once this
         method has been called on a dictionary, it must not be used again.
         """
-        ## TODO: freeing dictionaries breaks the caching that enchant
-        ##       does when using multiple dicts for the same thing. Dont
-        ##       do it until we figure out a solution
         self._check_this()
-        #_e.enchant_broker_free_dict(self._this,dict._this)
+        if self.__dec_live_dicts(dict.tag) == 0:
+            _e.enchant_broker_free_dict(self._this,dict._this)
         dict._this = None
         dict._broker = None
 
@@ -351,11 +387,8 @@ class Dict(_EnchantObject):
             broker = _broker
         # Create data if not given
         if data is None:
-            data = _e.enchant_broker_request_dict(broker._this,tag)
-            if data is None:
-                eStr = "Dictionary for language '%s' could not be found"
-                broker._raise_error(eStr % (tag,))
-        self._this = data
+            data = broker._request_dict_data(tag)
+            self._this = data
         self._broker = broker
         # Set instance-level description attributes
         desc = self.__describe(check_this=False)
@@ -366,7 +399,7 @@ class Dict(_EnchantObject):
         """Dict object constructor."""
         # Calling free() might fail if python is shutting down
         try:
-            self.free()
+            self._free()
         except AttributeError:
             pass
             
@@ -388,7 +421,7 @@ class Dict(_EnchantObject):
             raise Error(default)
         raise Error(err)
 
-    def free(self):
+    def _free(self):
         """Free the system resources associated with a Dict object.
         
         This method frees underlying system resources for a Dict object.
@@ -396,7 +429,7 @@ class Dict(_EnchantObject):
         It is called automatically when the object is garbage collected.
         """
         if self._broker is not None:
-            self._broker.free_dict(self)
+            self._broker._free_dict(self)
 
     def check(self,word):
         """Check spelling of a word.
@@ -542,14 +575,14 @@ class DictWithPWL(Dict):
     def _check_this(self,msg=None):
        """Extend Dict._check_this() to check PWL validity."""
        if self.pwl is None:
-           self.free()
+           self._free()
        Dict._check_this(self,msg)
        self.pwl._check_this(msg)
 
-    def free(self):
+    def _free(self):
         """Extend Dict.free() to free the PWL as well."""
         if self.pwl is not None:
-            self.pwl.free()
+            self.pwl._free()
             self.pwl = None
         Dict.free(self)
         
@@ -584,7 +617,6 @@ class DictWithPWL(Dict):
 _broker = Broker()
 request_dict = _broker.request_dict
 request_pwl_dict = _broker.request_pwl_dict
-free_dict = _broker.free_dict
 dict_exists = _broker.dict_exists
 
 
