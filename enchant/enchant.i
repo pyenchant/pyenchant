@@ -76,7 +76,7 @@ typedef unsigned long size_t;
             PyList_SetItem(suggs_list,i,tmp_str);
         }
         if(suggs != NULL) {
-            enchant_dict_free_suggestions(dict,suggs);
+            enchant_dict_free_string_list(dict,suggs);
         }
         return suggs_list;
     }
@@ -109,6 +109,12 @@ typedef unsigned long size_t;
                               (void*)py_callback);
     }
 
+    /*  Wrap enchant_broker_list_dicts to take Python callables  */
+    void enchant_broker_list_dicts_py(EnchantBroker *broker,PyObject *py_callback)
+    {
+        enchant_broker_list_dicts(broker,enchant_dict_describe_pycb,
+                                  (void*)py_callback);
+    }
 
     /*  Allow Python callables to be used in encant_broker_describe  */
     /*  The user_data pointer is used to pass the PyObject           */

@@ -31,7 +31,7 @@
 #ifndef ENCHANT_H
 #define ENCHANT_H
 
-/* for size_t */
+/* for size_t, ssize_t */
 #include <sys/types.h>
 
 #ifdef __cplusplus
@@ -93,25 +93,33 @@ ENCHANT_MODULE_EXPORT (void)
 			      void * user_data);
 
 ENCHANT_MODULE_EXPORT (int)
-     enchant_dict_check (EnchantDict * dict, const char *const word, size_t len);
+     enchant_dict_check (EnchantDict * dict, const char *const word, ssize_t len);
 ENCHANT_MODULE_EXPORT (char **)
      enchant_dict_suggest (EnchantDict * dict, const char *const word,
-			   size_t len, size_t * out_n_suggs);
-ENCHANT_MODULE_EXPORT (void)
-     enchant_dict_add_to_personal (EnchantDict * dict, const char *const word,
-				   size_t len);
+			   ssize_t len, size_t * out_n_suggs);
 ENCHANT_MODULE_EXPORT (void)
      enchant_dict_add_to_session (EnchantDict * dict, const char *const word,
-				  size_t len);
+				  ssize_t len);
 ENCHANT_MODULE_EXPORT (int)
      enchant_dict_is_in_session (EnchantDict * dict, const char *const word,
-				 size_t len);
+				 ssize_t len);
 ENCHANT_MODULE_EXPORT (void)
      enchant_dict_store_replacement (EnchantDict * dict,
-				     const char *const mis, size_t mis_len,
-				     const char *const cor, size_t cor_len);
+				     const char *const mis, ssize_t mis_len,
+				     const char *const cor, ssize_t cor_len);
+ENCHANT_MODULE_EXPORT (void)
+     enchant_dict_add_to_pwl (EnchantDict * dict, const char *const word,
+			      ssize_t len);
+ENCHANT_MODULE_EXPORT (void)
+	     enchant_dict_free_string_list (EnchantDict * dict, char **string_list);
+
+#ifndef ENCHANT_DISABLE_DEPRECATED
 ENCHANT_MODULE_EXPORT (void)
      enchant_dict_free_suggestions (EnchantDict * dict, char **suggestions);
+ENCHANT_MODULE_EXPORT (void)
+     enchant_dict_add_to_personal (EnchantDict * dict, const char *const word,
+				   ssize_t len);
+#endif /* ENCHANT_DISABLE_DEPRECATED */
 
 /* const */
 ENCHANT_MODULE_EXPORT(char *)
@@ -137,6 +145,11 @@ ENCHANT_MODULE_EXPORT (void)
      enchant_dict_describe (EnchantDict * dict,
 			    EnchantDictDescribeFn fn,
 			    void * user_data);
+
+ENCHANT_MODULE_EXPORT (void)
+     enchant_broker_list_dicts (EnchantBroker * broker,
+				EnchantDictDescribeFn fn,
+				void * user_data);
 
 #ifdef __cplusplus
 }

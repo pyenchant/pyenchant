@@ -7,13 +7,16 @@ PyEnchant:
   * implement a tkSpellCheckerDialog to compliment the wx one
   * Expand CmdLineChecker and make it ispell-compatible
   * regression tests: Dict, Broker, DictWithPWL
-  * add __version__ attribute
+  * Mark Dict.add_to_personal as deprecated sometime in future
+  * better registry handling:
+      - save into HKEY_LOCAL_USER rather than HKEY_LOCAL_MACHINE
+      - remove on module unload by creating a dummy object with
+        a destructor and saving in module scope
+      - patch enchant to look in HKEY_LOCAL_USER
 
   
 Enchant:
 
-  * watch for new release of enchant, which will extend the API to
-    include "list_dicts" functionality (this is in CVS already)
   * find a way to avoid using the registry to record dict locations
   * move to aspell for windows installer backend if possible
    

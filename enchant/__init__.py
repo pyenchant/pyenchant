@@ -339,8 +339,48 @@ class Broker(_EnchantObject):
         desc = desc.decode("utf-8")
         file = file.decode("utf-8")
         self.__describe_result.append((name,desc,file))
-
-
+        
+    def list_dicts(self):
+        """Return list of available dictionaries.
+        
+        This method returns a list of dictionaries available to the
+        broker.  Each entry in the list if a two-tuple of the form:
+            
+            (tag,provider)
+            
+        where <tag> is the language lag for the dictionary and
+        <provider> is a ProviderDesc object describing the provider
+        through which that dictionary can be obtained.
+        """
+        self._check_this()
+        self.__list_dicts_result = []
+        _e.enchant_broker_list_dicts_py(self._this,self.__list_dicts_callback)
+        return [ (r[0],ProviderDesc(*r[1])) for r in self.__list_dicts_result]
+    
+    def __list_dicts_callback(self,tag,name,desc,file):
+        """Collector callback for listing dictionaries.
+        
+        This method is used as a callback into the _enchant function
+        'enchant_broker_list_dicts_py'.  It collects the given arguments into
+        an appropriate tuple and appends them to '__list_dicts_result'.
+        """
+        name = name.decode("utf-8")
+        desc = desc.decode("utf-8")
+        file = file.decode("utf-8")
+        self.__list_dicts_result.append((tag,(name,desc,file)))
+        
+    def list_languages(self):
+        """List languages for which dictionaries are available.
+        
+        This function returns a list of language tags for which a
+        dictionary is available.
+        """
+        langs = []
+        for (tag,prov) in self.list_dicts():
+            if tag not in langs:
+                langs.append(tag)
+        return langs
+        
 
 class Dict(_EnchantObject):
     """Dictionary object for the Enchant spellchecker.
@@ -476,13 +516,27 @@ class Dict(_EnchantObject):
         return suggs
 
     def add_to_personal(self,word):
-        """Add a word to the user's personal dictionary."""
+        """Add a word to the user's personal dictionary.
+        
+        NOTE: this method is being deprecated in favour of
+        add_to_pwl.  Please fix references to this method ASAP.
+        
+        """
         self._check_this()
         if type(word) == unicode:
             inWord = word.encode("utf-8")
         else:
             inWord = word
         _e.enchant_dict_add_to_personal(self._this,inWord,len(inWord))
+
+    def add_to_pwl(self,word):
+        """Add a word to the user's personal dictionary."""
+        self._check_this()
+        if type(word) == unicode:
+            inWord = word.encode("utf-8")
+        else:
+            inWord = word
+        _e.enchant_dict_add_to_pwl(self._this,inWord,len(inWord))
 
     def add_to_session(self,word):
         """Add a word to the session list."""
@@ -638,5 +692,7 @@ _broker = Broker()
 request_dict = _broker.request_dict
 request_pwl_dict = _broker.request_pwl_dict
 dict_exists = _broker.dict_exists
+list_dicts = _broker.list_dicts
+list_languages = _broker.list_languages
 
 
