@@ -630,7 +630,7 @@ if len(_broker.describe()) == 0:
         del utils
         _broker = Broker()
 if len(_broker.describe()) == 0:
-    warnings.warn("PyEnchant: no dictionary providers are available.")
+    warnings.warn("No dictionary providers are available.")
 
 
 ##  Create a module-level default broker object, and make its important
