@@ -13,12 +13,8 @@ import os
 # Location of the windows binaries, if available
 WINDEPS = ".\\tools\\pyenchant-bdist-win32-sources\\build"
 
-#  Obtain version information from module
-try:
-    import enchant
-except ImportError:
-    pass
-VERSION = sys.modules["enchant"].__version__
+#  Cant obtain version information from module, must hardcode
+VERSION = "1.1.2"
 
 # Package MetaData
 NAME = "pyenchant"
