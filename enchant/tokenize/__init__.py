@@ -91,7 +91,7 @@ class Error(enchant.Error):
     """
     pass
 
-def get_tokenizer(tag):
+def get_tokenizer(tag,fallback=False):
     """Lookup an appropriate tokenizer by language tag.
     This requires importing the function 'tokenize' from an
     appropriate module.  Modules tried are named after the
@@ -99,6 +99,9 @@ def get_tokenizer(tag):
         * the entire tag (e.g. "en_AU.py")
         * the base country code of the tag (e.g. "en.py")
     If a suitable function cannot be found, raises Error.
+    If the optional argument <fallback> is True, languages for which
+    a tokeniser cannot be found have the English tokeniser returned.
+    It should do a 'reasonable' job in most cases.
     """
     # Try the whole tag
     tokenizer = _try_tokenizer(tag)
@@ -109,6 +112,10 @@ def get_tokenizer(tag):
     tokenizer = _try_tokenizer(base)
     if tokenizer is not None:
         return tokenizer
+    if fallback:
+        tokenizer = _try_tokenizer("en")
+        if tokenizer is not None:
+            return tokenizer
     raise Error("No tokenizer found for language '%s'" % (tag,))
 
 def _try_tokenizer(modName):
