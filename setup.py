@@ -15,7 +15,7 @@ WINDEPS = ".\\tools\\pyenchant-bdist-win32-sources\\build"
 
 #  Version Information
 VER_MAJOR = 1
-VER_MINOR = 0
+VER_MINOR = 1
 VER_PATCH = 0
 VER_SUB = ""
 VERSION = "%d.%d.%d%s" % (VER_MAJOR,VER_MINOR,VER_PATCH,VER_SUB)
@@ -31,7 +31,7 @@ URL = "http://pyenchant.sourceforge.net/"
 
 #  Module Lists
 PY_MODULES = []
-PACKAGES = ["enchant"]
+PACKAGES = ["enchant","enchant.tokenize"]
 EXT_MODULES = []
 PKG_DATA = {}
 DATA_FILES = []
@@ -80,14 +80,16 @@ if sys.platform == "win32":
             PKG_DATA["enchant"].append(os.path.join(WINDEPS,"lib","%s.dll") \
 			                                          % (dllName,))
 	# Also include local dictionaries
-        PKG_DATA["enchant/myspell"] = []
-	dictPath = os.path.join(WINDEPS,"myspell")
-	for dictName in os.listdir(dictPath):
-            PKG_DATA["enchant/myspell"].append(os.path.join(dictPath,dictName))
-        PKG_DATA["enchant/ispell"] = []
-	dictPath = os.path.join(WINDEPS,"ispell")
-	for dictName in os.listdir(dictPath):
-            PKG_DATA["enchant/ispell"].append(os.path.join(dictPath,dictName))
+    PKG_DATA["enchant/myspell"] = []
+    dictPath = os.path.join(WINDEPS,"myspell")
+    if os.path.isdir(dictPath):
+      for dictName in os.listdir(dictPath):
+        PKG_DATA["enchant/myspell"].append(os.path.join(dictPath,dictName))
+    PKG_DATA["enchant/ispell"] = []
+    dictPath = os.path.join(WINDEPS,"ispell")
+    if os.path.isdir(dictPath):
+      for dictName in os.listdir(dictPath):
+        PKG_DATA["enchant/ispell"].append(os.path.join(dictPath,dictName))
 else:
     ext1.libraries.append("enchant")
 
@@ -114,5 +116,4 @@ setup(name=NAME,
       data_files=DATA_FILES,
       scripts=SCRIPTS,
      )
-
 

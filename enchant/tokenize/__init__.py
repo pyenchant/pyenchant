@@ -56,6 +56,9 @@
     module enchant.tokenize.<tag>.  The 'get_tokenizer' function
     will automatically detect it.
     
+    Currently, a tokeniser has only been implemented for the English
+    language.
+    
 """
 
 import enchant

@@ -388,7 +388,7 @@ class Dict(_EnchantObject):
         # Create data if not given
         if data is None:
             data = broker._request_dict_data(tag)
-            self._this = data
+        self._this = data
         self._broker = broker
         # Set instance-level description attributes
         desc = self.__describe(check_this=False)

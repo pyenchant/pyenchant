@@ -1,6 +1,7 @@
 #!python
 #
-#  Written by Ryan Kelly.  This script is placed in the public domain.
+#  Written by Ryan Kelly, 2004-2005.
+#  This script is placed in the public domain.
 #
 #  wininst.py:  Windows installer script for PyEnchant
 #  
