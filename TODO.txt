@@ -1,9 +1,9 @@
 
 
   * find a way to avoid using the registry to record dict locations
-  * check with the enchant guys about free_dict corrupting the
-    cache of dict objects
   * move to aspell for windows installer backend if possible
   * test unicode support, hopefully get help from a user who speaks
     a language requiring Unicode
+  * implement a tkSpellCheckerDialog to compliment the wx one
+  * Expand CmdLineChecker and make it ispell-compatible
 
