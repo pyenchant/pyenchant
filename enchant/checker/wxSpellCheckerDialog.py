@@ -100,7 +100,8 @@ class wxSpellCheckerDialog(wx.Dialog):
         self.error_text = wx.TextCtrl(self, -1, "", style=wx.TE_MULTILINE|wx.TE_READONLY|wx.TE_RICH)
         self.replace_label = wx.StaticText(self, -1, "Replace with:")
         self.replace_text = wx.TextCtrl(self, -1, "", style=wx.TE_PROCESS_ENTER)
-        self.replace_list = wx.ListBox(self, -1, choices=["Option 1", "Option 2", "Option 3"], style=wx.LB_SINGLE)
+        #self.replace_list = wx.ListBox(self, -1, choices=["Option 1", "Option 2", "Option 3"], style=wx.LB_SINGLE)
+        self.replace_list = wx.ListBox(self, -1, style=wx.LB_SINGLE)
         self.btn_ignore = wx.Button(self, -1, "Ignore")
         self.btn_ignoreall = wx.Button(self, -1, "Ignore All")
         self.btn_replace = wx.Button(self, -1, "Replace")
@@ -251,12 +252,15 @@ class wxSpellCheckerDialog(wx.Dialog):
             return
         self._EnableButtons()
         # Display error context with erroneous word in red
+	# Restoring default style was misbehaving under windows, so
+	# I am forcing the rest of the text to be black
         self.error_text.SetValue("")
+        self.error_text.SetDefaultStyle(wx.TextAttr(wx.BLACK))
         lContext = self._checker.leading_context(self._numContext)
         self.error_text.AppendText(lContext)
         self.error_text.SetDefaultStyle(wx.TextAttr(wx.RED))
         self.error_text.AppendText(self._checker.word)
-        self.error_text.SetDefaultStyle(wx.TextAttr())
+        self.error_text.SetDefaultStyle(wx.TextAttr(wx.BLACK))
         tContext = self._checker.trailing_context(self._numContext)
         self.error_text.AppendText(tContext)
         # Display suggestions in the replacements list
@@ -304,7 +308,7 @@ def _test():
                 print "AFTER:", self._checker.get_text()
             self.Destroy()
     from enchant.checker import SpellChecker
-    text = u"This is sme text with a fw speling errors in it. Here are a fw more to tst it ut."
+    text = "This is sme text with a fw speling errors in it. Here are a fw more to tst it ut."
     print "BEFORE:", text
     app = wx.PySimpleApp()
     dlg = TestDialog(None,-1,"")
