@@ -82,7 +82,8 @@ __version__ = "%d.%d.%d%s" % (__ver_major__,__ver_minor__,
 
 import _enchant as _e
 import os
-
+import sys
+import warnings
 
 class Error(Exception):
     """Base exception class for the enchant module."""
@@ -619,9 +620,21 @@ class DictWithPWL(Dict):
         self.add_to_session(word) 
 
 
+##  Check whether there are providers available, possibly point to
+##  local enchant install if not.
+_broker = Broker()
+if len(_broker.describe()) == 0:
+    if sys.platform == "win32":
+        from enchant import utils
+        utils.create_registry_keys()
+        del utils
+        _broker = Broker()
+if len(_broker.describe()) == 0:
+    warnings.warn("PyEnchant: no dictionary providers are available.")
+
+
 ##  Create a module-level default broker object, and make its important
 ##  methods available at the module level.
-
 _broker = Broker()
 request_dict = _broker.request_dict
 request_pwl_dict = _broker.request_pwl_dict
