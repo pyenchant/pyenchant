@@ -294,18 +294,29 @@ class SpellChecker:
         context = self._text[start:end]
         return self._array_to_string(context)    
         
-        
+
 import sys
 class CmdLineChecker:
     """A simple command-line spell checker.
     This class uses the SpellChecker class to implement
     a simple command-line spell checker.  Use its run()
-    method to start things off.
+    method to start things off.  This class is *not*
+    meant to be used for any serious work, but as an example
+    and stress-test for the SpellChecker class.
     """
     def __init__(self):
         self._stop = False
         
     def run(self,args=None):
+        """Run the spellchecking loop, with given arguments.
+        Currently the only argument is the name of a file to
+        check.  For example, the check the contents of the
+        file 'test.txt' use:
+            
+            chkr.run(('test.txt',))
+            
+        The language is assumed to be Australian English (for now)    
+        """
         if args is None:
             args = sys.argv
         f = file(args[0],"r")
