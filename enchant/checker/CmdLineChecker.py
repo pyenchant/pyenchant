@@ -29,7 +29,11 @@
 #
 """
 
-    TODO: document the CmdLineChecker module
+    enchant.checker.CmdLineChecker:  Command-Line spell checker
+    
+    This module provides the class CmdLineChecker, which interactively
+    spellchecks a piece of text by interacting with the user on the
+    command line.  It can also be run as a script to spellcheck a file.
 
 """
 
@@ -38,56 +42,50 @@ from enchant.checker import SpellChecker
 
 class CmdLineChecker:
     """A simple command-line spell checker.
-    This class uses the SpellChecker class to implement
-    a simple command-line spell checker.  Use its run()
-    method to start things off.  This class is *not*
-    meant to be used for any serious work, but as an example
-    and stress-test for the SpellChecker class.
+    
+    This class implements a simple command-line spell checker.  It must
+    be given a SpellChecker instance to operate on, and interacts with
+    the user by printing instructions on stdout and reading commands from
+    stdin.
+    
     """
     def __init__(self):
         self._stop = False
+        self._checker = None
         
-    def run(self,args=None):
-        """Run the spellchecking loop, with given arguments.
-        Currently the only argument is the name of a file to
-        check.  For example, the check the contents of the
-        file 'test.txt' use:
-            
-            chkr.run(('test.txt',))
-            
-        The language is assumed to be US English (for now)    
-        """
-        if args is None:
-            args = sys.argv
-        f = file(args[0],"r")
-        chkr = SpellChecker("en_US","".join(f.readlines()))
-        f.close()
-        for err in chkr:
+    def set_checker(self,chkr):
+        self._checker = chkr
+    
+    def get_checker(self,chkr):
+        return self._checker
+        
+    def run(self):
+        """Run the spellchecking loop."""
+        self._stop = False
+        for err in self._checker:
             self.error = err
             print "ERROR:", err.word
             print "HOW ABOUT:", err.suggest()
-            status = self.readcommand()
-            while not status:
-                if status is None:
-                    sys.exit(1)
-                status = self.readcommand()
-        sys.stdout.write(chkr.get_text())
+            status = self.read_command()
+            while not status and not self._stop:
+                status = self.read_command()
+            if self._stop:
+                    break
     
-    def printhelp(self):
+    def print_help(self):
         print "0..N:    replace with the numbered suggestion"
         print "R0..rN:  always replace with the numbered suggestion"
         print "i:       ignore this word"
         print "I:       always ignore this word"
         print "a:       add word to personal dictionary"
         print "e:       edit the word"
-        print "s:       stop checking and write out changes"
-        print "q:       quit, discarding all changes"
+        print "q:       quit checking"
         print "h:       print this help message"
         print "----------------------------------------------------"
         print "HOW ABOUT:", self.error.suggest()
     
-    def readcommand(self):
-        cmd = raw_input(">>")
+    def read_command(self):
+        cmd = raw_input(">> ")
         cmd = cmd.strip()
         
         if cmd.isdigit():
@@ -102,7 +100,7 @@ class CmdLineChecker:
         
         if cmd[0] == "R":
             if not cmd[1:].isdigit():
-                print "Badly formatted command"
+                print "Badly formatted command (try 'help')"
                 return False
             repl = int(cmd[1:])
             suggs = self.error.suggest()
@@ -127,17 +125,63 @@ class CmdLineChecker:
             repl = raw_input("New Word: ")
             self.error.replace(repl.strip())
             return True
-        
-        if cmd == "s":
-            self._stop = True
-            return None
-            
+             
         if cmd == "q":
-            return None
+            self._stop = True
+            return True
         
         if "help".startswith(cmd.lower()):
-            self.printhelp()
+            self.print_help()
             return False
         
-        print "Badly formatted command"
+        print "Badly formatted command (try 'help')"
         return False
+        
+    def run_on_file(self,infile,outfile=None):
+        """Run spellchecking on the named file.
+        This method can be used to run the spellchecker over the named file.
+        If <outfile> is not given, the corrected contents replace the contents
+        of <infile>.  If <outfile> is given, the corrected contents will be
+        written to that file.  Use "-" to have the contents written to stdout.
+        """
+        inStr = "".join(file(infile,"r").readlines())
+        self._checker.set_text(inStr)
+        self.run()
+        outStr = self._checker.get_text()
+        if outfile is None:
+            outF = file(infile,"w")
+        elif outfile == "-":
+            outF = sys.stdout
+        else:
+            outF = file(outfile,"w")
+        outF.write(outStr)
+        outF.close()
+        
+def _run_as_script():
+    """Run the command-line spellchecker as a script.
+    This function allows the spellchecker to be invoked from the command-line
+    to check spelling in a file.
+    """
+    # Check necessary command-line options
+    from optparse import OptionParser
+    op = OptionParser()
+    op.add_option("-o","--output",dest="outfile",metavar="FILE",
+                      help="write changes into FILE")
+    op.add_option("-l","--lang",dest="lang",metavar="TAG",default="en_US",
+                      help="use language idenfified by TAG")
+    (opts,args) = op.parse_args()
+    # Sanity check
+    if len(args) < 1:
+        raise ValueError("Must name a file to check")
+    if len(args) > 1:
+        raise ValueError("Can only check a single file")
+    # Create and run the checker
+    chkr = SpellChecker(opts.lang)
+    cmdln = CmdLineChecker()
+    cmdln.set_checker(chkr)
+    cmdln.run_on_file(args[0],opts.outfile)
+    
+
+    
+if __name__ == "__main__":
+    _run_as_script()
