@@ -205,13 +205,13 @@ class wxSpellCheckerDialog(wx.Dialog):
         
     def _OnReplace(self,evnt=None):
         """Callback for the "replace" button."""
-        repl = self.replace_text.GetValue()
+        repl = self._GetRepl()
         self._checker.replace(repl)
         self._Advance()
         
     def _OnReplaceAll(self,evnt=None):
         """Callback for the "replace all" button."""
-        repl = self.replace_text.GetValue()
+        repl = self._GetRepl()
         self._checker.replace_always(repl)
         self._Advance()
     
@@ -230,6 +230,12 @@ class wxSpellCheckerDialog(wx.Dialog):
             return
         opt = self.replace_list.GetString(sel)
         self.replace_text.SetValue(opt)
+    
+    def _GetRepl(self):
+        """Get the chosen replacement string."""
+        repl = self.replace_text.GetValue()
+        repl = self._checker.coerce_string(repl)
+        return repl
 
     def _Advance(self):
         """Advance to the next error.
@@ -252,8 +258,8 @@ class wxSpellCheckerDialog(wx.Dialog):
             return
         self._EnableButtons()
         # Display error context with erroneous word in red
-	# Restoring default style was misbehaving under windows, so
-	# I am forcing the rest of the text to be black
+	    # Restoring default style was misbehaving under windows, so
+    	# I am forcing the rest of the text to be black
         self.error_text.SetValue("")
         self.error_text.SetDefaultStyle(wx.TextAttr(wx.BLACK))
         lContext = self._checker.leading_context(self._numContext)
