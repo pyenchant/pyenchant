@@ -93,23 +93,28 @@ class SpellChecker:
     
     """
     
-    def __init__(self,lang,text=None,dict=None,tokenize=None):
+    def __init__(self,lang,text=None,tokenize=None):
         """Constructor for the SpellChecker class.
-        SpellChecker objects must be created with a language
-        tag which determines the language of the text to be
-        checked.  Optional keyword arguments are:
+        SpellChecker objects can be created in two ways, depending on
+        the nature of the first argument.  If it is a string, it
+        specifies a language tag from which a dictionary is created.
+        Otherwise, it must be an enchant Dict object to be used.
+        
+        Optional keyword arguments are:
             
             * text:  to set the text to be checked at creation time
-            * dict:  a custom enchant Dict object to use
             * tokenize:  a custom tokenization function to use
             
-        If dict or tokenize are not given, default objects are
-        created using standard enchant functionality.
+        If <tokenize> is not given and the first argument is a Dict,
+        its 'tag' attribute must be a language tag so that a tokenization
+        function can be created automatically.
         """
-        
-        self.lang = lang
-        if dict is None:
+        if isinstance(lang,basestring):
             dict = enchant.Dict(lang)
+        else:
+            dict = lang
+            lang = dict.tag
+        self.lang = lang
         self.dict = dict
         if tokenize is None:
             tokenize = get_tokenizer(lang,fallback=True)
