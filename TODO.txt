@@ -5,4 +5,5 @@
   * find a way to avoid using the registry to record dict locations
   * check with the enchant guys about free_dict corrupting the
     cache of dict objects
+  * move to aspell for windows installer backend
 

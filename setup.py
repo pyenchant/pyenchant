@@ -14,7 +14,7 @@ import os
 VER_MAJOR = 1
 VER_MINOR = 0
 VER_PATCH = 0
-VER_SUB = "_rc1"
+VER_SUB = ""
 VERSION = "%d.%d.%d%s" % (VER_MAJOR,VER_MINOR,VER_PATCH,VER_SUB)
 
 
@@ -22,8 +22,8 @@ VERSION = "%d.%d.%d%s" % (VER_MAJOR,VER_MINOR,VER_PATCH,VER_SUB)
 NAME = "pyenchant"
 DESCRIPTION = "Python bindings for the Enchant spellchecking system"
 AUTHOR = "Ryan Kelly"
-AUTHOR_EMAIL = "ryan@rfk.id.au"
-URL = "http://www.rfk.id.au/software/projects/pyenchant"
+AUTHOR_EMAIL = "rynklly@users.sourceforge.net"
+URL = "http://pyenchant.sourceforge.net/"
 
 
 #  Module Lists
@@ -35,23 +35,38 @@ DATA_FILES = []
 SCRIPTS = []
 
 
-# Extension Objects
-
 #  The distutils/swig integration doesnt seem to cut it for this module
 #  For now, enchant_wrap.c will need to be distributed as well.  At least
 #  then people wont *have* to have swig installed.
 #  Generate it using `swig -python -noproxy enchant.i` to ensure that
 #  proxy class stubs are not generated.
+swig_infile = os.path.join('enchant','enchant.i')
+swig_outfile = os.path.join('enchant','enchant_wrap.c')
+if not os.path.exists(swig_outfile) or \
+       os.stat(swig_outfile).st_mtime < os.stat(swig_infile).st_mtime:
+    print "Generating '%s'..." % (swig_outfile,)
+    os.system('swig -python -noproxy -o %s %s' % (swig_outfile,swig_infile))
+
+
+# Extension Objects
 ext1 = Extension('enchant._enchant',['enchant/enchant_wrap.c'],
                  libraries=[],
                  library_dirs=[],
                 )
-# Include windows-specific build information if appropriate
+ 
+#               
+# Build and distribution information is different on Windows
+# The enchant library builds as 'enchant-1' instead of 'enchant'
+#
+# Also, there's the possibility of including pre-built support DLLs
+# for the Windows installer.  They will be included if the directory
+# 'windeps' exists when this script is run.
+#
 if sys.platform == "win32":
     ext1.libraries.append("enchant-1")
     SCRIPTS.append("tools/wininst.py")
     # Use local dlls if available
-    if os.path.exists(r".\windeps"):
+    if os.path.exists(r".\\windeps"):
         ext1.library_dirs.append("./windeps/bin")
         LOCAL_DLLS = ["libenchant-1","libglib-2.0-0","iconv","intl",
                       "libenchant_ispell-1","libgmodule-2.0-0"]
@@ -71,7 +86,7 @@ EXT_MODULES.append(ext1)
 
 # Try to simulate package_data for older distutils
 # Since PKG_DATA is only populated on Windows, we know the path
-# to site-packages
+# to site-packages will be Lib/site-packages
 distutils_ver = map(int,distutils.__version__.split("."))
 if distutils_ver[2] < 4:
     for k in PKG_DATA:
