@@ -1,9 +1,10 @@
 
 
-  * make sure all help messages fit in the console
-  * raise Exception/Warning if no providers are found
   * find a way to avoid using the registry to record dict locations
   * check with the enchant guys about free_dict corrupting the
     cache of dict objects
   * move to aspell for windows installer backend
+  * test unicode support, hopefully get help from a user who speaks
+    a language requiring Unicode
+  * Remove free() methods as they're unpythonic
 

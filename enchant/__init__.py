@@ -63,6 +63,12 @@
     A finer degree of control over the dictionaries and how they are used
     can be obtained using one or more 'Broker' objects.  These objects are
     responsible for locating dictionaries for a specific language.
+    
+    Unicode strings are supported transparently, as they are throughout
+    Python - if a unicode string is given as an argument, the result will
+    be a unicode string.  Note that Enchant works in UTF-8 internally,
+    so passing an ASCII string to a dictionary for a language requiring
+    Unicode may result in UTF-8 strings being returned.
 
     Errors that occur in this module are reported by raising 'Error'.
 
@@ -284,6 +290,9 @@ class Broker(_EnchantObject):
         'enchant_broker_describe_py'.  It collects the given arguments in
         a tuple and appends them to the list '__describe_result'.
         """
+        name = name.decode("utf-8")
+        desc = desc.decode("utf-8")
+        file = file.decode("utf-8")
         self.__describe_result.append((name,desc,file))
 
 
@@ -396,7 +405,11 @@ class Dict(_EnchantObject):
         True if it is correctly spelled, and false otherwise.
         """
         self._check_this()
-        val = _e.enchant_dict_check(self._this,word,len(word))
+        if type(word) == unicode:
+            inWord = word.encode("utf-8")
+        else:
+            inWord = word
+        val = _e.enchant_dict_check(self._this,inWord,len(inWord))
         if val == 0:
             return True
         if val > 0:
@@ -410,22 +423,42 @@ class Dict(_EnchantObject):
         word, returning the possibilities in a list.
         """
         self._check_this()
-        return _e.enchant_dict_suggest_py(self._this,word,len(word))
+        if type(word) == unicode:
+            inWord = word.encode("utf-8")
+        else:
+            inWord = word
+        suggs = _e.enchant_dict_suggest_py(self._this,inWord,len(inWord))
+        if type(word) == unicode:
+            uSuggs = [w.decode("utf-8") for w in suggs]
+            return uSuggs
+        return suggs
 
     def add_to_personal(self,word):
         """Add a word to the user's personal dictionary."""
         self._check_this()
-        _e.enchant_dict_add_to_personal(self._this,word,len(word))
+        if type(word) == unicode:
+            inWord = word.encode("utf-8")
+        else:
+            inWord = word
+        _e.enchant_dict_add_to_personal(self._this,inWord,len(inWord))
 
     def add_to_session(self,word):
         """Add a word to the session list."""
         self._check_this()
-        _e.enchant_dict_add_to_session(self._this,word,len(word))
+        if type(word) == unicode:
+            inWord = word.encode("utf-8")
+        else:
+            inWord = word
+        _e.enchant_dict_add_to_session(self._this,inWord,len(inWord))
 
     def is_in_session(self,word):
         """Check whether a word is in the session list."""
         self._check_this()
-        return _e.enchant_dict_is_in_session(self._this,word,len(word))
+        if type(word) == unicode:
+            inWord = word.encode("utf-8")
+        else:
+            inWord = word
+        return _e.enchant_dict_is_in_session(self._this,inWord,len(inWord))
 
     def store_replacement(self,mis,cor):
         """Store a replacement spelling for a miss-spelled word.
@@ -436,7 +469,15 @@ class Dict(_EnchantObject):
         list of suggested spellings offered for later instances of 'mis'.
         """
         self._check_this()
-        _e.enchant_dict_store_replacement(self._this,mis,len(mis),cor,len(cor))
+        if type(mis) == unicode:
+            inMis = mis.encode("utf-8")
+        else:
+            inMis = mis
+        if type(cor) == unicode:
+            inCor = cor.encode("utf-8")
+        else:
+            inCor = cor
+        _e.enchant_dict_store_replacement(self._this,inMis,len(inMis),inCor,len(inCor))
 
     def __describe(self,check_this=True):
         """Return a tuple describing the dictionary.
@@ -463,6 +504,9 @@ class Dict(_EnchantObject):
         'enchant_dict_describe_py'.  It collects the given arguments in
         a tuple and stores them in the attribute '__describe_result'.
         """
+        name = name.decode("utf-8")
+        desc = desc.decode("utf-8")
+        file = file.decode("utf-8")
         self.__describe_result = (tag,name,desc,file)
 
 
@@ -483,8 +527,8 @@ class DictWithPWL(Dict):
         """DictWithPWL constructor.
 
         The argument 'pwl' must be supplied, naming a file containing
-	the personal word list.  If this file does not exist, it is
-	created with default permissions.
+	    the personal word list.  If this file does not exist, it is
+    	created with default permissions.
         """
         if pwl is None:
             raise Error("DictWithPWL must be given a PWL file.")
