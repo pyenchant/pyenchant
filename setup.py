@@ -66,7 +66,6 @@ ext1 = Extension('enchant._enchant',['enchant/enchant_wrap.c'],
 #
 if sys.platform == "win32":
     ext1.libraries.append("libenchant-1")
-    SCRIPTS.append("tools/wininst.py")
     # Use local dlls if available
     if os.path.exists(WINDEPS):
         ext1.library_dirs.append(os.path.join(WINDEPS,"lib"))

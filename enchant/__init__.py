@@ -627,7 +627,6 @@ if len(_broker.describe()) == 0:
     if sys.platform == "win32":
         from enchant import utils
         utils.create_registry_keys()
-        del utils
         _broker = Broker()
 if len(_broker.describe()) == 0:
     warnings.warn("No dictionary providers are available.")
