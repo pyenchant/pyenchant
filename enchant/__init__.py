@@ -368,7 +368,7 @@ class Broker(_EnchantObject):
         desc = desc.decode("utf-8")
         file = file.decode("utf-8")
         self.__list_dicts_result.append((tag,(name,desc,file)))
-        
+ 
     def list_languages(self):
         """List languages for which dictionaries are available.
         
