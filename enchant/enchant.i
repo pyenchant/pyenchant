@@ -41,6 +41,7 @@
 %}
 
 typedef unsigned long size_t;
+typedef unsigned long ssize_t;
 
 %include "enchant.h"
 
