@@ -10,6 +10,9 @@ import distutils
 import sys
 import os
 
+# Location of the windows binaries, if available
+WINDEPS = ".\\windeps"
+
 #  Version Information
 VER_MAJOR = 1
 VER_MINOR = 0
@@ -54,7 +57,7 @@ ext1 = Extension('enchant._enchant',['enchant/enchant_wrap.c'],
                  library_dirs=[],
                 )
  
-#               
+#
 # Build and distribution information is different on Windows
 # The enchant library builds as 'enchant-1' instead of 'enchant'
 #
@@ -66,19 +69,19 @@ if sys.platform == "win32":
     ext1.libraries.append("enchant-1")
     SCRIPTS.append("tools/wininst.py")
     # Use local dlls if available
-    if os.path.exists(r".\\windeps"):
-        ext1.library_dirs.append("./windeps/bin")
+    if os.path.exists(WINDEPS):
+        ext1.library_dirs.append(os.path.join(WINDEPS,"bin"))
         LOCAL_DLLS = ["libenchant-1","libglib-2.0-0","iconv","intl",
-                      "libenchant_ispell-1","libgmodule-2.0-0"]
+                      "libgmodule-2.0-0","libenchant_myspell-1"]
         PKG_DATA["enchant"] = []
         for dllName in LOCAL_DLLS:
-            PKG_DATA["enchant"].append("./windeps/bin/%s.dll" % (dllName,))
-        PKG_DATA["enchant/ispell"] = []
+            PKG_DATA["enchant"].append(os.path.join(WINDEPS,"bin","%s.dll") \
+			                                          % (dllName,))
+        PKG_DATA["enchant/myspell"] = []
 	# Also include local dictionaries
-	dictPath = os.path.normpath("./windeps/ispell")
+	dictPath = os.path.join(WINDEPS,"myspell")
 	for dictName in os.listdir(dictPath):
-          if dictName.endswith(".hash"):
-            PKG_DATA["enchant/ispell"].append(os.path.join(dictPath,dictName))
+            PKG_DATA["enchant/myspell"].append(os.path.join(dictPath,dictName))
 else:
     ext1.libraries.append("enchant")
 
