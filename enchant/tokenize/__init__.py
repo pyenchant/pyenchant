@@ -40,12 +40,19 @@
     argument, and returns an iterator which will yield tuples of the
     following form, one for each word found:
         
-        (<word>,<line>,<col>)
+        (<word>,<pos>)
         
     The meanings of these fields should be clear: <word> is the word
-    that was found, <line> is the line within the text on which it
-    appears, and <col> is the column within that line at which the
-    word starts.  Both <line> and <col> start at zero.
+    that was found and <pos> is the position within the text at which
+    the word began (zero indexed, of course).  The function will work
+    on any string-like object that supports array-slicing - in
+    particular, character-array objects from the 'array' module may
+    be used.
+    
+    The iterator also provides the attribute 'offset' which may be used
+    to get/set the current position of the tokenizer inside the string
+    being split.  This can be used for example if the string's contents
+    have changed during the tokenisation process.
     
     To obtain an appropriate tokenisation function for the language
     identified by <tag>, use the function 'get_tokenizer(tag)'.
@@ -57,11 +64,26 @@
     will automatically detect it.
     
     Currently, a tokeniser has only been implemented for the English
-    language.
+    language.  Based on the Author's limited experience, this should
+    be at least partially suitable for other languages.
     
 """
 
 import enchant
+
+class tokenize:
+    """Base class for all tokenizer objects.
+    Each tokenizer must be an interator and provide the 'offset'
+    attribute as described in the documentation for this module.
+    """
+    def __init__(self,text):
+        raise NotImplementedError()
+    def next(self):
+        raise NotImplementedError()
+    def __iter__(self):
+        return self
+        
+
 class Error(enchant.Error):
     """Exception subclass for the tokenize module.
     This exception is raised for errors within the enchant.tokenize

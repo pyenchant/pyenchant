@@ -1,3 +1,32 @@
+# pyenchant
+#
+# Copyright (C) 2004-2005, Ryan Kelly
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the
+# Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+# Boston, MA 02111-1307, USA.
+#
+# In addition, as a special exception, you are
+# given permission to link the code of this program with
+# non-LGPL Spelling Provider libraries (eg: a MSFT Office
+# spell checker backend) and distribute linked combinations including
+# the two.  You must obey the GNU Lesser General Public License in all
+# respects for all of the code used other than said providers.  If you modify
+# this file, you may extend this exception to your version of the
+# file, but you are not obligated to do so.  If you do not wish to
+# do so, delete this exception statement from your version.
+#
 """
 
     enchant.tokenize.en:    Tokeniser for the English language
@@ -7,50 +36,52 @@
 
 """
 
-def tokenize(text,valid_chars=("'")):
-    """Generator splitting text into words, reporting line and column.
+import enchant.tokenize
+
+class tokenize(enchant.tokenize.tokenize):
+    """Iterator splitting text into words, reporting position.
     
-    This generator takes a text string as input, and yields tuples
+    This iterator takes a text string as input, and yields tuples
     representing each distinct word found in the text.  The tuples
     take the form:
         
-        (word,line,column)
+        (<word>,<pos>)
         
-    Where <word> is the word string found, <line> is the numeric line
-    number on which the word as found, and <column> is the numeric
-    column number at which the word was found.  Both the line and
-    column numbers start from zero.
+    Where <word> is the word string found and <pos> is the position
+    of the start of the word within the text.
     
     The optional argument <valid_chars> may be used to specify a
     list of additional characters that can form part of a word.
     By default, this list contains only the apostrophe (')
     """
-    # Allow easy comparison for alphanumeracy
-    def myIsAlpha(c):
-        if c.isalpha() or c in valid_chars:
+    
+    def __init__(self,text,valid_chars=("'")):
+        self._valid_chars = valid_chars
+        self._text = text
+        self.offset = 0
+    
+    def _myIsAlpha(self,c):
+        if c.isalpha() or c in self._valid_chars:
             return True
         return False
-    # Run tokenisation on a per-line basis,
-    # keeping track of line and column number
-    lines = text.split("\n")
-    curLine = 0
-    curCol = 0
-    baseCol = curCol
-    for line in lines:
-        offset = 0
+
+    def next(self):
+        text = self._text
+        offset = self.offset
         while True:
-          if offset >= len(line):
-              break
-          while offset < len(line) and not line[offset].isalpha():
-            offset += 1
-          curCol = baseCol + offset
-          while offset < len(line) and myIsAlpha(line[offset]):
-            offset += 1
-          if(curCol != offset):
-              yield (line[curCol:offset],curLine,curCol)
-        curLine += 1
-        curCol = 0
-        baseCol = curCol
+            if offset >= len(text):
+                break
+            while offset < len(text) and not self._myIsAlpha(text[offset]):
+                offset += 1
+            curPos = offset
+            while offset < len(text) and self._myIsAlpha(text[offset]):
+                offset += 1
+            if(curPos != offset):
+                self.offset = offset
+                return (text[curPos:offset],curPos)
+        self.offset = offset
+        raise StopIteration()
+
 
 if __name__ == "__main__":
     # Test out the tokenizer functionality
