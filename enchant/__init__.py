@@ -519,9 +519,13 @@ class Dict(_EnchantObject):
         """Add a word to the user's personal dictionary.
         
         NOTE: this method is being deprecated in favour of
-        add_to_pwl.  Please fix references to this method ASAP.
+        add_to_pwl.  Please change code using add_to_personal
+        to use add_to_pwl instead.  This change mirrors a
+        change in the Enchant C API.
         
         """
+        #warnings.warn("add_to_personal is deprecated, please use add_to_pwl",
+        #              DeprecationWarning)
         self._check_this()
         if type(word) == unicode:
             inWord = word.encode("utf-8")
@@ -588,7 +592,7 @@ class Dict(_EnchantObject):
         Use of this method is not recommended - instead, access this
         information through the 'tag' and 'provider' attributes.
         """
-	if check_this:
+        if check_this:
             self._check_this()
         _e.enchant_dict_describe_py(self._this,self.__describe_callback)
         return self.__describe_result
@@ -673,6 +677,16 @@ class DictWithPWL(Dict):
         # Also add_to_session on the Dict so that it appears in suggestions
         self.add_to_session(word) 
 
+    def add_to_pwl(self,word):
+        """Add a word to the associated personal word list.
+        
+        This method adds the given word to the personal word list, and
+        automatically saves the list to disk.
+        """
+        self._check_this()
+        self.pwl.add_to_pwl(word)
+        # Also add_to_session on the Dict so that it appears in suggestions
+        self.add_to_session(word)  
 
 ##  Check whether there are providers available, possibly point to
 ##  local enchant install if not.  If registry changes are made,
@@ -695,5 +709,60 @@ request_pwl_dict = _broker.request_pwl_dict
 dict_exists = _broker.dict_exists
 list_dicts = _broker.list_dicts
 list_languages = _broker.list_languages
+
+
+def _test():
+    """Run some simple regression tests on the enchant API."""
+    import tempfile
+    
+    assert(dict_exists("en_US"))
+    
+    d1 = Dict("en_US")
+    assert(d1.check("hello"))
+    assert(d1.check("helo") == False)
+    assert(d1._broker is _broker)
+    assert(d1.tag == "en_US")
+    
+    d2 = request_dict("en_US")
+    assert(d2.check("hello"))
+    assert(d2._broker is _broker)
+    assert("hello" in d1.suggest("helo"))
+    del d2
+    
+    assert(d1.check("hello"))
+    assert(d1.check("Lozz") == False)
+    assert(d1.is_in_session("Lozz") == False)
+    d1.add_to_session("Lozz")
+    assert(d1.is_in_session("Lozz"))
+    assert(d1.check("Lozz"))
+    
+    # Create a temporary PWL file
+    try:
+        pwlFileNm = tempfile.mkstemp()[1]
+    except NameError:
+        pwlFileNm = tempfile.mktemp()
+    pwlFile = file(pwlFileNm,"w")
+    pwlFile.write("Sazz\n")
+    pwlFile.close()
+    
+    d3 = DictWithPWL("en_US",pwlFileNm)
+    assert(d3.check("hello"))
+    assert(d3.check("Sazz"))
+    assert(d3.check("Flagen") == False)
+    d3.add_to_pwl("Flagen")
+    assert(d3.check("Flagen"))
+    del d3
+    
+    pwlFile = file(pwlFileNm,"r")
+    assert("Flagen\n" in pwlFile.readlines())
+    pwlFile.close()
+    os.remove(pwlFileNm)
+        
+    print "ALL TESTS PASSED"
+    
+    
+# Run regression tests when called from comand-line
+if __name__ == "__main__":
+    _test()
 
 
