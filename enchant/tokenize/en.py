@@ -52,10 +52,11 @@ class tokenize(enchant.tokenize.tokenize):
     
     The optional argument <valid_chars> may be used to specify a
     list of additional characters that can form part of a word.
-    By default, this list contains only the apostrophe (')
+    By default, this list contains only the apostrophe ('). Note that
+    these characters cannot appear at the start or end of a word.
     """
     
-    def __init__(self,text,valid_chars=("'")):
+    def __init__(self,text,valid_chars=("'",)):
         self._valid_chars = valid_chars
         self._text = text
         self.offset = 0
@@ -71,12 +72,18 @@ class tokenize(enchant.tokenize.tokenize):
         while True:
             if offset >= len(text):
                 break
-            while offset < len(text) and not self._myIsAlpha(text[offset]):
+            # Find start of next word (must be alpha)
+            while offset < len(text) and not text[offset].isalpha():
                 offset += 1
             curPos = offset
+            # Find end of word using myIsAlpha
             while offset < len(text) and self._myIsAlpha(text[offset]):
                 offset += 1
+            # Return if word isnt empty
             if(curPos != offset):
+                # Make sure word ends with an alpha
+                while not text[offset-1].isalpha():
+                    offset = offset - 1
                 self.offset = offset
                 return (text[curPos:offset],curPos)
         self.offset = offset
@@ -87,7 +94,7 @@ if __name__ == "__main__":
     # Test out the tokenizer functionality
     input = """This is a paragraph.  It's not very special, but it's designed
 2 show how the splitter works with many-different combos
-of words."""
+of words. Also need to "test" the handling of 'quoted' words."""
     for entry in tokenize(input):
         print entry
         
