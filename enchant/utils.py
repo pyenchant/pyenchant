@@ -41,3 +41,6 @@
         * ...out of ideas for the moment
           
 """
+
+# Make SpellChecker available for backwards compatability
+from enchant.checker import SpellChecker

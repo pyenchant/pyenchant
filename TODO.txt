@@ -6,4 +6,5 @@
     a language requiring Unicode
   * implement a tkSpellCheckerDialog to compliment the wx one
   * Expand CmdLineChecker and make it ispell-compatible
+  * regression tests: Dict, Broker, DictWithPWL
 
