@@ -8,9 +8,7 @@ PyEnchant:
   * Expand CmdLineChecker and make it ispell-compatible
   * regression tests: Dict, Broker, DictWithPWL
   * Mark Dict.add_to_personal as deprecated sometime in future
-  * better registry handling:
-      - save into HKEY_LOCAL_USER rather than HKEY_LOCAL_MACHINE
-      - check for broken entries and replace them with good ones
+  * look up default language somehow?
 
   
 Enchant:

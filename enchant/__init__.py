@@ -28,7 +28,7 @@
 # do so, delete this exception statement from your version.
 #
 """
-    enchant.py:  Access to the enchant spellchecking library
+    enchant:  Access to the enchant spellchecking library
 
     This module provides several classes for performing spell checking
     via the Enchant spellchecking library.  For more details on Enchant,
@@ -675,7 +675,8 @@ class DictWithPWL(Dict):
 
 
 ##  Check whether there are providers available, possibly point to
-##  local enchant install if not.
+##  local enchant install if not.  If registry changes are made,
+##  create an object to undo then and have it deleted on module unload
 _broker = Broker()
 if len(_broker.describe()) == 0:
     if sys.platform == "win32":

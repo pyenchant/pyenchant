@@ -60,7 +60,13 @@ from enchant.checker import SpellChecker
 def _reg_get():
     """Get the registry module, or None if not available.
     This function raises an appropriate warning if the registry
-    is not available.
+    is not available.  Functions requiring registry access should
+    use the following code:
+        
+        reg = _reg_get()
+        if reg is None:
+            return False
+
     """
     if reg is not None:
         return reg
@@ -70,77 +76,114 @@ def _reg_get():
         warn("Attempt to access the registry on non-Windows platform")
     return None
 
-def _reg_ensure_key_value(key,value,data):
-    """Ensure that the given registry key contains the given value.
-    If not, create it using the given data.  Keys are assumed to
-    be under HKEY_LOCAL_MACHINE and of type REG_SZ.
+def _reg_ensure_key_value(key,value,data,allusers=False):
+    """Ensure that the given registry key contains the given value and is valid.
+  
+    This function is designed to ensure that an appropriate registry key
+    exists.  It deals only with keys containing string values that represent
+    filenames.  If the named key does not contain the named value, it is
+    created using the given data.  If it does contain the named value,
+    its current data is checked for validity.  If the current data does
+    not point to an existing file location, it is replaced with the
+    given data.
+  
+    Intuitively, it ensures that the named key/value contains a valid
+    filename.  If it does not, it is replaced by the given data.
+    
+    By default, the work is done on HKEY_CURRENT_USER. The optional argument
+    <allusers> may be set to true to specify that HKEY_LOCAL_MACHINE should
+    be used instead.
     """
     reg = _reg_get()
     if reg is None:
-        return
-    # Make sure the key exists
-    hkey = reg.CreateKey(reg.HKEY_LOCAL_MACHINE,key)
+        return False
+    if allusers:
+        hkey = reg.CreateKey(reg.HKEY_LOCAL_MACHINE,key)
+    else:
+        hkey = reg.CreateKey(reg.HKEY_CURRENT_USER,key)    
     try:
-        reg.QueryValueEx(hkey,value)
-        #print "Registry Key Exists: %s\\%s" % (key,value)
+        (eData,_) = reg.QueryValueEx(hkey,value)
     except:
         # Value doesnt exist, create it
         reg.SetValueEx(hkey,value,0,reg.REG_SZ,data)
-        #print "Created Registry Key: %s\\%s" % (key,value)
+        return True
+    # Value already exists, check validity
+    if not os.path.exists(eData):
+        reg.SetValueEx(hkey,value,0,reg.REG_SZ,data)
+        return True
+    return True
+        
 
-
-def _reg_remove_key_matching(key,value,data):
-    """Remove the given registry key value if its contents match the
-    given data.
+def _reg_remove_key_matching(key,value,data,allusers=False):
+    """Remove the given registry value if its contents match the given data.
+    
+    This function looks up the given registry key/value and compares its
+    contents to the given data.  If they are an exact match, the value is
+    removed from the key.
+    
+    By default, the work is done on HKEY_CURRENT_USER. The optional argument
+    <allusers> may be set to true to specify that HKEY_LOCAL_MACHINE should
+    be used instead.
     """
     reg = _reg_get()
     if reg is None:
-        return
+        return False
+    if allusers:
+        hkey = reg.HKEY_LOCAL_MACHINE
+    else:
+        hkey = reg.HKEY_CURRENT_USER
     try:
-        hkey = reg.OpenKey(reg.HKEY_LOCAL_MACHINE,key,0,reg.KEY_ALL_ACCESS)
+        hkey = reg.OpenKey(hkey,key,0,reg.KEY_ALL_ACCESS)
     except:
         # Key doesnt exist
-        #print "  Key %s doesn't exist" % (key,)
-        return
+        return True
     try:
         (dat,typ) = reg.QueryValueEx(hkey,value)
         if dat != data:
             # Data doesnt match, dont delete
-            #print "  Key %s\\%s contains unexpected value" % (key,)
-            return
+            return True
     except:
         # Key doesnt have value, just return
-        #print "  Key %s\\%s doesnt exist" % (key,value)
-        return
-    # Remove the value
+        return True
     reg.DeleteValue(hkey,value)
-    #print "  Deleted Value: %s\\%s" % (key,value)
+    return True
 
-def _reg_remove_empty_key(key):
-    """Remove the given key, if it is empty."""
+
+def _reg_remove_empty_key(key,allusers=False):
+    """Remove the named registry key, if it is empty.
+    
+    By default, the work is done on HKEY_CURRENT_USER. The optional argument
+    <allusers> may be set to true to specify that HKEY_LOCAL_MACHINE should
+    be used instead.
+    """
     reg = _reg_get()
     if reg is None:
-        return
+        return False
+    if allusers:
+        hkey = reg.HKEY_LOCAL_MACHINE
+    else:
+        hkey = reg.HKEY_CURRENT_USER
     try:
-        hkey = reg.OpenKey(reg.HKEY_LOCAL_MACHINE,key,0,reg.KEY_ALL_ACCESS)
+        hkey = reg.OpenKey(hkey,key,0,reg.KEY_ALL_ACCESS)
     except:
         # Key doesnt exist
-        #print "  Key %s doesn't exist" % (key,)
-        return
+        return True
     try:
         reg.EnumValue(hkey,0)
-        #print "  Key %s still contains values" % (key,)
-        return
+        # Key still contains values
+        return True
     except:
         try:
             reg.EnumKey(hkey,0)
-            #print "  Key %s still contains subkeys" % (key,)
-            return
+            # Key still contains subkeys
+            return True
         except:
             # Was empty, we can delete it
             reg.DeleteKey(reg.HKEY_LOCAL_MACHINE,key)
-            #print "  Deleted Key:  %s" % (key,)
-            
+            return True
+    return False
+
+
 def _reg_config_keys():
     """Retuns a list of registry keys of interest.
     All keys point to locations in the filesystem and are returned
@@ -149,6 +192,7 @@ def _reg_config_keys():
         * Key Path
         * Key Value
         * Key Data
+        
     """
     modulesDir = os.path.join(sysconfig.get_python_lib(),"enchant")
     ispellDir = os.path.join(sysconfig.get_python_lib(),"enchant","ispell")
@@ -162,29 +206,39 @@ def _reg_config_keys():
 
 # Top-level registry handling functions
 
-def create_registry_keys():
+def create_registry_keys(allusers=False):
     """Create registry keys to point to local version of enchant.
+    
     This function can be used to insert entries into the Windows
     registry which point to a local version of enchant that was shipped
     with the PyEnchant distribution.  Each key is only installed if
     no existing value is found in the registry.
+    
+    The optional argument <allusers> can be set to True to indicate
+    that entries should be created for all users on the machine. By
+    default, the entries are created only for the current user.
     """
     for (p,v,d) in _reg_config_keys():
         if os.path.exists(d):
-            _reg_ensure_key_value(p,v,d)
+            _reg_ensure_key_value(p,v,d,allusers)
 
-def remove_registry_keys():
+def remove_registry_keys(allusers=False):
     """Remove registry keys pointing to local version of enchant.
+    
     This function can be used to remove the entries from the Windows
     registry that were created by create_registry_keys.  The entries
     are only removed if they exactly match those create by that
     function.  Empty keys below "Software\Enchant" are also removed.
+    
+    The optional argumetn <allusers> can be set to True to indicate
+    that entries should be removed for all users on the machine. By
+    default, the entries are removed only for the current user profile.
     """
     for (p,v,d) in _reg_config_keys():
-        _reg_remove_key_matching(p,v,d)
-    _reg_remove_empty_key("Software\\Enchant\\Config")
-    _reg_remove_empty_key("Software\\Enchant\\Ispell")
-    _reg_remove_empty_key("Software\\Enchant\\Myspell")
-    _reg_remove_empty_key("Software\\Enchant")
+        _reg_remove_key_matching(p,v,d,allusers)
+    _reg_remove_empty_key("Software\\Enchant\\Config",allusers)
+    _reg_remove_empty_key("Software\\Enchant\\Ispell",allusers)
+    _reg_remove_empty_key("Software\\Enchant\\Myspell",allusers)
+    _reg_remove_empty_key("Software\\Enchant",allusers)
 
     
