@@ -36,7 +36,7 @@
 import enchant
 
 # List of providers to test
-providers = ("myspell","aspell",)#"ispell")
+providers = ("myspell",)#"ispell",)#"aspell")
 
 # File containing test cases, and the language they are in
 # A suitable file can be found at http://aspell.net/test/batch0.tab

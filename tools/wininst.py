@@ -90,18 +90,15 @@ ispellDir = os.path.join(sysconfig.get_python_lib(),"enchant","ispell")
 myspellDir = os.path.join(sysconfig.get_python_lib(),"enchant","myspell")
 
 if sys.argv[1] == "-install":
-    if os.path.exists(os.path.join(modulesDir,"libenchant-1.dll")):
-        EnsureKeyValue("Software\\Enchant\\Config","Module_Dir",modulesDir)
-    if os.path.exists(ispellDir):
-        EnsureKeyValue("Software\\Enchant\\Ispell","Data_Dir",ispellDir)
-    if os.path.exists(myspellDir):
-        EnsureKeyValue("Software\\Enchant\\Myspell","Data_Dir",myspellDir)
+    EnsureKeyValue("Software\\Enchant\\Config","Module_Dir",modulesDir)
+    EnsureKeyValue("Software\\Enchant\\Ispell","Data_Dir",ispellDir)
+    EnsureKeyValue("Software\\Enchant\\Myspell","Data_Dir",myspellDir)
 
 elif sys.argv[1] == "-remove":
     print "Removing installed Registry Keys:"
     RemoveKeyMatching("Software\\Enchant\\Config","Module_Dir",modulesDir)
     RemoveKeyMatching("Software\\Enchant\\Ispell","Data_Dir",ispellDir)
-    RemoveKeyMatching("Software\\Enchant\\Myspell","Data_Dir",ispellDir)
+    RemoveKeyMatching("Software\\Enchant\\Myspell","Data_Dir",myspellDir)
     RemoveEmptyKey("Software\\Enchant\\Config")
     RemoveEmptyKey("Software\\Enchant\\Ispell")
     RemoveEmptyKey("Software\\Enchant\\Myspell")

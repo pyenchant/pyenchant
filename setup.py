@@ -84,12 +84,14 @@ if sys.platform == "win32":
     dictPath = os.path.join(WINDEPS,"myspell")
     if os.path.isdir(dictPath):
       for dictName in os.listdir(dictPath):
-        PKG_DATA["enchant/myspell"].append(os.path.join(dictPath,dictName))
+        if dictName[-3:] in ["txt","dic","aff"]:
+          PKG_DATA["enchant/myspell"].append(os.path.join(dictPath,dictName))
     PKG_DATA["enchant/ispell"] = []
     dictPath = os.path.join(WINDEPS,"ispell")
     if os.path.isdir(dictPath):
       for dictName in os.listdir(dictPath):
-        PKG_DATA["enchant/ispell"].append(os.path.join(dictPath,dictName))
+        if dictName.endswith("hash"):
+          PKG_DATA["enchant/ispell"].append(os.path.join(dictPath,dictName))
 else:
     ext1.libraries.append("enchant")
 

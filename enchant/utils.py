@@ -78,7 +78,7 @@ class SpellChecker:
     each misspelled word with the string "ERROR":
         
         >>> text = "This is sme text with a fw speling errors in it."
-        >>> chkr = SpellChecker("en_AU",text)
+        >>> chkr = SpellChecker("en_US",text)
         >>> for err in chkr:
         ...   err.replace("ERROR")
         ...
@@ -315,12 +315,12 @@ class CmdLineChecker:
             
             chkr.run(('test.txt',))
             
-        The language is assumed to be Australian English (for now)    
+        The language is assumed to be US English (for now)    
         """
         if args is None:
             args = sys.argv
         f = file(args[0],"r")
-        chkr = SpellChecker("en_AU","".join(f.readlines()))
+        chkr = SpellChecker("en_US","".join(f.readlines()))
         f.close()
         for err in chkr:
             self.error = err
@@ -408,7 +408,7 @@ def _test1():
     text = """This is sme text with a few speling erors in it. Its gret
 for checking wheather things are working proprly with the SpellChecker
 class. Not gret for much els though."""
-    chkr = SpellChecker("en_AU",text=text)
+    chkr = SpellChecker("en_US",text=text)
     for n,err in enumerate(chkr):
         if n == 0:
             # Fix up "sme" -> "some" properly

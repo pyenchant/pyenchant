@@ -49,16 +49,15 @@ The windows installer version provides a pre-compiled enchant library
 as well as several supporting libraries.  Several commonly-used
 dictionaries are installed into:
 
-    <YOUR_PYTHON_ROOT>\Lib\site-packages\enchant\ispell.
+    <YOUR_PYTHON_ROOT>\Lib\site-packages\enchant\myspell.
 
-Additional language dictionaries are available for download from:
+Additional language dictionaries are available from the OpenOffice.org
+project, and are available at:
 
-    http://prdownloads.sourceforge.net/abiword/
+    http://lingucomponent.openoffice.org/spell_dic.html
     
-The required file will be named 'abispell-LANG.i386.zip' where LANG is
-the appropriate language tag.  Download the zip file, and extract the
-contained .hash file into the above directory.  The new language should
-be detected automatically.
+Download the appropriate zip for for the language of interest, and
+unzip its contents into the "myspell" directory mentioned above.
 
 
 Installing from Source
