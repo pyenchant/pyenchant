@@ -265,7 +265,7 @@ class Broker(_EnchantObject):
             eStr = "Personal Word List file '%s' could not be loaded"
             self._raise_error(eStr % (pwl,))
             self._raise_error(eStr)
-        self.__inc_live_dicts(tag)
+        self.__inc_live_dicts(pwl)
         return Dict(None,self,new_dict)
 
     def _free_dict(self,dict):
