@@ -137,17 +137,24 @@ class CmdLineChecker:
         print "Badly formatted command (try 'help')"
         return False
         
-    def run_on_file(self,infile,outfile=None):
+    def run_on_file(self,infile,outfile=None,enc=None):
         """Run spellchecking on the named file.
         This method can be used to run the spellchecker over the named file.
         If <outfile> is not given, the corrected contents replace the contents
         of <infile>.  If <outfile> is given, the corrected contents will be
         written to that file.  Use "-" to have the contents written to stdout.
+        If <enc> is given, it specifies the encoding used to read the
+        file's contents into a unicode string.  The output will be written
+        in the same encoding.
         """
         inStr = "".join(file(infile,"r").readlines())
+        if enc is not None:
+            inStr = inStr.decode(enc)
         self._checker.set_text(inStr)
         self.run()
         outStr = self._checker.get_text()
+        if enc is not None:
+            outStr = outStr.encode(enc)
         if outfile is None:
             outF = file(infile,"w")
         elif outfile == "-":
@@ -169,6 +176,8 @@ def _run_as_script():
                       help="write changes into FILE")
     op.add_option("-l","--lang",dest="lang",metavar="TAG",default="en_US",
                       help="use language idenfified by TAG")
+    op.add_option("-e","--encoding",dest="enc",metavar="ENC",
+                      help="file is unicode with encoding ENC")
     (opts,args) = op.parse_args()
     # Sanity check
     if len(args) < 1:
@@ -179,7 +188,7 @@ def _run_as_script():
     chkr = SpellChecker(opts.lang)
     cmdln = CmdLineChecker()
     cmdln.set_checker(chkr)
-    cmdln.run_on_file(args[0],opts.outfile)
+    cmdln.run_on_file(args[0],opts.outfile,opts.enc)
     
 
     
