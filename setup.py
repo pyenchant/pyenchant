@@ -16,7 +16,7 @@ WINDEPS = ".\\tools\\pyenchant-bdist-win32-sources\\build"
 #  Version Information
 VER_MAJOR = 1
 VER_MINOR = 1
-VER_PATCH = 0
+VER_PATCH = 1
 VER_SUB = ""
 VERSION = "%d.%d.%d%s" % (VER_MAJOR,VER_MINOR,VER_PATCH,VER_SUB)
 
@@ -31,7 +31,7 @@ URL = "http://pyenchant.sourceforge.net/"
 
 #  Module Lists
 PY_MODULES = []
-PACKAGES = ["enchant","enchant.tokenize"]
+PACKAGES = ["enchant","enchant.tokenize","enchant.checker"]
 EXT_MODULES = []
 PKG_DATA = {}
 DATA_FILES = []
