@@ -1,7 +1,7 @@
 
 BUILD_DIR = /home/rfk/pyenchant/tools/pyenchant-bdist-win32-sources/build
 ASPELL_DIR = aspell-0.60.2
-ENCHANT_DIR = enchant-1.1.5
+ENCHANT_DIR = enchant-1.1.6
 
 #XMINGW_CONFIG_OPTS = --target=i386-mingw32msvc --host=i386-mingw32msvc
 XMINGW_CONFIG_OPTS =

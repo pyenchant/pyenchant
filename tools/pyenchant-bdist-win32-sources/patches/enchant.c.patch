@@ -1,2 +1,16 @@
---- enchant-1.1.5/src/enchant.c	Tue Nov 30 11:10:31 2004
-+++ enchant-1.1.5.new/src/enchant.c	Wed Dec 29 05:34:25 2004
+--- enchant.c.orig	2005-03-31 17:03:00.000000000 +1000
++++ enchant.c	2005-03-31 17:02:08.000000000 +1000
+@@ -200,7 +200,12 @@
+ ENCHANT_MODULE_EXPORT (char *)
+ enchant_get_registry_value (const char * const prefix, const char * const key)
+ {
+-	return enchant_get_registry_value_ex (0, prefix, key);
++	char *val;
++	val = enchant_get_registry_value_ex(1, prefix, key);
++	if(val == NULL) {
++		val = enchant_get_registry_value_ex (0, prefix, key);
++	}
++	return val;
+ }
+ 
+ /**
