@@ -10,9 +10,7 @@ PyEnchant:
   * Mark Dict.add_to_personal as deprecated sometime in future
   * better registry handling:
       - save into HKEY_LOCAL_USER rather than HKEY_LOCAL_MACHINE
-      - remove on module unload by creating a dummy object with
-        a destructor and saving in module scope
-      - patch enchant to look in HKEY_LOCAL_USER
+      - check for broken entries and replace them with good ones
 
   
 Enchant:
