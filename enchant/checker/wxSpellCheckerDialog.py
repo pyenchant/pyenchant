@@ -164,6 +164,7 @@ class wxSpellCheckerDialog(wx.Dialog):
         """Initialise internal state for the dialog.
         Initially, no checker is available and buttons are disabled.
         """
+        self._numContext = 40
         self._checker = None
         self._buttonsEnabled = True
         self._DisableButtons()
@@ -251,12 +252,12 @@ class wxSpellCheckerDialog(wx.Dialog):
         self._EnableButtons()
         # Display error context with erroneous word in red
         self.error_text.SetValue("")
-        lContext = self._checker.leading_context(20)
+        lContext = self._checker.leading_context(self._numContext)
         self.error_text.AppendText(lContext)
         self.error_text.SetDefaultStyle(wx.TextAttr(wx.RED))
         self.error_text.AppendText(self._checker.word)
         self.error_text.SetDefaultStyle(wx.TextAttr())
-        tContext = self._checker.trailing_context(20)
+        tContext = self._checker.trailing_context(self._numContext)
         self.error_text.AppendText(tContext)
         # Display suggestions in the replacements list
         suggs = self._checker.suggest()
@@ -300,10 +301,11 @@ def _test():
             wx.EVT_CLOSE(self,self.OnClose)
         def OnClose(self,evnt):
             if self._checker is not None:
-                print self._checker.get_text()
+                print "AFTER:", self._checker.get_text()
             self.Destroy()
     from enchant.checker import SpellChecker
     text = u"This is sme text with a fw speling errors in it. Here are a fw more to tst it ut."
+    print "BEFORE:", text
     app = wx.PySimpleApp()
     dlg = TestDialog(None,-1,"")
     chkr = SpellChecker("en_US",text)
