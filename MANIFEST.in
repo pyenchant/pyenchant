@@ -1,0 +1,6 @@
+
+include enchant/enchant.i
+include enchant/enchant.h
+include LICENSE.txt
+recursive-include tools *
+
