@@ -70,7 +70,7 @@ class SpellChecker:
     each misspelled word with the string "ERROR":
         
         >>> text = "This is sme text with a fw speling errors in it."
-        >>> chkr = SpellChecker("en_US",text)
+        >>> chkr = SpellChecker("en-US",text)
         >>> for err in chkr:
         ...   err.replace("ERROR")
         ...
@@ -168,8 +168,8 @@ class SpellChecker:
         """Check whether the checker wants unicode strings.
         This method will return True if the checker wants unicode strings
         as input, False if it wants normal strings.  It's important to
-	provide the correct type of string to the checker.
-	"""
+	    provide the correct type of string to the checker.
+	    """
         if self._text.typecode == 'u':
             return True
         return False
@@ -254,8 +254,7 @@ class SpellChecker:
             
     def add_to_personal(self,word=None):
         """Add given word to the personal word list.
-        If no word is given, the current erroneous word
-        is added.
+        If no word is given, the current erroneous word is added.
         """
         if word is None:
             word = self.word
@@ -323,7 +322,7 @@ def _test1():
     text = """This is sme text with a few speling erors in it. Its gret
 for checking wheather things are working proprly with the SpellChecker
 class. Not gret for much els though."""
-    chkr = SpellChecker("en_US",text=text)
+    chkr = SpellChecker("en-US",text=text)
     for n,err in enumerate(chkr):
         if n == 0:
             # Fix up "sme" -> "some" properly

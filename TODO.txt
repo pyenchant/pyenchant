@@ -9,6 +9,8 @@ PyEnchant:
   * regression tests: Broker
   * Mark Dict.add_to_personal as deprecated sometime in future
   * look up default language somehow?
+  * compliance with rfc1766, esp preference for '-' over '_' as
+    a seperator. Check this with different backends!
 
   
 Enchant:

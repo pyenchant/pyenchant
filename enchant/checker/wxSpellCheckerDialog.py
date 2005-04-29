@@ -71,7 +71,7 @@ class wxSpellCheckerDialog(wx.Dialog):
     dialog before it is shown:
         
         >>> dlg = wxSpellCheckerDialog(None,-1,"")
-        >>> chkr = SpellChecker("en_AU",text)
+        >>> chkr = SpellChecker("en-AU",text)
         >>> dlg.SetSpellChecker(chkr)
         >>> dlg.Show()
     
@@ -81,7 +81,7 @@ class wxSpellCheckerDialog(wx.Dialog):
     will need to be obtained from the SpellChecker object:
         
         >>> dlg = wxSpellCheckerDialog(None,-1,"")
-        >>> chkr = SpellChecker("en_AU",text)
+        >>> chkr = SpellChecker("en-AU",text)
         >>> dlg.SetSpellChecker(chkr)
         >>> dlg.ShowModal()
         >>> text = dlg.GetSpellChecker().get_text()
@@ -318,7 +318,7 @@ def _test():
     print "BEFORE:", text
     app = wx.PySimpleApp()
     dlg = TestDialog(None,-1,"")
-    chkr = SpellChecker("en_US",text)
+    chkr = SpellChecker("en-US",text)
     dlg.SetSpellChecker(chkr)
     dlg.Show()
     app.MainLoop()

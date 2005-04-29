@@ -61,10 +61,12 @@
     authors.  To register a tokenisation function for the language
     <tag>, implement it as the function 'tokenize' within the
     module enchant.tokenize.<tag>.  The 'get_tokenizer' function
-    will automatically detect it.
+    will automatically detect it.  Note that the underscore must be
+    used as the tag component seperator in this case, in order to
+    form a valid python module name.
     
     Currently, a tokeniser has only been implemented for the English
-    language.  Based on the Author's limited experience, this should
+    language.  Based on the author's limited experience, this should
     be at least partially suitable for other languages.
     
 """
@@ -103,6 +105,8 @@ def get_tokenizer(tag,fallback=False):
     a tokeniser cannot be found have the English tokeniser returned.
     It should do a 'reasonable' job in most cases.
     """
+    # Ensure only '_' used as seperator
+    tag = tag.replace("-","_")
     # Try the whole tag
     tokenizer = _try_tokenizer(tag)
     if tokenizer is not None:
