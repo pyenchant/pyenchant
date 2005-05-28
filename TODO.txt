@@ -9,13 +9,16 @@ PyEnchant:
   * regression tests: Broker
   * Mark Dict.add_to_personal as deprecated sometime in future
   * look up default language somehow?
-  * compliance with rfc1766, esp preference for '-' over '_' as
-    a seperator. Check this with different backends!
+  * respect locale.getdefaultencoding()?
+  * support for python2.2
+      - done for Linux, needs testing under Windows
+          - will probably require an updated distutils
 
   
 Enchant:
 
   * find a way to avoid using the registry to record dict locations
+     - augment the new binreloc code with calls to GetModuleFilename
   * move to aspell for windows installer backend if possible
    
 

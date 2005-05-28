@@ -35,10 +35,14 @@
     enchant spellchecking package.  Currently available functionality
     includes:
         
+        * 'backported' functionality for python2.2 compatability
         * functions for inserting/removing entries into the Windows
           registry, to point to local version of enchant
           
 """
+
+# Get generators for python2.2
+from __future__ import generators
 
 import sys
 import os
@@ -50,6 +54,23 @@ try:
 except ImportError:
     reg = None
 
+
+# Define basestring if it's not provided (e.g. python2.2)
+try:
+    basestring = basestring
+except NameError:
+    basestring = (str,unicode)
+    
+# Define enumerate() if it's not provided (e.g. python2.2)
+try:
+    enumerate = enumerate
+except NameError:
+    def enumerate(seq):
+        """Iterator producing (index,value) pairs for an interable."""
+        idx = 0
+        for itm in seq:
+            yield (idx,itm)
+            idx += 1
 
 # Make SpellChecker available for backwards compatability
 from enchant.checker import SpellChecker

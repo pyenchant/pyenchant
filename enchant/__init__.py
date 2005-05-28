@@ -41,7 +41,7 @@
     example:
 
         >>> import enchant
-        >>> d = enchant.Dict("en-US")   # create dictionary for US English
+        >>> d = enchant.Dict("en_US")   # create dictionary for US English
         >>> d.check("enchant")
         True
         >>> d.check("enchnt")
@@ -51,12 +51,8 @@
 
     Languages are identified by standard string tags such as "en" (English)
     and "fr" (French).  Specific language dialects can be specified by
-    including an additional code - for example, "en-AU" refers to Australian
+    including an additional code - for example, "en_AU" refers to Australian
     English.  The later form is preferred as it is more widely supported.
-    It is also possible to use more detailed language tags.  For full details,
-    please refer to RFC 1766 (http://www.faqs.org/rfcs/rfc1766.html).
-    As an extension to the RFC, the character '_' is permitted as an
-    alternate to '-' for tag component seperation.
 
     To check whether a dictionary exists for a given language, the function
     'dict_exists' is available.  Dictionaries may also be created using the
@@ -244,7 +240,7 @@ class Broker(_EnchantObject):
         
         This method constructs and returns a Dict object for the
         requested language.  'tag' should be a string of the appropriate
-        form for specifying a language, such as "fr" (French) or "en-AU"
+        form for specifying a language, such as "fr" (French) or "en_AU"
         (Australian English).  The existence of a specific language can
         be tested using the 'dict_exists' method.
         """
@@ -719,15 +715,15 @@ def _test():
     """Run some simple regression tests on the enchant API."""
     import tempfile
     
-    assert(dict_exists("en-US"))
+    assert(dict_exists("en_US"))
     
-    d1 = Dict("en-US")
+    d1 = Dict("en_US")
     assert(d1.check("hello"))
     assert(d1.check("helo") == False)
     assert(d1._broker is _broker)
-    assert(d1.tag == "en-US")
+    assert(d1.tag == "en_US")
     
-    d2 = request_dict("en-US")
+    d2 = request_dict("en_US")
     assert(d2.check("hello"))
     assert(d2._broker is _broker)
     assert("hello" in d1.suggest("helo"))
@@ -743,13 +739,13 @@ def _test():
     # Create a temporary PWL file
     try:
         pwlFileNm = tempfile.mkstemp()[1]
-    except NameError:
+    except (NameError,AttributeError):
         pwlFileNm = tempfile.mktemp()
     pwlFile = file(pwlFileNm,"w")
     pwlFile.write("Sazz\n")
     pwlFile.close()
     
-    d3 = DictWithPWL("en-US",pwlFileNm)
+    d3 = DictWithPWL("en_US",pwlFileNm)
     assert(d3.check("hello"))
     assert(d3.check("Sazz"))
     assert(d3.check("Flagen") == False)

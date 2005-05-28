@@ -48,6 +48,7 @@ import array
 
 import enchant
 from enchant.tokenize import get_tokenizer
+from enchant.utils import basestring, enumerate
 
 class SpellChecker:
     """Class implementing stateful spellchecking behavior.
@@ -70,7 +71,7 @@ class SpellChecker:
     each misspelled word with the string "ERROR":
         
         >>> text = "This is sme text with a fw speling errors in it."
-        >>> chkr = SpellChecker("en-US",text)
+        >>> chkr = SpellChecker("en_US",text)
         >>> for err in chkr:
         ...   err.replace("ERROR")
         ...
@@ -322,7 +323,7 @@ def _test1():
     text = """This is sme text with a few speling erors in it. Its gret
 for checking wheather things are working proprly with the SpellChecker
 class. Not gret for much els though."""
-    chkr = SpellChecker("en-US",text=text)
+    chkr = SpellChecker("en_US",text=text)
     for n,err in enumerate(chkr):
         if n == 0:
             # Fix up "sme" -> "some" properly
