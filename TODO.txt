@@ -10,9 +10,6 @@ PyEnchant:
   * Mark Dict.add_to_personal as deprecated sometime in future
   * look up default language somehow?
   * respect locale.getdefaultencoding()?
-  * support for python2.2
-      - done for Linux, needs testing under Windows
-          - will probably require an updated distutils
 
   
 Enchant:
