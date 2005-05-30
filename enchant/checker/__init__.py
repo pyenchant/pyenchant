@@ -322,7 +322,7 @@ def _test1():
     # Test things out briefly
     text = """This is sme text with a few speling erors in it. Its gret
 for checking wheather things are working proprly with the SpellChecker
-class. Not gret for much els though."""
+class. Not gret for much elss though."""
     chkr = SpellChecker("en_US",text=text)
     for n,err in enumerate(chkr):
         if n == 0:
@@ -360,8 +360,8 @@ class. Not gret for much els though."""
             err.ignore_always("SpellChecker")
         if n == 7:
             # The second "gret" should have been replaced
-            # So it's now on "els"
-            assert(err.word == "els")
+            # So it's now on "elss"
+            assert(err.word == "elss")
             err.replace("else")
         if n > 7:
             assert(False or "Too many errors!")
