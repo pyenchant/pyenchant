@@ -660,11 +660,11 @@ class DictWithPWL(Dict):
        self.pwl._check_this(msg)
 
     def _free(self):
-        """Extend Dict.free() to free the PWL as well."""
+        """Extend Dict._free() to free the PWL as well."""
         if self.pwl is not None:
             self.pwl._free()
             self.pwl = None
-        Dict.free(self)
+        Dict._free(self)
         
     def check(self,word):
         """Check spelling of a word.
