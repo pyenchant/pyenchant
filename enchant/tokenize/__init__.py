@@ -134,5 +134,25 @@ def _try_tokenizer(modName):
         return getattr(mod,funcName)
     except ImportError:
        return None
+
+
+def _test_get_tokenizer():
+    """Simple regression test for get_tokenizer."""
+    print "TESTING get_tokenizer"
+    from enchant.tokenize import en
+    assert(get_tokenizer("en") is en.tokenize)
+    assert(get_tokenizer("en_AU") is en.tokenize)
+    assert(get_tokenizer("en_US") is en.tokenize)
+    try:
+        get_tokenizer("nonexistant")
+        assert False, "Tokenzer was found for nonexistant language"
+    except Error:
+        pass
+    assert(get_tokenizer("nonexistant",fallback=True) is en.tokenize)
+    print "...ALL PASSED!"
     
+    
+if __name__ == "__main__":
+    _test_get_tokenizer()
+
     

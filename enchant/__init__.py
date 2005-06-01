@@ -75,7 +75,7 @@
 # Make version info available
 __ver_major__ = 1
 __ver_minor__ = 1
-__ver_patch__ = 2
+__ver_patch__ = 3
 __ver_sub__ = ""
 __version__ = "%d.%d.%d%s" % (__ver_major__,__ver_minor__,
                               __ver_patch__,__ver_sub__)
@@ -111,6 +111,11 @@ class ProviderDesc(object):
     def __repr__(self):
         return str(self)
 
+    def __eq__(self,pd):
+        """Equality operator on ProviderDesc objects."""
+        return (self.name == pd.name and \
+                self.desc == pd.desc and \
+                self.file == pd.file)
 
 
 class _EnchantObject(object):
@@ -711,10 +716,50 @@ list_dicts = _broker.list_dicts
 list_languages = _broker.list_languages
 
 
-def _test():
-    """Run some simple regression tests on the enchant API."""
-    import tempfile
-    
+
+def _test_brokers():
+    """Run some regression tests on the functionality of Broker.
+    These tests assume, at a minimum, that there is a working provider
+    with a dictionary for "en_US".
+    """
+    print "TESTING Broker"
+    b1 = Broker()
+    assert(b1 != _broker)
+    assert(b1.dict_exists("en_US"))
+    # Ensure all listed languages are in fact available
+    for lang in b1.list_languages():
+        assert(b1.dict_exists(lang))
+    # Ensure all listed providers are in fact available
+    for (lang,prov) in b1.list_dicts():
+        assert(b1.dict_exists(lang))
+        assert(prov in b1.describe())
+    # For each language given by more than one provider,
+    # test that ordering works as expected
+    langs = {}
+    for (tag,prov) in b1.list_dicts():
+        if langs.has_key(tag):
+            langs[tag].append(prov)
+        else:
+            langs[tag] = [prov]
+    for tag in langs:
+        for prov in langs[tag]:
+            b2 = Broker()
+            b2.set_ordering(tag,prov.name)
+            d = b2.request_dict(tag)
+            assert(d.provider == prov)
+            del d
+            del b2
+    print "...ALL PASSED!"
+            
+
+def _test_dicts():
+    """Run some simple regression tests on the enchant API.
+    These tests assume, at a minimum, that there is a working provider
+    with a dictionary for "en_US".
+    """
+    print "TESTING Dict and friends"
+
+    import tempfile    
     assert(dict_exists("en_US"))
     
     d1 = Dict("en_US")
@@ -760,12 +805,20 @@ def _test():
         os.remove(pwlFileNm)
     except:
         pass
-        
-    print "ALL TESTS PASSED"
+    print "...ALL PASSED!"
     
     
 # Run regression tests when called from comand-line
 if __name__ == "__main__":
-    _test()
+    from enchant.checker import _test_checker
+    from enchant.tokenize import _test_get_tokenizer
+    from enchant.tokenize.en import _test_tokenize_en
+    _test_brokers()
+    _test_dicts()
+    _test_checker()
+    _test_get_tokenizer()
+    _test_tokenize_en()
+    print "ALL TESTS PASSED!"
+
 
 

@@ -14,7 +14,7 @@ import os
 WINDEPS = ".\\tools\\pyenchant-bdist-win32-sources\\build"
 
 #  Cant obtain version information from module, must hardcode
-VERSION = "1.1.2"
+VERSION = "1.1.3"
 
 # Package MetaData
 NAME = "pyenchant"

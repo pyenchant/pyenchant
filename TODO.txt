@@ -4,10 +4,11 @@ PyEnchant:
 
   * implement a tkSpellCheckerDialog to compliment the wx one
   * Expand CmdLineChecker and make it ispell-compatible
-  * regression tests: Broker
   * Mark Dict.add_to_personal as deprecated sometime in future
   * look up default language somehow?
   * respect locale.getdefaultencoding()?
+  * test for memory leaks (valgrind?)
+  * try things out on OSX
 
   
 Enchant:

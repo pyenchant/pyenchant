@@ -72,9 +72,6 @@ except NameError:
             yield (idx,itm)
             idx += 1
 
-# Make SpellChecker available for backwards compatability
-from enchant.checker import SpellChecker
-
 
 # Useful registry-handling functions
 

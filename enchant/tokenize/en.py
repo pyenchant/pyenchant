@@ -90,11 +90,29 @@ class tokenize(enchant.tokenize.tokenize):
         raise StopIteration()
 
 
-if __name__ == "__main__":
-    # Test out the tokenizer functionality
+def _test_tokenize_en():
+    """Simple regression test for english tokenization."""
+    print "TESTING tokenize.en.tokenize"
     input = """This is a paragraph.  It's not very special, but it's designed
 2 show how the splitter works with many-different combos
 of words. Also need to "test" the handling of 'quoted' words."""
-    for entry in tokenize(input):
-        print entry
+    output = [
+              ("This",0),("is",5),("a",8),("paragraph",10),("It's",22),
+              ("not",27),("very",31),("special",36),("but",45),("it's",49),
+              ("designed",54),("show",65),("how",70),("the",74),
+              ("splitter",78),("works",87),("with",93),("many",98),
+              ("different",103),("combos",113),("of",120),("words",123),
+              ("Also",130),("need",135),
+              ("to",140),("test",144),("the",150),("handling",154),
+              ("of",163),("quoted",167),("words",175)
+             ]
+    for (itmO,itmV) in zip(output,tokenize(input)):
+        assert(itmO == itmV)
+    print "...ALL PASSED!"
+
+
+if __name__ == "__main__":
+    _test_tokenize_en()
+    
+    
         

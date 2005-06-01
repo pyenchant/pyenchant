@@ -318,11 +318,12 @@ class SpellChecker:
         
             
 
-def _test1():
+def _test_checker():
     # Test things out briefly
     text = """This is sme text with a few speling erors in it. Its gret
 for checking wheather things are working proprly with the SpellChecker
 class. Not gret for much elss though."""
+    print "TESTING checker.SpellChecker"
     chkr = SpellChecker("en_US",text=text)
     for n,err in enumerate(chkr):
         if n == 0:
@@ -369,8 +370,8 @@ class. Not gret for much elss though."""
 for checking whether things are working properly with the SpellChecker
 class. Not great for much else though."""
     assert(chkr.get_text() == text2)
-    print "ALL TESTS PASSED"
+    print "...ALL PASSED!"
 
 # Run tests when invoked from command line
 if __name__ == "__main__":
-    _test1()
+    _test_checker()
