@@ -81,6 +81,8 @@ __version__ = "%d.%d.%d%s" % (__ver_major__,__ver_minor__,
                               __ver_patch__,__ver_sub__)
 
 import _enchant as _e
+import utils
+
 import os
 import sys
 import warnings
@@ -412,23 +414,29 @@ class Dict(_EnchantObject):
     
     """
 
-    def __init__(self,tag,broker=None,data=None):
+    def __init__(self,tag=None,broker=None,data=None):
         """Dict object constructor.
         
         A dictionary belongs to a specific language, identified by the
-        string <tag>.  It must also have an associated Broker object which
+        string <tag>.  If the tag is not given, an attempt to determine
+        the user's default language is made using the 'locale' module.
+        If a default language cannot be determined, Error is raised.
+        
+        Each dictionary must also have an associated Broker object which
         obtains the dictionary information from the underlying system. This
         may be specified using <broker>.  If not given, the default broker
         is used.
         
-        System dictionary data can also be passed using <data>.  This should
+        System dictionary data can be passed using <data>.  This should
         only be done when initialising a Dict object from an existing
         C-library dictionary pointer as created from the _enchant module.
         """
         # Sanity checking on arguments
         if tag is None and data is None:
-            err = "Cannot create a dictionary without a language tag or "
-            err = err + "data pointer."
+            tag = utils.get_default_language()
+        if tag is None and data is None:
+            err = "No tag specified and default language could not "
+            err = err + "be determined."
             raise Error(err)
         if tag is not None and data is not None:
             err = "Cannot create a dictionary using both a language tag and "
@@ -694,12 +702,10 @@ class DictWithPWL(Dict):
         self.add_to_session(word)  
 
 ##  Check whether there are providers available, possibly point to
-##  local enchant install if not.  If registry changes are made,
-##  create an object to undo then and have it deleted on module unload
+##  local enchant install if not.
 _broker = Broker()
 if len(_broker.describe()) == 0:
     if sys.platform == "win32":
-        from enchant import utils
         utils.create_registry_keys()
         _broker = Broker()
 if len(_broker.describe()) == 0:
@@ -805,6 +811,21 @@ def _test_dicts():
         os.remove(pwlFileNm)
     except:
         pass
+        
+    # Check the behavior of default language
+    defLang = utils.get_default_language()
+    if defLang is None:
+        # If no default language, shouldnt work
+        try:
+            d4 = Dict()
+            assert False, "Created Dict without default language"
+        except Error:
+            pass
+    else:
+        # If there is a default language, should use it
+        d4 = Dict()
+        assert(d4.tag == defLang)
+    
     print "...ALL PASSED!"
     
     

@@ -4,4 +4,5 @@
    * support for Python 2.2
    * more and better regression tests
    * finally remove SpellChecker from utils --> checker
+   * use 'locale' module to look up default language if none specified
 

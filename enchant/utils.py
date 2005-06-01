@@ -38,6 +38,7 @@
         * 'backported' functionality for python2.2 compatability
         * functions for inserting/removing entries into the Windows
           registry, to point to local version of enchant
+        * functions for dealing with locale/language settings
           
 """
 
@@ -54,6 +55,10 @@ try:
 except ImportError:
     reg = None
 
+try:
+    import locale
+except ImportError:
+    locale = None
 
 # Define basestring if it's not provided (e.g. python2.2)
 try:
@@ -258,5 +263,39 @@ def remove_registry_keys(allusers=False):
     _reg_remove_empty_key("Software\\Enchant\\Ispell",allusers)
     _reg_remove_empty_key("Software\\Enchant\\Myspell",allusers)
     _reg_remove_empty_key("Software\\Enchant",allusers)
+    
+
+
+##  Allow looking up of default language on-demand.
+
+def get_default_language(default=None):
+    """Determine the user's default language, if possible.
+    
+    This function uses the 'locale' module to try to determine
+    the user's prefered language.  The return value is as
+    follows:
+        
+        * if a locale is available for the LC_MESSAGES category,
+          that language is used
+        * if a default locale is available, that language is used
+        * if the keyword argument <default> is given, it is used
+        * None
+        
+    Note that determining the user's language is in general only
+    possible if they have set the necessary environment variables
+    on their system.
+    """
+    try:
+        import locale
+        tag = locale.getlocale()[0]
+        if tag is None:
+            tag = locale.getdefaultlocale()[0]
+            if tag is None:
+                raise Exception("No default language available")
+        return tag
+    except:
+        pass
+    return default
+        
 
     
