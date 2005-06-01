@@ -5,4 +5,5 @@
    * more and better regression tests
    * finally remove SpellChecker from utils --> checker
    * use 'locale' module to look up default language if none specified
+   * marked Dict.add_to_personal as deprecated, use Dict.add_to_pwl
 

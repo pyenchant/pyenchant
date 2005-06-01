@@ -537,8 +537,8 @@ class Dict(_EnchantObject):
         change in the Enchant C API.
         
         """
-        #warnings.warn("add_to_personal is deprecated, please use add_to_pwl",
-        #              DeprecationWarning)
+        warnings.warn("add_to_personal is deprecated, please use add_to_pwl",
+                      DeprecationWarning)
         self._check_this()
         if type(word) == unicode:
             inWord = word.encode("utf-8")
