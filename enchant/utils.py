@@ -77,6 +77,14 @@ except NameError:
             yield (idx,itm)
             idx += 1
 
+# Make a deprecated SpellChecker available for backwards-compatability
+def SpellChecker(*args,**kwds):
+    warn("utils.SpellChecker is deprecated, please use checker.SpellChecker",
+         DeprecationWarning)
+    from checker import SpellChecker
+    return SpellChecker(*args,**kwds)
+
+
 
 # Useful registry-handling functions
 
