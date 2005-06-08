@@ -242,17 +242,24 @@ class Broker(_EnchantObject):
         assert(self.__live_dicts[tag] >= 0)
         return self.__live_dicts[tag]
         
-    def request_dict(self,tag):
-        """Request a Dict object for the language specified by 'tag'.
+    def request_dict(self,tag=None):
+        """Request a Dict object for the language specified by <tag>.
         
         This method constructs and returns a Dict object for the
         requested language.  'tag' should be a string of the appropriate
         form for specifying a language, such as "fr" (French) or "en_AU"
         (Australian English).  The existence of a specific language can
         be tested using the 'dict_exists' method.
+        
+        If <tag> is not given or is None, an attempt is made to determine
+        the current language in use.  If this cannot be determined, Error
+        is raised.
+        
+        NOTE:  this method is functionally equivalent to calling the Dict()
+               constructor and passing in the <broker> argument.
+               
         """
-        new_dict = self._request_dict_data(tag)
-        return Dict(None,self,new_dict)
+        return Dict(tag,self)
 
     def _request_dict_data(self,tag):
         """Request raw C-object data for a dictionary.
@@ -280,9 +287,10 @@ class Broker(_EnchantObject):
         if new_dict is None:
             eStr = "Personal Word List file '%s' could not be loaded"
             self._raise_error(eStr % (pwl,))
-            self._raise_error(eStr)
         self.__inc_live_dicts(pwl)
-        return Dict(None,self,new_dict)
+        d = Dict(False)
+        d._switch_this(new_dict,self)
+        return d
 
     def _free_dict(self,dict):
         """Free memory associated with a dictionary.
@@ -414,56 +422,76 @@ class Dict(_EnchantObject):
     
     """
 
-    def __init__(self,tag=None,broker=None,data=None):
+    def __init__(self,tag=None,broker=None):
         """Dict object constructor.
         
         A dictionary belongs to a specific language, identified by the
-        string <tag>.  If the tag is not given, an attempt to determine
-        the user's default language is made using the 'locale' module.
-        If a default language cannot be determined, Error is raised.
+        string <tag>.  If the tag is not given or is None, an attempt to
+        determine the language currently in use is made using the 'locale'
+        module.  If the current language cannot be determined, Error is raised.
+
+        If <tag> is instead given the value of False, a 'dead' Dict object
+        is created without any reference to a language.  This is typically
+        only useful within PyEnchant itself.  Any other non-string value
+        for <tag> raises Error.
         
         Each dictionary must also have an associated Broker object which
         obtains the dictionary information from the underlying system. This
         may be specified using <broker>.  If not given, the default broker
         is used.
-        
-        System dictionary data can be passed using <data>.  This should
-        only be done when initialising a Dict object from an existing
-        C-library dictionary pointer as created from the _enchant module.
         """
-        # Sanity checking on arguments
-        if tag is None and data is None:
-            tag = utils.get_default_language()
-        if tag is None and data is None:
-            err = "No tag specified and default language could not "
-            err = err + "be determined."
-            raise Error(err)
-        if tag is not None and data is not None:
-            err = "Cannot create a dictionary using both a language tag and "
-            err = err + "a data pointer."
-            raise Error(err)
         # Superclass initialisation
         _EnchantObject.__init__(self)
-        # Use module-level broker if none given
-        if broker is None:
-            broker = _broker
-        # Create data if not given
-        if data is None:
-            data = broker._request_dict_data(tag)
-        self._this = data
-        self._broker = broker
-        # Set instance-level description attributes
-        desc = self.__describe(check_this=False)
-        self.tag = desc[0]
-        self.provider = ProviderDesc(*desc[1:])
+        # Initialise object attributes to None
+        self._broker = None
+        self.tag = None
+        self.provider = None
+        # Create dead object if False was given
+        if tag is False:
+            self._this = None
+        else:
+            if tag is None:
+                tag = utils.get_default_language()
+                if tag is None:
+                    err = "No tag specified and default language could not "
+                    err = err + "be determined."
+                    raise Error(err)
+            # Use module-level broker if none given
+            if broker is None:
+                broker = _broker
+            # Use the broker to get C-library pointer data
+            self._switch_this(broker._request_dict_data(tag),broker)
 
     def __del__(self):
-        """Dict object constructor."""
+        """Dict object desstructor."""
         # Calling free() might fail if python is shutting down
         try:
             self._free()
         except AttributeError:
             pass
+            
+    def _switch_this(self,this,broker):
+        """Switch the underlying C-library pointer for this object.
+        
+        As all useful state for a Dict is stored by the underlyin C-library
+        pointer, it is very convenient to allow this to be switched at
+        run-time.  Pass a new dict data object into this method to affect
+        the necessary changes.  The creating Broker object (at the Python
+        level) must also be provided.
+                
+        This should *never* *ever* be used by application code.  It's
+        a convenience for developers only, replacing the clunkier <data>
+        parameter to __init__ from earlier versions.
+        """
+        # Free old dict data
+        Dict._free(self)
+        # Hook in the new stuff
+        self._this = this
+        self._broker = broker
+        # Update object properties
+        desc = self.__describe(check_this=False)
+        self.tag = desc[0]
+        self.provider = ProviderDesc(*desc[1:])
             
     def _check_this(self,msg=None):
         """Extend _EnchantObject._check_this() to check Broker validity.
@@ -634,9 +662,13 @@ class DictWithPWL(Dict):
     appended to the pwl file.
     
     The Dict object managing the PWL is available as the 'pwl' attribute.
+    
+    Unlike a regular Dict object, DictWithPWL *must* be created with an
+    explicit language tag.  Please contact the author if this is an
+    enourmous inconvenience.
     """
     
-    def __init__(self,tag,pwl,broker=None,data=None):
+    def __init__(self,tag,pwl,broker=None):
         """DictWithPWL constructor.
 
         The argument 'pwl' must be supplied, naming a file containing
@@ -649,7 +681,7 @@ class DictWithPWL(Dict):
             f = file(pwl,"wt")
 	    f.close()
 	    del f
-        Dict.__init__(self,tag,broker,data)
+        Dict.__init__(self,tag,broker)
         self.pwl = self._broker.request_pwl_dict(pwl)
      
     def _check_this(self,msg=None):

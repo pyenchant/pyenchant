@@ -6,5 +6,7 @@
    * Fixed memory leak in DictWithPWL._free()
    * more and better regression tests
    * mark deprecated interfaces with warnings
+   * removed <data> parameter to Dict constructor, with lots of
+     reshuffling behind the scenes
 
 

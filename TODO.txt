@@ -8,6 +8,8 @@ PyEnchant:
   * test for memory leaks (valgrind?)
   * try things out on OSX
   * Update tutorial with default language stuff
+  * allow DictWithPWL to use default language
+       - probably require swapping order of arguments, not good!
 
   
 Enchant:
