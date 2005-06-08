@@ -118,6 +118,10 @@ class ProviderDesc(object):
         return (self.name == pd.name and \
                 self.desc == pd.desc and \
                 self.file == pd.file)
+                
+    def __hash__(self):
+        """Hash operator on ProviderDesc objects."""
+        return hash(self.name + self.desc + self.file)
 
 
 class _EnchantObject(object):
@@ -300,7 +304,12 @@ class Broker(_EnchantObject):
         method has been called on a dictionary, it must not be used again.
         """
         self._check_this()
-        if self.__dec_live_dicts(dict.tag) == 0:
+        # Lookup key differs if it's a PWL or not
+        if dict.tag.lower() == "personal wordlist":
+            key = dict.provider.file
+        else:
+            key = dict.tag
+        if self.__dec_live_dicts(key) == 0:
             _e.enchant_broker_free_dict(self._this,dict._this)
         dict._this = None
         dict._broker = None
@@ -805,19 +814,24 @@ def _test_dicts():
     assert(d1.check("helo") == False)
     assert(d1._broker is _broker)
     assert(d1.tag == "en_US")
-    
+    assert(_broker._Broker__live_dicts["en_US"] == 1)  
+
     d2 = request_dict("en_US")
     assert(d2.check("hello"))
     assert(d2._broker is _broker)
     assert("hello" in d1.suggest("helo"))
+    assert(_broker._Broker__live_dicts["en_US"] == 2) 
     del d2
-    
+    assert(_broker._Broker__live_dicts["en_US"] == 1) 
+        
     assert(d1.check("hello"))
     assert(d1.check("Lozz") == False)
     assert(d1.is_in_session("Lozz") == False)
     d1.add_to_session("Lozz")
     assert(d1.is_in_session("Lozz"))
     assert(d1.check("Lozz"))
+    del d1
+    assert(_broker._Broker__live_dicts["en_US"] == 0) 
     
     # Create a temporary PWL file
     try:
@@ -836,6 +850,16 @@ def _test_dicts():
     assert(d3.check("Flagen"))
     del d3
     
+    d4 = request_pwl_dict(pwlFileNm)
+    print d4.tag
+    assert(d4.tag.lower() == "personal wordlist")
+    assert(d4.provider.file == pwlFileNm)
+    assert(d4.check("Flagen"))
+    assert(d4.check("hello") == False)
+    assert(_broker._Broker__live_dicts[pwlFileNm] == 1)
+    del d4
+    assert(_broker._Broker__live_dicts[pwlFileNm] == 0)
+    
     pwlFile = file(pwlFileNm,"r")
     assert("Flagen\n" in pwlFile.readlines())
     pwlFile.close()
@@ -849,14 +873,14 @@ def _test_dicts():
     if defLang is None:
         # If no default language, shouldnt work
         try:
-            d4 = Dict()
+            d5 = Dict()
             assert False, "Created Dict without default language"
         except Error:
             pass
     else:
         # If there is a default language, should use it
-        d4 = Dict()
-        assert(d4.tag == defLang)
+        d5 = Dict()
+        assert(d5.tag == defLang)
     
     print "...ALL PASSED!"
     

@@ -3,10 +3,12 @@
 
    * support for Python 2.2
    * use 'locale' module to look up default language if none specified
-   * Fixed memory leak in DictWithPWL._free()
    * more and better regression tests
    * mark deprecated interfaces with warnings
    * removed <data> parameter to Dict constructor, with lots of
      reshuffling behind the scenes
+   * Bug fixes:
+        * memory leak in DictWithPWL._free()
+        * incorrect cache handling for PWLs
 
 

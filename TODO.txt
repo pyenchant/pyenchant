@@ -17,5 +17,7 @@ Enchant:
   * find a way to avoid using the registry to record dict locations
      - augment the new binreloc code with calls to GetModuleFilename
   * move to aspell for windows installer backend if possible
+  * shouldnt use enchant_normalize_dictionary_tag on PWL names as it
+    might wreck the filename!  Should any normalizing be done?
    
 
