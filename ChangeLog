@@ -7,7 +7,10 @@
    * mark deprecated interfaces with warnings
    * removed <data> parameter to Dict constructor, with lots of
      reshuffling behind the scenes
-   * Bug fixes:
+   * add DictNotFoundError as a subclass of Error
+   * Remove de_AT from languages in the Windows version, it was
+     causing errors
+   * bug fixes:
         * memory leak in DictWithPWL._free()
         * incorrect cache handling for PWLs
 

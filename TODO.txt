@@ -6,12 +6,10 @@ PyEnchant:
   * Expand CmdLineChecker and make it ispell-compatible
   * respect locale.getdefaultencoding() ?
   * try things out on OSX
-  * Update tutorial with default language stuff <<<<< not that it may fail!
   * allow DictWithPWL to use default language
        - probably require swapping order of arguments, not good!
   * try implementing the shared library with PyRex instead of SWIG,
     see if we get better performance/memory handling/etc
-  * add changelog to CVS, record addition of DictNotFoundError
 
   
 Enchant:
