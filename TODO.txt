@@ -5,11 +5,12 @@ PyEnchant:
   * implement a tkSpellCheckerDialog to compliment the wx one
   * Expand CmdLineChecker and make it ispell-compatible
   * respect locale.getdefaultencoding() ?
-  * test for memory leaks (valgrind?)
   * try things out on OSX
   * Update tutorial with default language stuff
   * allow DictWithPWL to use default language
        - probably require swapping order of arguments, not good!
+  * try implementing the shared library with PyRex instead of SWIG,
+    see if we get better performance/memory handling/etc
 
   
 Enchant:
@@ -19,5 +20,22 @@ Enchant:
   * move to aspell for windows installer backend if possible
   * shouldnt use enchant_normalize_dictionary_tag on PWL names as it
     might wreck the filename!  Should any normalizing be done?
-   
 
+Docs:
+
+  * OSX install procedure:
+       - http://www.tenon.com/resources/revised/X_apps_1.shtml for glib?
+         Or possibly the gtk+osx project?
+       - compile for oneself?
+       - Needs:
+            - libiconv?
+            - pkg-config
+            - glib
+            - enchant
+       - distribute as a .mpkg, build using py2app.
+       - seems like most of the tools only available for >=10.3 ??
+
+       * install pkgconfig
+       * install libiconv
+       * install gettext - ho-hum, crashes PearPC
+       

@@ -823,7 +823,7 @@ def _test_dicts():
     assert(_broker._Broker__live_dicts["en_US"] == 2) 
     del d2
     assert(_broker._Broker__live_dicts["en_US"] == 1) 
-        
+
     assert(d1.check("hello"))
     assert(d1.check("Lozz") == False)
     assert(d1.is_in_session("Lozz") == False)
@@ -851,7 +851,6 @@ def _test_dicts():
     del d3
     
     d4 = request_pwl_dict(pwlFileNm)
-    print d4.tag
     assert(d4.tag.lower() == "personal wordlist")
     assert(d4.provider.file == pwlFileNm)
     assert(d4.check("Flagen"))
