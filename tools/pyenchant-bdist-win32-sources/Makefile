@@ -13,6 +13,8 @@ CFLAGS = -g -Wl,--enable-runtime-pseudo-reloc
 all: $(BUILD_DIR)/lib/libenchant-1.dll $(BUILD_DIR)/myspell/en_GB.dic \
 	$(BUILD_DIR)/myspell/en_US.dic $(BUILD_DIR)/myspell/de_DE.dic \
 	$(BUILD_DIR)/myspell/fr_FR.dic
+	# Remove dictionaries that are causing trouble
+	rm -f $(BUILD_DIR)/myspell/de_AT.dic
 
 #  Make enchant. Dont build aspell plugin yet
 #$(BUILD_DIR)/lib/libenchant-1.dll: $(BUILD_DIR)/lib/libaspell-15.dll

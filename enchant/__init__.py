@@ -91,6 +91,9 @@ class Error(Exception):
     """Base exception class for the enchant module."""
     pass
 
+class DictNotFoundError(Error):
+    """Exception raised when a requested dictionary could not be found."""
+    pass
 
 class ProviderDesc(object):
     """Simple class describing an Enchant provider.
@@ -144,19 +147,20 @@ class _EnchantObject(object):
     def _check_this(self,msg=None):
          """Check that self._this is set to a pointer, rather than None."""
          if msg is None:
-             msg = "%s unusable: the underlying C-library object has been freed."
-             msg = msg % (self.__class__.__name__,)
+            msg = "%s unusable: the underlying C-library object has been freed."
+            msg = msg % (self.__class__.__name__,)
          if self._this is None:
-             raise Error(msg)
+            raise Error(msg)
              
-    def _raise_error(self,default="Unspecified Error: No Information Available"):
+    def _raise_error(self,default="Unspecified Error",eclass=Error):
          """Raise an exception based on available error messages.
          This method causes an Error to be raised.  Subclasses should
          override it to retreive an error indication from the underlying
          API if possible.  If such a message cannot be retreived, the
-         argument value 'default' is used.
+         argument value <default> is used.  The class of the exception
+         can be specified using the argument <eclass>
          """
-         raise Error(default)
+         raise eclass(default)
 
 
 
@@ -204,12 +208,12 @@ class Broker(_EnchantObject):
         except AttributeError:
             pass
             
-    def _raise_error(self,default="Unspecified Error: No Information Available"):
+    def _raise_error(self,default="Unspecified Error",eclass=Error):
         """Overrides _EnchantObject._raise_error to check broker errors."""
         err = _e.enchant_broker_get_error(self._this)
         if err == "" or err is None:
-            raise Error(default)
-        raise Error(err)
+            raise eclass(default)
+        raise eclass(err)
 
     def _free(self):
         """Free system resource associated with a Broker object.
@@ -274,7 +278,7 @@ class Broker(_EnchantObject):
         new_dict = _e.enchant_broker_request_dict(self._this,tag)
         if new_dict is None:
             eStr = "Dictionary for language '%s' could not be found"
-            self._raise_error(eStr % (tag,))
+            self._raise_error(eStr % (tag,),DictNotFoundError)
         self.__inc_live_dicts(tag)
         return new_dict
 
@@ -513,12 +517,12 @@ class Dict(_EnchantObject):
             self._this = None
         _EnchantObject._check_this(self,msg)
 
-    def _raise_error(self,default="Unspecified Error: No Information Available"):
+    def _raise_error(self,default="Unspecified Error",eclass=Error):
         """Overrides _EnchantObject._raise_error to check dict errors."""
         err = _e.enchant_dict_get_error(self._this)
         if err == "" or err is None:
-            raise Error(default)
-        raise Error(err)
+            raise eclass(default)
+        raise eclass(err)
 
     def _free(self):
         """Free the system resources associated with a Dict object.
@@ -878,8 +882,12 @@ def _test_dicts():
             pass
     else:
         # If there is a default language, should use it
-        d5 = Dict()
-        assert(d5.tag == defLang)
+        # Of course, no need for the dict to actually exist
+        try:
+            d5 = Dict()
+            assert(d5.tag == defLang)
+        except DictNotFoundError:
+            pass
     
     print "...ALL PASSED!"
     
