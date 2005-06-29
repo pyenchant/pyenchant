@@ -24,8 +24,9 @@ $(BUILD_DIR)/lib/libenchant-1.dll: $(BUILD_DIR)/lib/pkgconfig/glib-2.0.pc \
 	cd $(ENCHANT_DIR) && PKG_CONFIG_PATH=$(BUILD_DIR)/lib/pkgconfig ./configure CFLAGS="$(CFLAGS)" $(XMINGW_CONFIG_OPTS) $(ENCHANT_CONFIG_OPTS) && make
 	cp $(ENCHANT_DIR)/src/.libs/libenchant-1.dll $(BUILD_DIR)/lib/
 	#cp $(ENCHANT_DIR)/src/aspell/.libs/libenchant_aspell-1.dll $(BUILD_DIR)/lib/
-	cp $(ENCHANT_DIR)/src/ispell/.libs/libenchant_ispell-1.dll $(BUILD_DIR)/lib/
-	cp $(ENCHANT_DIR)/src/myspell/.libs/libenchant_myspell-1.dll $(BUILD_DIR)/lib/
+	mkdir $(BUILD_DIR)/lib/enchant
+	cp $(ENCHANT_DIR)/src/ispell/.libs/libenchant_ispell-1.dll $(BUILD_DIR)/lib/enchant/
+	cp $(ENCHANT_DIR)/src/myspell/.libs/libenchant_myspell-1.dll $(BUILD_DIR)/lib/enchant/
 
 
 #  Make the necessary Aspell libraries and headers
@@ -67,6 +68,7 @@ clobber: clean
 	rm -rf $(BUILD_DIR)/include/aspell.h $(BUILD_DIR)/include/pspell
 	rm -f $(BUILD_DIR)/lib/libaspell*
 	rm -f $(BUILD_DIR)/lib/libenchant*
+	rm -rf $(BUILD_DIR)/lib/enchant
 	rm -f $(BUILD_DIR)/myspell/*.dic
 	rm -f $(BUILD_DIR)/myspell/*.aff
 	rm -f $(BUILD_DIR)/myspell/*.txt

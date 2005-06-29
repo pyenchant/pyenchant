@@ -225,11 +225,11 @@ def _reg_config_keys():
         * Key Data
         
     """
-    modulesDir = os.path.join(sysconfig.get_python_lib(),"enchant")
+    modulesDir = os.path.join(sysconfig.get_python_lib(),"enchant","enchant")
     ispellDir = os.path.join(sysconfig.get_python_lib(),"enchant","ispell")
     myspellDir = os.path.join(sysconfig.get_python_lib(),"enchant","myspell")
     keys = []
-    keys.append(("Software\\Enchant\\Config","Module_Dir",modulesDir))
+    #keys.append(("Software\\Enchant\\Config","Module_Dir",modulesDir))
     keys.append(("Software\\Enchant\\Ispell","Data_Dir",ispellDir))
     keys.append(("Software\\Enchant\\Myspell","Data_Dir",myspellDir))
     return keys
