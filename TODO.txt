@@ -16,11 +16,13 @@ PyEnchant:
   
 Enchant:
 
-  * find a way to avoid using the registry to record dict locations
-     - augment the new binreloc code with calls to GetModuleFilename
+  * Add binreloc/GetModuleFilename code to ispell and myspell plugins
   * move to aspell for windows installer backend if possible
   * shouldnt use enchant_normalize_dictionary_tag on PWL names as it
     might wreck the filename!  Should any normalizing be done?
+      - for instance, cant have seperate pwls pwl.txt and pwl.dic,
+        only the first one accessed gets used.  Also leads to a
+        crash in pyenchant due to double-freeing...
 
 Docs:
 

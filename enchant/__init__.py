@@ -271,7 +271,7 @@ class Broker(_EnchantObject):
 
     def _request_dict_data(self,tag):
         """Request raw C-object data for a dictionary.
-        This method passed on the call to the C library, and does
+        This method call is passed on the call to the C library, and does
         some internal bookkeeping.
         """
         self._check_this()
@@ -279,7 +279,9 @@ class Broker(_EnchantObject):
         if new_dict is None:
             eStr = "Dictionary for language '%s' could not be found"
             self._raise_error(eStr % (tag,),DictNotFoundError)
-        self.__inc_live_dicts(tag)
+        # Determine normalized tag, for live count
+        key = self.__describe_dict(new_dict)[0]
+        self.__inc_live_dicts(key)
         return new_dict
 
     def request_pwl_dict(self,pwl):
@@ -295,7 +297,9 @@ class Broker(_EnchantObject):
         if new_dict is None:
             eStr = "Personal Word List file '%s' could not be loaded"
             self._raise_error(eStr % (pwl,))
-        self.__inc_live_dicts(pwl)
+        # Find normalized filename, use as key
+        key = self.__describe_dict(new_dict)[3]
+        self.__inc_live_dicts(key)
         d = Dict(False)
         d._switch_this(new_dict,self)
         return d
@@ -408,6 +412,23 @@ class Broker(_EnchantObject):
             if tag not in langs:
                 langs.append(tag)
         return langs
+        
+    def __describe_dict(self,dict_data):
+        """Get the description tuple for a dict data object.
+        <dict_data> must be a C-library pointer to an enchant dictionary.
+        The return value is a tuple of the form:
+                (<tag>,<name>,<desc>,<file>)
+        """
+        # Define local callback function
+        cb_result = []
+        def cb_func(tag,name,desc,file):
+            name = name.decode("utf-8")
+            desc = desc.decode("utf-8")
+            file = file.decode("utf-8")
+            cb_result.append((tag,name,desc,file))
+        # Actual call describer function
+        _e.enchant_dict_describe_py(dict_data,cb_func)
+        return cb_result[0]
         
 
 class Dict(_EnchantObject):
@@ -835,7 +856,6 @@ def _test_dicts():
     assert(d1.is_in_session("Lozz"))
     assert(d1.check("Lozz"))
     del d1
-    assert(_broker._Broker__live_dicts["en_US"] == 0) 
     
     # Create a temporary PWL file
     try:
@@ -888,6 +908,16 @@ def _test_dicts():
             assert(d5.tag == defLang)
         except DictNotFoundError:
             pass
+    
+    # Check live_dicts behavior with normalized tag names
+    assert(_broker._Broker__live_dicts["en_US"] == 0)
+    d6 = Dict("en_US@fake")
+    assert(_broker._Broker__live_dicts["en_US"] == 1)
+    d7 = Dict("en_US.utf-8")
+    assert(_broker._Broker__live_dicts["en_US"] == 2)
+    del d6
+    del d7
+    assert(_broker._Broker__live_dicts["en_US"] == 0)
     
     print "...ALL PASSED!"
     

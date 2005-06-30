@@ -2,7 +2,9 @@
 1.1.4:
 
    * Trickery to avoid the registry on Windows
-   * Plugins on windows moved to "enchant" subdirector
+   * Plugins on Windows moved to "enchant" subdirector
+   * bug fixes:
+   		* (1230151): count of live instances done by normalized key
 
 1.1.3:
 
