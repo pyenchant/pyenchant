@@ -769,13 +769,13 @@ class DictWithPWL(Dict):
 
 ##  Check whether there are providers available, possibly point to
 ##  local enchant install if not.
-_broker = Broker()
-if len(_broker.describe()) == 0:
-    if sys.platform == "win32":
-        utils.create_registry_keys()
-        _broker = Broker()
-if len(_broker.describe()) == 0:
-    warnings.warn("No dictionary providers are available.")
+#_broker = Broker()
+#if len(_broker.describe()) == 0:
+#    if sys.platform == "win32":
+#        utils.create_registry_keys()
+#        _broker = Broker()
+#if len(_broker.describe()) == 0:
+#    warnings.warn("No dictionary providers are available.")
 
 
 ##  Create a module-level default broker object, and make its important

@@ -1,6 +1,6 @@
 --- src/enchant-1.1.6/src/enchant.c	Wed Mar  9 07:19:50 2005
-+++ enchant-1.1.6/src/enchant.c	Wed Jun 29 14:43:52 2005
-@@ -128,6 +128,26 @@
++++ enchant-1.1.6/src/enchant.c	Thu Jun 30 06:17:46 2005
+@@ -128,6 +128,24 @@
  	if (module_dir)
  		return module_dir;
  
@@ -25,7 +25,7 @@
  #ifdef ENCHANT_GLOBAL_MODULE_DIR
  	return g_strdup (ENCHANT_GLOBAL_MODULE_DIR);
  #else
-@@ -147,6 +167,10 @@
+@@ -147,6 +165,10 @@
  	if (ordering_dir)
  		return ordering_dir;
  
@@ -36,7 +36,7 @@
  #ifdef ENCHANT_GLOBAL_ORDERING
  	return g_strdup (ENCHANT_GLOBAL_ORDERING);
  #else
-@@ -200,7 +224,12 @@
+@@ -200,7 +222,12 @@
  ENCHANT_MODULE_EXPORT (char *)
  enchant_get_registry_value (const char * const prefix, const char * const key)
  {

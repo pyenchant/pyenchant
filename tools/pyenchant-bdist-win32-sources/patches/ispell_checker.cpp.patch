@@ -1,0 +1,28 @@
+--- src/enchant-1.1.6/src/ispell/ispell_checker.cpp	Wed Feb  9 14:45:00 2005
++++ enchant-1.1.6/src/ispell/ispell_checker.cpp	Thu Jun 30 06:22:12 2005
+@@ -367,6 +367,25 @@
+ 	if (ispell_prefix)
+ 		return ispell_prefix;
+ #endif
++
++#ifdef _WIN32
++	/* Dynamically locate DLL and search for modules relative to it. */
++	char dll_path[MAX_PATH];
++	char *dll_dir;
++	HINSTANCE hInstance = GetModuleHandle("libenchant_ispell-1");
++	if(hInstance != NULL)
++		{
++		if(GetModuleFileName(hInstance,dll_path,MAX_PATH))
++			{
++			/* Create dir string and return */
++			dll_dir = g_path_get_dirname(dll_path);
++			ispell_prefix=g_build_filename(dll_dir,"..","ispell",NULL);
++			g_free(dll_dir);
++			return ispell_prefix;
++			}
++		}
++#endif
++
+ #ifdef ENCHANT_ISPELL_DICT_DIR
+ 	return g_strdup (ENCHANT_ISPELL_DICT_DIR);
+ #else
