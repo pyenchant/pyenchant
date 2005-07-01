@@ -12,6 +12,7 @@ PyEnchant:
     see if we get better performance/memory handling/etc
   * check enchant version in configure script, issue warning if
     not >= 1.1.6
+  * create/fillin README.txt in folders in the Windows distribution
 
   
 Enchant:
