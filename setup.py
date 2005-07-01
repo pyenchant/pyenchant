@@ -72,25 +72,25 @@ if sys.platform == "win32":
             PKG_DATA["enchant"].append(os.path.join(WINDEPS,"lib","%s.dll") \
 			                                          % (dllName,))
         # Plugin DLLs are in a seperate directory
-        LOCAL_DLLS = ["enchant\\libenchant_myspell-1",
+        PLUGIN_DLLS = ["enchant\\libenchant_myspell-1",
                       "enchant\\libenchant_ispell-1",]
-        PKG_DATA["enchant/enchant"] = []
-        for dllName in LOCAL_DLLS:
-            PKG_DATA["enchant/enchant"].append(os.path.join(WINDEPS,"lib",
+        PKG_DATA["enchant/lib/enchant"] = []
+        for dllName in PLUGIN_DLLS:
+            PKG_DATA["enchant/lib/enchant"].append(os.path.join(WINDEPS,"lib",
 		                                          "%s.dll"%(dllName,)))
     # Also include local dictionaries
-    PKG_DATA["enchant/myspell"] = []
+    PKG_DATA["enchant/share/enchant/myspell"] = []
     dictPath = os.path.join(WINDEPS,"myspell")
     if os.path.isdir(dictPath):
       for dictName in os.listdir(dictPath):
         if dictName[-3:] in ["txt","dic","aff"]:
-          PKG_DATA["enchant/myspell"].append(os.path.join(dictPath,dictName))
-    PKG_DATA["enchant/ispell"] = []
+          PKG_DATA["enchant/share/enchant/myspell"].append(os.path.join(dictPath,dictName))
+    PKG_DATA["enchant/share/enchant/ispell"] = []
     dictPath = os.path.join(WINDEPS,"ispell")
     if os.path.isdir(dictPath):
       for dictName in os.listdir(dictPath):
         if dictName.endswith("hash") or dictName == "README.txt":
-          PKG_DATA["enchant/ispell"].append(os.path.join(dictPath,dictName))
+          PKG_DATA["enchant/share/enchant/ispell"].append(os.path.join(dictPath,dictName))
 else:
     ext1.libraries.append("enchant")
 

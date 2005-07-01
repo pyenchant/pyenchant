@@ -1,0 +1,12 @@
+--- enchant-1.1.6/src/enchant-provider.h	Wed Feb  9 14:43:24 2005
++++ enchant-1.1.7/src/enchant-provider.h	Fri Jul  1 15:16:48 2005
+@@ -56,6 +56,9 @@
+ ENCHANT_MODULE_EXPORT (char *)
+ 	enchant_get_registry_value (const char * const prefix, const char * const key);
+ 
++ENCHANT_MODULE_EXPORT(char *)
++	enchant_get_prefix_dir(void);
++
+ ENCHANT_MODULE_EXPORT(void)
+ 	enchant_dict_set_error (EnchantDict * dict, const char * const err);
+ 

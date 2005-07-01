@@ -1,42 +1,68 @@
---- src/enchant-1.1.6/src/enchant.c	Wed Mar  9 07:19:50 2005
-+++ enchant-1.1.6/src/enchant.c	Thu Jun 30 06:17:46 2005
-@@ -128,6 +128,24 @@
+--- enchant-1.1.6/src/enchant.c	Wed Mar  9 07:19:50 2005
++++ enchant-1.1.7/src/enchant.c	Fri Jul  1 05:45:50 2005
+@@ -53,6 +53,10 @@
+ #define ENCHANT_USER_PATH_EXTENSION ".enchant"
+ #endif
+ 
++#ifdef ENABLE_BINRELOC
++#include "prefix.h"
++#endif
++
+ ENCHANT_PLUGIN_DECLARE("Enchant")
+ 
+ /********************************************************************************/
+@@ -122,13 +126,25 @@
+ #ifdef XP_TARGET_COCOA
+ 	return g_strdup ([[EnchantResourceProvider instance] moduleFolder]);
+ #endif
++
+ 	char * module_dir = NULL;
+ 
++	/* Look for explicitly set registry values */
+ 	module_dir = enchant_get_registry_value ("Config", "Module_Dir");
  	if (module_dir)
  		return module_dir;
  
-+#ifdef _WIN32
-+	/* Dynamically locate DLL and search for modules relative to it. */
-+	char dll_path[MAX_PATH];
-+	char *dll_dir;
-+	HINSTANCE hInstance = GetModuleHandle("libenchant-1");
-+	if(hInstance != NULL)
+-#ifdef ENCHANT_GLOBAL_MODULE_DIR
++	/* Dynamically locate library and search for modules relative to it. */
++	char * prefix = NULL;
++	prefix = enchant_get_prefix_dir();
++	if(prefix)
 +		{
-+		if(GetModuleFileName(hInstance,dll_path,MAX_PATH))
-+			{
-+			/* Create dir string and return */
-+			dll_dir = g_path_get_dirname(dll_path);
-+			module_dir = g_build_filename(dll_dir,"enchant",NULL);
-+			g_free(dll_dir);
++			module_dir = g_build_filename(prefix,"lib","enchant",NULL);
++			g_free(prefix);
 +			return module_dir;
-+			}
 +		}
-+#endif
 +
- #ifdef ENCHANT_GLOBAL_MODULE_DIR
++#if defined(ENCHANT_GLOBAL_MODULE_DIR)
  	return g_strdup (ENCHANT_GLOBAL_MODULE_DIR);
  #else
-@@ -147,6 +165,10 @@
+ 	return NULL;
+@@ -143,11 +159,22 @@
+ #endif
+ 	char * ordering_dir = NULL;
+ 
++	/* Look for explicitly set registry values */
+ 	ordering_dir = enchant_get_registry_value ("Config", "Data_Dir");
  	if (ordering_dir)
  		return ordering_dir;
  
-+#ifdef _WIN32
-+	/* TODO */
-+#endif
+-#ifdef ENCHANT_GLOBAL_ORDERING
++	/* Dynamically locate library and search for files relative to it. */
++	char * prefix = NULL;
++	prefix = enchant_get_prefix_dir();
++	if(prefix)
++		{
++			ordering_dir = g_build_filename(prefix,"share","enchant",NULL);
++			g_free(prefix);
++			return ordering_dir;
++		}
 +
- #ifdef ENCHANT_GLOBAL_ORDERING
++#if defined(ENCHANT_GLOBAL_ORDERING)
  	return g_strdup (ENCHANT_GLOBAL_ORDERING);
  #else
-@@ -200,7 +222,12 @@
+ 	return NULL;
+@@ -200,7 +227,12 @@
  ENCHANT_MODULE_EXPORT (char *)
  enchant_get_registry_value (const char * const prefix, const char * const key)
  {
@@ -50,3 +76,45 @@
  }
  
  /**
+@@ -1424,4 +1456,41 @@
+ 	g_return_val_if_fail (broker, NULL);
+ 	
+ 	return broker->error;
++}
++
++
++/**
++ * enchant_get_prefix_dir
++ *
++ * Returns a string giving the location of the base directory
++ * of the enchant installation.  This corresponds roughly to 
++ * the --prefix option given to ./configure when enchant is
++ * compiled, except it is determined at runtime based on the location
++ * of the enchant library.
++ *
++ * This API is private to the providers.
++ *
++ */
++ENCHANT_MODULE_EXPORT (char *)
++enchant_get_prefix_dir(void)
++{
++#ifdef _WIN32
++	/* Dynamically locate library and return containing directory */
++	char dll_path[MAX_PATH];
++	char *dll_dir;
++	HINSTANCE hInstance = GetModuleHandle("libenchant-1");
++	if(hInstance != NULL)
++		{
++			if(GetModuleFileName(hInstance,dll_path,MAX_PATH))
++				{
++					dll_dir = g_path_get_dirname(dll_path);
++					return dll_dir;
++				}
++		}
++#elif defined(ENABLE_BINRELOC)
++	/* Use standard binreloc PREFIX macro */
++	return g_strdup (PREFIX);
++#else
++	return NULL;
++#endif
+ }

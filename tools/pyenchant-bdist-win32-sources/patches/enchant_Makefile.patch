@@ -1,0 +1,11 @@
+--- enchant-1.1.6/src/Makefile.in	Wed Feb  9 14:31:32 2005
++++ enchant-1.1.6/src/Makefile.in.new	Thu Jun 30 17:53:38 2005
+@@ -231,7 +231,7 @@
+ lib_LTLIBRARIES = libenchant.la
+ libenchant_la_LIBADD = $(ENCHANT_LIBS)
+ libenchant_la_LDFLAGS = -version-info $(VERSION_INFO) -no-undefined
+-libenchant_la_SOURCES = enchant.c enchant.h
++libenchant_la_SOURCES = enchant.c enchant.h prefix.c prefix.h
+ libenchant_includedir = $(includedir)/enchant/
+ libenchant_include_HEADERS = enchant.h enchant-provider.h enchant++.h
+ EXTRA_DIST = enchant.i

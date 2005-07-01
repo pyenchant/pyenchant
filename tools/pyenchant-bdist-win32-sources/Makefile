@@ -3,7 +3,6 @@ BUILD_DIR = /home/rfk/pyenchant/tools/pyenchant-bdist-win32-sources/build
 ASPELL_DIR = aspell-0.60.2
 ENCHANT_DIR = enchant-1.1.6
 
-#XMINGW_CONFIG_OPTS = --target=i386-mingw32msvc --host=i386-mingw32msvc
 XMINGW_CONFIG_OPTS =
 ASPELL_CONFIG_OPTS = --enable-win32-relocatable --enable-shared --disable-rpath 
 ENCHANT_CONFIG_OPTS = --enable-ispell --enable-myspell --disable-aspell --with-aspell-prefix=$(BUILD_DIR)
@@ -24,7 +23,7 @@ $(BUILD_DIR)/lib/libenchant-1.dll: $(BUILD_DIR)/lib/pkgconfig/glib-2.0.pc \
 	cd $(ENCHANT_DIR) && PKG_CONFIG_PATH=$(BUILD_DIR)/lib/pkgconfig ./configure CFLAGS="$(CFLAGS)" $(XMINGW_CONFIG_OPTS) $(ENCHANT_CONFIG_OPTS) && make
 	cp $(ENCHANT_DIR)/src/.libs/libenchant-1.dll $(BUILD_DIR)/lib/
 	#cp $(ENCHANT_DIR)/src/aspell/.libs/libenchant_aspell-1.dll $(BUILD_DIR)/lib/
-	mkdir $(BUILD_DIR)/lib/enchant
+	mkdir -p $(BUILD_DIR)/lib/enchant
 	cp $(ENCHANT_DIR)/src/ispell/.libs/libenchant_ispell-1.dll $(BUILD_DIR)/lib/enchant/
 	cp $(ENCHANT_DIR)/src/myspell/.libs/libenchant_myspell-1.dll $(BUILD_DIR)/lib/enchant/
 
@@ -55,7 +54,9 @@ $(ENCHANT_DIR): src/$(ENCHANT_DIR).tar.gz
 	patch $(ENCHANT_DIR)/src/enchant.c patches/enchant.c.patch
 	patch $(ENCHANT_DIR)/src/myspell/myspell_checker.cpp patches/myspell_checker.cpp.patch
 	patch $(ENCHANT_DIR)/src/ispell/ispell_checker.cpp patches/ispell_checker.cpp.patch
+	patch $(ENCHANT_DIR)/src/enchant-provider.h patches/enchant-provider.h.patch
 	patch $(ENCHANT_DIR)/configure patches/enchant_configure.patch
+	patch $(ENCHANT_DIR)/src/Makefile.in patches/enchant_Makefile.patch
 
 # Ability to extract MySpell dictionary files
 $(BUILD_DIR)/myspell/%.dic: $(BUILD_DIR)/myspell/%.zip

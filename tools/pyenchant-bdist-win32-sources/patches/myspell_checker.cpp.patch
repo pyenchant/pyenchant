@@ -1,26 +1,24 @@
---- src/enchant-1.1.6/src/myspell/myspell_checker.cpp	Thu Feb 10 13:04:20 2005
-+++ enchant-1.1.6/src/myspell/myspell_checker.cpp	Thu Jun 30 06:31:24 2005
-@@ -79,6 +79,23 @@
+--- enchant-1.1.6/src/myspell/myspell_checker.cpp	Thu Feb 10 13:04:20 2005
++++ enchant-1.1.7/src/myspell/myspell_checker.cpp	Fri Jul  1 15:16:48 2005
+@@ -76,9 +76,21 @@
+ {
+ 	char * data_dir = NULL;
+ 
++	/* Look for explicitly set registry values */
  	data_dir = enchant_get_registry_value ("Myspell", "Data_Dir");
  	if (data_dir)
  		return data_dir;
-+#ifdef _WIN32
-+	/* Dynamically locate DLL and search for modules relative to it. */
-+	char dll_path[MAX_PATH];
-+	char *dll_dir;
-+	HINSTANCE hInstance = GetModuleHandle("libenchant_myspell-1");
-+	if(hInstance != NULL)
++
++	/* Dynamically locate library and search for modules relative to it. */
++	char * prefix = NULL;
++	prefix = enchant_get_prefix_dir();
++	if(prefix)
 +		{
-+		if(GetModuleFileName(hInstance,dll_path,MAX_PATH))
-+			{
-+			/* Create dir string and return */
-+			dll_dir = g_path_get_dirname(dll_path);
-+			data_dir=g_build_filename(dll_dir,"..","myspell",NULL);
-+			g_free(dll_dir);
++			data_dir = g_build_filename(prefix,"share","enchant","myspell",NULL);
++			g_free(prefix);
 +			return data_dir;
-+			}
 +		}
-+#endif
++
  
  #ifdef ENCHANT_MYSPELL_DICT_DIR
  	return g_strdup (ENCHANT_MYSPELL_DICT_DIR);
