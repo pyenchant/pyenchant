@@ -1,0 +1,14 @@
+LICENSE.txt
+README.txt
+setup.py
+enchant/__init__.py
+enchant/enchant.h
+enchant/enchant.i
+enchant/enchant_wrap.c
+enchant/utils.py
+enchant/checker/CmdLineChecker.py
+enchant/checker/__init__.py
+enchant/checker/wxSpellCheckerDialog.py
+enchant/tokenize/__init__.py
+enchant/tokenize/en.py
+tools/shootout.py

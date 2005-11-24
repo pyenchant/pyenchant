@@ -1,6 +1,6 @@
 /* pyenchant
  *
- * Copyright (C) 2004 Ryan Kelly
+ * Copyright (C) 2004-2005 Ryan Kelly
  *
  * This code is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public

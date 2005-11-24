@@ -1,7 +1,7 @@
 
 BUILD_DIR = /home/rfk/pyenchant/tools/pyenchant-bdist-win32-sources/build
 ASPELL_DIR = aspell-0.60.2
-ENCHANT_DIR = enchant-1.1.6
+ENCHANT_DIR = enchant-1.2.0
 
 XMINGW_CONFIG_OPTS =
 ASPELL_CONFIG_OPTS = --enable-win32-relocatable --enable-shared --disable-rpath 
