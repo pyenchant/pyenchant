@@ -56,7 +56,6 @@ $(ENCHANT_DIR): src/$(ENCHANT_DIR).tar.gz
 	patch $(ENCHANT_DIR)/src/ispell/ispell_checker.cpp patches/ispell_checker.cpp.patch
 	patch $(ENCHANT_DIR)/src/enchant-provider.h patches/enchant-provider.h.patch
 	patch $(ENCHANT_DIR)/configure patches/enchant_configure.patch
-	patch $(ENCHANT_DIR)/src/Makefile.in patches/enchant_Makefile.patch
 
 # Ability to extract MySpell dictionary files
 $(BUILD_DIR)/myspell/%.dic: $(BUILD_DIR)/myspell/%.zip

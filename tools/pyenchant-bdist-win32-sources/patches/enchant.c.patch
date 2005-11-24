@@ -1,21 +1,7 @@
---- enchant-1.1.6/src/enchant.c	Wed Mar  9 07:19:50 2005
-+++ enchant-1.1.7/src/enchant.c	Fri Jul  1 05:45:50 2005
-@@ -53,6 +53,10 @@
- #define ENCHANT_USER_PATH_EXTENSION ".enchant"
+--- enchant.c.old	Thu Nov 24 21:04:12 2005
++++ enchant.c	Thu Nov 24 21:10:52 2005
+@@ -129,13 +129,22 @@
  #endif
- 
-+#ifdef ENABLE_BINRELOC
-+#include "prefix.h"
-+#endif
-+
- ENCHANT_PLUGIN_DECLARE("Enchant")
- 
- /********************************************************************************/
-@@ -122,13 +126,25 @@
- #ifdef XP_TARGET_COCOA
- 	return g_strdup ([[EnchantResourceProvider instance] moduleFolder]);
- #endif
-+
  	char * module_dir = NULL;
  
 +	/* Look for explicitly set registry values */
@@ -23,22 +9,24 @@
  	if (module_dir)
  		return module_dir;
  
--#ifdef ENCHANT_GLOBAL_MODULE_DIR
+-#ifdef ENABLE_BINRELOC
+-	return g_strdup (BR_LIBDIR ("/enchant"));
+-#elif defined(ENCHANT_GLOBAL_MODULE_DIR)
 +	/* Dynamically locate library and search for modules relative to it. */
 +	char * prefix = NULL;
 +	prefix = enchant_get_prefix_dir();
 +	if(prefix)
 +		{
-+			module_dir = g_build_filename(prefix,"lib","enchant",NULL);
-+			g_free(prefix);
-+			return module_dir;
++		module_dir = g_build_filename(prefix,"lib","enchant",NULL);
++		g_free(prefix);
++		return module_dir;
 +		}
 +
 +#if defined(ENCHANT_GLOBAL_MODULE_DIR)
  	return g_strdup (ENCHANT_GLOBAL_MODULE_DIR);
  #else
  	return NULL;
-@@ -143,11 +159,22 @@
+@@ -150,13 +159,22 @@
  #endif
  	char * ordering_dir = NULL;
  
@@ -47,40 +35,27 @@
  	if (ordering_dir)
  		return ordering_dir;
  
--#ifdef ENCHANT_GLOBAL_ORDERING
+-#ifdef ENABLE_BINRELOC
+-	return g_strdup (BR_DATADIR ("/enchant"));
+-#elif defined(ENCHANT_GLOBAL_ORDERING)
 +	/* Dynamically locate library and search for files relative to it. */
 +	char * prefix = NULL;
 +	prefix = enchant_get_prefix_dir();
 +	if(prefix)
 +		{
-+			ordering_dir = g_build_filename(prefix,"share","enchant",NULL);
-+			g_free(prefix);
-+			return ordering_dir;
++		ordering_dir = g_build_filename(prefix,"share","enchant",NULL);
++		g_free(prefix);
++		return ordering_dir;
 +		}
 +
 +#if defined(ENCHANT_GLOBAL_ORDERING)
  	return g_strdup (ENCHANT_GLOBAL_ORDERING);
  #else
  	return NULL;
-@@ -200,7 +227,12 @@
- ENCHANT_MODULE_EXPORT (char *)
- enchant_get_registry_value (const char * const prefix, const char * const key)
- {
--	return enchant_get_registry_value_ex (0, prefix, key);
-+	char *val;
-+	val = enchant_get_registry_value_ex(1, prefix, key);
-+	if(val == NULL) {
-+		val = enchant_get_registry_value_ex (0, prefix, key);
-+	}
-+	return val;
- }
- 
- /**
-@@ -1424,4 +1456,41 @@
- 	g_return_val_if_fail (broker, NULL);
+@@ -1435,6 +1453,44 @@
  	
  	return broker->error;
-+}
+ }
 +
 +
 +/**
@@ -117,4 +92,8 @@
 +#else
 +	return NULL;
 +#endif
- }
++}
++
+ 
+ /* private */ 
+ ENCHANT_MODULE_EXPORT(char *)
