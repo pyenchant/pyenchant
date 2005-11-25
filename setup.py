@@ -5,7 +5,10 @@
 #  This script is placed in the public domain.
 #
 
-from distutils.core import setup, Extension
+import ez_setup
+ez_setup.use_setuptools()
+
+from setuptools import setup, find_packages, Extension
 import distutils
 import sys
 import os
@@ -22,15 +25,14 @@ DESCRIPTION = "Python bindings for the Enchant spellchecking system"
 AUTHOR = "Ryan Kelly"
 AUTHOR_EMAIL = "rynklly@users.sourceforge.net"
 URL = "http://pyenchant.sourceforge.net/"
+LICENSE = "LGPL"
 
 
 #  Module Lists
-PY_MODULES = []
-PACKAGES = ["enchant","enchant.tokenize","enchant.checker"]
+PACKAGES = find_packages()
 EXT_MODULES = []
 PKG_DATA = {}
-DATA_FILES = []
-SCRIPTS = []
+EAGER_RES = []
 
 
 #  The distutils/swig integration doesnt seem to cut it for this module
@@ -58,7 +60,7 @@ ext1 = Extension('enchant._enchant',['enchant/enchant_wrap.c'],
 #
 # Also, there's the possibility of including pre-built support DLLs
 # for the Windows installer.  They will be included if the directory
-# 'windeps' exists when this script is run.
+# <WINDEPS> exists when this script is run.
 #
 if sys.platform == "win32":
     ext1.libraries.append("libenchant-1")
@@ -91,19 +93,11 @@ if sys.platform == "win32":
       for dictName in os.listdir(dictPath):
         if dictName.endswith("hash") or dictName == "README.txt":
           PKG_DATA["enchant/share/enchant/ispell"].append(os.path.join(dictPath,dictName))
+    EAGER_RES = ["enchant/lib", "enchant/share"]
 else:
     ext1.libraries.append("enchant")
 
 EXT_MODULES.append(ext1)
-
-# Try to simulate package_data for older distutils
-# Since PKG_DATA is only populated on Windows, we know the path
-# to site-packages will be Lib/site-packages
-distutils_ver = map(int,distutils.__version__.split("."))
-if distutils_ver[2] < 4:
-    for k in PKG_DATA:
-        DATA_FILES.append(("Lib/site-packages/%s"%(k,),PKG_DATA[k]))
-    
 
 setup(name=NAME,
       version=VERSION,
@@ -111,10 +105,8 @@ setup(name=NAME,
       author_email=AUTHOR_EMAIL,
       url=URL,
       packages=PACKAGES,
-      py_modules=PY_MODULES,
       ext_modules=EXT_MODULES,
       package_data=PKG_DATA,
-      data_files=DATA_FILES,
-      scripts=SCRIPTS,
+      eager_resources=EAGER_RES,
      )
 
