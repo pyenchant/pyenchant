@@ -919,8 +919,7 @@ def _test_dicts():
     print "...ALL PASSED!"
     
     
-# Run regression tests when called from comand-line
-if __name__ == "__main__":
+def _test_all():
     from enchant.checker import _test_checker
     from enchant.tokenize import _test_get_tokenizer
     from enchant.tokenize.en import _test_tokenize_en
@@ -931,5 +930,8 @@ if __name__ == "__main__":
     _test_tokenize_en()
     print "ALL TESTS PASSED!"
 
+# Run regression tests when called from comand-line
+if __name__ == "__main__":
+    _test_all()
 
 

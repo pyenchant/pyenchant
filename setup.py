@@ -1,5 +1,5 @@
 #
-#  This is the pyenchant distutils setup script.
+#  This is the pyenchant setuptools script.
 #  Originally developed by Ryan Kelly, 2004.
 #
 #  This script is placed in the public domain.
@@ -9,9 +9,10 @@ import ez_setup
 ez_setup.use_setuptools()
 
 from setuptools import setup, find_packages, Extension
-import distutils
+
 import sys
 import os
+import shutil
 
 # Location of the windows binaries, if available
 WINDEPS = ".\\tools\\pyenchant-bdist-win32-sources\\build"
@@ -63,36 +64,37 @@ ext1 = Extension('enchant._enchant',['enchant/enchant_wrap.c'],
 # <WINDEPS> exists when this script is run.
 #
 if sys.platform == "win32":
-    ext1.libraries.append("libenchant-1")
-    # Use local dlls if available
+    # Copy local DLLs across if available
     if os.path.exists(WINDEPS):
-        ext1.library_dirs.append(os.path.join(WINDEPS,"lib"))
-        LOCAL_DLLS = ["libenchant-1","libglib-2.0-0","iconv","intl",
-                      "libgmodule-2.0-0",]
-        PKG_DATA["enchant"] = []
-        for dllName in LOCAL_DLLS:
-            PKG_DATA["enchant"].append(os.path.join(WINDEPS,"lib","%s.dll") \
-			                                          % (dllName,))
-        # Plugin DLLs are in a seperate directory
-        PLUGIN_DLLS = ["enchant\\libenchant_myspell-1",
-                      "enchant\\libenchant_ispell-1",]
-        PKG_DATA["enchant/lib/enchant"] = []
-        for dllName in PLUGIN_DLLS:
-            PKG_DATA["enchant/lib/enchant"].append(os.path.join(WINDEPS,"lib",
-		                                          "%s.dll"%(dllName,)))
-    # Also include local dictionaries
-    PKG_DATA["enchant/share/enchant/myspell"] = []
-    dictPath = os.path.join(WINDEPS,"myspell")
-    if os.path.isdir(dictPath):
-      for dictName in os.listdir(dictPath):
-        if dictName[-3:] in ["txt","dic","aff"]:
-          PKG_DATA["enchant/share/enchant/myspell"].append(os.path.join(dictPath,dictName))
-    PKG_DATA["enchant/share/enchant/ispell"] = []
-    dictPath = os.path.join(WINDEPS,"ispell")
-    if os.path.isdir(dictPath):
-      for dictName in os.listdir(dictPath):
-        if dictName.endswith("hash") or dictName == "README.txt":
-          PKG_DATA["enchant/share/enchant/ispell"].append(os.path.join(dictPath,dictName))
+      # Main DLLs
+      libDir = os.path.join(WINDEPS,"lib")
+      for fName in os.listdir(libDir):
+        if fName[-3:] == "dll":
+          shutil.copy(os.path.join(libDir,fName),".\\enchant\\")
+      # Enchant plugins
+      plugDir = os.path.join(WINDEPS,"lib\\enchant")
+      for fName in os.listdir(plugDir):
+        if fName[-3:] == "dll":
+          shutil.copy(os.path.join(plugDir,fName),".\\enchant\\lib\\enchant\\")
+      # Local Dictionaries
+      dictPath = os.path.join(WINDEPS,"myspell")
+      if os.path.isdir(dictPath):
+        for dictName in os.listdir(dictPath):
+          if dictName[-3:] in ["txt","dic","aff"]:
+            shutil.copy(os.path.join(dictPath,dictName),
+			".\\enchant\\share\\enchant\\myspell\\")
+      dictPath = os.path.join(WINDEPS,"ispell")
+      if os.path.isdir(dictPath):
+        for dictName in os.listdir(dictPath):
+          if dictName.endswith("hash") or dictName == "README.txt":
+            shutil.copy(os.path.join(dictPath,dictName),
+			".\\enchant\\share\\enchant\\ispell\\")
+    # Set up additional compile info for C extension
+    ext1.libraries.append("libenchant-1")
+    ext1.library_dirs.append("enchant")
+    PKG_DATA["enchant"] = ["*.dll", "lib/enchant/*.dll",
+                           "share/enchant/myspell/*.*",
+                           "share/enchant/ispell/*.*"]
     EAGER_RES = ["enchant/lib", "enchant/share"]
 else:
     ext1.libraries.append("enchant")
