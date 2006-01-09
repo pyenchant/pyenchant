@@ -3,3 +3,4 @@
 *.egg
 dist
 pyenchant.egg-info
+MANIFEST
