@@ -1,9 +1,10 @@
 
 1.1.4:
 
-   * Avoid using the registry at all on Windows
+   * No longer need to use the registry under Windows
    * Moved to setuptools for managing distribution
-   * Plugins on Windows moved to "enchant" subdirector
+   * Implemented unittest TestCases, works with `python setup.py test`
+   * Plugins on Windows moved to "enchant" subdirectory
    * SpellChecker now coerces to/from unicode automatically
    * Use python default encoding rather than UTF-8 where appropriate
    * Various documentation cleanups
