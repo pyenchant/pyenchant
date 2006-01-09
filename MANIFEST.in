@@ -1,6 +1,2 @@
 
-include enchant/enchant.i
-include enchant/enchant.h
-include LICENSE.txt
-include tools/*.py
-
+prune tools/pyenchant-bdist-win32-sources
