@@ -214,6 +214,8 @@ def remove_registry_keys(allusers=False):
  
     On platforms other than Windows, this function returns immediately
     """
+    if sys.platform != "win32":
+        return None
     for (p,v,d) in _reg_config_keys():
         _reg_remove_key_matching(p,v,d,allusers)
     _reg_remove_empty_key("Software\\Enchant\\Config",allusers)

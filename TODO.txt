@@ -1,9 +1,6 @@
 
 Documentation:
 
-  * install procedure for easysetup/setuptools
-  * update tutorial with new install positions for dictionaries
-    under Windows
   * talk more about PWLs in the tutorial
 
 PyEnchant:

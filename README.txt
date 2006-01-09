@@ -51,7 +51,7 @@ The windows installer version provides a pre-compiled enchant library
 as well as several supporting libraries.  Several commonly-used
 dictionaries are installed into:
 
-    <YOUR_PYTHON_ROOT>\Lib\site-packages\enchant\myspell.
+    <YOUR_PYTHON_ROOT>\Lib\site-packages\enchant\share\enchant\myspell.
 
 Additional language dictionaries are available from the OpenOffice.org
 project, and are available at:
