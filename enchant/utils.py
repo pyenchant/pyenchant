@@ -54,6 +54,8 @@ from __future__ import generators
 import sys
 import os
 from warnings import warn
+from distutils import sysconfig
+
 
 try:
     import _winreg as reg
@@ -112,13 +114,13 @@ def _reg_get():
         warn("Attempt to access the registry on non-Windows platform")
     return None
 
-def _reg_remove_broken_key(key,value,allusers=False):
+def _reg_remove_key_matching(key,value,data,allusers=False):
     """Remove the given registry value if its contents match the given data.
-    
-    This function looks up the given registry key/value and checks whether its
-    contents are a valid, non-empty directory in the filesystem.  If not, the
-    key is removed.
-    
+
+    This function looks up the given registry key/value and compares its
+    contents to the given data.  If they are an exact match, the value is
+    removed from the key.
+
     By default, the work is done on HKEY_CURRENT_USER. The optional argument
     <allusers> may be set to true to specify that HKEY_LOCAL_MACHINE should
     be used instead.
@@ -136,15 +138,16 @@ def _reg_remove_broken_key(key,value,allusers=False):
         # Key doesnt exist
         return True
     try:
-        (data,typ) = reg.QueryValueEx(hkey,value)
-        if os.path.isdir(data) and len(os.listdir(data))>0:
-            # Data is a valid directory, leave it alone
+        (dat,typ) = reg.QueryValueEx(hkey,value)
+        if dat != data:
+            # Data doesnt match, dont delete
             return True
     except:
         # Key doesnt have value, just return
         return True
     reg.DeleteValue(hkey,value)
-    return True    
+    return True
+
 
 def _reg_remove_empty_key(key,allusers=False):
     """Remove the named registry key, if it is empty.
@@ -161,60 +164,61 @@ def _reg_remove_empty_key(key,allusers=False):
     else:
         hkey = reg.HKEY_CURRENT_USER
     try:
-        hkey = reg.OpenKey(hkey,key,0,reg.KEY_ALL_ACCESS)
+        okey = reg.OpenKey(hkey,key,0,reg.KEY_ALL_ACCESS)
     except:
         # Key doesnt exist
         return True
     try:
-        reg.EnumValue(hkey,0)
+        reg.EnumValue(okey,0)
         # Key still contains values
         return True
     except:
         try:
-            reg.EnumKey(hkey,0)
+            reg.EnumKey(okey,0)
             # Key still contains subkeys
             return True
         except:
             # Was empty, we can delete it
-            reg.DeleteKey(reg.HKEY_LOCAL_MACHINE,key)
+            reg.DeleteKey(hkey,key)
             return True
     return False
 
 
 def _reg_config_keys():
-    """Itrerator giving registry keys of interest.
-    This function is an interator yielding (Path,Value) pairs that name
-    keys of interest in the Windows Registry.  Each of these keys should,
-    if present, point to a non-empty directory in the filesystem.
+    """Retuns a list of registry keys of interest.
+    All keys point to locations in the filesystem and are returned
+    as a tuple containing:
+
+        * Key Path
+        * Key Value
+        * Key Data
+
     """
-    yield ("Software\\Enchant\\Config","Module_Dir")
-    yield ("Software\\Enchant\\Ispell","Data_Dir")
-    yield ("Software\\Enchant\\Myspell","Data_Dir")
+    modulesDir = os.path.join(sysconfig.get_python_lib(),"enchant")
+    ispellDir = os.path.join(sysconfig.get_python_lib(),"enchant","ispell")
+    myspellDir = os.path.join(sysconfig.get_python_lib(),"enchant","myspell")
+    keys = []
+    keys.append(("Software\\Enchant\\Config","Module_Dir",modulesDir))
+    keys.append(("Software\\Enchant\\Ispell","Data_Dir",ispellDir))
+    keys.append(("Software\\Enchant\\Myspell","Data_Dir",myspellDir))
+    return keys
 
 
 # Top-level registry handling functions
 
 def remove_registry_keys(allusers=False):
     """Remove registry keys from previous versions of PyEnchant.
-    
+ 
     This function can be used to remove the entries from the Windows
     registry that were created by previous versions of PyEnchant.
-    The keys are removed if they point to non-existant or empty
-    directories.  Empty keys below "Software\Enchant" are also
-    removed.
-    
-    The optional argument <allusers> can be set to True to indicate
-    that entries should be removed for all users on the machine. By
-    default, the entries are removed only for the current user profile.
-    
+ 
     On platforms other than Windows, this function returns immediately
     """
-    if sys.platform != "win32":
-        return
-    for (p,v) in _reg_config_keys():
-        _reg_remove_broken_key(p,v,allusers)
-    for (p,v) in _reg_config_keys():
-        _reg_remove_empty_key(p,allusers)
+    for (p,v,d) in _reg_config_keys():
+        _reg_remove_key_matching(p,v,d,allusers)
+    _reg_remove_empty_key("Software\\Enchant\\Config",allusers)
+    _reg_remove_empty_key("Software\\Enchant\\Ispell",allusers)
+    _reg_remove_empty_key("Software\\Enchant\\Myspell",allusers)
     _reg_remove_empty_key("Software\\Enchant",allusers)
     
 
