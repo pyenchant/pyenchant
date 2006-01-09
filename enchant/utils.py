@@ -39,6 +39,12 @@
         * functions for inserting/removing entries into the Windows
           registry, to point to local version of enchant
         * functions for dealing with locale/language settings
+    
+    Functionality that is temporarily available and may move or disappear
+    in future releases:
+        
+        * useful string-handling functions (soundex, edit_dist, ...)
+        * PyPWL, a pure-python PWL object with enhanced functionality
           
 """
 
@@ -48,7 +54,6 @@ from __future__ import generators
 import sys
 import os
 from warnings import warn
-from distutils import sysconfig
 
 try:
     import _winreg as reg
@@ -107,50 +112,12 @@ def _reg_get():
         warn("Attempt to access the registry on non-Windows platform")
     return None
 
-def _reg_ensure_key_value(key,value,data,allusers=False):
-    """Ensure that the given registry key contains the given value and is valid.
-  
-    This function is designed to ensure that an appropriate registry key
-    exists.  It deals only with keys containing string values that represent
-    filenames.  If the named key does not contain the named value, it is
-    created using the given data.  If it does contain the named value,
-    its current data is checked for validity.  If the current data does
-    not point to an existing file location, it is replaced with the
-    given data.
-  
-    Intuitively, it ensures that the named key/value contains a valid
-    filename.  If it does not, it is replaced by the given data.
-    
-    By default, the work is done on HKEY_CURRENT_USER. The optional argument
-    <allusers> may be set to true to specify that HKEY_LOCAL_MACHINE should
-    be used instead.
-    """
-    reg = _reg_get()
-    if reg is None:
-        return False
-    if allusers:
-        hkey = reg.CreateKey(reg.HKEY_LOCAL_MACHINE,key)
-    else:
-        hkey = reg.CreateKey(reg.HKEY_CURRENT_USER,key)    
-    try:
-        (eData,_) = reg.QueryValueEx(hkey,value)
-    except:
-        # Value doesnt exist, create it
-        reg.SetValueEx(hkey,value,0,reg.REG_SZ,data)
-        return True
-    # Value already exists, check validity
-    if not os.path.exists(eData):
-        reg.SetValueEx(hkey,value,0,reg.REG_SZ,data)
-        return True
-    return True
-        
-
-def _reg_remove_key_matching(key,value,data,allusers=False):
+def _reg_remove_broken_key(key,value,allusers=False):
     """Remove the given registry value if its contents match the given data.
     
-    This function looks up the given registry key/value and compares its
-    contents to the given data.  If they are an exact match, the value is
-    removed from the key.
+    This function looks up the given registry key/value and checks whether its
+    contents are a valid, non-empty directory in the filesystem.  If not, the
+    key is removed.
     
     By default, the work is done on HKEY_CURRENT_USER. The optional argument
     <allusers> may be set to true to specify that HKEY_LOCAL_MACHINE should
@@ -169,16 +136,15 @@ def _reg_remove_key_matching(key,value,data,allusers=False):
         # Key doesnt exist
         return True
     try:
-        (dat,typ) = reg.QueryValueEx(hkey,value)
-        if dat != data:
-            # Data doesnt match, dont delete
+        (data,typ) = reg.QueryValueEx(hkey,value)
+        if os.path.isdir(data) and len(os.listdir(data))>0:
+            # Data is a valid directory, leave it alone
             return True
     except:
         # Key doesnt have value, just return
         return True
     reg.DeleteValue(hkey,value)
-    return True
-
+    return True    
 
 def _reg_remove_empty_key(key,allusers=False):
     """Remove the named registry key, if it is empty.
@@ -216,60 +182,39 @@ def _reg_remove_empty_key(key,allusers=False):
 
 
 def _reg_config_keys():
-    """Retuns a list of registry keys of interest.
-    All keys point to locations in the filesystem and are returned
-    as a tuple containing:
-        
-        * Key Path
-        * Key Value
-        * Key Data
-        
+    """Itrerator giving registry keys of interest.
+    This function is an interator yielding (Path,Value) pairs that name
+    keys of interest in the Windows Registry.  Each of these keys should,
+    if present, point to a non-empty directory in the filesystem.
     """
-    modulesDir = os.path.join(sysconfig.get_python_lib(),"enchant","enchant")
-    ispellDir = os.path.join(sysconfig.get_python_lib(),"enchant","ispell")
-    myspellDir = os.path.join(sysconfig.get_python_lib(),"enchant","myspell")
-    keys = []
-    #keys.append(("Software\\Enchant\\Config","Module_Dir",modulesDir))
-    keys.append(("Software\\Enchant\\Ispell","Data_Dir",ispellDir))
-    keys.append(("Software\\Enchant\\Myspell","Data_Dir",myspellDir))
-    return keys
+    yield ("Software\\Enchant\\Config","Module_Dir")
+    yield ("Software\\Enchant\\Ispell","Data_Dir")
+    yield ("Software\\Enchant\\Myspell","Data_Dir")
 
 
 # Top-level registry handling functions
 
-def create_registry_keys(allusers=False):
-    """Create registry keys to point to local version of enchant.
-    
-    This function can be used to insert entries into the Windows
-    registry which point to a local version of enchant that was shipped
-    with the PyEnchant distribution.  Each key is only installed if
-    no existing value is found in the registry.
-    
-    The optional argument <allusers> can be set to True to indicate
-    that entries should be created for all users on the machine. By
-    default, the entries are created only for the current user.
-    """
-    for (p,v,d) in _reg_config_keys():
-        if os.path.exists(d):
-            _reg_ensure_key_value(p,v,d,allusers)
-
 def remove_registry_keys(allusers=False):
-    """Remove registry keys pointing to local version of enchant.
+    """Remove registry keys from previous versions of PyEnchant.
     
     This function can be used to remove the entries from the Windows
-    registry that were created by create_registry_keys.  The entries
-    are only removed if they exactly match those created by that
-    function.  Empty keys below "Software\Enchant" are also removed.
+    registry that were created by previous versions of PyEnchant.
+    The keys are removed if they point to non-existant or empty
+    directories.  Empty keys below "Software\Enchant" are also
+    removed.
     
     The optional argument <allusers> can be set to True to indicate
     that entries should be removed for all users on the machine. By
     default, the entries are removed only for the current user profile.
+    
+    On platforms other than Windows, this function returns immediately
     """
-    for (p,v,d) in _reg_config_keys():
-        _reg_remove_key_matching(p,v,d,allusers)
-    _reg_remove_empty_key("Software\\Enchant\\Config",allusers)
-    _reg_remove_empty_key("Software\\Enchant\\Ispell",allusers)
-    _reg_remove_empty_key("Software\\Enchant\\Myspell",allusers)
+    if sys.platform != "win32":
+        return
+    for (p,v) in _reg_config_keys():
+        _reg_remove_broken_key(p,v,allusers)
+    for (p,v) in _reg_config_keys():
+        _reg_remove_empty_key(p,allusers)
     _reg_remove_empty_key("Software\\Enchant",allusers)
     
 
@@ -306,4 +251,164 @@ def get_default_language(default=None):
     return default
         
 
+
+# Useful string-handling functions
+
+def soundex(name, len=4):
+    """ soundex module conforming to Knuth's algorithm
+        implementation 2000-12-24 by Gregory Jorgensen
+        public domain
+    """
+    # digits holds the soundex values for the alphabet
+    digits = '01230120022455012623010202'
+    sndx = ''
+    fc = ''
+    # translate alpha chars in name to soundex digits
+    for c in name.upper():
+        if c.isalpha():
+            if not fc: fc = c   # remember first letter
+            d = digits[ord(c)-ord('A')]
+            # duplicate consecutive soundex digits are skipped
+            if not sndx or (d != sndx[-1]):
+                sndx += d
+    # replace first digit with first alpha character
+    sndx = fc + sndx[1:]
+    # remove all 0s from the soundex code
+    sndx = sndx.replace('0','')
+    # return soundex code padded to len characters
+    return (sndx + (len * '0'))[:len]
+
+def edit_dist(a,b):
+    """Calculates the Levenshtein distance between a and b.
+       From Wikipedia: http://en.wikisource.org/wiki/Levenshtein_distance
+    """
+    n, m = len(a), len(b)
+    if n > m:
+        # Make sure n <= m, to use O(min(n,m)) space
+        a,b = b,a
+        n,m = m,n
+    current = range(n+1)
+    for i in range(1,m+1):
+        previous, current = current, [i]+[0]*m
+        for j in range(1,n+1):
+            add, delete = previous[j]+1, current[j-1]+1
+            change = previous[j-1]
+            if a[j-1] != b[i-1]:
+                change = change + 1
+            current[j] = min(add, delete, change)
+    return current[n]
+
+#  Clone of PWL objects in pure python, with more functionality
+#  than is in the C version.  Hopefully we can move the good bits
+#  back into enchant eventually.
+
+class PyPWL:
+    """Pure-python implementation of Personal Word List dictionary.
+    This class emulates the Dict objects provided by enchant using the
+    function request_pwl_dict(), but with additional functionality.
+    In particular, a simple soundex + edit distance algorithm allows
+    suggestions to be returned from the list.
+    """
     
+    def __init__(self,pwl):
+        """PyPWL constructor.
+        This method takes as its only argument the name of a file
+        containing the personal word list, one word per line.  Entries
+        will be read from this file, and new entries will be written to
+        it automatically.
+        """
+        self.pwl = os.path.abspath(pwl)
+        self.tag = self.pwl
+        self.provider= None
+        # Read entries into memory
+        # Entries will be a dict of dicts indexed by soundex
+        # key then by word, all containing True.
+        self._entries = {}
+        pwlF = file(pwl)
+        for ln in pwlF:
+            word = ln.strip()
+            self.add_to_session(word)
+                
+    def check(self,word):
+        """Check spelling of a word.
+        
+        This method takes a word in the dictionary language and returns
+        True if it is correctly spelled, and false otherwise.
+        """
+        key = soundex(word)
+        try:
+            if self._entries[key][word]:
+                return True
+        except KeyError:
+            pass
+        return False
+    
+    def suggest(self,word):
+        """Suggest possible spellings for a word.
+        
+        This method tries to guess the correct spelling for a given
+        word, returning the possibilities in a list.
+        """
+        key = soundex(word)
+        try:
+            poss = [w for w in self._entries[key]]
+        except KeyError:
+            return []
+        # Assign edit distances, and sort with lowest first
+        for n,w in enumerate(poss):
+            poss[n] = (edit_dist(word,w),w)
+        poss.sort()
+        # Trim those that arent good enough
+        # Examples: too high edit distance, too many words
+        # For the moment, just restrict to 10 suggestions
+        poss = poss[:10]
+        # Remove edit distances, and return
+        return [w for (n,w) in poss]
+    
+    def add_to_personal(self,word):
+        """Add a word to the user's personal dictionary.
+        
+        NOTE: this method is being deprecated in favour of
+        add_to_pwl.  Please change code using add_to_personal
+        to use add_to_pwl instead.  This change mirrors a
+        change in the Enchant C API.
+        
+        """
+        warn("add_to_personal is deprecated, please use add_to_pwl",
+             DeprecationWarning)
+        self.add_to_pwl(word)
+        
+    def add_to_pwl(self,word):
+        """Add a word to the user's personal dictionary.
+        For a PWL, this means appending it to the file.
+        """
+        pwlF = file(self.pwl,"a")
+        pwlF.write("%s\n" % (word.strip(),))
+        pwlF.close()
+        self.add_to_session(word)
+
+    def add_to_session(self,word):
+        """Add a word to the session list."""
+        key = soundex(word)
+        try:
+            self._entries[key][word] = True
+        except KeyError:
+            self._entries[key] = {}
+            self._entries[key][word] = True
+            
+    def is_in_session(self,word):
+        """Check whether a word is in the session list."""
+        # Consider all words to be in the session list
+        return self.check(word)
+    
+    def store_replacement(self,mis,cor):
+        """Store a replacement spelling for a miss-spelled word.
+        
+        This method makes a suggestion to the spellchecking engine that the 
+        miss-spelled word <mis> is in fact correctly spelled as <cor>.  Such
+        a suggestion will typically mean that <cor> appears early in the
+        list of suggested spellings offered for later instances of <mis>.
+        """
+        # Cant really do anything with it
+        pass
+

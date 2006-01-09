@@ -82,6 +82,7 @@ __version__ = "%d.%d.%d%s" % (__ver_major__,__ver_minor__,
 
 import _enchant as _e
 import utils
+import unittest
 
 import os
 import sys
@@ -764,16 +765,9 @@ class DictWithPWL(Dict):
         # Also add_to_session on the Dict so that it appears in suggestions
         self.add_to_session(word)  
 
-##  Check whether there are providers available, possibly point to
-##  local enchant install if not.
-#_broker = Broker()
-#if len(_broker.describe()) == 0:
-#    if sys.platform == "win32":
-#        utils.create_registry_keys()
-#        _broker = Broker()
-#if len(_broker.describe()) == 0:
-#    warnings.warn("No dictionary providers are available.")
 
+## Fix potentially broken registry entries from previous enchant versions
+utils.remove_registry_keys()
 
 ##  Create a module-level default broker object, and make its important
 ##  methods available at the module level.
@@ -785,153 +779,236 @@ list_dicts = _broker.list_dicts
 list_languages = _broker.list_languages
 
 
+##  Define unittest TestCases for the functionality provided in this module
 
-def _test_brokers():
-    """Run some regression tests on the functionality of Broker.
-    These tests assume, at a minimum, that there is a working provider
-    with a dictionary for "en_US".
+class TestBroker(unittest.TestCase):
+    """Test cases for the proper functioning of Broker objects.
+    These tests assume that there is at least one working provider
+    with a dictionary for the "en_US" language.
     """
-    print "TESTING Broker"
-    b1 = Broker()
-    assert(b1 != _broker)
-    assert(b1.dict_exists("en_US"))
-    # Ensure all listed languages are in fact available
-    for lang in b1.list_languages():
-        assert(b1.dict_exists(lang))
-    # Ensure all listed providers are in fact available
-    for (lang,prov) in b1.list_dicts():
-        assert(b1.dict_exists(lang))
-        assert(prov in b1.describe())
-    # For each language given by more than one provider,
-    # test that ordering works as expected
-    langs = {}
-    for (tag,prov) in b1.list_dicts():
-        if langs.has_key(tag):
-            langs[tag].append(prov)
-        else:
-            langs[tag] = [prov]
-    for tag in langs:
-        for prov in langs[tag]:
-            b2 = Broker()
-            b2.set_ordering(tag,prov.name)
-            d = b2.request_dict(tag)
-            assert(d.provider == prov)
-            del d
-            del b2
-    print "...ALL PASSED!"
-
-
-def _test_dicts():
-    """Run some simple regression tests on the enchant API.
-    These tests assume, at a minimum, that there is a working provider
-    with a dictionary for "en_US".
-    """
-    print "TESTING Dict and friends"
-
-    import tempfile    
-    assert(dict_exists("en_US"))
     
-    d1 = Dict("en_US")
-    assert(d1.check("hello"))
-    assert(d1.check("helo") == False)
-    assert(d1._broker is _broker)
-    assert(d1.tag == "en_US")
-    assert(_broker._Broker__live_dicts["en_US"] == 1)  
+    def setUp(self):
+        self.broker = Broker()
+    
+    def tearDown(self):
+        del self.broker
 
-    d2 = request_dict("en_US")
-    assert(d2.check("hello"))
-    assert(d2._broker is _broker)
-    assert("hello" in d1.suggest("helo"))
-    assert(_broker._Broker__live_dicts["en_US"] == 2) 
-    del d2
-    assert(_broker._Broker__live_dicts["en_US"] == 1) 
+    def test_HasENUS(self):
+        """Test that the en_US language is available."""
+        self.assert_(self.broker.dict_exists("en_US"))
+    
+    def test_LangsAreAvail(self):
+        """Test whether all advertised languages are in fact available."""
+        for lang in self.broker.list_languages():
+            self.assert_(self.broker.dict_exists(lang))
+            
+    def test_ProvsAreAvail(self):
+        """Test whether all advertised providers are in fact available."""
+        for (lang,prov) in self.broker.list_dicts():
+            self.assert_(self.broker.dict_exists(lang))
+            self.assert_(prov in self.broker.describe())
+    
+    def test_ProvOrdering(self):
+        """Test that provider ordering works correctly."""
+        langs = {}
+        provs = []
+        # Find the providers for each language, and a list of all providers
+        for (tag,prov) in self.broker.list_dicts():
+            if langs.has_key(tag):
+                langs[tag].append(prov)
+            else:
+                langs[tag] = [prov]
+            if prov not in provs:
+                provs.append(prov)
+        # Check availability using a single entry in ordering
+        for tag in langs:
+            for prov in langs[tag]:
+                b2 = Broker()
+                b2.set_ordering(tag,prov.name)
+                d = b2.request_dict(tag)
+                self.assertEqual(d.provider,prov)
+                del d
+                del b2
+        # Place providers that dont have the language in the ordering
+        for tag in langs:
+            for prov in langs[tag]:
+                order = prov.name
+                for prov2 in provs:
+                    if prov2 not in langs[tag]:
+                        order = prov2.name + "," + order
+                b2 = Broker()
+                b2.set_ordering(tag,order)
+                d = b2.request_dict(tag)
+                self.assertEqual(d.provider,prov)
+                del d
+                del b2
 
-    assert(d1.check("hello"))
-    assert(d1.check("Lozz") == False)
-    assert(d1.is_in_session("Lozz") == False)
-    d1.add_to_session("Lozz")
-    assert(d1.is_in_session("Lozz"))
-    assert(d1.check("Lozz"))
-    del d1
-    
-    # Create a temporary PWL file
-    try:
-        pwlFileNm = tempfile.mkstemp()[1]
-    except (NameError,AttributeError):
-        pwlFileNm = tempfile.mktemp()
-    pwlFile = file(pwlFileNm,"w")
-    pwlFile.write("Sazz\n")
-    pwlFile.close()
-    
-    d3 = DictWithPWL("en_US",pwlFileNm)
-    assert(d3.check("hello"))
-    assert(d3.check("Sazz"))
-    assert(d3.check("Flagen") == False)
-    d3.add_to_pwl("Flagen")
-    assert(d3.check("Flagen"))
-    del d3
-    
-    d4 = request_pwl_dict(pwlFileNm)
-    assert(d4.tag.lower() == "personal wordlist")
-    assert(d4.provider.file == pwlFileNm)
-    assert(d4.check("Flagen"))
-    assert(d4.check("hello") == False)
-    assert(_broker._Broker__live_dicts[pwlFileNm] == 1)
-    del d4
-    assert(_broker._Broker__live_dicts[pwlFileNm] == 0)
-    
-    pwlFile = file(pwlFileNm,"r")
-    assert("Flagen\n" in pwlFile.readlines())
-    pwlFile.close()
-    try:
-        os.remove(pwlFileNm)
-    except:
-        pass
+    def test_LiveDicts(self):
+        """Test proper functioning of live dicts count."""
+        self.failIf(self.broker._Broker__live_dicts.has_key("en_US"))
+        d1 = self.broker.request_dict("en_US")
+        self.assertEqual(self.broker._Broker__live_dicts["en_US"],1)
+        d2 = self.broker.request_dict("en_US")
+        self.assertEqual(self.broker._Broker__live_dicts["en_US"],2)
+        del d2
+        self.assertEqual(self.broker._Broker__live_dicts["en_US"],1)
+        d2 = self.broker.request_dict("en_US")
+        self.assertEqual(self.broker._Broker__live_dicts["en_US"],2)
+        del d1
+        del d2
+        self.assertEqual(self.broker._Broker__live_dicts["en_US"],0)
         
-    # Check the behavior of default language
-    defLang = utils.get_default_language()
-    if defLang is None:
-        # If no default language, shouldnt work
+    def test_LiveDictsNorm(self):
+        """Test live dicts count with normalised tag names."""
+        self.failIf(self.broker._Broker__live_dicts.has_key("en_US"))
+        d1 = self.broker.request_dict("en_US@fake")
+        self.assert_(self.broker._Broker__live_dicts["en_US"] == 1)
+        d2 = self.broker.request_dict("en_US.utf-8")
+        self.assert_(self.broker._Broker__live_dicts["en_US"] == 2)
+        del d1
+        del d2
+        self.assert_(self.broker._Broker__live_dicts["en_US"] == 0)
+
+
+class TestDict(unittest.TestCase):
+    """Test cases for the proper functioning of Dict objects.
+    These tests assume that there is at least one working provider
+    with a dictionary for the "en_US" language.
+    """
+        
+    def setUp(self):
+        self.dict = Dict("en_US")
+    
+    def tearDown(self):
+        del self.dict
+
+    def test_HasENUS(self):
+        """Test that the en_US language is available."""
+        self.assert_(dict_exists("en_US"))
+    
+    def test_check(self):
+        """Test that check() works on some common words."""
+        self.assert_(self.dict.check("hello"))
+        self.assert_(self.dict.check("test"))
+        self.failIf(self.dict.check("helo"))
+        self.failIf(self.dict.check("testt"))
+        
+    def test_broker(self):
+        """Test that the dict's broker is set correctly."""
+        self.assert_(self.dict._broker is _broker)
+    
+    def test_tag(self):
+        """Test that the dict's tag is set correctly."""
+        self.assertEqual(self.dict.tag,"en_US")
+    
+    def test_suggest(self):
+        """Test that suggest() gets simple suggestions right."""
+        self.assert_("hello" in self.dict.suggest("helo"))
+    
+    def test_session(self):
+        """Test that adding words to the session works as required."""
+        self.failIf(self.dict.check("Lozz"))
+        self.failIf(self.dict.is_in_session("Lozz"))
+        self.dict.add_to_session("Lozz")
+        self.assert_(self.dict.is_in_session("Lozz"))
+        self.assert_(self.dict.check("Lozz"))
+            # Check the behavior of default language
+    
+    def test_DefaultLang(self):
+        """Test behavior of default language selection."""
+        defLang = utils.get_default_language()
+        if defLang is None:
+            # If no default language, shouldnt work
+            self.assertRaises(Error,Dict)
+        else:
+            # If there is a default language, should use it
+            # Of course, no need for the dict to actually exist
+            try:
+                d = Dict()
+                self.assertEqual(d.tag,defLang)
+            except DictNotFoundError:
+                pass
+
+
+class TestPWL(unittest.TestCase):
+    """Test cases for the proper functioning of PWLs and DictWithPWL objects.
+    These tests assume that there is at least one working provider
+    with a dictionary for the "en_US" language.
+    """    
+    
+    def setUp(self):
+        import tempfile
         try:
-            d5 = Dict()
-            assert False, "Created Dict without default language"
-        except Error:
-            pass
-    else:
-        # If there is a default language, should use it
-        # Of course, no need for the dict to actually exist
+            self.pwlFileNm = tempfile.mkstemp()[1]
+        except (NameError,AttributeError):
+            self.pwlFileNm = tempfile.mktemp()
+    
+    def tearDown(self):
         try:
-            d5 = Dict()
-            assert(d5.tag == defLang)
-        except DictNotFoundError:
+            os.remove(self.pwlFileNm)
+        except:
             pass
     
-    # Check live_dicts behavior with normalized tag names
-    assert(_broker._Broker__live_dicts["en_US"] == 0)
-    d6 = Dict("en_US@fake")
-    assert(_broker._Broker__live_dicts["en_US"] == 1)
-    d7 = Dict("en_US.utf-8")
-    assert(_broker._Broker__live_dicts["en_US"] == 2)
-    del d6
-    del d7
-    assert(_broker._Broker__live_dicts["en_US"] == 0)
+    def setPWLContents(self,contents):
+        """Set the contents of the PWL file."""
+        pwlFile = file(self.pwlFileNm,"w")
+        for ln in contents:
+            pwlFile.write(ln)
+            pwlFile.write("\n")
+        pwlFile.close()
+        
+    def getPWLContents(self):
+        """Retreive the contents of the PWL file."""
+        pwlFile = file(self.pwlFileNm,"r")
+        contents = pwlFile.readlines()
+        pwlFile.close()
+        return contents
     
-    print "...ALL PASSED!"
+    def test_check(self):
+        """Test that basic checking words on PWLs."""
+        self.setPWLContents(["Sazz","Lozz"])
+        d = request_pwl_dict(self.pwlFileNm)
+        self.assert_(d.check("Sazz"))
+        self.assert_(d.check("Lozz"))
+        self.failIf(d.check("hello"))
+    
+    def test_add(self):
+        """Test that adding words to a PWL works correctly."""
+        d = request_pwl_dict(self.pwlFileNm)
+        self.failIf(d.check("Flagen"))
+        d.add_to_pwl("Flagen")
+        self.assert_(d.check("Flagen"))
+        self.assert_("Flagen\n" in self.getPWLContents())
+    
+    def test_DWPWL(self):
+        """Test functionality of DictWithPWL."""
+        self.setPWLContents(["Sazz","Lozz"])
+        d = DictWithPWL("en_US",self.pwlFileNm)
+        self.assert_(d.check("Sazz"))
+        self.assert_(d.check("Lozz"))
+        self.assert_(d.check("hello"))
+        self.failIf(d.check("helo"))
+        self.failIf(d.check("Flagen"))
+        d.add_to_pwl("Flagen")
+        self.assert_(d.check("Flagen"))
+        self.assert_("Flagen\n" in self.getPWLContents())
     
     
-def _test_all():
-    from enchant.checker import _test_checker
-    from enchant.tokenize import _test_get_tokenizer
-    from enchant.tokenize.en import _test_tokenize_en
-    _test_brokers()
-    _test_dicts()
-    _test_checker()
-    _test_get_tokenizer()
-    _test_tokenize_en()
-    print "ALL TESTS PASSED!"
+def testsuite():
+    from enchant.checker import TestChecker
+    from enchant.tokenize import TestGetTokenizer
+    from enchant.tokenize.en import TestTokenizeEN
+    suite = unittest.TestSuite()
+    suite.addTest(unittest.makeSuite(TestBroker))
+    suite.addTest(unittest.makeSuite(TestDict))
+    suite.addTest(unittest.makeSuite(TestPWL))
+    suite.addTest(unittest.makeSuite(TestChecker))
+    suite.addTest(unittest.makeSuite(TestGetTokenizer))
+    suite.addTest(unittest.makeSuite(TestTokenizeEN))
+    return suite
 
 # Run regression tests when called from comand-line
 if __name__ == "__main__":
-    _test_all()
+    UnitTest.TextTestRunner().run(testsuite())
 
 

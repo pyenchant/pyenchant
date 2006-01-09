@@ -45,6 +45,7 @@
 """
 
 import array
+import unittest
 
 import enchant
 from enchant.tokenize import get_tokenizer
@@ -333,61 +334,57 @@ class SpellChecker:
         return self._array_to_string(context)    
         
             
-
-def _test_checker():
-    # Test things out briefly
-    text = """This is sme text with a few speling erors in it. Its gret
-for checking wheather things are working proprly with the SpellChecker
-class. Not gret for much elss though."""
-    print "TESTING checker.SpellChecker"
-    chkr = SpellChecker("en_US",text=text)
-    for n,err in enumerate(chkr):
-        if n == 0:
-            # Fix up "sme" -> "some" properly
-            assert(err.word == "sme")
-            assert(err.wordpos == 8)
-            assert("some" in err.suggest())
-            err.replace("some")
-        if n == 1:
-            # Ignore "speling"
-            assert(err.word == "speling")
-        if n == 2:
-            # Check context around "erors", and replace
-            assert(err.word == "erors")
-            assert(err.leading_context(5) == "ling ")
-            assert(err.trailing_context(5) == " in i")
-            err.replace(u"errors")
-        if n == 3:
-            # Replace-all on gret as it appears twice
-            assert(err.word == "gret")
-            err.replace_always("great")
-        if n == 4:
-            # First encounter with "wheather", move offset back
-            assert(err.word == "wheather")
-            err.set_offset(-1*len(err.word))
-        if n == 5:
-            # Second encounter, fix up "wheather'
-            assert(err.word == "wheather")
-            err.replace("whether")
-        if n == 6:
-            # Just replace "proprly", but also add an ignore
-            # for "SpellChecker"
-            assert(err.word == "proprly")
-            err.replace("properly")
-            err.ignore_always("SpellChecker")
-        if n == 7:
-            # The second "gret" should have been replaced
-            # So it's now on "elss"
-            assert(err.word == "elss")
-            err.replace("else")
-        if n > 7:
-            assert(False or "Too many errors!")
-    text2 = """This is some text with a few speling errors in it. Its great
-for checking whether things are working properly with the SpellChecker
-class. Not great for much else though."""
-    assert(chkr.get_text() == text2)
-    print "...ALL PASSED!"
-
-# Run tests when invoked from command line
-if __name__ == "__main__":
-    _test_checker()
+class TestChecker(unittest.TestCase):
+    """TestCases for checking behavior of SpellChecker class."""
+    
+    def test_run1(self):
+        """Test performance of a basic spellchecking run."""
+        text = """This is sme text with a few speling erors in it. Its gret
+        for checking wheather things are working proprly with the SpellChecker
+        class. Not gret for much elss though."""
+        chkr = SpellChecker("en_US",text=text)
+        for n,err in enumerate(chkr):
+            if n == 0:
+                # Fix up "sme" -> "some" properly
+                self.assertEqual(err.word,"sme")
+                self.assertEqual(err.wordpos,8)
+                self.assert_("some" in err.suggest())
+                err.replace("some")
+            if n == 1:
+                # Ignore "speling"
+                self.assertEqual(err.word,"speling")
+            if n == 2:
+                # Check context around "erors", and replace
+                self.assertEqual(err.word,"erors")
+                self.assertEqual(err.leading_context(5),"ling ")
+                self.assertEqual(err.trailing_context(5)," in i")
+                err.replace(u"errors")
+            if n == 3:
+                # Replace-all on gret as it appears twice
+                self.assertEqual(err.word,"gret")
+                err.replace_always("great")
+            if n == 4:
+                # First encounter with "wheather", move offset back
+                self.assertEqual(err.word,"wheather")
+                err.set_offset(-1*len(err.word))
+            if n == 5:
+                # Second encounter, fix up "wheather'
+                self.assertEqual(err.word,"wheather")
+                err.replace("whether")
+            if n == 6:
+                # Just replace "proprly", but also add an ignore
+                # for "SpellChecker"
+                self.assertEqual(err.word,"proprly")
+                err.replace("properly")
+                err.ignore_always("SpellChecker")
+            if n == 7:
+                # The second "gret" should have been replaced
+                # So it's now on "elss"
+                self.assertEqual(err.word,"elss")
+                err.replace("else")
+            if n > 7:
+                self.fail("Extraneous spelling errors were found")
+        text2 = """This is some text with a few speling errors in it. Its great
+        for checking whether things are working properly with the SpellChecker
+        class. Not great for much else though."""
+        self.assertEqual(chkr.get_text(),text2)

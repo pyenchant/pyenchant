@@ -17,7 +17,7 @@ import shutil
 # Location of the windows binaries, if available
 WINDEPS = ".\\tools\\pyenchant-bdist-win32-sources\\build"
 
-#  Cant obtain version information from module, must hardcode
+#  Cant seem to obtain version information from module, must hardcode
 VERSION = "1.1.4"
 
 # Package MetaData
@@ -27,6 +27,7 @@ AUTHOR = "Ryan Kelly"
 AUTHOR_EMAIL = "rynklly@users.sourceforge.net"
 URL = "http://pyenchant.sourceforge.net/"
 LICENSE = "LGPL"
+KEYWORDS = "spelling spellcheck enchant"
 
 
 #  Module Lists
@@ -61,7 +62,8 @@ ext1 = Extension('enchant._enchant',['enchant/enchant_wrap.c'],
 #
 # Also, there's the possibility of including pre-built support DLLs
 # for the Windows installer.  They will be included if the directory
-# <WINDEPS> exists when this script is run.
+# <WINDEPS> exists when this script is run.  They are copied into
+# the package directory so setuptools can locate them.
 #
 if sys.platform == "win32":
     # Copy local DLLs across if available
@@ -101,14 +103,20 @@ else:
 
 EXT_MODULES.append(ext1)
 
+##
+##  Main call to setup() function
+##
+
 setup(name=NAME,
       version=VERSION,
       author=AUTHOR,
       author_email=AUTHOR_EMAIL,
       url=URL,
+      keywords=KEYWORDS,
       packages=PACKAGES,
       ext_modules=EXT_MODULES,
       package_data=PKG_DATA,
       eager_resources=EAGER_RES,
+      test_suite="enchant.testsuite",
      )
 
