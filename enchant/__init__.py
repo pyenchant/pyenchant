@@ -904,6 +904,12 @@ class TestDict(unittest.TestCase):
     def test_suggest(self):
         """Test that suggest() gets simple suggestions right."""
         self.assert_("hello" in self.dict.suggest("helo"))
+
+    def test_suggestHang1(self):
+        """Test whether suggest() hangs on some inputs (Bug #1404196)"""
+        self.assert_(len(self.dict.suggest("Thiis")) >= 0)
+        self.assert_(len(self.dict.suggest("Thiiis")) >= 0)
+        self.assert_(len(self.dict.suggest("Thiiiis")) >= 0)
     
     def test_session(self):
         """Test that adding words to the session works as required."""

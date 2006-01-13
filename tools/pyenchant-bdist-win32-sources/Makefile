@@ -7,7 +7,7 @@ XMINGW_CONFIG_OPTS =
 ASPELL_CONFIG_OPTS = --enable-win32-relocatable --enable-shared --disable-rpath 
 ENCHANT_CONFIG_OPTS = --enable-ispell --enable-myspell --disable-aspell --with-aspell-prefix=$(BUILD_DIR)
 
-CFLAGS = -g -Wl,--enable-runtime-pseudo-reloc
+CFLAGS = -Wl,--enable-runtime-pseudo-reloc
 
 all: $(BUILD_DIR)/lib/libenchant-1.dll $(BUILD_DIR)/myspell/en_GB.dic \
 	$(BUILD_DIR)/myspell/en_US.dic $(BUILD_DIR)/myspell/de_DE.dic \
@@ -53,6 +53,7 @@ $(ENCHANT_DIR): src/$(ENCHANT_DIR).tar.gz
 	tar -xzvf src/$(ENCHANT_DIR).tar.gz
 	patch $(ENCHANT_DIR)/src/enchant.c patches/enchant.c.patch
 	patch $(ENCHANT_DIR)/src/myspell/myspell_checker.cpp patches/myspell_checker.cpp.patch
+	patch $(ENCHANT_DIR)/src/myspell/suggestmgr.cxx patches/suggestmgr.cxx.patch
 	patch $(ENCHANT_DIR)/src/ispell/ispell_checker.cpp patches/ispell_checker.cpp.patch
 	patch $(ENCHANT_DIR)/src/enchant-provider.h patches/enchant-provider.h.patch
 	patch $(ENCHANT_DIR)/configure patches/enchant_configure.patch

@@ -1,6 +1,6 @@
 --- enchant-1.1.6/src/myspell/myspell_checker.cpp	Thu Feb 10 13:04:20 2005
 +++ enchant-1.1.7/src/myspell/myspell_checker.cpp	Fri Jul  1 15:16:48 2005
-@@ -76,9 +76,21 @@
+@@ -76,9 +76,22 @@
  {
  	char * data_dir = NULL;
  
@@ -16,6 +16,7 @@
 +		{
 +			data_dir = g_build_filename(prefix,"share","enchant","myspell",NULL);
 +			g_free(prefix);
++		/*printf("MYSPELL PREFIX: %s\n",data_dir);*/
 +			return data_dir;
 +		}
 +

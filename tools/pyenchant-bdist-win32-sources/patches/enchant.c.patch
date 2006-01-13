@@ -52,7 +52,7 @@
  	return g_strdup (ENCHANT_GLOBAL_ORDERING);
  #else
  	return NULL;
-@@ -1435,6 +1453,44 @@
+@@ -1435,6 +1453,45 @@
  	
  	return broker->error;
  }
@@ -83,6 +83,7 @@
 +			if(GetModuleFileName(hInstance,dll_path,MAX_PATH))
 +				{
 +					dll_dir = g_path_get_dirname(dll_path);
++				/*printf("ENCHANT PREFIX: %s\n",dll_dir);*/
 +					return dll_dir;
 +				}
 +		}
