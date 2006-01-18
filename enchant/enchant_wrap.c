@@ -1511,6 +1511,7 @@ SWIG_Check_unsigned_SS_long(PyObject* obj)
         PyObject *suggs_list, *tmp_str;
         int i;
         suggs = enchant_dict_suggest(dict,word,len,&n_suggs);
+        if(suggs == NULL) { n_suggs = 0; }
         suggs_list = PyList_New(n_suggs);
         if(suggs_list == NULL) { return NULL; }
         for(i = 0;i < n_suggs;i++) {

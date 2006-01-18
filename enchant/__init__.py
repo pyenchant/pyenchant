@@ -910,7 +910,15 @@ class TestDict(unittest.TestCase):
         self.assert_(len(self.dict.suggest("Thiis")) >= 0)
         self.assert_(len(self.dict.suggest("Thiiis")) >= 0)
         self.assert_(len(self.dict.suggest("Thiiiis")) >= 0)
-    
+
+    def test_unicode1(self):
+        """Test checking/suggesting for unicode strings"""
+        us1 = u"\u21496"
+        self.assert_(type(us1) == unicode)
+        self.failIf(self.dict.check(us1))
+        for s in self.dict.suggest(us1):
+            self.assert_(type(s) == unicode)
+            
     def test_session(self):
         """Test that adding words to the session works as required."""
         self.failIf(self.dict.check("Lozz"))

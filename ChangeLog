@@ -1,4 +1,10 @@
 
+1.1.4p1:
+
+   * Fix hang in included MySpell (Windows distribution)
+   * Return empty list when suggest() fails, regardless of
+     reported number of suggestions
+
 1.1.4:
 
    * No longer need to use the registry under Windows
