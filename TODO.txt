@@ -2,10 +2,13 @@
 Documentation:
 
   * talk more about PWLs in the tutorial
+  * explain a little more about setuptools
+  * talk about py2exe and pyGTK issues
 
 PyEnchant:
 
   * implement a tkSpellCheckerDialog to compliment the wx one
+  * include GtkSpellCheckerDialog from contributor
   * Expand CmdLineChecker and make it ispell-compatible
   * try things out on OSX
   * allow DictWithPWL to use default language
@@ -20,12 +23,9 @@ PyEnchant:
 Enchant:
 
   * move to aspell for windows installer backend if possible
-  * shouldnt use enchant_normalize_dictionary_tag on PWL names as it
-    might wreck the filename!  Should any normalizing be done?
-    (taken out in CVS, remove from our patched version)
 
 
-Docs:
+Misc:
 
   * OSX install procedure:
        - http://www.tenon.com/resources/revised/X_apps_1.shtml for glib?

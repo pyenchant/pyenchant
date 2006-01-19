@@ -1,9 +1,9 @@
 
-1.1.4p1:
+1.1.5:
 
    * Fix hang in included MySpell (Windows distribution)
-   * Return empty list when suggest() fails, regardless of
-     reported number of suggestions
+   * Workaround for some MySpell/unicode problems
+   * Update to latest setuptools ez_setup.py
 
 1.1.4:
 
