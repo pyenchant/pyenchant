@@ -1,4 +1,18 @@
 
+1.2.0:
+
+   * Implemented "filters" that allow tokenization to skip common word
+     forms such as URLs, WikiWords, email addresses etc.
+   * Tokenization doesnt split words at non-alpha characters by default
+   * Dialogs:
+        * wxSpellCheckerDialog reimplemented (no longer burns eyes)
+        * GtkSpellCheckerDialog contributed by Fredrik Corneliusson
+   * Removed deprecated functionality:
+   		* Dict.add_to_personal
+   		* All registry handling functionality from enchant.utils
+   		* enchant.utils.SpellChecker (use enchant.checker.SpellChecker)
+   * Removed PyPWL, as native enchant PWLs can now suggest corrections
+
 1.1.5:
 
    * Fix hang in included MySpell (Windows distribution)

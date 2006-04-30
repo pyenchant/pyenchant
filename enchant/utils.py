@@ -36,8 +36,6 @@
     includes:
         
         * 'backported' functionality for python2.2 compatability
-        * functions for inserting/removing entries into the Windows
-          registry, to point to local version of enchant
         * functions for dealing with locale/language settings
     
     Functionality that is temporarily available and may move or disappear
@@ -51,17 +49,9 @@
 # Get generators for python2.2
 from __future__ import generators
 
-import sys
 import os
-from warnings import warn
-from distutils import sysconfig
 
-
-try:
-    import _winreg as reg
-except ImportError:
-    reg = None
-
+# Attempt to access local language information
 try:
     import locale
 except ImportError:
@@ -84,148 +74,7 @@ except NameError:
             yield (idx,itm)
             idx += 1
 
-# Make a deprecated SpellChecker available for backwards-compatability
-def SpellChecker(*args,**kwds):
-    warn("utils.SpellChecker is deprecated, please use checker.SpellChecker",
-         DeprecationWarning)
-    from checker import SpellChecker
-    return SpellChecker(*args,**kwds)
-
-
-
-# Useful registry-handling functions
-
-def _reg_get():
-    """Get the registry module, or None if not available.
-    This function raises an appropriate warning if the registry
-    is not available.  Functions requiring registry access should
-    use the following code:
-        
-        reg = _reg_get()
-        if reg is None:
-            return False
-
-    """
-    if reg is not None:
-        return reg
-    if sys.platform == "win32":
-        warn("Could not import the registry-handling module _winreg")
-    else:
-        warn("Attempt to access the registry on non-Windows platform")
-    return None
-
-def _reg_remove_key_matching(key,value,data,allusers=False):
-    """Remove the given registry value if its contents match the given data.
-
-    This function looks up the given registry key/value and compares its
-    contents to the given data.  If they are an exact match, the value is
-    removed from the key.
-
-    By default, the work is done on HKEY_CURRENT_USER. The optional argument
-    <allusers> may be set to true to specify that HKEY_LOCAL_MACHINE should
-    be used instead.
-    """
-    reg = _reg_get()
-    if reg is None:
-        return False
-    if allusers:
-        hkey = reg.HKEY_LOCAL_MACHINE
-    else:
-        hkey = reg.HKEY_CURRENT_USER
-    try:
-        hkey = reg.OpenKey(hkey,key,0,reg.KEY_ALL_ACCESS)
-    except:
-        # Key doesnt exist
-        return True
-    try:
-        (dat,typ) = reg.QueryValueEx(hkey,value)
-        if dat != data:
-            # Data doesnt match, dont delete
-            return True
-    except:
-        # Key doesnt have value, just return
-        return True
-    reg.DeleteValue(hkey,value)
-    return True
-
-
-def _reg_remove_empty_key(key,allusers=False):
-    """Remove the named registry key, if it is empty.
-    
-    By default, the work is done on HKEY_CURRENT_USER. The optional argument
-    <allusers> may be set to true to specify that HKEY_LOCAL_MACHINE should
-    be used instead.
-    """
-    reg = _reg_get()
-    if reg is None:
-        return False
-    if allusers:
-        hkey = reg.HKEY_LOCAL_MACHINE
-    else:
-        hkey = reg.HKEY_CURRENT_USER
-    try:
-        okey = reg.OpenKey(hkey,key,0,reg.KEY_ALL_ACCESS)
-    except:
-        # Key doesnt exist
-        return True
-    try:
-        reg.EnumValue(okey,0)
-        # Key still contains values
-        return True
-    except:
-        try:
-            reg.EnumKey(okey,0)
-            # Key still contains subkeys
-            return True
-        except:
-            # Was empty, we can delete it
-            reg.DeleteKey(hkey,key)
-            return True
-    return False
-
-
-def _reg_config_keys():
-    """Retuns a list of registry keys of interest.
-    All keys point to locations in the filesystem and are returned
-    as a tuple containing:
-
-        * Key Path
-        * Key Value
-        * Key Data
-
-    """
-    modulesDir = os.path.join(sysconfig.get_python_lib(),"enchant")
-    ispellDir = os.path.join(sysconfig.get_python_lib(),"enchant","ispell")
-    myspellDir = os.path.join(sysconfig.get_python_lib(),"enchant","myspell")
-    keys = []
-    keys.append(("Software\\Enchant\\Config","Module_Dir",modulesDir))
-    keys.append(("Software\\Enchant\\Ispell","Data_Dir",ispellDir))
-    keys.append(("Software\\Enchant\\Myspell","Data_Dir",myspellDir))
-    return keys
-
-
-# Top-level registry handling functions
-
-def remove_registry_keys(allusers=False):
-    """Remove registry keys from previous versions of PyEnchant.
- 
-    This function can be used to remove the entries from the Windows
-    registry that were created by previous versions of PyEnchant.
- 
-    On platforms other than Windows, this function returns immediately
-    """
-    if sys.platform != "win32":
-        return None
-    for (p,v,d) in _reg_config_keys():
-        _reg_remove_key_matching(p,v,d,allusers)
-    _reg_remove_empty_key("Software\\Enchant\\Config",allusers)
-    _reg_remove_empty_key("Software\\Enchant\\Ispell",allusers)
-    _reg_remove_empty_key("Software\\Enchant\\Myspell",allusers)
-    _reg_remove_empty_key("Software\\Enchant",allusers)
-    
-
-
-##  Allow looking up of default language on-demand.
+#  Allow looking up of default language on-demand.
 
 def get_default_language(default=None):
     """Determine the user's default language, if possible.
@@ -250,13 +99,11 @@ def get_default_language(default=None):
         if tag is None:
             tag = locale.getdefaultlocale()[0]
             if tag is None:
-                raise Exception("No default language available")
+                raise Error("No default language available")
         return tag
     except:
         pass
     return default
-        
-
 
 # Useful string-handling functions
 
@@ -316,18 +163,28 @@ class PyPWL:
     suggestions to be returned from the list.
     """
     
-    def __init__(self,pwl):
+    def __init__(self,pwl,encode="soundex"):
         """PyPWL constructor.
         This method takes as its only argument the name of a file
         containing the personal word list, one word per line.  Entries
         will be read from this file, and new entries will be written to
         it automatically.
+        
+        For experienced users only:  the keyword argument 'encode' can
+        be given, naming an encoding function to use.  The current default
+        is "soundex".  This is mainly for the purposes of testing
+        different encoding functions.
         """
         self.pwl = os.path.abspath(pwl)
         self.tag = self.pwl
         self.provider= None
+        # Set up encoding function as directed
+        if encode == "soundex":
+            self._encode = soundex
+        else:
+            raise ValueError("Unrecognised encoder function: '%s'"%(encode))
         # Read entries into memory
-        # Entries will be a dict of dicts indexed by soundex
+        # Entries will be a dict of dicts indexed by encoding
         # key then by word, all containing True.
         self._entries = {}
         pwlF = file(pwl)
@@ -341,7 +198,7 @@ class PyPWL:
         This method takes a word in the dictionary language and returns
         True if it is correctly spelled, and false otherwise.
         """
-        key = soundex(word)
+        key = self._encode(word)
         try:
             if self._entries[key][word]:
                 return True
@@ -355,7 +212,7 @@ class PyPWL:
         This method tries to guess the correct spelling for a given
         word, returning the possibilities in a list.
         """
-        key = soundex(word)
+        key = self._encode(word)
         try:
             poss = [w for w in self._entries[key]]
         except KeyError:
@@ -395,7 +252,7 @@ class PyPWL:
 
     def add_to_session(self,word):
         """Add a word to the session list."""
-        key = soundex(word)
+        key = self._encode(word)
         try:
             self._entries[key][word] = True
         except KeyError:
@@ -417,4 +274,275 @@ class PyPWL:
         """
         # Cant really do anything with it
         pass
+
+
+class Trie:
+    """Class implementing a trie-based dictionary of words."""
+    
+    def __init__(self,words=()):
+        self._eos = False
+        self._keys = {}
+        for w in words:
+            self.add_word(w)
+    
+    def add_word(self,word):
+        if word == "":
+            self._eos = True
+        else:
+            key = word[0]
+            try:
+                subtrie = self[key]
+            except KeyError:
+                subtrie = Trie()
+                self[key] = subtrie
+            subtrie.add_word(word[1:])
+    
+    def search_word(self,word,maxerrs):
+        """Search for the given word, possibly allowing errors.
+        
+        This method searches the trie for the given <word>, but allowing
+        at most <maxerrs> errors.
+        
+        The return value is a dict mapping word->nerrs giving the possible
+        matches.
+        """
+        res = {}
+        if maxerrs < 0:
+            return res
+        # Precise match of the word
+        if word == "":
+            if self._eos:
+                res[""] = 0
+        # Precisely match the first character
+        try:
+            subtrie = self[word[0]]
+            subres = subtrie.search_word(word[1:],maxerrs)
+            for w in subres:
+                w2 = word[0] + w
+                try:
+                    res[w2] = min(res[w2],subres[w])
+                except KeyError:
+                    res[w2] = subres[w]
+        except (IndexError, KeyError):
+            pass
+        # match on insertion of first character
+        try:
+            subres = self.search_word(word[1:],maxerrs-1)
+            for w in subres:
+                try:
+                    res[w] = min(res[w],subres[w]+1)
+                except KeyError:
+                    res[w] = subres[w]+1
+        except (IndexError,):
+            pass
+        # match on deletion of first character
+        try:
+            for k in self._keys:
+                subres = self[k].search_word(word,maxerrs-1)
+                for w in subres:
+                    w2 = k+w
+                    try:
+                        res[w2] = min(res[w2],subres[w]+1)
+                    except KeyError:
+                        res[w2] = subres[w]+1
+        except (IndexError,KeyError):
+            pass
+        # match on swapping first character
+        try:
+            for k in self._keys:
+                subres = self[k].search_word(word[1:],maxerrs-1)
+                for w in subres:
+                    w2 = k+w
+                    try:
+                        res[w2] = min(res[w2],subres[w]+1)
+                    except KeyError:
+                        res[w2] = subres[w]+1
+        except (IndexError,KeyError):
+            pass
+        # All done!
+        return res
+        
+    def search_word2(self,word,nerrs):
+        """Search for the given word, possibly allowing errors.
+        
+        This method searches the trie for the given <word>, but with
+        precisely <nerrs> errors.
+        
+        
+        The return value is a dict mapping word->nerrs giving the possible
+        matches.
+        """
+        res = {}
+        if nerrs < 0:
+            return res
+        # Precise match of the word
+        if word == "":
+            if nerrs == 0:
+                if self._eos:
+                    res[""] = nerrs
+            return res
+        # Precisely match the first character
+        try:
+            subtrie = self[word[0]]
+            subres = subtrie.search_word(word[1:],nerrs)
+            for w in subres:
+                w2 = word[0] + w
+                res[w2] = nerrs
+        except (IndexError, KeyError):
+            pass
+        # match on insertion of first character
+        try:
+            subres = self.search_word(word[1:],nerrs-1)
+            for w in subres:
+                res[w] = nerrs
+        except (IndexError,):
+            pass
+        # match on deletion of first character
+        try:
+            for k in self._keys:
+                subres = self[k].search_word(word,nerrs-1)
+                for w in subres:
+                    w2 = k+w
+                    res[w2] = nerrs
+        except (IndexError,KeyError):
+            pass
+        # match on swapping first character
+        try:
+            for k in self._keys:
+                subres = self[k].search_word(word[1:],nerrs-1)
+                for w in subres:
+                    w2 = k+w
+                    res[w2] = nerrs
+        except (IndexError,KeyError):
+            pass
+        # All done!
+        return res
+            
+    
+    def __getitem__(self,key):
+        return self._keys[key]
+        
+    def __setitem__(self,key,val):
+        self._keys[key] = val
+
+
+class PyPWL2:
+    """Pure-python implementation of Personal Word List dictionary.
+    This class emulates the Dict objects provided by enchant using the
+    function request_pwl_dict(), but with additional functionality.
+    In particular, a trie-based approximate matching algorithm is used
+    to make suggestions.
+    """
+    
+    def __init__(self,pwl):
+        """PyPWL constructor.
+        This method takes as its only argument the name of a file
+        containing the personal word list, one word per line.  Entries
+        will be read from this file, and new entries will be written to
+        it automatically.
+        """
+        self.pwl = os.path.abspath(pwl)
+        self.tag = self.pwl
+        self.provider= None
+        # Read entries into memory
+        # Entries will be stored in a Trie
+        self._entries = Trie()
+        pwlF = file(pwl)
+        for ln in pwlF:
+            word = ln.strip()
+            self.add_to_session(word)
+                
+    def check(self,word):
+        """Check spelling of a word.
+        
+        This method takes a word in the dictionary language and returns
+        True if it is correctly spelled, and false otherwise.
+        """
+        res = self._entries.search_word(word,0)
+        if len(res) == 0:
+            return False
+        return True
+    
+    def _subkey(self,word,sugg):
+        sndx1 = soundex(word)
+        sndx2 = soundex(sugg)
+        return edit_dist(sndx1,sndx2)
+    
+    def suggest(self,word):
+        """Suggest possible spellings for a word.
+        
+        This method tries to guess the correct spelling for a given
+        word, returning the possibilities in a list.
+        """
+        limit = 10
+        maxdepth = 3
+        # Iterative deepening until we get enough matches
+        depth = 0
+        res = self._entries.search_word(word,depth)
+        while len(res) < limit and depth < maxdepth:
+            depth += 1
+            res.update(self._entries.search_word(word,depth))
+        poss = [(e,w) for (w,e) in res.iteritems()]
+        # TODO: maybe sub-order by soundex key?
+        poss.sort()
+        # Limit number of suggs
+        poss = poss[:limit]
+        # Remove edit distances, and return
+        return [w for (e,w) in poss]
+    
+    def suggest2(self,word):
+        """Suggest possible spellings for a word.
+        
+        This method tries to guess the correct spelling for a given
+        word, returning the possibilities in a list.
+        """
+        limit = 10
+        maxdepth = 3
+        # Iterative deepening until we get enough matches
+        depth = 0
+        res = self._entries.search_word2(word,depth)
+        while len(res) < limit and depth < maxdepth:
+            depth += 1
+            res.update(self._entries.search_word2(word,depth))
+        poss = [(e,w) for (e,w) in res.iteritems()]
+        # TODO: maybe sub-order by soundex key?
+        poss.sort()
+        # Limit number of suggs
+        poss = poss[:limit]
+        # Remove edit distances, and return
+        return [w for (e,w) in poss]
+    
+    def add_to_pwl(self,word):
+        """Add a word to the user's personal dictionary.
+        For a PWL, this means appending it to the file.
+        """
+        pwlF = file(self.pwl,"a")
+        pwlF.write("%s\n" % (word.strip(),))
+        pwlF.close()
+        self.add_to_session(word)
+
+    def add_to_session(self,word):
+        """Add a word to the session list."""
+        self._entries.add_word(word)
+                    
+    def is_in_session(self,word):
+        """Check whether a word is in the session list."""
+        # Consider all words to be in the session list
+        return self.check(word)
+    
+    def store_replacement(self,mis,cor):
+        """Store a replacement spelling for a miss-spelled word.
+        
+        This method makes a suggestion to the spellchecking engine that the 
+        miss-spelled word <mis> is in fact correctly spelled as <cor>.  Such
+        a suggestion will typically mean that <cor> appears early in the
+        list of suggested spellings offered for later instances of <mis>.
+        """
+        # Cant really do anything with it
+        pass
+
+# Make enchant.Error available
+# Done at bottom of file to avoid circular imports
+from enchant import Error
+
 

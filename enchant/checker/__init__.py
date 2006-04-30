@@ -100,7 +100,7 @@ class SpellChecker:
     
     """
     
-    def __init__(self,lang,text=None,tokenize=None):
+    def __init__(self,lang,text=None,tokenize=None,filters=()):
         """Constructor for the SpellChecker class.
         SpellChecker objects can be created in two ways, depending on
         the nature of the first argument.  If it is a string, it
@@ -111,11 +111,13 @@ class SpellChecker:
             
             * text:  to set the text to be checked at creation time
             * tokenize:  a custom tokenization function to use
+            * filters:  a list of filters to apply during tokenization
             
         If <tokenize> is not given and the first argument is a Dict,
         its 'tag' attribute must be a language tag so that a tokenization
         function can be created automatically.  In particular this means
-        that a PWL dictionary cannot be used directy.
+        that a PWL dictionary cannot be used without specifying a
+        tokenization function.
         """
         if isinstance(lang,basestring):
             dict = enchant.Dict(lang)
@@ -126,6 +128,8 @@ class SpellChecker:
         self.dict = dict
         if tokenize is None:
             tokenize = get_tokenizer(lang,fallback=True)
+        for f in filters:
+            tokenize = f(tokenize)
         self._tokenize = tokenize
         
         self.word = None

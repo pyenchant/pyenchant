@@ -11,19 +11,13 @@ PyEnchant:
   * include GtkSpellCheckerDialog from contributor
   * Expand CmdLineChecker and make it ispell-compatible
   * try things out on OSX
+  * finish filter implementation
+  * pretty up the wxSpellCheckerDialog
   * allow DictWithPWL to use default language
        - probably require swapping order of arguments, not good!
   * try implementing the shared library with PyRex instead of SWIG,
     see if we get better performance/memory handling/etc
-  * check enchant version in configure script, issue warning if
-    not >= 1.1.6
   * create/fillin README.txt in folders in the Windows distribution
-
-  
-Enchant:
-
-  * move to aspell for windows installer backend if possible
-
 
 Misc:
 

@@ -68,10 +68,26 @@
     Currently, a tokeniser has only been implemented for the English
     language.  Based on the author's limited experience, this should
     be at least partially suitable for other languages.
-    
+
+    This module also provides the Filter class and a variety of subclasses.
+    These are designed to allow skipping over certain types of word
+    during the spellchecking process.  For example, the following would
+    produce a tokenizer for the English language that skips over URLs
+    and WikiWords:
+        
+        tknzr = URLFilter(WikiWordsFilter(get_tokenizer("en_US")))
+        
+    It is then used in the same way as a tokenizer functionn:
+        
+        tkns = tknzr("text to be tokenized goes here")
+        for (word,pos) in tkns:
+            do_something(word)
+        
 """
 
 import unittest
+import re
+
 import enchant
 
 class tokenize:
@@ -85,7 +101,7 @@ class tokenize:
         raise NotImplementedError()
     def __iter__(self):
         return self
-        
+
 
 class Error(enchant.Error):
     """Exception subclass for the tokenize module.
@@ -137,6 +153,116 @@ def _try_tokenizer(modName):
        return None
 
 
+class Filter:
+    """Base class for token filtering functions.
+    Filters are used to skip over certain special words during a spellchecking
+    session, such as URLs or WikiWords.  A filter is designed to wrap a
+    tokenizer (or another filter) and skip over tokens that match its
+    particular check.  So you might use them as follows:
+        
+        tknzr = get_tokenizer("en_US")
+        tknzr = URLFilter(WikiWordsFilter(tknzr))
+        
+    The object in <tknzr> would then be a tokenizer function for English text
+    that skips over URLs and WikiWords.
+    
+    Subclasses has two basic options for customising their behavior.  The
+    method _match(word) may be overridden to return True for words that
+    should be skipped, and false otherwise.  If more complex behavior is
+    needed, the inner class TokenFilter can be overriden.
+    """
+    
+    def __init__(self,tokenizer):
+        """Filter class constructor."""
+        self._tokenizer = tokenizer
+    
+    def __call__(self,*args,**kwds):
+        tkn = self._tokenizer(*args,**kwds)
+        return self.TokenFilter(tkn,self._match)
+    
+    def _match(self,word):
+        """Filter matching method.
+        If this method returns true, the given word will be skipped by
+        the filter.  This should be overriden in subclasses to produce the
+        desired functionality.
+        """
+        return False
+    
+    class TokenFilter:
+        def __init__(self,tokenizer,match):
+            self._match = match
+            self._tokenizer = tokenizer
+    
+        def __iter__(self):
+            return self
+    
+        def next(self):
+            """Iterator protocol method for Filter objects.
+            The call to next is passed on to the underlying tokenizer,
+            skipping over words matching against the filter.
+            """
+            (word,pos) = self._tokenizer.next()
+            while self._match(word):
+                (word,pos) = self._tokenizer.next()
+            return (word,pos)
+                
+        # Pass on access to offset to the tokenizer.
+        def _getOffset(self):
+            return self._tokenizer.offset
+        def _setOffset(self,val):
+            self._tokenizer.offset = val
+        offset = property(_getOffset,_setOffset)
+
+
+#  Pre-defined filters start here
+
+class URLFilter(Filter):
+    """Filter skipping over URLs.
+    This filter skips any words matching the following regular expression:
+       
+           ^[a-zA-z]+:\/\/[^\s].*
+        
+    That is, any words that are URLs.
+    """
+    _pattern = re.compile(r"^[a-zA-z]+:\/\/[^\s].*")
+    def _match(self,word):
+        if self._pattern.match(word):
+            return True
+        return False
+
+class WikiWordFilter(Filter):
+    """Filter skipping over WikiWords.
+    This filter skips any words matching the following regular expression:
+       
+           ^([A-Z]\w+[A-Z]+\w+)
+        
+    That is, any words that are WikiWords.
+    """
+    _pattern = re.compile(r"^([A-Z]\w+[A-Z]+\w+)")
+    def _match(self,word):
+        if self._pattern.match(word):
+            return True
+        return False
+
+class EmailFilter(Filter):
+    """Filter skipping over email addreses.
+    This filter skips any words matching the following regular expression:
+       
+           ^.+@[^\.].*\.[a-z]{2,}$
+        
+    That is, any words that resemble email addresses.
+    """
+    _pattern = re.compile(r"^.+@[^\.].*\.[a-z]{2,}$")
+    def _match(self,word):
+        if self._pattern.match(word):
+            return True
+        return False
+
+#TODO: HTMLFilter
+
+
+# Test cases begin here
+
 class TestGetTokenizer(unittest.TestCase):
     """TestCases for testing the get_tokenizer() functionality."""
     
@@ -150,4 +276,54 @@ class TestGetTokenizer(unittest.TestCase):
         self.assert_(get_tokenizer("nonexistant",fallback=True) is en.tokenize)
     
 
+class TestFilters(unittest.TestCase):
+    """TestCases for the various Filter subclasses."""
     
+    text = """this text with http://url.com and SomeLinksLike
+              ftp://my.site.com.au/some/file AndOthers not:/quite.a.url
+              with-an@aemail.address as well"""
+    
+    def setUp(self):
+        from enchant.tokenize import en
+        self.tokenize = en.tokenize
+    
+    def test_URLFilter(self):
+        """Test filtering of URLs"""
+        tkns = URLFilter(self.tokenize)(self.text)
+        out = [t for t in tkns]
+        exp = [("this",0),("text",5),("with",10),("and",30),
+               ("SomeLinksLike",34),("AndOthers",93),("not:/quite.a.url",103),
+               ("with-an@aemail.address",134),("as",157),("well",160)]
+        self.assertEquals(out,exp)
+        
+    def test_WikiWordFilter(self):
+        """Test filtering of WikiWords"""
+        tkns = WikiWordFilter(self.tokenize)(self.text)
+        out = [t for t in tkns]
+        exp = [("this",0),("text",5),("with",10),("http://url.com",15),
+               ("and",30), ("ftp://my.site.com.au/some/file",62),
+               ("not:/quite.a.url",103),
+               ("with-an@aemail.address",134),("as",157),("well",160)]
+        self.assertEquals(out,exp)
+        
+    def test_EmailFilter(self):
+        """Test filtering of email addresses"""
+        tkns = EmailFilter(self.tokenize)(self.text)
+        out = [t for t in tkns]
+        exp = [("this",0),("text",5),("with",10),("http://url.com",15),
+               ("and",30),("SomeLinksLike",34),
+               ("ftp://my.site.com.au/some/file",62),("AndOthers",93),
+               ("not:/quite.a.url",103),
+               ("as",157),("well",160)]
+        self.assertEquals(out,exp)
+        
+    def test_CombinedFilter(self):
+        """Test several filters combined"""
+        tkns=EmailFilter(URLFilter(WikiWordFilter(self.tokenize)))(self.text)
+        out = [t for t in tkns]
+        exp = [("this",0),("text",5),("with",10),
+               ("and",30),("not:/quite.a.url",103),
+               ("as",157),("well",160)]
+        self.assertEquals(out,exp)
+        
+        

@@ -18,6 +18,10 @@
 #    SUGGESTED:  percentage of misspelled words for which the correct
 #                spelling was suggested
 #
+#    SUGGP:      percentage of misspelled words whose correct spelling
+#                existed, for which the correct spelling was suggested
+#                (this is simply 100*SUGGESTED/EXISTED)
+#
 #    FIRST:      percentage of misspelled words for which the correct
 #                spelling was the first suggested correction.
 #
@@ -34,14 +38,19 @@
 # 
 
 import enchant
+import enchant.utils
 
 # List of providers to test
-providers = ("myspell","ispell",)#"aspell")
+# Providers can also be named "pypwl:<encode>" where <encode> is
+# the encoding function to use for PyPWL.  All PyPWL instances
+# will use <wordsfile> as their word list
+providers = ("aspell","pypwl","pypwl2")
 
 # File containing test cases, and the language they are in
 # A suitable file can be found at http://aspell.net/test/batch0.tab
 datafile = "batch0.tab"
 lang = "en_US"
+wordsfile = "/usr/share/dict/words"
 
 # Corrections to make the the 'correct' words in the tests
 # This is so we can use unmodified tests published by third parties
@@ -58,17 +67,22 @@ dists = []
 
 # Create each dictionary object
 for prov in providers:
-    b = enchant.Broker()
-    b.set_ordering(lang,prov)
-    d = b.request_dict(lang)
-    if not d.provider.name == prov:
-      raise RuntimeError("Provider '%s' has no dictionary for '%s'"%(prov,lang))
+    if prov == "pypwl":
+        d = enchant.utils.PyPWL(wordsfile)
+    elif prov == "pypwl2":
+        d = enchant.utils.PyPWL2(wordsfile)
+    else:
+        b = enchant.Broker()
+        b.set_ordering(lang,prov)
+        d = b.request_dict(lang)
+        if not d.provider.name == prov:
+          raise RuntimeError("Provider '%s' has no dictionary for '%s'"%(prov,lang))
+        del b
     dicts.append(d)
     missed.append([])
     incorrect.append([])
     dists.append([])
-    del b
-
+    
 # Actually run the tests
 testcases = file(datafile,"r")
 testnum = 0
@@ -110,6 +124,7 @@ for pnum,prov in enumerate(providers):
     print "PROVIDER:", prov
     print "  EXISTED: %.1f"%(((numtests - len(missed[pnum]))*100.0)/numtests,)
     print "  SUGGESTED: %.1f"%((len(exdists)*100.0)/numtests,)
+    print "  SUGGP: %.1f"%((len(exdists)*100.0)/(numtests - len(missed[pnum])),)
     print "  FIRST: %.1f"%((len([d for d in exdists if d == 0])*100.0)/numtests,)
     print "  FIRST5: %.1f"%((len([d for d in exdists if d < 5])*100.0)/numtests,)
     print "  FIRST10: %.1f"%((len([d for d in exdists if d < 10])*100.0)/numtests,)

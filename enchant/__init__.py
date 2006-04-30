@@ -1,6 +1,6 @@
 # pyenchant
 #
-# Copyright (C) 2004-2005, Ryan Kelly
+# Copyright (C) 2004-2006, Ryan Kelly
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -9,7 +9,7 @@
 #
 # This library is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPsE.  See the GNU
 # Lesser General Public License for more details.
 #
 # You should have received a copy of the GNU Lesser General Public
@@ -74,23 +74,24 @@
 
 # Make version info available
 __ver_major__ = 1
-__ver_minor__ = 1
-__ver_patch__ = 5
-__ver_sub__ = ""
+__ver_minor__ = 2
+__ver_patch__ = 0
+__ver_sub__ = "b1"
 __version__ = "%d.%d.%d%s" % (__ver_major__,__ver_minor__,
                               __ver_patch__,__ver_sub__)
+
+# Define Error class before imports, so it is available for import
+# by enchant subpackages with circular dependencies
+class Error(Exception):
+    """Base exception class for the enchant module."""
+    pass
+
 
 import _enchant as _e
 import utils
 import unittest
 
 import os
-import sys
-import warnings
-
-class Error(Exception):
-    """Base exception class for the enchant module."""
-    pass
 
 class DictNotFoundError(Error):
     """Exception raised when a requested dictionary could not be found."""
@@ -593,21 +594,8 @@ class Dict(_EnchantObject):
             return uSuggs
         return suggs
 
-    def add_to_personal(self,word):
-        """Add a word to the user's personal dictionary.
-        
-        NOTE: this method is being deprecated in favour of
-        add_to_pwl.  Please change code using add_to_personal
-        to use add_to_pwl instead.  This change mirrors a
-        change in the Enchant C API.
-        
-        """
-        warnings.warn("add_to_personal is deprecated, please use add_to_pwl",
-                      DeprecationWarning)
-        self.add_to_pwl(word)
-
     def add_to_pwl(self,word):
-        """Add a word to the user's personal dictionary."""
+        """Add a word to the user's personal word list."""
         self._check_this()
         if type(word) == unicode:
             inWord = word.encode("utf-8")
@@ -697,7 +685,7 @@ class DictWithPWL(Dict):
     
     Unlike a regular Dict object, DictWithPWL *must* be created with an
     explicit language tag.  Please contact the author if this is an
-    enourmous inconvenience.
+    enormous inconvenience.
     """
     
     def __init__(self,tag,pwl,broker=None):
@@ -705,7 +693,7 @@ class DictWithPWL(Dict):
 
         The argument 'pwl' must be supplied, naming a file containing
 	    the personal word list.  If this file does not exist, it is
-    	created with default permissions.
+        	created with default permissions.
         """
         if pwl is None:
             raise Error("DictWithPWL must be given a PWL file.")
@@ -742,17 +730,6 @@ class DictWithPWL(Dict):
         if self.pwl.check(word):
             return True
         return False
-        
-    def add_to_personal(self,word):
-        """Add a word to the associated personal word list.
-        
-        This method adds the given word to the personal word list, and
-        automatically saves the list to disk.
-        """
-        self._check_this()
-        self.pwl.add_to_personal(word)
-        # Also add_to_session on the Dict so that it appears in suggestions
-        self.add_to_session(word) 
 
     def add_to_pwl(self,word):
         """Add a word to the associated personal word list.
@@ -762,12 +739,6 @@ class DictWithPWL(Dict):
         """
         self._check_this()
         self.pwl.add_to_pwl(word)
-        # Also add_to_session on the Dict so that it appears in suggestions
-        self.add_to_session(word)  
-
-
-## Fix potentially broken registry entries from previous enchant versions
-utils.remove_registry_keys()
 
 ##  Create a module-level default broker object, and make its important
 ##  methods available at the module level.
@@ -1010,7 +981,7 @@ class TestPWL(unittest.TestCase):
     
 def testsuite():
     from enchant.checker import TestChecker
-    from enchant.tokenize import TestGetTokenizer
+    from enchant.tokenize import TestGetTokenizer, TestFilters
     from enchant.tokenize.en import TestTokenizeEN
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestBroker))
@@ -1019,6 +990,7 @@ def testsuite():
     suite.addTest(unittest.makeSuite(TestChecker))
     suite.addTest(unittest.makeSuite(TestGetTokenizer))
     suite.addTest(unittest.makeSuite(TestTokenizeEN))
+    suite.addTest(unittest.makeSuite(TestFilters))
     return suite
 
 # Run regression tests when called from comand-line

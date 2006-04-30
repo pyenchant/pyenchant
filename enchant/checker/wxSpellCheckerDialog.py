@@ -107,7 +107,7 @@ class wxSpellCheckerDialog(wx.Dialog):
         self.btn_replace = wx.Button(self, -1, "Replace")
         self.btn_replaceall = wx.Button(self, -1, "Replace All")
         self.btn_add = wx.Button(self, -1, "Add")
-        self.btn_close = wx.Button(self, -1, "Close")
+        self.btn_done = wx.Button(self, -1, "Done")
 
         self.__set_properties()
         self.__do_layout()
@@ -119,7 +119,7 @@ class wxSpellCheckerDialog(wx.Dialog):
     def __set_properties(self):
         # begin wxGlade: wxSpellCheckerDialog.__set_properties
         self.SetTitle("Checking Spelling...")
-        self.replace_list.SetSelection(0)
+        #self.replace_list.SetSelection(0)
         # end wxGlade
 
     def __do_layout(self):
@@ -151,7 +151,7 @@ class wxSpellCheckerDialog(wx.Dialog):
         sizer_6.Add(sizer_7_copy_2, 1, wx.EXPAND, 0)
         sizer_7_copy_3.Add(self.btn_add, 0, wx.ALIGN_CENTER_VERTICAL, 0)
         sizer_6.Add(sizer_7_copy_3, 1, wx.EXPAND, 0)
-        sizer_7_copy_4.Add(self.btn_close, 0, wx.ALIGN_CENTER_VERTICAL, 0)
+        sizer_7_copy_4.Add(self.btn_done, 0, wx.ALIGN_CENTER_VERTICAL, 0)
         sizer_6.Add(sizer_7_copy_4, 1, wx.EXPAND, 0)
         sizer_5.Add(sizer_6, 0, wx.ALL|wx.EXPAND, 5)
         self.SetAutoLayout(True)
@@ -179,7 +179,7 @@ class wxSpellCheckerDialog(wx.Dialog):
         wx.EVT_BUTTON(self,self.btn_replace.GetId(),self._OnReplace)
         wx.EVT_BUTTON(self,self.btn_replaceall.GetId(),self._OnReplaceAll)
         wx.EVT_BUTTON(self,self.btn_add.GetId(),self._OnAdd)
-        wx.EVT_BUTTON(self,self.btn_close.GetId(),self._OnClose)
+        wx.EVT_BUTTON(self,self.btn_done.GetId(),self._OnDone)
         wx.EVT_LISTBOX(self,self.replace_list.GetId(),self._OnReplSelect)
         wx.EVT_LISTBOX_DCLICK(self,self.replace_list.GetId(),self._OnReplace)
         
@@ -215,9 +215,9 @@ class wxSpellCheckerDialog(wx.Dialog):
         self._checker.replace_always(repl)
         self._Advance()
     
-    def _OnClose(self,evnt=None):
+    def _OnDone(self,evnt=None):
         """Callback for the "close" button."""
-        self.Close()
+        self.EndModal(wx.ID_OK)
     
     def _OnAdd(self,evnt=None):
         """Callback for the "add" button."""
