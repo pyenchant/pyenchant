@@ -44,13 +44,14 @@ import enchant.utils
 # Providers can also be named "pypwl:<encode>" where <encode> is
 # the encoding function to use for PyPWL.  All PyPWL instances
 # will use <wordsfile> as their word list
-providers = ("aspell","pypwl","pypwl2")
+providers = ("aspell","pypwl",)
 
 # File containing test cases, and the language they are in
 # A suitable file can be found at http://aspell.net/test/batch0.tab
 datafile = "batch0.tab"
 lang = "en_US"
-wordsfile = "/usr/share/dict/words"
+#wordsfile = "/usr/share/dict/words"
+wordsfile = "words"
 
 # Corrections to make the the 'correct' words in the tests
 # This is so we can use unmodified tests published by third parties
@@ -68,9 +69,7 @@ dists = []
 # Create each dictionary object
 for prov in providers:
     if prov == "pypwl":
-        d = enchant.utils.PyPWL(wordsfile)
-    elif prov == "pypwl2":
-        d = enchant.utils.PyPWL2(wordsfile)
+        d = enchant.request_pwl_dict(wordsfile)
     else:
         b = enchant.Broker()
         b.set_ordering(lang,prov)

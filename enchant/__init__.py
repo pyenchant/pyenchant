@@ -683,9 +683,8 @@ class DictWithPWL(Dict):
     
     The Dict object managing the PWL is available as the 'pwl' attribute.
     
-    Unlike a regular Dict object, DictWithPWL *must* be created with an
-    explicit language tag.  Please contact the author if this is an
-    enormous inconvenience.
+    To create a DictWithPWL from the user's default language, use None
+    as the 'tag' argument.
     """
     
     def __init__(self,tag,pwl,broker=None):
@@ -964,6 +963,16 @@ class TestPWL(unittest.TestCase):
         d.add_to_pwl("Flagen")
         self.assert_(d.check("Flagen"))
         self.assert_("Flagen\n" in self.getPWLContents())
+        
+    def test_suggestions(self):
+        """Test getting suggestions from a PWL."""
+        self.setPWLContents(["Sazz","Lozz"])
+        d = request_pwl_dict(self.pwlFileNm)
+        self.assert_("sazz" in d.suggest("Saz"))
+        self.assert_("lozz" in d.suggest("Saz"))
+        d.add_to_pwl("Flagen")
+        self.assert_("flagen" in d.suggest("Flags"))
+        self.failIf("sazz" in d.suggest("Flags"))
     
     def test_DWPWL(self):
         """Test functionality of DictWithPWL."""
@@ -978,7 +987,7 @@ class TestPWL(unittest.TestCase):
         self.assert_(d.check("Flagen"))
         self.assert_("Flagen\n" in self.getPWLContents())
     
-    
+
 def testsuite():
     from enchant.checker import TestChecker
     from enchant.tokenize import TestGetTokenizer, TestFilters

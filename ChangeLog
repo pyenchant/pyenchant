@@ -4,9 +4,7 @@
    * Implemented "filters" that allow tokenization to skip common word
      forms such as URLs, WikiWords, email addresses etc.
    * Tokenization doesnt split words at non-alpha characters by default
-   * Dialogs:
-        * wxSpellCheckerDialog reimplemented (no longer burns eyes)
-        * GtkSpellCheckerDialog contributed by Fredrik Corneliusson
+   * GtkSpellCheckerDialog contributed by Fredrik Corneliusson
    * Removed deprecated functionality:
    		* Dict.add_to_personal
    		* All registry handling functionality from enchant.utils

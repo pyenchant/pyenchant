@@ -4,17 +4,14 @@ Documentation:
   * talk more about PWLs in the tutorial
   * explain a little more about setuptools
   * talk about py2exe and pyGTK issues
+  * document filters in tutorial
 
 PyEnchant:
 
   * implement a tkSpellCheckerDialog to compliment the wx one
-  * include GtkSpellCheckerDialog from contributor
   * Expand CmdLineChecker and make it ispell-compatible
   * try things out on OSX
-  * finish filter implementation
   * pretty up the wxSpellCheckerDialog
-  * allow DictWithPWL to use default language
-       - probably require swapping order of arguments, not good!
   * try implementing the shared library with PyRex instead of SWIG,
     see if we get better performance/memory handling/etc
   * create/fillin README.txt in folders in the Windows distribution

@@ -258,7 +258,7 @@ class EmailFilter(Filter):
             return True
         return False
 
-#TODO: HTMLFilter
+#TODO: HTMLFilter, LaTeXFilter, ...
 
 
 # Test cases begin here
