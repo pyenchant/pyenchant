@@ -1,10 +1,9 @@
 
 Documentation:
 
-  * talk more about PWLs in the tutorial
-  * explain a little more about setuptools
   * talk about py2exe and pyGTK issues
-  * document filters in tutorial
+  * investigate myspell->hunspell move, check windows install and
+    docs on installing dictionaries
 
 PyEnchant:
 
