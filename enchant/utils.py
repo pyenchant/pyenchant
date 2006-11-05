@@ -119,7 +119,7 @@ def win32_data_files():
     which we ship our own supporting data files)
     """
     dataDirs = ("share/enchant/myspell","share/enchant/ispell","lib/enchant")
-    mainDir = os.path.dirname(__file__)
+    mainDir = os.path.abspath(os.path.dirname(__file__))
     dataFiles = []
     for dataDir in dataDirs:
         files = []
@@ -128,7 +128,7 @@ def win32_data_files():
             fullFn = os.path.join(fullDir,fn)
             if os.path.isfile(fullFn):
                 files.append(fullFn)
-        dataFiles.append(dataDir,files)
+        dataFiles.append((dataDir,files))
     return dataFiles
      
 
