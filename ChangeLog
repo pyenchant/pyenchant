@@ -3,6 +3,10 @@
 
    * Implemented "filters" that allow tokenization to skip common word
      forms such as URLs, WikiWords, email addresses etc.
+   * Now ships with enchant-1.3.0, meaning:
+        * PWLs can return a useful list of suggestions rather than
+          the empty list
+        * Hunspell replaces MySpell as the default Windows backend
    * Tokenization doesnt split words at non-alpha characters by default
    * GtkSpellCheckerDialog contributed by Fredrik Corneliusson
    * Removed deprecated functionality:
