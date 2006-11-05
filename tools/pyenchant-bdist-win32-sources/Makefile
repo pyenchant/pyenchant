@@ -20,8 +20,8 @@ $(BUILD_DIR)/lib/libenchant-1.dll: $(BUILD_DIR)/lib/pkgconfig/glib-2.0.pc \
 	cd $(ENCHANT_DIR) && PKG_CONFIG_PATH=$(BUILD_DIR)/lib/pkgconfig ./configure CFLAGS="$(CFLAGS)" $(XMINGW_CONFIG_OPTS) $(ENCHANT_CONFIG_OPTS) && make
 	cp $(ENCHANT_DIR)/src/.libs/libenchant-1.dll $(BUILD_DIR)/lib/
 	mkdir -p $(BUILD_DIR)/lib/enchant
-	cp $(ENCHANT_DIR)/src/ispell/.libs/libenchant_ispell-1.dll $(BUILD_DIR)/lib/enchant/
-	cp $(ENCHANT_DIR)/src/myspell/.libs/libenchant_myspell-1.dll $(BUILD_DIR)/lib/enchant/
+	cp $(ENCHANT_DIR)/src/ispell/.libs/libenchant_ispell.dll $(BUILD_DIR)/lib/enchant/
+	cp $(ENCHANT_DIR)/src/myspell/.libs/libenchant_myspell.dll $(BUILD_DIR)/lib/enchant/
 
 
 #  Make pkg-config files pointing to the right prefix
