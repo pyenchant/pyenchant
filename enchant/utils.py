@@ -105,6 +105,34 @@ def get_default_language(default=None):
         pass
     return default
 
+
+def win32_data_files():
+    """Get list of supporting data files, for use with setup.py
+    
+    This function returns a list of the supporting data files available
+    to the running version of PyEnchant.  This is in the format expected
+    by the data_files argument of the distutils setup function.  It's
+    very useful, for example, for including the data files in an executable
+    produced by py2exe.
+    
+    Only really tested on the win32 platform (it's the only platform for
+    which we ship our own supporting data files)
+    """
+    dataDirs = ("share/enchant/myspell","share/enchant/ispell","lib/enchant")
+    mainDir = os.path.firname(__file__)
+    dataFiles = []
+    for dataDir in dataDirs:
+        files = []
+        fullDir = os.path.join(mainDir,os.path.normpath(dataDir))
+        for fn in os.listdir(fullDir):
+            fullFn = os.path.join(fullDir,fn)
+            if os.path.isfile(fullFn):
+                files.append(fullFn)
+        dataFiles.append(dataDir,files)
+    return dataFiles
+     
+
+
 # Useful string-handling functions
 
 def soundex(name, len=4):
