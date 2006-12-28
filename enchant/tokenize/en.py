@@ -50,15 +50,22 @@ class tokenize(enchant.tokenize.tokenize):
         
     Where <word> is the word string found and <pos> is the position
     of the start of the word within the text.
+    
+    The optional argument <valid_chars> may be used to specify a
+    list of additional characters that can form part of a word.
+    By default, this list contains only the apostrophe ('). Note that
+    these characters cannot appear at the start or end of a word.
     """
     
-    # Chars to remove from start/end of words
-    strip_from_start = '"' + "'`({[<>]})"
-    strip_from_end = '"' + "'`({[<>]}).!,?;:"
-    
-    def __init__(self,text):
+    def __init__(self,text,valid_chars=("'",)):
+        self._valid_chars = valid_chars
         self._text = text
         self.offset = 0
+    
+    def _myIsAlpha(self,c):
+        if c.isalpha() or c in self._valid_chars:
+            return True
+        return False
 
     def next(self):
         text = self._text
@@ -66,23 +73,21 @@ class tokenize(enchant.tokenize.tokenize):
         while True:
             if offset >= len(text):
                 break
-            # Find start of next word
-            while offset < len(text) and text[offset].isspace():
+            # Find start of next word (must be alpha)
+            while offset < len(text) and not text[offset].isalpha():
                 offset += 1
-            sPos = offset
-            # Find end of word
-            while offset < len(text) and not text[offset].isspace():
+            curPos = offset
+            # Find end of word using myIsAlpha
+            while offset < len(text) and self._myIsAlpha(text[offset]):
                 offset += 1
-            ePos = offset
-            self.offset = offset
-            # Strip chars from font/end of word
-            while text[sPos] in self.strip_from_start:
-                sPos += 1
-            while text[ePos-1] in self.strip_from_end:
-                    ePos -= 1
             # Return if word isnt empty
-            if(sPos != ePos):
-                return (text[sPos:ePos],sPos)
+            if(curPos != offset):
+                # Make sure word ends with an alpha
+                while not text[offset-1].isalpha():
+                    offset = offset - 1
+                self.offset = offset
+                return (text[curPos:offset],curPos)
+        self.offset = offset
         raise StopIteration()
 
 
@@ -93,16 +98,16 @@ class TestTokenizeEN(unittest.TestCase):
         """Simple regression test for english tokenization."""
         input = """This is a paragraph.  It's not very special, but it's designed
 2 show how the splitter works with many-different combos
-of words. Also need to "test" the (handling) of 'quoted' words."""
+of words. Also need to "test" the handling of 'quoted' words."""
         output = [
                   ("This",0),("is",5),("a",8),("paragraph",10),("It's",22),
                   ("not",27),("very",31),("special",36),("but",45),("it's",49),
-                  ("designed",54),("2",63), ("show",65),("how",70),("the",74),
-                  ("splitter",78),("works",87),("with",93),("many-different",98),
-                  ("combos",113),("of",120),("words",123),
+                  ("designed",54),("show",65),("how",70),("the",74),
+                  ("splitter",78),("works",87),("with",93),("many",98),
+                  ("different",103),("combos",113),("of",120),("words",123),
                   ("Also",130),("need",135),
-                  ("to",140),("test",144),("the",150),("handling",155),
-                  ("of",165),("quoted",169),("words",177)
+                  ("to",140),("test",144),("the",150),("handling",154),
+                  ("of",163),("quoted",167),("words",175)
                  ]
         for (itmO,itmV) in zip(output,tokenize(input)):
             self.assertEqual(itmO,itmV)

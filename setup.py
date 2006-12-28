@@ -18,7 +18,7 @@ import shutil
 WINDEPS = ".\\tools\\pyenchant-bdist-win32-sources\\build"
 
 #  Cant seem to obtain version information from module, must hardcode
-VERSION = "1.2.0"
+VERSION = "1.3.0"
 
 # Package MetaData
 NAME = "pyenchant"

@@ -74,7 +74,7 @@
 
 # Make version info available
 __ver_major__ = 1
-__ver_minor__ = 2
+__ver_minor__ = 3
 __ver_patch__ = 0
 __ver_sub__ = ""
 __version__ = "%d.%d.%d%s" % (__ver_major__,__ver_minor__,
@@ -853,7 +853,7 @@ class TestDict(unittest.TestCase):
         del self.dict
 
     def test_HasENUS(self):
-        """Test that the en_US language is available."""
+        """Test that the en_US language is available through default broker."""
         self.assert_(dict_exists("en_US"))
     
     def test_check(self):
@@ -949,7 +949,7 @@ class TestPWL(unittest.TestCase):
         return contents
     
     def test_check(self):
-        """Test that basic checking words on PWLs."""
+        """Test that basic checking works for PWLs."""
         self.setPWLContents(["Sazz","Lozz"])
         d = request_pwl_dict(self.pwlFileNm)
         self.assert_(d.check("Sazz"))
@@ -990,14 +990,14 @@ class TestPWL(unittest.TestCase):
 
 def testsuite():
     from enchant.checker import TestChecker
-    from enchant.tokenize import TestGetTokenizer, TestFilters
+    from enchant.tokenize import TestTokenization, TestFilters
     from enchant.tokenize.en import TestTokenizeEN
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(TestBroker))
     suite.addTest(unittest.makeSuite(TestDict))
     suite.addTest(unittest.makeSuite(TestPWL))
     suite.addTest(unittest.makeSuite(TestChecker))
-    suite.addTest(unittest.makeSuite(TestGetTokenizer))
+    suite.addTest(unittest.makeSuite(TestTokenization))
     suite.addTest(unittest.makeSuite(TestTokenizeEN))
     suite.addTest(unittest.makeSuite(TestFilters))
     return suite

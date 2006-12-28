@@ -48,6 +48,7 @@ import array
 import unittest
 
 import enchant
+import enchant.tokenize
 from enchant.tokenize import get_tokenizer
 from enchant.utils import basestring, enumerate
 
@@ -100,7 +101,7 @@ class SpellChecker:
     
     """
     
-    def __init__(self,lang,text=None,tokenize=None,filters=()):
+    def __init__(self,lang,text=None,tokenize=None,filters=None):
         """Constructor for the SpellChecker class.
         SpellChecker objects can be created in two ways, depending on
         the nature of the first argument.  If it is a string, it
@@ -112,7 +113,7 @@ class SpellChecker:
             * text:  to set the text to be checked at creation time
             * tokenize:  a custom tokenization function to use
             * filters:  a list of filters to apply during tokenization
-            
+        
         If <tokenize> is not given and the first argument is a Dict,
         its 'tag' attribute must be a language tag so that a tokenization
         function can be created automatically.  In particular this means
@@ -127,18 +128,21 @@ class SpellChecker:
         self.lang = lang
         self.dict = dict
         if tokenize is None:
-            tokenize = get_tokenizer(lang,fallback=True)
-        for f in filters:
-            tokenize = f(tokenize)
+            try:
+                tokenize = get_tokenizer(lang,filters)
+            except enchant.tokenize.Error:
+                # Fall back to English tokenization if no match for 'lang'
+                tokenize = get_tokenizer("en",filters)
         self._tokenize = tokenize
         
         self.word = None
         self.wordpos = None
-        self._tokens = ()
-        self._ignore_words = []
+        self._ignore_words = {}
         self._replace_words = {}
+        # Default to the empty string as the text to be checked
         self._text = array.array('u')
         self._use_tostring = False
+        self._tokens = ()
         
         if text is not None:
             self.set_text(text)
@@ -222,7 +226,7 @@ class SpellChecker:
                 err.do_something()
         
         """
-        # Find the next spelling error
+        # Find the next spelling error.
         # The uncaught StopIteration from self._tokens.next()
         # will provide the StopIteration for this method
         while True:
@@ -272,7 +276,7 @@ class SpellChecker:
             word = self.word
         word = self.coerce_string(word)
         if word not in self._ignore_words:
-            self._ignore_words.append(word)
+            self._ignore_words[word] = True
             
     def add_to_personal(self,word=None):
         """Add given word to the personal word list.
@@ -320,7 +324,7 @@ class SpellChecker:
         """Get <chars> characters of leading context.
         This method returns up to <chars> characters of leading
         context - the text that occurs in the string immediately
-        before the currently erroneous word.
+        before the current erroneous word.
         """
         start = max(self.wordpos - chars,0)
         context = self._text[start:self.wordpos]
@@ -330,7 +334,7 @@ class SpellChecker:
         """Get <chars> characters of trailing context.
         This method returns up to <chars> characters of trailing
         context - the text that occurs in the string immediately
-        after the currently erroneous word.
+        after the current erroneous word.
         """
         start = self.wordpos + len(self.word)
         end = min(start + chars,len(self._text))
@@ -341,8 +345,8 @@ class SpellChecker:
 class TestChecker(unittest.TestCase):
     """TestCases for checking behavior of SpellChecker class."""
     
-    def test_run1(self):
-        """Test performance of a basic spellchecking run."""
+    def test_basic(self):
+        """Test a basic run of the SpellChecker class."""
         text = """This is sme text with a few speling erors in it. Its gret
         for checking wheather things are working proprly with the SpellChecker
         class. Not gret for much elss though."""
@@ -392,3 +396,56 @@ class TestChecker(unittest.TestCase):
         for checking whether things are working properly with the SpellChecker
         class. Not great for much else though."""
         self.assertEqual(chkr.get_text(),text2)
+
+    def test_filters(self):
+        """Test SpellChecker with the 'filters' argument."""
+        text = """I contain WikiWords that ShouldBe skipped by the filters"""
+        chkr = SpellChecker("en_US",text=text,
+                            filters=[enchant.tokenize.WikiWordFilter])
+        for err in chkr:
+            # There are no errors once the WikiWords are skipped
+            self.fail("Extraneous spelling errors were found")
+        self.assertEqual(chkr.get_text(),text)
+        
+    def test_unicode(self):
+        """Test SpellChecker with a unicode string."""
+        text = u"""I am a unicode strng with unicode erors."""
+        chkr = SpellChecker("en_US",text)
+        for n,err in enumerate(chkr):
+            if n == 0:
+                self.assertEqual(err.word,u"unicode")
+                self.assertEqual(err.wordpos,7)
+                chkr.ignore_always()
+            if n == 1:
+                self.assertEqual(err.word,u"strng")
+                chkr.replace_always("string")
+                self.assertEqual(chkr._replace_words[u"strng"],u"string")
+            if n == 2:
+                self.assertEqual(err.word,u"erors")
+                chkr.replace("erros")
+                chkr.set_offset(-6)
+            if n == 3:
+                self.assertEqual(err.word,u"erros")
+                chkr.replace("errors")
+        self.assertEqual(n,3)
+        self.assertEqual(chkr.get_text(),u"I am a unicode string with unicode errors.")
+
+    def test_chararray(self):
+        """Test SpellChecker with a character array as input."""
+        text = "I wll be stord in an aray"
+        txtarr = array.array('c',text)
+        chkr = SpellChecker("en_US",txtarr)
+        for (n,err) in enumerate(chkr):
+            if n == 0:
+                self.assertEqual(err.word,"wll")
+                self.assertEqual(err.word.__class__,str)
+            if n == 1:
+                self.assertEqual(err.word,"stord")
+                txtarr[err.wordpos:err.wordpos+len(err.word)] = array.array('c',"stored")
+                chkr.set_offset(-1*len(err.word))
+            if n == 3:
+                self.assertEqual(err.word,"aray")
+                chkr.replace("array")
+        self.assertEqual(n,3)
+        self.assertEqual(txtarr.tostring(),"I wll be stored in an array")
+
