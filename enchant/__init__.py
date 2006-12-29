@@ -1002,8 +1002,11 @@ def testsuite():
     suite.addTest(unittest.makeSuite(TestFilters))
     return suite
 
+def runtestsuite():
+    unittest.TextTestRunner().run(testsuite())
+
 # Run regression tests when called from comand-line
 if __name__ == "__main__":
-    UnitTest.TextTestRunner().run(testsuite())
+    runtestsuite()
 
 
