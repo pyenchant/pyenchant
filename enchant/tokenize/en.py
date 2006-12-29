@@ -112,6 +112,18 @@ of words. Also need to "test" the handling of 'quoted' words."""
         for (itmO,itmV) in zip(output,tokenize(input)):
             self.assertEqual(itmO,itmV)
 
+    def test_bug1591450(self):
+        """Check for tokenization regressions identified in bug #1591450."""
+	input = """Testing <i>markup</i> and {y:i}so-forth...leading dots and trail--- well, you get-the-point. Also check numbers: 999 1,000 12:00 .45. Done?"""
+        output = [
+                  ("Testing",0),("i",9),("markup",11),("i",19),("and",22),
+                  ("y",27),("i",29),("so",31),("forth",34),("leading",42),
+                  ("dots",50),("and",55),("trail",59),("well",68),
+                  ("you",74),("get",78),("the",82),("point",86),
+                  ("Also",93),("check",98),("numbers",104),("Done",134),
+                 ]
+        for (itmO,itmV) in zip(output,tokenize(input)):
+            self.assertEqual(itmO,itmV)
 
     
         
