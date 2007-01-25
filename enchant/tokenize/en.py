@@ -37,6 +37,8 @@
 """
 
 import unittest
+import unicodedata
+
 import enchant.tokenize
 
 class tokenize(enchant.tokenize.tokenize):
@@ -60,10 +62,26 @@ class tokenize(enchant.tokenize.tokenize):
     def __init__(self,text,valid_chars=("'",)):
         self._valid_chars = valid_chars
         self._text = text
+        if isinstance(text,unicode):
+            self._myIsAlpha = self._myIsAlpha_u
+        else:
+            self._myIsAlpha = self._myIsAlpha_a
         self.offset = 0
     
-    def _myIsAlpha(self,c):
+    def _myIsAlpha_a(self,c):
         if c.isalpha() or c in self._valid_chars:
+            return True
+        return False
+
+    def _myIsAlpha_u(self,c):
+        """Extra is-alpha tests for unicode characters.
+        As well as letter character, treat combining marks as letters.
+        """
+        if c.isalpha():
+            return True
+        if c in self._valid_chars:
+            return True
+        if unicodedata.category(c)[0] == "M":
             return True
         return False
 
@@ -125,5 +143,21 @@ of words. Also need to "test" the handling of 'quoted' words."""
         for (itmO,itmV) in zip(output,tokenize(input)):
             self.assertEqual(itmO,itmV)
 
-    
-        
+    def test_unicodeBasic(self):
+        """Test tokenization of a basic unicode string."""
+        input = u"Ik ben ge\u00EFnteresseerd in de co\u00F6rdinatie van mijn knie\u00EBn, maar kan niet \u00E9\u00E9n \u00E0 twee enqu\u00EAtes vinden die recht doet aan mijn carri\u00E8re op Cura\u00E7ao"
+        output = input.split(" ")
+        output[8] = output[8][0:-1]
+        for (itmO,itmV) in zip(output,tokenize(input)):
+            self.assertEqual(itmO,itmV[0])
+            self.assert_(input[itmV[1]:].startswith(itmO))
+
+    def test_unicodeCombining(self):
+        """Test tokenization with unicode combining symbols."""
+        input = u"Ik ben gei\u0308nteresseerd in de co\u00F6rdinatie van mijn knie\u00EBn, maar kan niet e\u0301e\u0301n \u00E0 twee enqu\u00EAtes vinden die recht doet aan mijn carri\u00E8re op Cura\u00E7ao"
+        output = input.split(" ")
+        output[8] = output[8][0:-1]
+        for (itmO,itmV) in zip(output,tokenize(input)):
+            self.assertEqual(itmO,itmV[0])
+            self.assert_(input[itmV[1]:].startswith(itmO))
+

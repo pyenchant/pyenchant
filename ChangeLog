@@ -1,4 +1,8 @@
 
+1.3.1:
+
+    * treat combining unicode marks as letters during tokenization
+
 1.3.0:
 
    * Re-worked the tokenization API to allow filters but still
@@ -10,10 +14,10 @@
      	  your application.
      	* filters should be passed into get_tokenizer() as the second
      	  argument, rather than applied as seperate functions.
-		* Basic whitespace-and-punctuation tokenization seperated from
-		  the language-specific parts.
-		* Internal details of Filter classes expanded and generalized
-		* English tokenization rules reverted to 1.1.5 version
+        * Basic whitespace-and-punctuation tokenization seperated from
+          the language-specific parts.
+        * Internal details of Filter classes expanded and generalized
+        * English tokenization rules reverted to 1.1.5 version
 
 1.2.0:
 
