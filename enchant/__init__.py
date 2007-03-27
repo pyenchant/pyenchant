@@ -277,6 +277,8 @@ class Broker(_EnchantObject):
         some internal bookkeeping.
         """
         self._check_this()
+        if type(tag) == unicode:
+            tag = tag.encode("utf-8")
         new_dict = _e.enchant_broker_request_dict(self._this,tag)
         if new_dict is None:
             eStr = "Dictionary for language '%s' could not be found"
@@ -295,6 +297,8 @@ class Broker(_EnchantObject):
         of custom dictionary entries, one word per line.
         """
         self._check_this()
+        if type(pwl) == unicode:
+            pwl = pwl.encode("utf-8")
         new_dict = _e.enchant_broker_request_pwl_dict(self._this,pwl)
         if new_dict is None:
             eStr = "Personal Word List file '%s' could not be loaded"
@@ -839,6 +843,13 @@ class TestBroker(unittest.TestCase):
         del d2
         self.assert_(self.broker._Broker__live_dicts["en_US"] == 0)
 
+    def test_UnicodeTag(self):
+        """Test that unicode language tags are accepted"""
+        d1 = self.broker._request_dict_data(u"en_US")
+        self.assert_(d1)
+        d1 = Dict(u"en_US")
+        self.assert_(d1)
+
 
 class TestDict(unittest.TestCase):
     """Test cases for the proper functioning of Dict objects.
@@ -955,6 +966,11 @@ class TestPWL(unittest.TestCase):
         self.assert_(d.check("Sazz"))
         self.assert_(d.check("Lozz"))
         self.failIf(d.check("hello"))
+
+    def test_UnicodeFN(self):
+        """Test that unicode PWL filenames are accepted."""
+        d = request_pwl_dict(unicode(self.pwlFileNm))
+        self.assert_(d)
     
     def test_add(self):
         """Test that adding words to a PWL works correctly."""
