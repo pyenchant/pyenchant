@@ -1,4 +1,6 @@
 
+ * fixes to wxSpellCheckerDialog from Phil Mayes
+
 Documentation:
 
   * talk about py2exe and pyGTK issues
