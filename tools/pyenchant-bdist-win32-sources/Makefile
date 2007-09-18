@@ -32,6 +32,12 @@ $(BUILD_DIR)/lib/pkgconfig/%.pc: $(BUILD_DIR)/lib/pkgconfig/%.pc.in
 #  Make the enchant source dir
 $(ENCHANT_DIR): src/$(ENCHANT_DIR).tar.gz
 	tar -xzvf src/$(ENCHANT_DIR).tar.gz
+	# Upgrade hunspell to latest version
+	tar -xzvf src/hunspell-1.1.12.tar.gz
+	cp hunspell-1.1.12/src/hunspell/*.cxx $(ENCHANT_DIR)/src/myspell/
+	cp hunspell-1.1.12/src/hunspell/*.h $(ENCHANT_DIR)/src/myspell/
+	cp hunspell-1.1.12/src/hunspell/*.dsp $(ENCHANT_DIR)/src/myspell/
+	rm -rf hunspell-1.1.12
 
 # Ability to extract MySpell dictionary files
 $(BUILD_DIR)/myspell/%.dic: $(BUILD_DIR)/myspell/%.zip

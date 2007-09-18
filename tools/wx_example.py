@@ -13,7 +13,7 @@ print "[INITIAL TEXT:]", text
 app = wx.PySimpleApp()
 
 # Construct the dialog, and the SpellChecker it is to use
-dlg = wxSpellCheckerDialog(None,-1,"")
+dlg = wxSpellCheckerDialog(None)
 chkr = SpellChecker("en_US",text)
 dlg.SetSpellChecker(chkr)
 
