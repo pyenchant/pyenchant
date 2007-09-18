@@ -10,8 +10,6 @@ CFLAGS = -Wl,--enable-runtime-pseudo-reloc
 all: $(BUILD_DIR)/lib/libenchant-1.dll $(BUILD_DIR)/myspell/en_GB.dic \
 	$(BUILD_DIR)/myspell/en_US.dic $(BUILD_DIR)/myspell/de_DE.dic \
 	$(BUILD_DIR)/myspell/en_AU.dic $(BUILD_DIR)/myspell/fr_FR.dic
-	# Remove dictionaries that are causing trouble
-	rm -f $(BUILD_DIR)/myspell/de_AT.dic
 
 #  Make enchant.
 $(BUILD_DIR)/lib/libenchant-1.dll: $(BUILD_DIR)/lib/pkgconfig/glib-2.0.pc \
@@ -35,14 +33,16 @@ $(ENCHANT_DIR): src/$(ENCHANT_DIR).tar.gz
 	# Upgrade hunspell to latest version
 	tar -xzvf src/hunspell-1.1.12-2.tar.gz
 	cp hunspell-1.1.12/src/hunspell/*.cxx $(ENCHANT_DIR)/src/myspell/
+	cp hunspell-1.1.12/src/hunspell/*.hxx $(ENCHANT_DIR)/src/myspell/
 	cp hunspell-1.1.12/src/hunspell/*.h $(ENCHANT_DIR)/src/myspell/
 	cp hunspell-1.1.12/src/hunspell/*.dsp $(ENCHANT_DIR)/src/myspell/
 	cd $(ENCHANT_DIR)/src/myspell && patch < ../../../patches/myspell_Makefile.am.patch
+	cd $(ENCHANT_DIR)/src/myspell && patch < ../../../patches/myspell_Makefile.in.patch
 	rm -rf hunspell-1.1.12
 
 # Ability to extract MySpell dictionary files
 $(BUILD_DIR)/myspell/%.dic: $(BUILD_DIR)/myspell/%.zip
-	cd $(BUILD_DIR)/myspell && unzip $< *.dic *.aff
+	cd $(BUILD_DIR)/myspell && unzip $< '*.dic' '*.aff'
 
 
 clean:

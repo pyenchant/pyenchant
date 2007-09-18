@@ -55,6 +55,11 @@ typedef unsigned __int64 guint64;
 #else /* _MSC_VER */
 #define G_GINT64_CONSTANT(val)	(val##i64)
 #endif /* _MSC_VER */
+#ifndef _MSC_VER
+#define G_GUINT64_CONSTANT(val)	(G_GNUC_EXTENSION (val##ULL))
+#else /* _MSC_VER */
+#define G_GUINT64_CONSTANT(val)	(val##Ui64)
+#endif /* _MSC_VER */
 #define G_GINT64_MODIFIER "I64"
 #define G_GINT64_FORMAT "I64i"
 #define G_GUINT64_FORMAT "I64u"
@@ -83,11 +88,11 @@ typedef unsigned int gsize;
 # define g_ATEXIT(proc)	(atexit (proc))
 #endif
 
-#define g_memmove(d,s,n) G_STMT_START { memmove ((d), (s), (n)); } G_STMT_END
+#define g_memmove(dest,src,len) G_STMT_START { memmove ((dest), (src), (len)); } G_STMT_END
 
 #define GLIB_MAJOR_VERSION 2
-#define GLIB_MINOR_VERSION 4
-#define GLIB_MICRO_VERSION 7
+#define GLIB_MINOR_VERSION 12
+#define GLIB_MICRO_VERSION 13
 
 #define G_OS_WIN32
 #define G_PLATFORM_WIN32
@@ -101,22 +106,19 @@ typedef unsigned int gsize;
 #else	/* !__cplusplus */
 #ifndef _MSC_VER
 #define G_HAVE_INLINE 1
-#else /* _MSC_VER */
-
 #endif /* _MSC_VER */
 #define G_HAVE___INLINE 1
-#ifndef _MSC_VER
+#if !defined(_MSC_VER) && !defined(__DMC__)
 #define G_HAVE___INLINE__ 1
-#endif /* not _MSC_VER */
+#endif /* !_MSC_VER and !__DMC__ */
 #endif	/* !__cplusplus */
 
+#if defined(__cplusplus) || !defined(_MSC_VER)
+#define G_CAN_INLINE	1
+#endif
+
 #ifndef _MSC_VER
-#ifndef __cplusplus
-# define G_HAVE_ISO_VARARGS 1
-#endif
-#ifdef __cplusplus
-# define G_HAVE_ISO_VARARGS 1
-#endif
+#define G_HAVE_ISO_VARARGS 1
 
 /* gcc-2.95.x supports both gnu style and ISO varargs, but if -ansi
  * is passed ISO vararg support is turned off, and there is no work
@@ -130,6 +132,7 @@ typedef unsigned int gsize;
 #endif /* not _MSC_VER */
 #define G_HAVE_GROWING_STACK 0
 
+#define G_GNUC_INTERNAL
 
 #define G_THREADS_ENABLED
 #define G_THREADS_IMPL_WIN32
