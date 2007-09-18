@@ -1,21 +1,11 @@
 
- * fixes to wxSpellCheckerDialog from Phil Mayes
-
-Documentation:
-
-  * talk about py2exe and pyGTK issues
-  * investigate myspell->hunspell move, check windows install and
-    docs on installing dictionaries
-
 PyEnchant:
 
   * implement a tkSpellCheckerDialog to compliment the wx one
   * Expand CmdLineChecker and make it ispell-compatible
   * try things out on OSX
-  * pretty up the wxSpellCheckerDialog
   * try implementing the shared library with PyRex instead of SWIG,
     see if we get better performance/memory handling/etc
-  * create/fillin README.txt in folders in the Windows distribution
 
 Misc:
 
