@@ -37,12 +37,7 @@
         
         * 'backported' functionality for python2.2 compatability
         * functions for dealing with locale/language settings
-    
-    Functionality that is temporarily available and may move or disappear
-    in future releases:
-        
-        * useful string-handling functions (soundex, edit_dist, ...)
-        * PyPWL, a pure-python PWL object with enhanced functionality
+        * ability to list supporting data files (win32 only)
           
 """
 
@@ -130,55 +125,6 @@ def win32_data_files():
                 files.append(fullFn)
         dataFiles.append((dataDir,files))
     return dataFiles
-     
-
-
-# Useful string-handling functions
-
-def soundex(name, len=4):
-    """ soundex module conforming to Knuth's algorithm
-        implementation 2000-12-24 by Gregory Jorgensen
-        public domain
-    """
-    # digits holds the soundex values for the alphabet
-    digits = '01230120022455012623010202'
-    sndx = ''
-    fc = ''
-    # translate alpha chars in name to soundex digits
-    for c in name.upper():
-        if c.isalpha():
-            if not fc: fc = c   # remember first letter
-            d = digits[ord(c)-ord('A')]
-            # duplicate consecutive soundex digits are skipped
-            if not sndx or (d != sndx[-1]):
-                sndx += d
-    # replace first digit with first alpha character
-    sndx = fc + sndx[1:]
-    # remove all 0s from the soundex code
-    sndx = sndx.replace('0','')
-    # return soundex code padded to len characters
-    return (sndx + (len * '0'))[:len]
-
-def edit_dist(a,b):
-    """Calculates the Levenshtein distance between a and b.
-       From Wikipedia: http://en.wikisource.org/wiki/Levenshtein_distance
-    """
-    n, m = len(a), len(b)
-    if n > m:
-        # Make sure n <= m, to use O(min(n,m)) space
-        a,b = b,a
-        n,m = m,n
-    current = range(n+1)
-    for i in range(1,m+1):
-        previous, current = current, [i]+[0]*m
-        for j in range(1,n+1):
-            add, delete = previous[j]+1, current[j-1]+1
-            change = previous[j-1]
-            if a[j-1] != b[i-1]:
-                change = change + 1
-            current[j] = min(add, delete, change)
-    return current[n]
-
 
 # Make enchant.Error available
 # Done at bottom of file to avoid circular imports

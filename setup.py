@@ -37,7 +37,7 @@ PKG_DATA = {}
 EAGER_RES = []
 
 
-#  The distutils/swig integration doesnt seem to cut it for this module
+#  The distutils/swig integration doesnt seem to cut it for this module.
 #  For now, enchant_wrap.c will need to be distributed as well.  At least
 #  then people wont *have* to have swig installed.
 #  Generate it using `swig -python -noproxy enchant.i` to ensure that
@@ -57,7 +57,7 @@ ext1 = Extension('enchant._enchant',['enchant/enchant_wrap.c'],
                 )
  
 #
-# Build and distribution information is different on Windows
+# Build and distribution information is different on Windows.
 # The enchant library builds as 'enchant-1' instead of 'enchant'
 #
 # Also, there's the possibility of including pre-built support DLLs

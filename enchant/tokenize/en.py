@@ -75,7 +75,7 @@ class tokenize(enchant.tokenize.tokenize):
 
     def _myIsAlpha_u(self,c):
         """Extra is-alpha tests for unicode characters.
-        As well as letter character, treat combining marks as letters.
+        As well as letter characters, treat combining marks as letters.
         """
         if c.isalpha():
             return True
