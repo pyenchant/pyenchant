@@ -112,6 +112,8 @@ GLIB_VAR GThreadFunctions       g_thread_functions_for_glib_use;
 GLIB_VAR gboolean               g_thread_use_default_impl;
 GLIB_VAR gboolean               g_threads_got_initialized;
 
+GLIB_VAR guint64   (*g_thread_gettime) (void);
+
 /* initializes the mutex/cond/private implementation for glib, might
  * only be called once, and must not be called directly or indirectly
  * from another glib-function, e.g. as a callback.
@@ -138,7 +140,7 @@ void    g_thread_init_with_errorcheck_mutexes (GThreadFunctions* vtable);
 GMutex* g_static_mutex_get_mutex_impl   (GMutex **mutex);
 
 #define g_static_mutex_get_mutex_impl_shortcut(mutex) \
-  (g_atomic_pointer_get ((gpointer*)mutex) ? *(mutex) : \
+  (g_atomic_pointer_get ((gpointer*)(void*)mutex) ? *(mutex) : \
    g_static_mutex_get_mutex_impl (mutex))
 
 /* shorthands for conditional and unconditional function calls */
@@ -148,7 +150,8 @@ GMutex* g_static_mutex_get_mutex_impl   (GMutex **mutex);
 #define G_THREAD_CF(op, fail, arg)					\
     (g_thread_supported () ? G_THREAD_UF (op, arg) : (fail))
 #define G_THREAD_ECF(op, fail, mutex, type)				\
-    (g_thread_supported () ? ((type(*)(GMutex*, gulong, gchar*))	\
+    (g_thread_supported () ? 						\
+      ((type(*)(GMutex*, const gulong, gchar const*))			\
       (*g_thread_functions_for_glib_use . op))				\
      (mutex, G_MUTEX_DEBUG_MAGIC, G_STRLOC) : (fail))
 
@@ -289,6 +292,9 @@ gboolean  g_static_rw_lock_writer_trylock (GStaticRWLock* lock);
 void      g_static_rw_lock_writer_unlock  (GStaticRWLock* lock);
 void      g_static_rw_lock_free           (GStaticRWLock* lock);
 
+void	  g_thread_foreach         	  (GFunc    	  thread_func,
+					   gpointer 	  user_data);
+
 typedef enum
 {
   G_ONCE_STATUS_NOTCALLED,
@@ -367,7 +373,7 @@ extern void glib_dummy_decl (void);
 #  define G_TRYLOCK(name)               (TRUE)
 #endif  /* !G_THREADS_ENABLED */
 
+
 G_END_DECLS
 
 #endif /* __G_THREAD_H__ */
-

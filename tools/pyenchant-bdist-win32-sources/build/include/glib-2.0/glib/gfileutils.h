@@ -52,6 +52,7 @@ typedef enum
   G_FILE_ERROR_INTR,
   G_FILE_ERROR_IO,
   G_FILE_ERROR_PERM,
+  G_FILE_ERROR_NOSYS,
   G_FILE_ERROR_FAILED
 } GFileError;
 
@@ -72,12 +73,23 @@ GQuark     g_file_error_quark      (void);
 /* So other code can generate a GFileError */
 GFileError g_file_error_from_errno (gint err_no);
 
+#ifdef G_OS_WIN32
+#define g_file_test g_file_test_utf8
+#define g_file_get_contents g_file_get_contents_utf8
+#define g_mkstemp g_mkstemp_utf8
+#define g_file_open_tmp g_file_open_tmp_utf8
+#endif
+
 gboolean g_file_test         (const gchar  *filename,
                               GFileTest     test);
 gboolean g_file_get_contents (const gchar  *filename,
                               gchar       **contents,
                               gsize        *length,    
                               GError      **error);
+gboolean g_file_set_contents (const gchar *filename,
+			      const gchar *contents,
+			      gssize	     length,
+			      GError	   **error);
 gchar   *g_file_read_link    (const gchar  *filename,
 			      GError      **error);
 
@@ -91,12 +103,17 @@ gint    g_file_open_tmp      (const gchar  *tmpl,
 
 gchar *g_build_path     (const gchar *separator,
 			 const gchar *first_element,
-			 ...);
+			 ...) G_GNUC_MALLOC G_GNUC_NULL_TERMINATED;
+gchar *g_build_pathv    (const gchar  *separator,
+			 gchar       **args) G_GNUC_MALLOC;
+
 gchar *g_build_filename (const gchar *first_element,
-			 ...);
+			 ...) G_GNUC_MALLOC G_GNUC_NULL_TERMINATED;
+gchar *g_build_filenamev (gchar      **args) G_GNUC_MALLOC;
+
+int    g_mkdir_with_parents (const gchar *pathname,
+			     int          mode);
 
 G_END_DECLS
 
 #endif /* __G_FILEUTILS_H__ */
-
-

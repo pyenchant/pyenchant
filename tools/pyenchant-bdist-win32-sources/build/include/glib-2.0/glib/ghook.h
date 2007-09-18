@@ -64,7 +64,7 @@ struct _GHookList
   guint		    hook_size : 16;
   guint		    is_setup : 1;
   GHook		   *hooks;
-  GMemChunk	   *hook_memchunk;
+  gpointer	    dummy3;
   GHookFinalizeFunc finalize_hook;
   gpointer	    dummy[2];
 };
@@ -105,7 +105,7 @@ void	 g_hook_list_clear		(GHookList		*hook_list);
 GHook*	 g_hook_alloc			(GHookList		*hook_list);
 void	 g_hook_free			(GHookList		*hook_list,
 					 GHook			*hook);
-void	 g_hook_ref			(GHookList		*hook_list,
+GHook *	 g_hook_ref			(GHookList		*hook_list,
 					 GHook			*hook);
 void	 g_hook_unref			(GHookList		*hook_list,
 					 GHook			*hook);

@@ -31,17 +31,10 @@
 
 #ifdef G_PLATFORM_WIN32
 
-/* Windows emulation stubs for common Unix functions
- */
-
 G_BEGIN_DECLS
 
 #ifndef MAXPATHLEN
 #define MAXPATHLEN 1024
-#endif
-
-#ifdef _MSC_VER
-typedef int pid_t;
 #endif
 
 #ifdef G_OS_WIN32
@@ -86,12 +79,22 @@ gchar* 		g_win32_getlocale  (void);
  */
 gchar*          g_win32_error_message (gint error);
 
+#define g_win32_get_package_installation_directory g_win32_get_package_installation_directory_utf8
+#define g_win32_get_package_installation_subdirectory g_win32_get_package_installation_subdirectory_utf8
+
 gchar*          g_win32_get_package_installation_directory (gchar *package,
 							    gchar *dll_name);
 
 gchar*          g_win32_get_package_installation_subdirectory (gchar *package,
 							       gchar *dll_name,
 							       gchar *subdir);
+
+guint		g_win32_get_windows_version (void);
+
+gchar*          g_win32_locale_filename_from_utf8 (const gchar *utf8filename);
+
+#define G_WIN32_IS_NT_BASED() (g_win32_get_windows_version () < 0x80000000)
+#define G_WIN32_HAVE_WIDECHAR_API() (G_WIN32_IS_NT_BASED ())
 
 G_END_DECLS
 

@@ -65,7 +65,7 @@ typedef double  gdouble;
 #define G_MAXINT32	((gint32)  0x7fffffff)
 #define G_MAXUINT32	((guint32) 0xffffffff)
 
-#define G_MININT64	G_GINT64_CONSTANT(0x8000000000000000)
+#define G_MININT64	((gint64) G_GINT64_CONSTANT(0x8000000000000000))
 #define G_MAXINT64	G_GINT64_CONSTANT(0x7fffffffffffffff)
 #define G_MAXUINT64	G_GINT64_CONSTANT(0xffffffffffffffffU)
 
@@ -87,17 +87,20 @@ typedef void            (*GHFunc)               (gpointer       key,
                                                  gpointer       value,
                                                  gpointer       user_data);
 typedef void            (*GFreeFunc)            (gpointer       data);
+typedef const gchar *   (*GTranslateFunc)       (const gchar   *str,
+						 gpointer       data);
+
 
 /* Define some mathematical constants that aren't available
  * symbolically in some strict ISO C implementations.
  */
-#define G_E     2.7182818284590452354E0
-#define G_LN2   6.9314718055994530942E-1
-#define G_LN10  2.3025850929940456840E0
-#define G_PI    3.14159265358979323846E0
-#define G_PI_2  1.57079632679489661923E0
-#define G_PI_4  0.78539816339744830962E0
-#define G_SQRT2 1.4142135623730950488E0
+#define G_E     2.7182818284590452353602874713526624977572470937000
+#define G_LN2   0.69314718055994530941723212145817656807550013436026
+#define G_LN10  2.3025850929940456840179914546843642076011014886288
+#define G_PI    3.1415926535897932384626433832795028841971693993751
+#define G_PI_2  1.5707963267948966192313216916397514420985846996876
+#define G_PI_4  0.78539816339744830961566084581987572104929234984378
+#define G_SQRT2 1.4142135623730950488016887242096980785696718753769
 
 /* Portable endian checks and conversions
  *

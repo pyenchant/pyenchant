@@ -27,12 +27,11 @@
 #ifndef __G_MEM_H__
 #define __G_MEM_H__
 
+#include <glib/gslice.h>
 #include <glib/gtypes.h>
 
 G_BEGIN_DECLS
 
-typedef struct _GAllocator GAllocator;
-typedef struct _GMemChunk  GMemChunk;
 typedef struct _GMemVTable GMemVTable;
 
 
@@ -45,14 +44,15 @@ typedef struct _GMemVTable GMemVTable;
 
 /* Memory allocation functions
  */
-gpointer g_malloc         (gulong	 n_bytes);
-gpointer g_malloc0        (gulong	 n_bytes);
+gpointer g_malloc         (gulong	 n_bytes) G_GNUC_MALLOC;
+gpointer g_malloc0        (gulong	 n_bytes) G_GNUC_MALLOC;
 gpointer g_realloc        (gpointer	 mem,
-			   gulong	 n_bytes);
+			   gulong	 n_bytes) G_GNUC_WARN_UNUSED_RESULT;
 void	 g_free	          (gpointer	 mem);
-gpointer g_try_malloc     (gulong	 n_bytes);
+gpointer g_try_malloc     (gulong	 n_bytes) G_GNUC_MALLOC;
+gpointer g_try_malloc0    (gulong	 n_bytes) G_GNUC_MALLOC;
 gpointer g_try_realloc    (gpointer	 mem,
-			   gulong	 n_bytes);
+			   gulong	 n_bytes) G_GNUC_WARN_UNUSED_RESULT;
 
 
 /* Convenience memory allocators
@@ -63,6 +63,13 @@ gpointer g_try_realloc    (gpointer	 mem,
     ((struct_type *) g_malloc0 (((gsize) sizeof (struct_type)) * ((gsize) (n_structs))))
 #define g_renew(struct_type, mem, n_structs)	\
     ((struct_type *) g_realloc ((mem), ((gsize) sizeof (struct_type)) * ((gsize) (n_structs))))
+
+#define g_try_new(struct_type, n_structs)		\
+    ((struct_type *) g_try_malloc (((gsize) sizeof (struct_type)) * ((gsize) (n_structs))))
+#define g_try_new0(struct_type, n_structs)		\
+    ((struct_type *) g_try_malloc0 (((gsize) sizeof (struct_type)) * ((gsize) (n_structs))))
+#define g_try_renew(struct_type, mem, n_structs)	\
+    ((struct_type *) g_try_realloc ((mem), ((gsize) sizeof (struct_type)) * ((gsize) (n_structs))))
 
 
 /* Memory allocation virtualization for debugging purposes
@@ -85,14 +92,18 @@ struct _GMemVTable
 void	 g_mem_set_vtable (GMemVTable	*vtable);
 gboolean g_mem_is_system_malloc (void);
 
+GLIB_VAR gboolean g_mem_gc_friendly;
+
 /* Memory profiler and checker, has to be enabled via g_mem_set_vtable()
  */
 GLIB_VAR GMemVTable	*glib_mem_profiler_table;
 void	g_mem_profile	(void);
 
 
-/* Memchunk convenience functions
- */
+/* deprecated memchunks and allocators */
+#if !defined (G_DISABLE_DEPRECATED) || defined (GTK_COMPILATION) || defined (GDK_COMPILATION)
+typedef struct _GAllocator GAllocator;
+typedef struct _GMemChunk  GMemChunk;
 #define g_mem_chunk_create(type, pre_alloc, alloc_type)	( \
   g_mem_chunk_new (#type " mem chunks (" #pre_alloc ")", \
 		   sizeof (type), \
@@ -108,30 +119,8 @@ void	g_mem_profile	(void);
 #define g_chunk_free(mem, mem_chunk)	G_STMT_START { \
   g_mem_chunk_free ((mem_chunk), (mem)); \
 } G_STMT_END
-
-
-/* "g_mem_chunk_new" creates a new memory chunk.
- * Memory chunks are used to allocate pieces of memory which are
- *  always the same size. Lists are a good example of such a data type.
- * The memory chunk allocates and frees blocks of memory as needed.
- *  Just be sure to call "g_mem_chunk_free" and not "g_free" on data
- *  allocated in a mem chunk. ("g_free" will most likely cause a seg
- *  fault...somewhere).
- *
- * Oh yeah, GMemChunk is an opaque data type. (You don't really
- *  want to know what's going on inside do you?)
- */
-
-/* ALLOC_ONLY MemChunks can only allocate memory. The free operation
- *  is interpreted as a no op. ALLOC_ONLY MemChunks save 4 bytes per
- *  atom. (They are also useful for lists which use MemChunk to allocate
- *  memory but are also part of the MemChunk implementation).
- * ALLOC_AND_FREE MemChunks can allocate and free memory.
- */
-
 #define G_ALLOC_ONLY	  1
 #define G_ALLOC_AND_FREE  2
-
 GMemChunk* g_mem_chunk_new     (const gchar *name,
 				gint         atom_size,
 				gulong       area_size,
@@ -145,29 +134,14 @@ void       g_mem_chunk_clean   (GMemChunk   *mem_chunk);
 void       g_mem_chunk_reset   (GMemChunk   *mem_chunk);
 void       g_mem_chunk_print   (GMemChunk   *mem_chunk);
 void       g_mem_chunk_info    (void);
-
-/* Ah yes...we have a "g_blow_chunks" function.
- * "g_blow_chunks" simply compresses all the chunks. This operation
- *  consists of freeing every memory area that should be freed (but
- *  which we haven't gotten around to doing yet). And, no,
- *  "g_blow_chunks" doesn't follow the naming scheme, but it is a
- *  much better name than "g_mem_chunk_clean_all" or something
- *  similar.
- */
-void	   g_blow_chunks (void);
-
-
-/* Generic allocators
- */
-GAllocator* g_allocator_new   (const gchar  *name,
-			       guint         n_preallocs);
-void        g_allocator_free  (GAllocator   *allocator);
-
-/* internal */
-#define	G_ALLOCATOR_LIST	(1)
-#define	G_ALLOCATOR_SLIST	(2)
-#define	G_ALLOCATOR_NODE	(3)
-
+void	   g_blow_chunks       (void);
+GAllocator*g_allocator_new     (const gchar  *name,
+				guint         n_preallocs);
+void       g_allocator_free    (GAllocator   *allocator);
+#define	G_ALLOCATOR_LIST       (1)
+#define	G_ALLOCATOR_SLIST      (2)
+#define	G_ALLOCATOR_NODE       (3)
+#endif /* G_DISABLE_DEPRECATED */
 
 G_END_DECLS
 

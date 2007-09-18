@@ -1,9 +1,7 @@
 /* GLIB - Library of useful routines for C programming
- * Copyright (C) 1995-1997  Peter Mattis, Spencer Kimball and Josh MacDonald
+ * gmappedfile.h: Simplified wrapper around the mmap function
  *
- * gdir.c: Simplified wrapper around the DIRENT functions.
- *
- * Copyright 2001 Hans Breuer
+ * Copyright 2005 Matthias Clasen
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,28 +18,22 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
-#ifndef __G_DIR_H__
-#define __G_DIR_H__
+#ifndef __G_MAPPED_FILE_H__
+#define __G_MAPPED_FILE_H__
 
 #include <glib/gerror.h>
 
 G_BEGIN_DECLS
 
-typedef struct _GDir GDir;
+typedef struct _GMappedFile GMappedFile;
 
-#ifdef G_OS_WIN32
-/* For DLL ABI stability, keep old names for old (non-UTF-8) functionality. */
-#define g_dir_open g_dir_open_utf8
-#define g_dir_read_name g_dir_read_name_utf8
-#endif
-
-GDir    *                g_dir_open           (const gchar  *path,
-					       guint         flags,
-					       GError      **error);
-G_CONST_RETURN gchar    *g_dir_read_name      (GDir         *dir);
-void                     g_dir_rewind         (GDir         *dir);
-void                     g_dir_close          (GDir         *dir);
+GMappedFile *g_mapped_file_new          (const gchar  *filename,
+				         gboolean      writable,
+				         GError      **error) G_GNUC_MALLOC;
+gsize        g_mapped_file_get_length   (GMappedFile  *file);
+gchar       *g_mapped_file_get_contents (GMappedFile  *file);
+void         g_mapped_file_free         (GMappedFile  *file);
 
 G_END_DECLS
 
-#endif /* __G_DIR_H__ */
+#endif /* __G_MAPPED_FILE_H__ */

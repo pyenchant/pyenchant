@@ -42,11 +42,6 @@ Installing with the Windows Installer
 Download and run the windows installer program.  It will automatically
 detect your python installation and set up pyenchant accordingly.
 
-WARNING:  if you have another version of enchant installed on your
-          system, the windows installer may cause it to stop working.
-          It is recommended that you install pyenchant from source
-          in this case.
-
 The windows installer version provides a pre-compiled enchant library
 as well as several supporting libraries.  Several commonly-used
 dictionaries are installed into:

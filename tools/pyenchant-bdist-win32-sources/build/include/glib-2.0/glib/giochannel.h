@@ -104,7 +104,7 @@ typedef enum
 struct _GIOChannel
 {
   /*< private >*/
-  guint ref_count;
+  gint ref_count;
   GIOFuncs *funcs;
 
   gchar *encoding;
@@ -163,7 +163,7 @@ struct _GIOFuncs
 };
 
 void        g_io_channel_init   (GIOChannel    *channel);
-void        g_io_channel_ref    (GIOChannel    *channel);
+GIOChannel *g_io_channel_ref    (GIOChannel    *channel);
 void        g_io_channel_unref  (GIOChannel    *channel);
 
 #ifndef G_DISABLE_DEPRECATED
@@ -260,6 +260,10 @@ GIOStatus   g_io_channel_seek_position    (GIOChannel   *channel,
 					   gint64        offset,
 					   GSeekType     type,
 					   GError      **error);
+#ifdef G_OS_WIN32
+#define g_io_channel_new_file g_io_channel_new_file_utf8
+#endif
+
 GIOChannel* g_io_channel_new_file         (const gchar  *filename,
 					   const gchar  *mode,
 					   GError      **error);

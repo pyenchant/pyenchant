@@ -34,11 +34,13 @@ G_BEGIN_DECLS
 
 #ifdef G_OS_WIN32
 
-/* On native Win32, directory separator is the backslash, and search path
- * separator is the semicolon.
+/* On Win32, the canonical directory separator is the backslash, and
+ * the search path separator is the semicolon. Note that also the
+ * (forward) slash works as directory separator.
  */
 #define G_DIR_SEPARATOR '\\'
 #define G_DIR_SEPARATOR_S "\\"
+#define G_IS_DIR_SEPARATOR(c) ((c) == G_DIR_SEPARATOR || (c) == '/')
 #define G_SEARCHPATH_SEPARATOR ';'
 #define G_SEARCHPATH_SEPARATOR_S ";"
 
@@ -48,6 +50,7 @@ G_BEGIN_DECLS
 
 #define G_DIR_SEPARATOR '/'
 #define G_DIR_SEPARATOR_S "/"
+#define G_IS_DIR_SEPARATOR(c) ((c) == G_DIR_SEPARATOR)
 #define G_SEARCHPATH_SEPARATOR ':'
 #define G_SEARCHPATH_SEPARATOR_S ":"
 
@@ -69,21 +72,14 @@ G_BEGIN_DECLS
 /* inlining hassle. for compilers that don't allow the `inline' keyword,
  * mostly because of strict ANSI C compliance or dumbness, we try to fall
  * back to either `__inline__' or `__inline'.
- * we define G_CAN_INLINE, if the compiler seems to be actually
- * *capable* to do function inlining, in which case inline function bodys
- * do make sense. we also define G_INLINE_FUNC to properly export the
- * function prototypes if no inlining can be performed.
+ * G_CAN_INLINE is defined in glibconfig.h if the compiler seems to be 
+ * actually *capable* to do function inlining, in which case inline 
+ * function bodies do make sense. we also define G_INLINE_FUNC to properly 
+ * export the function prototypes if no inlining can be performed.
  * inline function bodies have to be special cased with G_CAN_INLINE and a
  * .c file specific macro to allow one compiled instance with extern linkage
  * of the functions by defining G_IMPLEMENT_INLINES and the .c file macro.
  */
-#ifdef G_IMPLEMENT_INLINES
-#  define G_INLINE_FUNC extern
-#  undef  G_CAN_INLINE
-#endif
-#ifndef G_INLINE_FUNC
-#  define G_CAN_INLINE 1
-#endif
 #if defined (G_HAVE_INLINE) && defined (__GNUC__) && defined (__STRICT_ANSI__)
 #  undef inline
 #  define inline __inline__
@@ -95,33 +91,59 @@ G_BEGIN_DECLS
 #    define inline __inline
 #  else /* !inline && !__inline__ && !__inline */
 #    define inline  /* don't inline, then */
-#    ifndef G_INLINE_FUNC
-#      undef G_CAN_INLINE
-#    endif
 #  endif
 #endif
-#ifndef G_INLINE_FUNC
-#  if defined (__GNUC__) && defined (__OPTIMIZE__)
-#    define G_INLINE_FUNC extern inline
-#  elif defined (G_CAN_INLINE) && !defined (__GNUC__)
-#    define G_INLINE_FUNC static inline
-#  else /* can't inline */
-#    define G_INLINE_FUNC extern
-#    undef G_CAN_INLINE
-#  endif
+#ifdef G_IMPLEMENT_INLINES
+#  define G_INLINE_FUNC
+#  undef  G_CAN_INLINE
+#elif defined (__GNUC__) 
+#  define G_INLINE_FUNC extern inline
+#elif defined (G_CAN_INLINE) 
+#  define G_INLINE_FUNC static inline
+#else /* can't inline */
+#  define G_INLINE_FUNC
 #endif /* !G_INLINE_FUNC */
 
 /* Retrive static string info
  */
+#ifdef G_OS_WIN32
+#define g_get_user_name g_get_user_name_utf8
+#define g_get_real_name g_get_real_name_utf8
+#define g_get_home_dir g_get_home_dir_utf8
+#define g_get_tmp_dir g_get_tmp_dir_utf8
+#endif
+
 G_CONST_RETURN gchar* g_get_user_name        (void);
 G_CONST_RETURN gchar* g_get_real_name        (void);
 G_CONST_RETURN gchar* g_get_home_dir         (void);
 G_CONST_RETURN gchar* g_get_tmp_dir          (void);
+G_CONST_RETURN gchar* g_get_host_name	     (void);
 gchar*                g_get_prgname          (void);
 void                  g_set_prgname          (const gchar *prgname);
 G_CONST_RETURN gchar* g_get_application_name (void);
 void                  g_set_application_name (const gchar *application_name);
 
+G_CONST_RETURN gchar*    g_get_user_data_dir      (void);
+G_CONST_RETURN gchar*    g_get_user_config_dir    (void);
+G_CONST_RETURN gchar*    g_get_user_cache_dir     (void);
+G_CONST_RETURN gchar* G_CONST_RETURN * g_get_system_data_dirs   (void);
+
+#ifdef G_OS_WIN32
+G_CONST_RETURN gchar* G_CONST_RETURN * g_win32_get_system_data_dirs_for_module (gconstpointer address);
+#endif
+
+#if defined (G_OS_WIN32) && defined (G_CAN_INLINE) && !defined (__cplusplus)
+static inline G_CONST_RETURN gchar * G_CONST_RETURN *
+g_win32_get_system_data_dirs (void)
+{
+  return g_win32_get_system_data_dirs_for_module ((gconstpointer) &g_win32_get_system_data_dirs);
+}
+#define g_get_system_data_dirs g_win32_get_system_data_dirs
+#endif
+
+G_CONST_RETURN gchar* G_CONST_RETURN * g_get_system_config_dirs (void);
+
+G_CONST_RETURN gchar* G_CONST_RETURN * g_get_language_names (void);
 
 typedef struct _GDebugKey	GDebugKey;
 struct _GDebugKey
@@ -162,23 +184,35 @@ G_CONST_RETURN gchar* g_basename           (const gchar *file_name);
 
 #endif /* G_DISABLE_DEPRECATED */
 
+#ifdef G_OS_WIN32
+#define g_get_current_dir g_get_current_dir_utf8
+#endif
+
 /* The returned strings are newly allocated with g_malloc() */
 gchar*                g_get_current_dir    (void);
-gchar*                g_path_get_basename  (const gchar *file_name);
-gchar*                g_path_get_dirname   (const gchar *file_name);
-
+gchar*                g_path_get_basename  (const gchar *file_name) G_GNUC_MALLOC;
+gchar*                g_path_get_dirname   (const gchar *file_name) G_GNUC_MALLOC;
 
 /* Set the pointer at the specified location to NULL */
 void                  g_nullify_pointer    (gpointer    *nullify_location);
 
 /* return the environment string for the variable. The returned memory
  * must not be freed. */
+#ifdef G_OS_WIN32
+#define g_getenv g_getenv_utf8
+#define g_setenv g_setenv_utf8
+#define g_unsetenv g_unsetenv_utf8
+#define g_find_program_in_path g_find_program_in_path_utf8
+#endif
+
 G_CONST_RETURN gchar* g_getenv             (const gchar *variable);
 gboolean              g_setenv             (const gchar *variable,
 					    const gchar *value,
 					    gboolean     overwrite);
 void                  g_unsetenv           (const gchar *variable);
-
+gchar**               g_listenv            (void);
+const gchar*	     _g_getenv_nomalloc	   (const gchar	*variable,
+					    gchar        buffer[1024]);
 
 /* we try to provide a usefull equivalent for ATEXIT if it is
  * not defined, but use is actually abandoned. people should
@@ -197,16 +231,27 @@ typedef	void		(*GVoidFunc)		(void);
  */
 void	g_atexit		(GVoidFunc    func);
 
+#ifdef G_OS_WIN32
+/* It's a bad idea to wrap atexit() on Windows. If the GLib DLL calls
+ * atexit(), the function will be called when the GLib DLL is detached
+ * from the program, which is not what the caller wants. The caller
+ * wants the function to be called when it *itself* exits (or is
+ * detached, in case the caller, too, is a DLL).
+ */
+int atexit (void (*)(void));
+#define g_atexit(func) atexit(func)
+#endif
+
 /* Look for an executable in PATH, following execvp() rules */
 gchar*  g_find_program_in_path  (const gchar *program);
 
 /* Bit tests
  */
 G_INLINE_FUNC gint	g_bit_nth_lsf (gulong  mask,
-				       gint    nth_bit);
+				       gint    nth_bit) G_GNUC_CONST;
 G_INLINE_FUNC gint	g_bit_nth_msf (gulong  mask,
-				       gint    nth_bit);
-G_INLINE_FUNC guint	g_bit_storage (gulong  number);
+				       gint    nth_bit) G_GNUC_CONST;
+G_INLINE_FUNC guint	g_bit_storage (gulong  number) G_GNUC_CONST;
 
 /* Trash Stacks
  * elements need to be >= sizeof (gpointer)
@@ -230,33 +275,36 @@ G_INLINE_FUNC gint
 g_bit_nth_lsf (gulong mask,
 	       gint   nth_bit)
 {
-  do
+  if (G_UNLIKELY (nth_bit < -1))
+    nth_bit = -1;
+  while (nth_bit < ((GLIB_SIZEOF_LONG * 8) - 1))
     {
       nth_bit++;
       if (mask & (1UL << nth_bit))
 	return nth_bit;
     }
-  while (nth_bit < ((GLIB_SIZEOF_LONG * 8) - 1));
   return -1;
 }
 G_INLINE_FUNC gint
 g_bit_nth_msf (gulong mask,
 	       gint   nth_bit)
 {
-  if (nth_bit < 0)
+  if (nth_bit < 0 || G_UNLIKELY (nth_bit > GLIB_SIZEOF_LONG * 8))
     nth_bit = GLIB_SIZEOF_LONG * 8;
-  do
+  while (nth_bit > 0)
     {
       nth_bit--;
       if (mask & (1UL << nth_bit))
 	return nth_bit;
     }
-  while (nth_bit > 0);
   return -1;
 }
 G_INLINE_FUNC guint
 g_bit_storage (gulong number)
 {
+#if defined(__GNUC__) && (__GNUC__ >= 4) && defined(__OPTIMIZE__)
+  return number ? GLIB_SIZEOF_LONG * 8 - __builtin_clzl(number) : 1;
+#else
   register guint n_bits = 0;
   
   do
@@ -266,6 +314,7 @@ g_bit_storage (gulong number)
     }
   while (number);
   return n_bits;
+#endif
 }
 G_INLINE_FUNC void
 g_trash_stack_push (GTrashStack **stack_p,
@@ -325,6 +374,10 @@ GLIB_VAR const guint glib_micro_version;
 GLIB_VAR const guint glib_interface_age;
 GLIB_VAR const guint glib_binary_age;
 
+const gchar * glib_check_version (guint required_major,
+                                  guint required_minor,
+                                  guint required_micro);
+
 #define GLIB_CHECK_VERSION(major,minor,micro)    \
     (GLIB_MAJOR_VERSION > (major) || \
      (GLIB_MAJOR_VERSION == (major) && GLIB_MINOR_VERSION > (minor)) || \
@@ -347,24 +400,38 @@ G_END_DECLS
 #ifndef G_PLATFORM_WIN32
 # define G_WIN32_DLLMAIN_FOR_DLL_NAME(static, dll_name)
 #else
-# define G_WIN32_DLLMAIN_FOR_DLL_NAME(static, dll_name)			   \
-static char *dll_name;							   \
-									   \
-BOOL WINAPI								   \
-DllMain (HINSTANCE hinstDLL,						   \
-	 DWORD     fdwReason,						   \
-	 LPVOID    lpvReserved)						   \
-{									   \
-  char bfr[1000];							   \
-  switch (fdwReason)							   \
-    {									   \
-    case DLL_PROCESS_ATTACH:						   \
-      GetModuleFileName ((HMODULE) hinstDLL, bfr, sizeof (bfr));	   \
-      dll_name = g_path_get_basename (bfr);				   \
-      break;								   \
-    }									   \
-									   \
-  return TRUE;								   \
+# define G_WIN32_DLLMAIN_FOR_DLL_NAME(static, dll_name)			\
+static char *dll_name;							\
+									\
+BOOL WINAPI								\
+DllMain (HINSTANCE hinstDLL,						\
+	 DWORD     fdwReason,						\
+	 LPVOID    lpvReserved)						\
+{									\
+  wchar_t wcbfr[1000];							\
+  char cpbfr[1000];							\
+  char *tem;								\
+  switch (fdwReason)							\
+    {									\
+    case DLL_PROCESS_ATTACH:						\
+      if (GetVersion () < 0x80000000)					\
+	{								\
+	  GetModuleFileNameW ((HMODULE) hinstDLL, wcbfr, G_N_ELEMENTS (wcbfr));	\
+	  tem = g_utf16_to_utf8 (wcbfr, -1, NULL, NULL, NULL);		\
+	  dll_name = g_path_get_basename (tem);				\
+	  g_free (tem);							\
+	}								\
+      else								\
+	{								\
+	  GetModuleFileNameA ((HMODULE) hinstDLL, cpbfr, G_N_ELEMENTS (cpbfr));	\
+	  tem = g_locale_to_utf8 (cpbfr, -1, NULL, NULL, NULL);		\
+	  dll_name = g_path_get_basename (tem);				\
+	  g_free (tem);							\
+	}								\
+      break;								\
+    }									\
+									\
+  return TRUE;								\
 }
 #endif /* G_PLATFORM_WIN32 */
 

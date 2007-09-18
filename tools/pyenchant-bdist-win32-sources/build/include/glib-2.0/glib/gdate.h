@@ -27,6 +27,9 @@
 #ifndef __G_DATE_H__
 #define __G_DATE_H__
 
+#include <time.h>
+
+#include <glib/gtypes.h>
 #include <glib/gquark.h>
 
 G_BEGIN_DECLS
@@ -150,6 +153,7 @@ guint        g_date_get_day_of_year       (const GDate *date);
  */
 guint        g_date_get_monday_week_of_year (const GDate *date);
 guint        g_date_get_sunday_week_of_year (const GDate *date);
+guint        g_date_get_iso8601_week_of_year (const GDate *date);
 
 /* If you create a static date struct you need to clear it to get it
  * in a sane state before use. You can clear a whole array at
@@ -164,8 +168,14 @@ void         g_date_clear                 (GDate       *date,
  */
 void         g_date_set_parse             (GDate       *date,
                                            const gchar *str);
+void         g_date_set_time_t            (GDate       *date,
+					   time_t       timet);
+void         g_date_set_time_val          (GDate       *date,
+					   GTimeVal    *timeval);
+#ifndef G_DISABLE_DEPRECATED
 void         g_date_set_time              (GDate       *date,
                                            GTime        time_);
+#endif
 void         g_date_set_month             (GDate       *date,
                                            GDateMonth   month);
 void         g_date_set_day               (GDate       *date,

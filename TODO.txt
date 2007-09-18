@@ -1,5 +1,7 @@
 
  * fixes to wxSpellCheckerDialog from Phil Mayes
+ * upgrade packages glib on windows
+ * upgrade packaged dicts on windows
 
 Documentation:
 

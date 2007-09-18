@@ -32,6 +32,8 @@
 #include <glib/gasyncqueue.h>
 #include <glib/gatomic.h>
 #include <glib/gbacktrace.h>
+#include <glib/gbase64.h>
+#include <glib/gbookmarkfile.h>
 #include <glib/gcache.h>
 #include <glib/gcompletion.h>
 #include <glib/gconvert.h>
@@ -43,13 +45,16 @@
 #include <glib/ghash.h>
 #include <glib/ghook.h>
 #include <glib/giochannel.h>
+#include <glib/gkeyfile.h>
 #include <glib/glist.h>
 #include <glib/gmacros.h>
 #include <glib/gmain.h>
+#include <glib/gmappedfile.h>
 #include <glib/gmarkup.h>
 #include <glib/gmem.h>
 #include <glib/gmessages.h>
 #include <glib/gnode.h>
+#include <glib/goption.h>
 #include <glib/gpattern.h>
 #include <glib/gprimes.h>
 #include <glib/gqsort.h>

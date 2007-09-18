@@ -54,8 +54,10 @@ void        g_hash_table_replace           (GHashTable     *hash_table,
 					    gpointer	    value);
 gboolean    g_hash_table_remove		   (GHashTable	   *hash_table,
 					    gconstpointer   key);
+void        g_hash_table_remove_all        (GHashTable     *hash_table);
 gboolean    g_hash_table_steal             (GHashTable     *hash_table,
 					    gconstpointer   key);
+void        g_hash_table_steal_all         (GHashTable     *hash_table);
 gpointer    g_hash_table_lookup		   (GHashTable	   *hash_table,
 					    gconstpointer   key);
 gboolean    g_hash_table_lookup_extended   (GHashTable	   *hash_table,
@@ -65,7 +67,7 @@ gboolean    g_hash_table_lookup_extended   (GHashTable	   *hash_table,
 void	    g_hash_table_foreach	   (GHashTable	   *hash_table,
 					    GHFunc	    func,
 					    gpointer	    user_data);
-gpointer    g_hash_table_find	   (GHashTable	   *hash_table,
+gpointer    g_hash_table_find	           (GHashTable	   *hash_table,
 					    GHRFunc	    predicate,
 					    gpointer	    user_data);
 guint	    g_hash_table_foreach_remove	   (GHashTable	   *hash_table,
@@ -75,6 +77,10 @@ guint	    g_hash_table_foreach_steal	   (GHashTable	   *hash_table,
 					    GHRFunc	    func,
 					    gpointer	    user_data);
 guint	    g_hash_table_size		   (GHashTable	   *hash_table);
+
+/* keeping hash tables alive */
+GHashTable* g_hash_table_ref   		   (GHashTable 	   *hash_table);
+void        g_hash_table_unref             (GHashTable     *hash_table);
 
 #ifndef G_DISABLE_DEPRECATED
 
@@ -87,11 +93,11 @@ guint	    g_hash_table_size		   (GHashTable	   *hash_table);
 
 /* Hash Functions
  */
-gboolean g_str_equal (gconstpointer  v,
+gboolean g_str_equal (gconstpointer  v1,
                       gconstpointer  v2);
 guint    g_str_hash  (gconstpointer  v);
 
-gboolean g_int_equal (gconstpointer  v,
+gboolean g_int_equal (gconstpointer  v1,
                       gconstpointer  v2);
 guint    g_int_hash  (gconstpointer  v);
 
@@ -102,7 +108,7 @@ guint    g_int_hash  (gconstpointer  v);
  * same effect as passing g_direct_hash().
  */
 guint    g_direct_hash  (gconstpointer  v) G_GNUC_CONST;
-gboolean g_direct_equal (gconstpointer  v,
+gboolean g_direct_equal (gconstpointer  v1,
                          gconstpointer  v2) G_GNUC_CONST;
 
 G_END_DECLS

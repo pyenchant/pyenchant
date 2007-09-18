@@ -85,7 +85,7 @@ guint           g_thread_pool_unprocessed     (GThreadPool     *pool);
  * does however not mean, that threads are killed. */
 void            g_thread_pool_free            (GThreadPool     *pool,
                                                gboolean         immediate,
-                                               gboolean         wait);
+                                               gboolean         wait_);
 
 /* Set the maximal number of unused threads before threads will be stopped by
  * GLib, -1 means no limit */
@@ -95,6 +95,15 @@ guint           g_thread_pool_get_num_unused_threads (void);
 
 /* Stop all currently unused threads, but leave the limit untouched */
 void            g_thread_pool_stop_unused_threads    (void);
+
+/* Set sort function for priority threading */
+void            g_thread_pool_set_sort_function      (GThreadPool      *pool,
+		                                      GCompareDataFunc  func,
+						      gpointer          user_data);
+
+/* Set maximum time a thread can be idle in the pool before it is stopped */
+void            g_thread_pool_set_max_idle_time      (guint             interval);
+guint           g_thread_pool_get_max_idle_time      (void);
 
 G_END_DECLS
 

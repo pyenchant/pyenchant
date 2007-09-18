@@ -136,7 +136,7 @@ struct _GPollFD
 /* GMainContext: */
 
 GMainContext *g_main_context_new       (void);
-void          g_main_context_ref       (GMainContext *context);
+GMainContext *g_main_context_ref       (GMainContext *context);
 void          g_main_context_unref     (GMainContext *context);
 GMainContext *g_main_context_default   (void);
 
@@ -159,6 +159,7 @@ GSource      *g_main_context_find_source_by_funcs_user_data (GMainContext *conte
 void     g_main_context_wakeup  (GMainContext *context);
 gboolean g_main_context_acquire (GMainContext *context);
 void     g_main_context_release (GMainContext *context);
+gboolean g_main_context_is_owner (GMainContext *context);
 gboolean g_main_context_wait    (GMainContext *context,
 				 GCond        *cond,
 				 GMutex       *mutex);
@@ -176,19 +177,21 @@ gint     g_main_context_check    (GMainContext *context,
 				  gint          n_fds);
 void     g_main_context_dispatch (GMainContext *context);
 
-void      g_main_context_set_poll_func (GMainContext *context,
-					GPollFunc     func);
+void     g_main_context_set_poll_func (GMainContext *context,
+				       GPollFunc     func);
 GPollFunc g_main_context_get_poll_func (GMainContext *context);
 
 /* Low level functions for use by source implementations
  */
-void g_main_context_add_poll      (GMainContext *context,
-				   GPollFD      *fd,
-				   gint          priority);
-void g_main_context_remove_poll   (GMainContext *context,
-				   GPollFD      *fd);
+void     g_main_context_add_poll    (GMainContext *context,
+				     GPollFD      *fd,
+				     gint          priority);
+void     g_main_context_remove_poll (GMainContext *context,
+				     GPollFD      *fd);
 
-int g_main_depth (void);
+gint     g_main_depth               (void);
+GSource *g_main_current_source      (void);
+
 
 /* GMainLoop: */
 
@@ -222,11 +225,14 @@ guint    g_source_get_id          (GSource        *source);
 
 GMainContext *g_source_get_context (GSource       *source);
 
-void g_source_set_callback          (GSource              *source,
-				     GSourceFunc           func,
-				     gpointer              data,
-				     GDestroyNotify        notify);
+void     g_source_set_callback    (GSource        *source,
+				   GSourceFunc     func,
+				   gpointer        data,
+				   GDestroyNotify  notify);
 
+void     g_source_set_funcs       (GSource        *source,
+                                   GSourceFuncs   *funcs);
+gboolean g_source_is_destroyed    (GSource        *source);
 
 /* Used to implement g_source_connect_closure and internally*/
 void g_source_set_callback_indirect (GSource              *source,

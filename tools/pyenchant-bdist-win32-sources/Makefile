@@ -9,7 +9,7 @@ CFLAGS = -Wl,--enable-runtime-pseudo-reloc
 
 all: $(BUILD_DIR)/lib/libenchant-1.dll $(BUILD_DIR)/myspell/en_GB.dic \
 	$(BUILD_DIR)/myspell/en_US.dic $(BUILD_DIR)/myspell/de_DE.dic \
-	$(BUILD_DIR)/myspell/fr_FR.dic
+	$(BUILD_DIR)/myspell/en_AU.dic $(BUILD_DIR)/myspell/fr_FR.dic
 	# Remove dictionaries that are causing trouble
 	rm -f $(BUILD_DIR)/myspell/de_AT.dic
 
@@ -29,23 +29,20 @@ $(BUILD_DIR)/lib/pkgconfig/%.pc: $(BUILD_DIR)/lib/pkgconfig/%.pc.in
 	echo "prefix=$(BUILD_DIR)" > $@
 	cat $< >> $@
 
-#  Make the enchant aspell source dir
+#  Make the enchant source dir
 $(ENCHANT_DIR): src/$(ENCHANT_DIR).tar.gz
 	tar -xzvf src/$(ENCHANT_DIR).tar.gz
-	#patch $(ENCHANT_DIR)/configure patches/enchant_configure.patch
 
 # Ability to extract MySpell dictionary files
 $(BUILD_DIR)/myspell/%.dic: $(BUILD_DIR)/myspell/%.zip
-	cd $(BUILD_DIR)/myspell && unzip $<
+	cd $(BUILD_DIR)/myspell && unzip $< *.dic *.aff
 
 
 clean:
-	rm -fr $(ASPELL_DIR) $(ENCHANT_DIR)
+	rm -fr $(ENCHANT_DIR)
 
 clobber: clean
 	rm -f $(BUILD_DIR)/lib/pkgconfig/*.pc
-	rm -rf $(BUILD_DIR)/include/aspell.h $(BUILD_DIR)/include/pspell
-	rm -f $(BUILD_DIR)/lib/libaspell*
 	rm -f $(BUILD_DIR)/lib/libenchant*
 	rm -rf $(BUILD_DIR)/lib/enchant
 	rm -f $(BUILD_DIR)/myspell/*.dic
