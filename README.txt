@@ -51,7 +51,7 @@ dictionaries are installed into:
 Additional language dictionaries are available from the OpenOffice.org
 project, and are available at:
 
-    http://lingucomponent.openoffice.org/spell_dic.html
+    http://wiki.services.openoffice.org/wiki/Dictionaries
     
 Download the appropriate zip for for the language of interest, and
 unzip its contents into the "myspell" directory mentioned above.
