@@ -33,10 +33,11 @@ $(BUILD_DIR)/lib/pkgconfig/%.pc: $(BUILD_DIR)/lib/pkgconfig/%.pc.in
 $(ENCHANT_DIR): src/$(ENCHANT_DIR).tar.gz
 	tar -xzvf src/$(ENCHANT_DIR).tar.gz
 	# Upgrade hunspell to latest version
-	tar -xzvf src/hunspell-1.1.12.tar.gz
+	tar -xzvf src/hunspell-1.1.12-2.tar.gz
 	cp hunspell-1.1.12/src/hunspell/*.cxx $(ENCHANT_DIR)/src/myspell/
 	cp hunspell-1.1.12/src/hunspell/*.h $(ENCHANT_DIR)/src/myspell/
 	cp hunspell-1.1.12/src/hunspell/*.dsp $(ENCHANT_DIR)/src/myspell/
+	cd $(ENCHANT_DIR)/src/myspell && patch < ../../../patches/myspell_Makefile.am.patch
 	rm -rf hunspell-1.1.12
 
 # Ability to extract MySpell dictionary files
