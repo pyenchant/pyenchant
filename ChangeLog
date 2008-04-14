@@ -1,3 +1,10 @@
+1.4.0:
+
+    * upgrade to latest enchant release, with new functionality:
+        * Ability to exlude words using Dict.remove,
+          Dict.remove_from_session
+        * Dict.is_added/Dict.is_removed
+    * upgrade bundled glib DLLs in Windows version
 
 1.3.1:
 

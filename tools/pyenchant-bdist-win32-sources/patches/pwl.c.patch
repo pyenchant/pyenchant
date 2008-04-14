@@ -1,0 +1,20 @@
+--- enchant-1.4.0/src/pwl.c	Mon Mar  3 06:17:56 2008
++++ pwl.c	Wed Apr  9 16:24:26 2008
+@@ -196,8 +196,6 @@
+ 	flock (fileno (f), LOCK_EX);
+ #elif defined(HAVE_LOCKF)
+ 	lockf (fileno (f), F_LOCK, 0);
+-#elif defined(_WIN32)
+-	_lock_file(f);
+ #else
+ 	/* TODO: UNIX fcntl. This race condition probably isn't too bad. */
+ #endif /* HAVE_FLOCK */
+@@ -210,8 +208,6 @@
+ 	flock (fileno (f), LOCK_UN);
+ #elif defined(HAVE_LOCKF)
+ 	lockf (fileno (f), F_ULOCK, 0);
+-#elif defined(_WIN32)
+-	_unlock_file(f);
+ #else
+ 	/* TODO: UNIX fcntl. This race condition probably isn't too bad. */
+ #endif /* HAVE_FLOCK */

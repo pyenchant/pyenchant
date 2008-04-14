@@ -28,6 +28,7 @@
 #define __G_HASH_H__
 
 #include <glib/gtypes.h>
+#include <glib/glist.h>
 
 G_BEGIN_DECLS
 
@@ -36,6 +37,19 @@ typedef struct _GHashTable  GHashTable;
 typedef gboolean  (*GHRFunc)  (gpointer  key,
                                gpointer  value,
                                gpointer  user_data);
+
+typedef struct _GHashTableIter GHashTableIter;
+
+struct _GHashTableIter
+{
+  /*< private >*/
+  gpointer	dummy1;
+  gpointer	dummy2;
+  gpointer	dummy3;
+  int		dummy4;
+  gboolean	dummy5;
+  gpointer	dummy6;
+};
 
 /* Hash tables
  */
@@ -77,6 +91,17 @@ guint	    g_hash_table_foreach_steal	   (GHashTable	   *hash_table,
 					    GHRFunc	    func,
 					    gpointer	    user_data);
 guint	    g_hash_table_size		   (GHashTable	   *hash_table);
+GList *     g_hash_table_get_keys          (GHashTable     *hash_table);
+GList *     g_hash_table_get_values        (GHashTable     *hash_table);
+
+void        g_hash_table_iter_init         (GHashTableIter *iter,
+					    GHashTable     *hash_table);
+gboolean    g_hash_table_iter_next         (GHashTableIter *iter,
+					    gpointer       *key,
+					    gpointer       *value);
+GHashTable* g_hash_table_iter_get_hash_table (GHashTableIter *iter);
+void        g_hash_table_iter_remove       (GHashTableIter *iter);
+void        g_hash_table_iter_steal        (GHashTableIter *iter);
 
 /* keeping hash tables alive */
 GHashTable* g_hash_table_ref   		   (GHashTable 	   *hash_table);

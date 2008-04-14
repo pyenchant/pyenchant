@@ -18,7 +18,7 @@ import shutil
 WINDEPS = ".\\tools\\pyenchant-bdist-win32-sources\\build"
 
 #  Cant seem to obtain version information from module, must hardcode
-VERSION = "1.3.1"
+VERSION = "1.4.0"
 
 # Package MetaData
 NAME = "pyenchant"
@@ -58,9 +58,8 @@ ext1 = Extension('enchant._enchant',['enchant/enchant_wrap.c'],
  
 #
 # Build and distribution information is different on Windows.
-# The enchant library builds as 'enchant-1' instead of 'enchant'
 #
-# Also, there's the possibility of including pre-built support DLLs
+# There's the possibility of including pre-built support DLLs
 # for the Windows installer.  They will be included if the directory
 # <WINDEPS> exists when this script is run.  They are copied into
 # the package directory so setuptools can locate them.
@@ -92,7 +91,7 @@ if sys.platform == "win32":
             shutil.copy(os.path.join(dictPath,dictName),
 			".\\enchant\\share\\enchant\\ispell\\")
     # Set up additional compile info for C extension
-    ext1.libraries.append("libenchant-1")
+    ext1.libraries.append("libenchant")
     ext1.library_dirs.append("enchant")
     PKG_DATA["enchant"] = ["*.dll", "lib/enchant/*.dll",
                            "share/enchant/myspell/*.*",

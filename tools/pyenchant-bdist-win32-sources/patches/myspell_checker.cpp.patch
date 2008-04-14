@@ -1,0 +1,27 @@
+--- myspell_checker.cpp	Mon Apr 14 21:51:56 2008
++++ myspell_checker.cpp.new	Mon Apr 14 21:51:18 2008
+@@ -75,16 +75,21 @@
+ 	unsigned long lType;	
+ 	DWORD dwSize;
+ 	WCHAR* wszValue = NULL;
++        char* keyStr;
+ 
+-	if(RegOpenKeyEx(baseKey, uKeyName, 0, KEY_READ, &hKey) == ERROR_SUCCESS)
++        keyStr = g_utf16_to_utf8((gunichar2*) uKeyName, -1, NULL, NULL, NULL);
++	if(RegOpenKeyEx(baseKey, keyStr, 0, KEY_READ, &hKey) == ERROR_SUCCESS)
+ 		{
++                g_free(keyStr);
++                keyStr = g_utf16_to_utf8((gunichar2*) uKey, -1, NULL, NULL, NULL);
+ 			/* Determine size of string */
+-			if(RegQueryValueEx( hKey, uKey, NULL, &lType, NULL, &dwSize) == ERROR_SUCCESS)
++			if(RegQueryValueEx( hKey, keyStr, NULL, &lType, NULL, &dwSize) == ERROR_SUCCESS)
+ 				{
+ 					wszValue = g_new0(WCHAR, dwSize + 1);
+-					RegQueryValueEx(hKey, uKey, NULL, &lType, (LPBYTE) wszValue, &dwSize);
++					RegQueryValueEx(hKey, keyStr, NULL, &lType, (LPBYTE) wszValue, &dwSize);
+ 				}
+ 		}
++        g_free(keyStr);
+ 
+ 	return wszValue;
+ }

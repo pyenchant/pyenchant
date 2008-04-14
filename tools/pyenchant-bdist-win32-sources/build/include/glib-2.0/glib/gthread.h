@@ -29,7 +29,8 @@
 
 #include <glib/gerror.h>
 #include <glib/gtypes.h>
-#include <glib/gatomic.h>  /* for g_atomic_pointer_get */
+#include <glib/gutils.h>        /* for G_INLINE_FUNC */
+#include <glib/gatomic.h>       /* for g_atomic_pointer_get */
 
 G_BEGIN_DECLS
 
@@ -139,9 +140,15 @@ void    g_thread_init_with_errorcheck_mutexes (GThreadFunctions* vtable);
 /* internal function for fallback static mutex implementation */
 GMutex* g_static_mutex_get_mutex_impl   (GMutex **mutex);
 
+#ifdef __cplusplus
 #define g_static_mutex_get_mutex_impl_shortcut(mutex) \
   (g_atomic_pointer_get ((gpointer*)(void*)mutex) ? *(mutex) : \
    g_static_mutex_get_mutex_impl (mutex))
+#else
+#define g_static_mutex_get_mutex_impl_shortcut(mutex) \
+  (g_atomic_pointer_get (mutex) ? *(mutex) : \
+   g_static_mutex_get_mutex_impl (mutex))
+#endif
 
 /* shorthands for conditional and unconditional function calls */
 
@@ -321,7 +328,23 @@ gpointer g_once_impl (GOnce *once, GThreadFunc func, gpointer arg);
    (once)->retval : \
    g_once_impl ((once), (func), (arg)))
 #endif /* G_ATOMIC_OP_MEMORY_BARRIER_NEEDED */
-    
+
+/* initialize-once guards, keyed by value_location */
+G_INLINE_FUNC gboolean  g_once_init_enter       (volatile gsize *value_location);
+gboolean                g_once_init_enter_impl  (volatile gsize *value_location);
+void                    g_once_init_leave       (volatile gsize *value_location,
+                                                 gsize           initialization_value);
+#if defined (G_CAN_INLINE) || defined (__G_THREAD_C__)
+G_INLINE_FUNC gboolean
+g_once_init_enter (volatile gsize *value_location)
+{
+  if G_LIKELY (g_atomic_pointer_get ((void*volatile*) value_location) != NULL)
+    return FALSE;
+  else
+    return g_once_init_enter_impl (value_location);
+}
+#endif /* G_CAN_INLINE || __G_THREAD_C__ */
+
 /* these are some convenience macros that expand to nothing if GLib
  * was configured with --disable-threads. for using StaticMutexes,
  * you define them with G_LOCK_DEFINE_STATIC (name) or G_LOCK_DEFINE (name)
@@ -343,21 +366,21 @@ extern void glib_dummy_decl (void);
 #    define G_LOCK(name)                G_STMT_START{             \
         g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,                   \
                "file %s: line %d (%s): locking: %s ",             \
-               __FILE__,        __LINE__, G_GNUC_PRETTY_FUNCTION, \
+               __FILE__,        __LINE__, G_STRFUNC,              \
                #name);                                            \
         g_static_mutex_lock (&G_LOCK_NAME (name));                \
      }G_STMT_END
 #    define G_UNLOCK(name)              G_STMT_START{             \
         g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,                   \
                "file %s: line %d (%s): unlocking: %s ",           \
-               __FILE__,        __LINE__, G_GNUC_PRETTY_FUNCTION, \
+               __FILE__,        __LINE__, G_STRFUNC,              \
                #name);                                            \
        g_static_mutex_unlock (&G_LOCK_NAME (name));               \
      }G_STMT_END
 #    define G_TRYLOCK(name)                                       \
         (g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,                  \
                "file %s: line %d (%s): try locking: %s ",         \
-               __FILE__,        __LINE__, G_GNUC_PRETTY_FUNCTION, \
+               __FILE__,        __LINE__, G_STRFUNC,              \
                #name), g_static_mutex_trylock (&G_LOCK_NAME (name)))
 #  else  /* !G_DEBUG_LOCKS */
 #    define G_LOCK(name) g_static_mutex_lock       (&G_LOCK_NAME (name))

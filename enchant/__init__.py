@@ -788,6 +788,11 @@ class TestBroker(unittest.TestCase):
         provs = []
         # Find the providers for each language, and a list of all providers
         for (tag,prov) in self.broker.list_dicts():
+            # Skip hyphenation dictionaries installed by OOo
+            if tag.startswith("hyph_") and prov.name == "myspell":
+                continue
+            # Canonicalize separators
+            tag = tag.replace("-","_")
             if langs.has_key(tag):
                 langs[tag].append(prov)
             else:
@@ -800,7 +805,7 @@ class TestBroker(unittest.TestCase):
                 b2 = Broker()
                 b2.set_ordering(tag,prov.name)
                 d = b2.request_dict(tag)
-                self.assertEqual(d.provider,prov)
+                self.assertEqual((d.provider,tag),(prov,tag))
                 del d
                 del b2
         # Place providers that dont have the language in the ordering
@@ -813,7 +818,7 @@ class TestBroker(unittest.TestCase):
                 b2 = Broker()
                 b2.set_ordering(tag,order)
                 d = b2.request_dict(tag)
-                self.assertEqual(d.provider,prov)
+                self.assertEqual((d.provider,tag,order),(prov,tag,order))
                 del d
                 del b2
 
@@ -932,21 +937,32 @@ class TestPWL(unittest.TestCase):
     """    
     
     def setUp(self):
-        import tempfile
-        try:
-            self.pwlFileNm = tempfile.mkstemp()[1]
-        except (NameError,AttributeError):
-            self.pwlFileNm = tempfile.mktemp()
+        self._tempDir = self._mkdtemp()
+        self._fileName = "pwl.txt"
     
     def tearDown(self):
+        import shutil
+        shutil.rmtree(self._tempDir)
+
+    def _mkdtemp(self):
+        """Backwards-compatability wrapper for tempfile.mkdtemp"""
+        import tempfile
         try:
-            os.remove(self.pwlFileNm)
-        except:
-            pass
-    
+            return tempfile.mkdtemp()
+        except (NameError,AttributeError):
+            nm = tempfile.mktemp()
+            os.mkdir(nm)
+            return nm
+
+    def _path(self):
+        nm = os.path.join(self._tempDir,self._fileName)
+        if not os.path.exists(nm):
+          file(nm,'w').close()
+        return nm
+
     def setPWLContents(self,contents):
         """Set the contents of the PWL file."""
-        pwlFile = file(self.pwlFileNm,"w")
+        pwlFile = file(self._path(),"w")
         for ln in contents:
             pwlFile.write(ln)
             pwlFile.write("\n")
@@ -954,7 +970,7 @@ class TestPWL(unittest.TestCase):
         
     def getPWLContents(self):
         """Retreive the contents of the PWL file."""
-        pwlFile = file(self.pwlFileNm,"r")
+        pwlFile = file(self._path(),"r")
         contents = pwlFile.readlines()
         pwlFile.close()
         return contents
@@ -962,19 +978,19 @@ class TestPWL(unittest.TestCase):
     def test_check(self):
         """Test that basic checking works for PWLs."""
         self.setPWLContents(["Sazz","Lozz"])
-        d = request_pwl_dict(self.pwlFileNm)
+        d = request_pwl_dict(self._path())
         self.assert_(d.check("Sazz"))
         self.assert_(d.check("Lozz"))
         self.failIf(d.check("hello"))
 
     def test_UnicodeFN(self):
         """Test that unicode PWL filenames are accepted."""
-        d = request_pwl_dict(unicode(self.pwlFileNm))
+        d = request_pwl_dict(unicode(self._path()))
         self.assert_(d)
-    
+
     def test_add(self):
         """Test that adding words to a PWL works correctly."""
-        d = request_pwl_dict(self.pwlFileNm)
+        d = request_pwl_dict(self._path())
         self.failIf(d.check("Flagen"))
         d.add_to_pwl("Flagen")
         self.assert_(d.check("Flagen"))
@@ -983,7 +999,7 @@ class TestPWL(unittest.TestCase):
     def test_suggestions(self):
         """Test getting suggestions from a PWL."""
         self.setPWLContents(["Sazz","Lozz"])
-        d = request_pwl_dict(self.pwlFileNm)
+        d = request_pwl_dict(self._path())
         self.assert_("sazz" in d.suggest("Saz"))
         self.assert_("lozz" in d.suggest("Saz"))
         d.add_to_pwl("Flagen")
@@ -993,7 +1009,7 @@ class TestPWL(unittest.TestCase):
     def test_DWPWL(self):
         """Test functionality of DictWithPWL."""
         self.setPWLContents(["Sazz","Lozz"])
-        d = DictWithPWL("en_US",self.pwlFileNm)
+        d = DictWithPWL("en_US",self._path())
         self.assert_(d.check("Sazz"))
         self.assert_(d.check("Lozz"))
         self.assert_(d.check("hello"))
@@ -1002,6 +1018,14 @@ class TestPWL(unittest.TestCase):
         d.add_to_pwl("Flagen")
         self.assert_(d.check("Flagen"))
         self.assert_("Flagen\n" in self.getPWLContents())
+
+    def test_UnicodeCharsInPath(self):
+        """Test that unicode chars in PWL paths are accepted."""
+        self._fileName = u'test_\xe5\xe4\xf6_ing'
+        d = request_pwl_dict(self._path())
+        print d.provider.file
+        self.assert_(d)
+    
     
 
 def testsuite():

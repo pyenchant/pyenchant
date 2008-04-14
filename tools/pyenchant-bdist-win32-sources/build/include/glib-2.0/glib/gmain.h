@@ -120,7 +120,11 @@ typedef gint	(*GPollFunc)	(GPollFD *ufds,
 
 struct _GPollFD
 {
+#if defined (G_OS_WIN32) && GLIB_SIZEOF_VOID_P == 8
+  gint64	fd;
+#else
   gint		fd;
+#endif
   gushort 	events;
   gushort 	revents;
 };
@@ -256,6 +260,7 @@ void     g_source_get_current_time (GSource        *source,
 GSource *g_idle_source_new        (void);
 GSource *g_child_watch_source_new (GPid pid);
 GSource *g_timeout_source_new     (guint interval);
+GSource *g_timeout_source_new_seconds (guint interval);
 
 /* Miscellaneous functions
  */
@@ -290,29 +295,37 @@ gboolean g_source_remove_by_funcs_user_data  (GSourceFuncs  *funcs,
 					      gpointer       user_data);
 
 /* Idles, child watchers and timeouts */
-guint    g_timeout_add_full     (gint            priority,
-				 guint           interval,
-				 GSourceFunc     function,
-				 gpointer        data,
-				 GDestroyNotify  notify);
-guint    g_timeout_add          (guint           interval,
-				 GSourceFunc     function,
-				 gpointer        data);
-guint    g_child_watch_add_full (gint            priority,
-				 GPid            pid,
-				 GChildWatchFunc function,
-				 gpointer        data,
-				 GDestroyNotify  notify);
-guint    g_child_watch_add      (GPid            pid,
-				 GChildWatchFunc function,
-				 gpointer        data);
-guint    g_idle_add             (GSourceFunc     function,
-				 gpointer        data);
-guint    g_idle_add_full        (gint            priority,
-				 GSourceFunc     function,
-				 gpointer        data,
-				 GDestroyNotify  notify);
-gboolean g_idle_remove_by_data  (gpointer        data);
+guint    g_timeout_add_full         (gint            priority,
+				     guint           interval,
+				     GSourceFunc     function,
+				     gpointer        data,
+				     GDestroyNotify  notify);
+guint    g_timeout_add              (guint           interval,
+				     GSourceFunc     function,
+				     gpointer        data);
+guint    g_timeout_add_seconds_full (gint            priority,
+                                     guint           interval,
+                                     GSourceFunc     function,
+                                     gpointer        data,
+                                     GDestroyNotify  notify);
+guint    g_timeout_add_seconds      (guint           interval,
+				     GSourceFunc     function,
+				     gpointer        data);
+guint    g_child_watch_add_full     (gint            priority,
+				     GPid            pid,
+				     GChildWatchFunc function,
+				     gpointer        data,
+				     GDestroyNotify  notify);
+guint    g_child_watch_add          (GPid            pid,
+				     GChildWatchFunc function,
+				     gpointer        data);
+guint    g_idle_add                 (GSourceFunc     function,
+				     gpointer        data);
+guint    g_idle_add_full            (gint            priority,
+				     GSourceFunc     function,
+				     gpointer        data,
+				     GDestroyNotify  notify);
+gboolean g_idle_remove_by_data      (gpointer        data);
 
 /* Hook for GClosure / GSource integration. Don't touch */
 GLIB_VAR GSourceFuncs g_timeout_funcs;

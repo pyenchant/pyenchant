@@ -97,7 +97,11 @@ G_BEGIN_DECLS
 #  define G_INLINE_FUNC
 #  undef  G_CAN_INLINE
 #elif defined (__GNUC__) 
-#  define G_INLINE_FUNC extern inline
+#  if defined (__GNUC_STDC_INLINE__) || defined (__GNUC_GNU_INLINE__)
+#   define G_INLINE_FUNC extern inline __attribute__ ((__gnu_inline__))
+#  else
+#   define G_INLINE_FUNC extern inline
+#  endif
 #elif defined (G_CAN_INLINE) 
 #  define G_INLINE_FUNC static inline
 #else /* can't inline */
@@ -144,6 +148,43 @@ g_win32_get_system_data_dirs (void)
 G_CONST_RETURN gchar* G_CONST_RETURN * g_get_system_config_dirs (void);
 
 G_CONST_RETURN gchar* G_CONST_RETURN * g_get_language_names (void);
+
+/**
+ * GUserDirectory:
+ * @G_USER_DIRECTORY_DESKTOP: the user's Desktop directory
+ * @G_USER_DIRECTORY_DOCUMENTS: the user's Documents directory
+ * @G_USER_DIRECTORY_DOWNLOAD: the user's Downloads directory
+ * @G_USER_DIRECTORY_MUSIC: the user's Music directory
+ * @G_USER_DIRECTORY_PICTURES: the user's Pictures directory
+ * @G_USER_DIRECTORY_PUBLIC_SHARE: the user's shared directory
+ * @G_USER_DIRECTORY_TEMPLATES: the user's Templates directory
+ * @G_USER_DIRECTORY_VIDEOS: the user's Movies directory
+ * @G_USER_N_DIRECTORIES: the number of enum values
+ *
+ * These are logical ids for special directories which are defined
+ * depending on the platform used. You should use g_get_user_special_dir()
+ * to retrieve the full path associated to the logical id.
+ *
+ * The #GUserDirectory enumeration can be extended at later date. Not
+ * every platform has a directory for every logical id in this
+ * enumeration.
+ *
+ * Since: 2.14
+ */
+typedef enum {
+  G_USER_DIRECTORY_DESKTOP,
+  G_USER_DIRECTORY_DOCUMENTS,
+  G_USER_DIRECTORY_DOWNLOAD,
+  G_USER_DIRECTORY_MUSIC,
+  G_USER_DIRECTORY_PICTURES,
+  G_USER_DIRECTORY_PUBLIC_SHARE,
+  G_USER_DIRECTORY_TEMPLATES,
+  G_USER_DIRECTORY_VIDEOS,
+
+  G_USER_N_DIRECTORIES
+} GUserDirectory;
+
+G_CONST_RETURN gchar* g_get_user_special_dir (GUserDirectory directory);
 
 typedef struct _GDebugKey	GDebugKey;
 struct _GDebugKey
@@ -211,10 +252,12 @@ gboolean              g_setenv             (const gchar *variable,
 					    gboolean     overwrite);
 void                  g_unsetenv           (const gchar *variable);
 gchar**               g_listenv            (void);
+
+/* private */
 const gchar*	     _g_getenv_nomalloc	   (const gchar	*variable,
 					    gchar        buffer[1024]);
 
-/* we try to provide a usefull equivalent for ATEXIT if it is
+/* we try to provide a useful equivalent for ATEXIT if it is
  * not defined, but use is actually abandoned. people should
  * use g_atexit() instead.
  */
@@ -303,7 +346,8 @@ G_INLINE_FUNC guint
 g_bit_storage (gulong number)
 {
 #if defined(__GNUC__) && (__GNUC__ >= 4) && defined(__OPTIMIZE__)
-  return number ? GLIB_SIZEOF_LONG * 8 - __builtin_clzl(number) : 1;
+  return G_LIKELY (number) ?
+	   ((GLIB_SIZEOF_LONG * 8 - 1) ^ __builtin_clzl(number)) + 1 : 1;
 #else
   register guint n_bits = 0;
   
@@ -387,6 +431,12 @@ const gchar * glib_check_version (guint required_major,
 G_END_DECLS
 
 /*
+ * This macro will be deprecated in the future. This DllMain() is too
+ * complex. It is recommended to have a DLlMain() that just saves the
+ * handle to the DLL and then use that handle in normal code instead,
+ * for instance passing it to
+ * g_win32_get_package_installation_directory_of_module().
+ *
  * On Windows, this macro defines a DllMain function that stores the
  * actual DLL name that the code being compiled will be included in.
  * STATIC should be empty or 'static'. DLL_NAME is the name of the
@@ -409,25 +459,14 @@ DllMain (HINSTANCE hinstDLL,						\
 	 LPVOID    lpvReserved)						\
 {									\
   wchar_t wcbfr[1000];							\
-  char cpbfr[1000];							\
   char *tem;								\
   switch (fdwReason)							\
     {									\
     case DLL_PROCESS_ATTACH:						\
-      if (GetVersion () < 0x80000000)					\
-	{								\
-	  GetModuleFileNameW ((HMODULE) hinstDLL, wcbfr, G_N_ELEMENTS (wcbfr));	\
-	  tem = g_utf16_to_utf8 (wcbfr, -1, NULL, NULL, NULL);		\
-	  dll_name = g_path_get_basename (tem);				\
-	  g_free (tem);							\
-	}								\
-      else								\
-	{								\
-	  GetModuleFileNameA ((HMODULE) hinstDLL, cpbfr, G_N_ELEMENTS (cpbfr));	\
-	  tem = g_locale_to_utf8 (cpbfr, -1, NULL, NULL, NULL);		\
-	  dll_name = g_path_get_basename (tem);				\
-	  g_free (tem);							\
-	}								\
+      GetModuleFileNameW ((HMODULE) hinstDLL, wcbfr, G_N_ELEMENTS (wcbfr)); \
+      tem = g_utf16_to_utf8 (wcbfr, -1, NULL, NULL, NULL);		\
+      dll_name = g_path_get_basename (tem);				\
+      g_free (tem);							\
       break;								\
     }									\
 									\

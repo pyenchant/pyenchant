@@ -75,6 +75,13 @@ typedef unsigned int gsize;
 #define G_GSIZE_FORMAT "u"
 
 #define G_MAXSIZE	G_MAXUINT
+#define G_MINSSIZE	G_MININT
+#define G_MAXSSIZE	G_MAXINT
+
+typedef gint64 goffset;
+#define G_MINOFFSET	G_MININT64
+#define G_MAXOFFSET	G_MAXINT64
+
 
 #define GPOINTER_TO_INT(p)	((gint)   (p))
 #define GPOINTER_TO_UINT(p)	((guint)  (p))
@@ -91,8 +98,8 @@ typedef unsigned int gsize;
 #define g_memmove(dest,src,len) G_STMT_START { memmove ((dest), (src), (len)); } G_STMT_END
 
 #define GLIB_MAJOR_VERSION 2
-#define GLIB_MINOR_VERSION 12
-#define GLIB_MICRO_VERSION 13
+#define GLIB_MINOR_VERSION 16
+#define GLIB_MICRO_VERSION 2
 
 #define G_OS_WIN32
 #define G_PLATFORM_WIN32
@@ -113,9 +120,7 @@ typedef unsigned int gsize;
 #endif /* !_MSC_VER and !__DMC__ */
 #endif	/* !__cplusplus */
 
-#if defined(__cplusplus) || !defined(_MSC_VER)
 #define G_CAN_INLINE	1
-#endif
 
 #ifndef _MSC_VER
 #define G_HAVE_ISO_VARARGS 1
@@ -129,6 +134,11 @@ typedef unsigned int gsize;
 #endif
 
 #define G_HAVE_GNUC_VARARGS 1
+#else /* _MSC_VER */
+/* varargs macros available since msvc8 (vs2005) */
+#  if _MSC_VER >= 1400
+#    define G_HAVE_ISO_VARARGS 1
+#   endif
 #endif /* not _MSC_VER */
 #define G_HAVE_GROWING_STACK 0
 
