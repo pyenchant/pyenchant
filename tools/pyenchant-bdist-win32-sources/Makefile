@@ -36,6 +36,7 @@ $(ENCHANT_DIR): src/$(ENCHANT_DIR).tar.gz
 	cp hunspell-1.1.12/src/hunspell/*.h $(ENCHANT_DIR)/src/myspell/
 	cp hunspell-1.1.12/src/hunspell/*.dsp $(ENCHANT_DIR)/src/myspell/
 	cd $(ENCHANT_DIR)/src/ && patch < ../../patches/pwl.c.patch
+	cd $(ENCHANT_DIR)/src/ && patch < ../../patches/enchant.c.patch
 	cd $(ENCHANT_DIR)/src/myspell && patch < ../../../patches/myspell_checker.cpp.patch
 	cd $(ENCHANT_DIR)/ && patch < ../patches/configure.patch
 	cp patches/compile-resource $(ENCHANT_DIR)/compile-resource

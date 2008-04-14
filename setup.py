@@ -106,6 +106,7 @@ EXT_MODULES.append(ext1)
 ##  Main call to setup() function
 ##
 
+print EXT_MODULES
 setup(name=NAME,
       version=VERSION,
       author=AUTHOR,

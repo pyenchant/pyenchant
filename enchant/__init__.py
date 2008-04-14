@@ -1000,10 +1000,11 @@ class TestPWL(unittest.TestCase):
         """Test getting suggestions from a PWL."""
         self.setPWLContents(["Sazz","Lozz"])
         d = request_pwl_dict(self._path())
-        self.assert_("sazz" in d.suggest("Saz"))
-        self.assert_("lozz" in d.suggest("Saz"))
+        self.assert_("Sazz" in d.suggest("Saz"))
+        self.assert_("Lozz" in d.suggest("laz"))
+        self.assert_("Sazz" in d.suggest("laz"))
         d.add_to_pwl("Flagen")
-        self.assert_("flagen" in d.suggest("Flags"))
+        self.assert_("Flagen" in d.suggest("Flags"))
         self.failIf("sazz" in d.suggest("Flags"))
     
     def test_DWPWL(self):
@@ -1023,7 +1024,6 @@ class TestPWL(unittest.TestCase):
         """Test that unicode chars in PWL paths are accepted."""
         self._fileName = u'test_\xe5\xe4\xf6_ing'
         d = request_pwl_dict(self._path())
-        print d.provider.file
         self.assert_(d)
     
     
