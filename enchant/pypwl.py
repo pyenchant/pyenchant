@@ -29,7 +29,7 @@
 #
 """
 
-  pypwl:  pure-python personal word list in the style of PyEnchant
+  pypwl:  pure-python personal word list in the style of Enchant
 
 This module provides a pure-python version of the personal word list
 functionality found in the spellchecking package Enchant.  While the
@@ -41,6 +41,8 @@ external dependencies or C code. (Actually, it's the author's prototype
 for the C version found in Enchant.)
 
 """
+
+from __future__ import generators
 
 import os
 
@@ -68,6 +70,18 @@ class Trie:
                 subtrie = Trie()
                 self[key] = subtrie
             subtrie.insert(word[1:])
+
+    def remove(self,word):
+        if word == "":
+            self._eos = False
+        else:
+            key = word[0]
+            try:
+                subtrie = self[key]
+            except KeyError:
+                pass
+            else:
+                subtrie.remove(word[1:])
     
     def search(self,word,nerrs=0):
         """Search for the given word, but possibly making errors.
@@ -130,6 +144,13 @@ class Trie:
     def __setitem__(self,key,val):
         self._keys[key] = val
 
+    def __iter__(self):
+        if self._eos:
+            yield ""
+        for k in self._keys:
+            for w2 in self._keys[k]:
+                yield k + w2
+
 
 class PyPWL:
     """Pure-python implementation of Personal Word List dictionary.
@@ -137,21 +158,29 @@ class PyPWL:
     implemented purely in python.
     """
     
-    def __init__(self,pwl):
+    def __init__(self,pwl=None):
         """PyPWL constructor.
         This method takes as its only argument the name of a file
         containing the personal word list, one word per line.  Entries
         will be read from this file, and new entries will be written to
         it automatically.
+
+        If <pwl> is not specified or None, the list is maintained in
+        memory only.
         """
-        self.pwl = os.path.abspath(pwl)
-        self.tag = self.pwl
         self.provider= None
         self._words = Trie()
-        pwlF = file(pwl)
-        for ln in pwlF:
-            word = ln.strip()
-            self.add_to_session(word)
+        if pwl is not None:
+            self.pwl = os.path.abspath(pwl)
+            self.tag = self.pwl
+            pwlF = file(pwl)
+            for ln in pwlF:
+                word = ln.strip()
+                self.add_to_session(word)
+            pwlF.close()
+        else:
+            self.pwl = None
+            self.tag = "PyPWL"
                 
     def check(self,word):
         """Check spelling of a word.
@@ -181,14 +210,34 @@ class PyPWL:
         # Limit number of suggs
         return res[:limit]
     
+    def add(self,word):
+        """Add a word to the user's personal dictionary.
+        For a PWL, this means appending it to the file.
+        """
+        if self.pwl is not None:
+            pwlF = file(self.pwl,"a")
+            pwlF.write("%s\n" % (word.strip(),))
+            pwlF.close()
+        self.add_to_session(word)
+
     def add_to_pwl(self,word):
         """Add a word to the user's personal dictionary.
         For a PWL, this means appending it to the file.
         """
-        pwlF = file(self.pwl,"a")
-        pwlF.write("%s\n" % (word.strip(),))
-        pwlF.close()
-        self.add_to_session(word)
+        warnings.warn("PyPWL.add_to_pwl is deprecated, please use PyPWL.add",
+                      category=DeprecationWarning)
+        self.add(word)
+
+    def remove(self,word):
+        """Add a word to the user's personal exclude list."""
+        # There's no exclude list for a stand-alone PWL.
+        # Just remove it from the list.
+        self._words.remove(word)
+        if self.pwl is not None:
+            pwlF = file(self.pwl,"wt")
+            for w in self._words:
+                pwlF.write("%s\n" % (w.strip(),))
+            pwlF.close()
 
     def add_to_session(self,word):
         """Add a word to the session list."""
@@ -208,6 +257,22 @@ class PyPWL:
         list of suggested spellings offered for later instances of <mis>.
         """
         # Too much work for this simple spellchecker
+        pass
+
+    def is_added(self,word):
+        """Check whether a word is in the personal word list."""
+        return self.check(word)
+
+    def is_removed(self,word):
+        """Check whether a word is in the personal exclude list."""
+        return False
+
+    #  No-op methods to support internal use as a Dict() replacement
+
+    def _check_this(self,msg):
+        pass
+
+    def _free(self):
         pass
 
 

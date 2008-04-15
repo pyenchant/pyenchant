@@ -74,8 +74,8 @@
 
 # Make version info available
 __ver_major__ = 1
-__ver_minor__ = 3
-__ver_patch__ = 1
+__ver_minor__ = 4
+__ver_patch__ = 0
 __ver_sub__ = ""
 __version__ = "%d.%d.%d%s" % (__ver_major__,__ver_minor__,
                               __ver_patch__,__ver_sub__)
@@ -89,9 +89,11 @@ class Error(Exception):
 
 import _enchant as _e
 import utils
-import unittest
+from pypwl import PyPWL
 
 import os
+import unittest
+import warnings
 
 class DictNotFoundError(Error):
     """Exception raised when a requested dictionary could not be found."""
@@ -434,7 +436,7 @@ class Broker(_EnchantObject):
             desc = desc.decode("utf-8")
             file = file.decode("utf-8")
             cb_result.append((tag,name,desc,file))
-        # Actual call describer function
+        # Actually call describer function
         _e.enchant_dict_describe_py(dict_data,cb_func)
         return cb_result[0]
         
@@ -452,8 +454,9 @@ class Dict(_EnchantObject):
 
         * check():              check whether a word id spelled correctly
         * suggest():            suggest correct spellings for a word
+        * add():                add a word to the user's personal dictionary
+        * remove():             add a word to the user's personal exclude list
         * add_to_session():     add a word to the current spellcheck session
-        * add_to_pwl():         add a word to the personal dictionary
         * store_replacement():  indicate a replacement for a given word
 
     Information about the dictionary is available using the following
@@ -598,8 +601,28 @@ class Dict(_EnchantObject):
             return uSuggs
         return suggs
 
+    def add(self,word):
+        """Add a word to the user's personal word list."""
+        self._check_this()
+        if type(word) == unicode:
+            inWord = word.encode("utf-8")
+        else:
+            inWord = word
+        _e.enchant_dict_add(self._this,inWord,len(inWord))
+
+    def remove(self,word):
+        """Add a word to the user's personal exclude list."""
+        self._check_this()
+        if type(word) == unicode:
+            inWord = word.encode("utf-8")
+        else:
+            inWord = word
+        _e.enchant_dict_remove(self._this,inWord,len(inWord))
+
     def add_to_pwl(self,word):
         """Add a word to the user's personal word list."""
+        warnings.warn("Dict.add_to_pwl is deprecated, please use Dict.add",
+                      category=DeprecationWarning)
         self._check_this()
         if type(word) == unicode:
             inWord = word.encode("utf-8")
@@ -608,13 +631,40 @@ class Dict(_EnchantObject):
         _e.enchant_dict_add_to_pwl(self._this,inWord,len(inWord))
 
     def add_to_session(self,word):
-        """Add a word to the session list."""
+        """Add a word to the session personal list."""
         self._check_this()
         if type(word) == unicode:
             inWord = word.encode("utf-8")
         else:
             inWord = word
         _e.enchant_dict_add_to_session(self._this,inWord,len(inWord))
+
+    def remove_from_session(self,word):
+        """Add a word to the session exclude list."""
+        self._check_this()
+        if type(word) == unicode:
+            inWord = word.encode("utf-8")
+        else:
+            inWord = word
+        _e.enchant_dict_remove_from_session(self._this,inWord,len(inWord))
+
+    def is_added(self,word):
+        """Check whether a word is in the personal word list."""
+        self._check_this()
+        if type(word) == unicode:
+            inWord = word.encode("utf-8")
+        else:
+            inWord = word
+        return _e.enchant_dict_is_added(self._this,inWord,len(inWord))
+
+    def is_removed(self,word):
+        """Check whether a word is in the personal exclude list."""
+        self._check_this()
+        if type(word) == unicode:
+            inWord = word.encode("utf-8")
+        else:
+            inWord = word
+        return _e.enchant_dict_is_removed(self._this,inWord,len(inWord))
 
     def is_in_session(self,word):
         """Check whether a word is in the session list."""
@@ -675,50 +725,81 @@ class Dict(_EnchantObject):
         self.__describe_result = (tag,name,desc,file)
 
 
-
 class DictWithPWL(Dict):
-    """Dictionary with managed personal word list.
+    """Dictionary with separately-managed personal word list.
+
+    NOTE:  As of version 1.4.0, enchant manages a per-user pwl and
+           exclude list.  This class is now only needed if you want
+           to explicitly maintain a separate word list in addition to
+           the default one.
     
     This class behaves as the standard Dict class, but also manages a
     personal word list stored in a seperate file.  The file must be
     specified at creation time by the 'pwl' argument to the constructor.
-    Words added to the dictionary using "add_to_personal" are automatically
-    appended to the pwl file.
+    Words added to the dictionary are automatically appended to the pwl file.
+
+    A personal exclude list can also be managed, by passing another filename
+    to the constructor in the optional 'pel' argument.  If this is not given,
+    requests to exclude words are ignored.
+
+    If either 'pwl' or 'pel' are None, an in-memory word list is used.
+    This will prevent calls to add() and remove() from affecting the user's
+    default word lists.
     
     The Dict object managing the PWL is available as the 'pwl' attribute.
+    The Dict object managing the PEL is available as the 'pel' attribute.
     
     To create a DictWithPWL from the user's default language, use None
     as the 'tag' argument.
     """
     
-    def __init__(self,tag,pwl,broker=None):
+    def __init__(self,tag,pwl=None,pel=None,broker=None):
         """DictWithPWL constructor.
 
-        The argument 'pwl' must be supplied, naming a file containing
-	    the personal word list.  If this file does not exist, it is
-        	created with default permissions.
+        The argument 'pwl', if not None, names a file containing the
+        personal word list.  If this file does not exist, it is created
+       	with default permissions.
+
+        The argument 'pel', if not None, names a file containing the personal
+        exclude list.  If this file does not exist, it is created with
+        default permissions.
         """
-        if pwl is None:
-            raise Error("DictWithPWL must be given a PWL file.")
-        if not os.path.exists(pwl):
-            f = file(pwl,"wt")
-	    f.close()
-	    del f
         Dict.__init__(self,tag,broker)
-        self.pwl = self._broker.request_pwl_dict(pwl)
+        if pwl is not None:
+            if not os.path.exists(pwl):
+                f = file(pwl,"wt")
+	        f.close()
+	        del f
+            self.pwl = self._broker.request_pwl_dict(pwl)
+        else:
+            self.pwl = PyPWL()
+        if pel is not None:
+            if not os.path.exists(pel):
+                f = file(pel,"wt")
+	        f.close()
+	        del f
+            self.pel = self._broker.request_pwl_dict(pel)
+        else:
+            self.pel = PyPWL()
      
     def _check_this(self,msg=None):
        """Extend Dict._check_this() to check PWL validity."""
        if self.pwl is None:
            self._free()
+       if self.pel is None:
+           self._free()
        Dict._check_this(self,msg)
        self.pwl._check_this(msg)
+       self.pel._check_this(msg)
 
     def _free(self):
         """Extend Dict._free() to free the PWL as well."""
         if self.pwl is not None:
             self.pwl._free()
             self.pwl = None
+        if self.pel is not None:
+            self.pel._free()
+            self.pel = None
         Dict._free(self)
         
     def check(self,word):
@@ -728,11 +809,29 @@ class DictWithPWL(Dict):
         True if it is correctly spelled, and false otherwise.  It checks
         both the dictionary and the personal wordlist.
         """
-        if Dict.check(self,word):
-            return True
+        if self.pel.check(word):
+            return False
         if self.pwl.check(word):
             return True
+        if Dict.check(self,word):
+            return True
         return False
+
+    def add(self,word):
+        """Add a word to the associated personal word list.
+        
+        This method adds the given word to the personal word list, and
+        automatically saves the list to disk.
+        """
+        self._check_this()
+        self.pwl.add(word)
+        self.pel.remove(word)
+
+    def remove(self,word):
+        """Add a word to the associated exclude list."""
+        self._check_this()
+        self.pwl.remove(word)
+        self.pel.add(word)
 
     def add_to_pwl(self,word):
         """Add a word to the associated personal word list.
@@ -742,6 +841,17 @@ class DictWithPWL(Dict):
         """
         self._check_this()
         self.pwl.add_to_pwl(word)
+        self.pel.remove(word)
+
+    def is_added(self,word):
+        """Check whether a word is in the personal word list."""
+        self._check_this()
+        return self.pwl.is_added(word)
+
+    def is_removed(self,word):
+        """Check whether a word is in the personal exclude list."""
+        self._check_this()
+        return self.pel.is_added(word)
 
 ##  Create a module-level default broker object, and make its important
 ##  methods available at the module level.
@@ -911,8 +1021,31 @@ class TestDict(unittest.TestCase):
         self.failIf(self.dict.is_in_session("Lozz"))
         self.dict.add_to_session("Lozz")
         self.assert_(self.dict.is_in_session("Lozz"))
+        self.assert_(self.dict.is_added("Lozz"))
         self.assert_(self.dict.check("Lozz"))
-            # Check the behavior of default language
+        self.dict.remove_from_session("Lozz")
+        self.failIf(self.dict.check("Lozz"))
+        self.failIf(self.dict.is_in_session("Lozz"))
+        self.dict.remove_from_session("hello")
+        self.failIf(self.dict.check("hello"))
+        self.assert_(self.dict.is_removed("hello"))
+
+    def test_AddRemove(self):
+        """Testing adding/removing from default user dictionary."""
+        nonsense = "kxhjsddsi"
+        self.failIf(self.dict.check(nonsense))
+        self.dict.add(nonsense)
+        self.assert_(self.dict.is_added(nonsense))
+        self.assert_(self.dict.check(nonsense))
+        self.dict.remove(nonsense)
+        self.failIf(self.dict.is_added(nonsense))
+        self.failIf(self.dict.check(nonsense))
+        self.dict.remove("pineapple")
+        self.failIf(self.dict.check("pineapple"))
+        self.assert_(self.dict.is_removed("pineapple"))
+        self.failIf(self.dict.is_added("pineapple"))
+        self.dict.add("pineapple")
+        self.assert_(self.dict.check("pineapple"))
     
     def test_DefaultLang(self):
         """Test behavior of default language selection."""
@@ -954,8 +1087,10 @@ class TestPWL(unittest.TestCase):
             os.mkdir(nm)
             return nm
 
-    def _path(self):
-        nm = os.path.join(self._tempDir,self._fileName)
+    def _path(self,nm=None):
+        if nm is None:
+          nm = self._fileName
+        nm = os.path.join(self._tempDir,nm)
         if not os.path.exists(nm):
           file(nm,'w').close()
         return nm
@@ -992,9 +1127,10 @@ class TestPWL(unittest.TestCase):
         """Test that adding words to a PWL works correctly."""
         d = request_pwl_dict(self._path())
         self.failIf(d.check("Flagen"))
-        d.add_to_pwl("Flagen")
-        self.assert_(d.check("Flagen"))
-        self.assert_("Flagen\n" in self.getPWLContents())
+        d.add("Esquilax")
+        self.assert_(d.check("Esquilax"))
+        self.assert_("Esquilax\n" in self.getPWLContents())
+        self.assert_(d.is_added("Esquilax"))
         
     def test_suggestions(self):
         """Test getting suggestions from a PWL."""
@@ -1003,12 +1139,29 @@ class TestPWL(unittest.TestCase):
         self.assert_("Sazz" in d.suggest("Saz"))
         self.assert_("Lozz" in d.suggest("laz"))
         self.assert_("Sazz" in d.suggest("laz"))
-        d.add_to_pwl("Flagen")
+        d.add("Flagen")
         self.assert_("Flagen" in d.suggest("Flags"))
         self.failIf("sazz" in d.suggest("Flags"))
     
     def test_DWPWL(self):
         """Test functionality of DictWithPWL."""
+        self.setPWLContents(["Sazz","Lozz"])
+        d = DictWithPWL("en_US",self._path(),self._path("pel.txt"))
+        self.assert_(d.check("Sazz"))
+        self.assert_(d.check("Lozz"))
+        self.assert_(d.check("hello"))
+        self.failIf(d.check("helo"))
+        self.failIf(d.check("Flagen"))
+        d.add("Flagen")
+        self.assert_(d.check("Flagen"))
+        self.assert_("Flagen\n" in self.getPWLContents())
+        d.remove("Lozz")
+        d.remove("hello")
+        self.failIf(d.check("Lozz"))
+        self.failIf(d.check("hello"))
+
+    def test_DWPEL(self):
+        """Test functionality of DictWithPWL using exclude list."""
         self.setPWLContents(["Sazz","Lozz"])
         d = DictWithPWL("en_US",self._path())
         self.assert_(d.check("Sazz"))
@@ -1016,16 +1169,48 @@ class TestPWL(unittest.TestCase):
         self.assert_(d.check("hello"))
         self.failIf(d.check("helo"))
         self.failIf(d.check("Flagen"))
-        d.add_to_pwl("Flagen")
+        d.add("Flagen")
         self.assert_(d.check("Flagen"))
         self.assert_("Flagen\n" in self.getPWLContents())
+        d.remove("Lozz")
+        self.failIf(d.check("Lozz"))
+
+    def test_DWPWL_empty(self):
+        """Test functionality of DictWithPWL using transient dicts."""
+        d = DictWithPWL("en_US",None,None)
+        self.assert_(d.check("hello"))
+        self.failIf(d.check("helo"))
+        self.failIf(d.check("Flagen"))
+        d.add("Flagen")
+        self.assert_(d.check("Flagen"))
+        d.remove("hello")
+        self.failIf(d.check("hello"))
+        d.add("hello")
+        self.assert_(d.check("hello"))
+
+    def test_PyPWL(self):
+        d = PyPWL()
+        self.assert_(list(d._words) == [])
+        d.add("hello")
+        d.add("there")
+        d.add("duck")
+        ws = list(d._words)
+        self.assert_(len(ws) == 3)
+        self.assert_("hello" in ws)
+        self.assert_("there" in ws)
+        self.assert_("duck" in ws)
+        d.remove("duck")
+        d.remove("notinthere")
+        ws = list(d._words)
+        self.assert_(len(ws) == 2)
+        self.assert_("hello" in ws)
+        self.assert_("there" in ws)
 
     def test_UnicodeCharsInPath(self):
         """Test that unicode chars in PWL paths are accepted."""
         self._fileName = u'test_\xe5\xe4\xf6_ing'
         d = request_pwl_dict(self._path())
         self.assert_(d)
-    
     
 
 def testsuite():

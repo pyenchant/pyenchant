@@ -50,7 +50,7 @@ typedef unsigned long ssize_t;
 
 
 /*  Allow proper passing of python callable objects as callbacks  */
-%typemap(python,in) PyObject *py_callback {
+%typemap(in) PyObject *py_callback {
     if(!PyCallable_Check($input)) {
         PyErr_SetString(PyExc_TypeError,"Callable object required.");
         return NULL;
