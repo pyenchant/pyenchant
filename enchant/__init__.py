@@ -999,6 +999,7 @@ class TestDict(unittest.TestCase):
     
     def test_suggest(self):
         """Test that suggest() gets simple suggestions right."""
+        self.assert_(self.dict.check("hello"))
         self.assert_("hello" in self.dict.suggest("helo"))
 
     def test_suggestHang1(self):
@@ -1029,6 +1030,7 @@ class TestDict(unittest.TestCase):
         self.dict.remove_from_session("hello")
         self.failIf(self.dict.check("hello"))
         self.assert_(self.dict.is_removed("hello"))
+        self.dict.add_to_session("hello")
 
     def test_AddRemove(self):
         """Testing adding/removing from default user dictionary."""
