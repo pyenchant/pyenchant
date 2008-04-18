@@ -143,7 +143,7 @@ class _EnchantObject(object):
     can be called to ensure that this point is not None, raising an
     exception if it is.
     """
-    
+
     def __init__(self):
         """_EnchantObject constructor."""
         self._this = None
@@ -206,11 +206,8 @@ class Broker(_EnchantObject):
 
     def __del__(self):
         """Broker object destructor."""
-        # Calling _free() might fail if python is shutting down
-        try:
-            self._free()
-        except AttributeError:
-            pass
+        if _e is not None:
+          self._free()
             
     def _raise_error(self,default="Unspecified Error",eclass=Error):
         """Overrides _EnchantObject._raise_error to check broker errors."""
@@ -508,7 +505,7 @@ class Dict(_EnchantObject):
             self._switch_this(broker._request_dict_data(tag),broker)
 
     def __del__(self):
-        """Dict object desstructor."""
+        """Dict object destructor."""
         # Calling free() might fail if python is shutting down
         try:
             self._free()
@@ -955,6 +952,9 @@ class TestBroker(unittest.TestCase):
         d2 = self.broker.request_dict("en_US.utf-8")
         self.assert_(self.broker._Broker__live_dicts["en_US"] == 2)
         del d1
+        d1 = self.broker.request_dict(u"en_US")
+        self.assert_(self.broker._Broker__live_dicts["en_US"] == 2)
+        del d1
         del d2
         self.assert_(self.broker._Broker__live_dicts["en_US"] == 0)
 
@@ -962,6 +962,7 @@ class TestBroker(unittest.TestCase):
         """Test that unicode language tags are accepted"""
         d1 = self.broker._request_dict_data(u"en_US")
         self.assert_(d1)
+        _e.enchant_broker_free_dict(self.broker._this,d1)
         d1 = Dict(u"en_US")
         self.assert_(d1)
 
