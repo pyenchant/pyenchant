@@ -1,9 +1,9 @@
 1.4.0:
 
-    * upgrade to latest enchant release, with new functionality and APIs:
+    * upgrade to enchant v1.4.0, with new functionality and APIs:
         * Ability to exlude words using Dict.remove, remove_from_session
-        * Dict.is_added/Dict.is_removed for checking membership of word lists
         * Dict.add_to_personal renamed to Dict.add
+        * Dict.is_added/Dict.is_removed for checking membership of word lists
         * unicode PWL filenames now handled correctly on Windows
     * upgrade bundled glib DLLs in Windows version
 
