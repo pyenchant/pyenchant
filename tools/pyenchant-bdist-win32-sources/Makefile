@@ -14,7 +14,6 @@ all: $(BUILD_DIR)/lib/libenchant.dll $(BUILD_DIR)/myspell/en_GB.dic \
 $(BUILD_DIR)/lib/libenchant.dll: $(BUILD_DIR)/lib/pkgconfig/glib-2.0.pc \
 		$(BUILD_DIR)/lib/pkgconfig/gmodule-2.0.pc \
 		$(ENCHANT_DIR)
-#		$(ENCHANT_DIR)/src/enchant.c
 	cd $(ENCHANT_DIR) && PKG_CONFIG_PATH=$(BUILD_DIR)/lib/pkgconfig ./configure CFLAGS="$(CFLAGS)" $(ENCHANT_CONFIG_OPTS) && make
 	cp $(ENCHANT_DIR)/src/.libs/libenchant.dll $(BUILD_DIR)/lib/
 	mkdir -p $(BUILD_DIR)/lib/enchant
