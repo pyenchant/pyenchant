@@ -1,6 +1,14 @@
+1.4.2:
+
+    * upgrade to enchant v1.4.2
+    * windows version can now be installed at a path containing
+      unicode characters
+
 1.4.0:
 
     * upgrade to enchant v1.4.0, with new functionality and APIs:
+        * All dictionary providers now use a shared default personal word file
+          (largely obsoleting the DictWithPWL class)
         * Ability to exlude words using Dict.remove, remove_from_session
         * Dict.add_to_personal renamed to Dict.add
         * Dict.is_added/Dict.is_removed for checking membership of word lists
