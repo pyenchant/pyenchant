@@ -1,6 +1,6 @@
 
 BUILD_DIR = /home/rfk/pyenchant/tools/pyenchant-bdist-win32-sources/build
-ENCHANT_DIR = enchant-1.4.0
+ENCHANT_DIR = enchant-1.4.2
 
 ENCHANT_CONFIG_OPTS = --enable-ispell --enable-myspell --disable-aspell
 
@@ -14,6 +14,7 @@ all: $(BUILD_DIR)/lib/libenchant.dll $(BUILD_DIR)/myspell/en_GB.dic \
 $(BUILD_DIR)/lib/libenchant.dll: $(BUILD_DIR)/lib/pkgconfig/glib-2.0.pc \
 		$(BUILD_DIR)/lib/pkgconfig/gmodule-2.0.pc \
 		$(ENCHANT_DIR)
+#		$(ENCHANT_DIR)/src/enchant.c
 	cd $(ENCHANT_DIR) && PKG_CONFIG_PATH=$(BUILD_DIR)/lib/pkgconfig ./configure CFLAGS="$(CFLAGS)" $(ENCHANT_CONFIG_OPTS) && make
 	cp $(ENCHANT_DIR)/src/.libs/libenchant.dll $(BUILD_DIR)/lib/
 	mkdir -p $(BUILD_DIR)/lib/enchant
@@ -29,22 +30,21 @@ $(BUILD_DIR)/lib/pkgconfig/%.pc: $(BUILD_DIR)/lib/pkgconfig/%.pc.in
 #  Make the enchant source dir
 $(ENCHANT_DIR): src/$(ENCHANT_DIR).tar.gz
 	tar -xzvf src/$(ENCHANT_DIR).tar.gz
-	# Upgrade hunspell to latest version
-	tar -xzvf src/hunspell-1.1.12-2.tar.gz
-	cp hunspell-1.1.12/src/hunspell/*.cxx $(ENCHANT_DIR)/src/myspell/
-	cp hunspell-1.1.12/src/hunspell/*.hxx $(ENCHANT_DIR)/src/myspell/
-	cp hunspell-1.1.12/src/hunspell/*.h $(ENCHANT_DIR)/src/myspell/
-	cp hunspell-1.1.12/src/hunspell/*.dsp $(ENCHANT_DIR)/src/myspell/
+	# Apply local build patches
 	cd $(ENCHANT_DIR)/src/ && patch < ../../patches/pwl.c.patch
 	cd $(ENCHANT_DIR)/src/ && patch < ../../patches/enchant.c.patch
 	cd $(ENCHANT_DIR)/src/myspell && patch < ../../../patches/myspell_checker.cpp.patch
+	cd $(ENCHANT_DIR)/src/myspell && patch < ../../../patches/hunspell.hxx.patch
+	cd $(ENCHANT_DIR)/src/myspell && patch < ../../../patches/atypes.hxx.patch
+	cd $(ENCHANT_DIR)/src/myspell && patch < ../../../patches/diffmgr.cxx.patch
+	cd $(ENCHANT_DIR)/src/myspell && patch < ../../../patches/filemgr.cxx.patch
+	cd $(ENCHANT_DIR)/src/myspell && patch < ../../../patches/hunzip.cxx.patch
 	cd $(ENCHANT_DIR)/ && patch < ../patches/configure.patch
 	cp patches/compile-resource $(ENCHANT_DIR)/compile-resource
-	rm -rf hunspell-1.1.12
 
 # Ability to extract MySpell dictionary files
 $(BUILD_DIR)/myspell/%.dic: $(BUILD_DIR)/myspell/%.zip
-	cd $(BUILD_DIR)/myspell && unzip $< '*.dic' '*.aff'
+	cd $(BUILD_DIR)/myspell && unzip -n $< '*.dic' '*.aff'
 
 
 clean:

@@ -1,0 +1,21 @@
+--- filemgr.cxx.orig	Wed Jun 18 13:20:52 2008
++++ filemgr.cxx	Wed Jun 18 13:21:40 2008
+@@ -2,6 +2,9 @@
+ #include <stdlib.h>
+ #include <string.h>
+ 
++#include <glib.h>
++#include <glib/gstdio.h>
++
+ #include "filemgr.hxx"
+ 
+ int FileMgr::fail(const char * err, const char * par) {
+@@ -11,7 +14,7 @@
+ 
+ FileMgr::FileMgr(const char * file, const char * key) {
+     hin = NULL;
+-    fin = fopen(file, "r");
++    fin = g_fopen(file, "r");
+     if (!fin) {
+         // check hzipped file
+         char * st = (char *) malloc(strlen(file) + strlen(HZIP_EXTENSION));

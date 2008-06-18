@@ -1,0 +1,10 @@
+--- hunspell.hxx.orig	Wed Jun 18 13:09:16 2008
++++ hunspell.hxx	Wed Jun 18 13:10:08 2008
+@@ -16,6 +16,7 @@
+ #ifndef _MYSPELLMGR_HXX_
+ #define _MYSPELLMGR_HXX_
+ 
++#define HUNSPELL_STATIC
+ #ifdef HUNSPELL_STATIC
+ 	#define DLLEXPORT
+ #else

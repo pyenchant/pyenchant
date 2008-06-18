@@ -1,0 +1,21 @@
+--- dictmgr.cxx.orig	Wed Jun 18 13:20:44 2008
++++ dictmgr.cxx	Wed Jun 18 13:21:52 2008
+@@ -4,6 +4,9 @@
+ #include <cctype>
+ #include <cstdio>
+ 
++#include <glib.h>
++#include <glib/gstdio.h>
++
+ #include "dictmgr.hxx"
+ 
+ using namespace std;
+@@ -62,7 +65,7 @@
+ 
+     // open the dictionary list file
+     FILE * dictlst;
+-    dictlst = fopen(dictpath,"r");
++    dictlst = g_fopen(dictpath,"r");
+     if (!dictlst) {
+       return 1;
+     }

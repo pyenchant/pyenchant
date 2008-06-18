@@ -1,0 +1,21 @@
+--- hunzip.cxx.orig	Wed Jun 18 13:21:02 2008
++++ hunzip.cxx	Wed Jun 18 13:22:10 2008
+@@ -8,6 +8,9 @@
+ #include <stdio.h> 
+ #endif
+ 
++#include <glib.h>
++#include <glib/gstdio.h>
++
+ #include "hunzip.hxx"
+ 
+ #define CODELEN  65536
+@@ -41,7 +44,7 @@
+     int allocatedbit = BASEBITREC;
+     const char * enc = key;
+ 
+-    fin = fopen(filename, "rb");
++    fin = g_fopen(filename, "rb");
+     if (!fin) return -1;
+ 
+     // read magic number

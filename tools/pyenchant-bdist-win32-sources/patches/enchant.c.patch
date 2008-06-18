@@ -1,6 +1,6 @@
---- enchant-1.4.0/src/enchant.c	Fri Mar 21 13:40:26 2008
-+++ enchant.c	Mon Apr 14 23:03:22 2008
-@@ -2153,16 +2153,14 @@
+--- enchant.c.orig	Tue Jun 17 21:59:40 2008
++++ enchant.c	Tue Jun 17 22:00:00 2008
+@@ -2160,12 +2160,12 @@
  #ifdef _WIN32
  	if (!prefix) {
  		/* Dynamically locate library and return containing directory */
@@ -8,15 +8,10 @@
 +		HINSTANCE hInstance = GetModuleHandle("libenchant");
  		if(hInstance != NULL)
  			{
--				WCHAR dll_path[MAX_PATH];
-+				char* dll_path[MAX_PATH];
+ 				WCHAR dll_path[MAX_PATH];
  	  
- 				if(GetModuleFileName(hInstance,dll_path,MAX_PATH))
+-				if(GetModuleFileName(hInstance,dll_path,MAX_PATH))
++				if(GetModuleFileNameW(hInstance,dll_path,MAX_PATH))
  					{
--						gchar* utf8_dll_path = g_utf16_to_utf8 (dll_path, -1, NULL, NULL, NULL);
--						prefix = g_path_get_dirname(utf8_dll_path);
--						g_free(utf8_dll_path);
-+						prefix = g_path_get_dirname(dll_path);
- 					}
- 			}
- 	}
+ 						gchar* utf8_dll_path = g_utf16_to_utf8 (dll_path, -1, NULL, NULL, NULL);
+ 						prefix = g_path_get_dirname(utf8_dll_path);

@@ -1111,7 +1111,7 @@ class TestPWL(unittest.TestCase):
         pwlFile = file(self._path(),"r")
         contents = pwlFile.readlines()
         pwlFile.close()
-        return contents
+        return [c.strip() for c in contents]
     
     def test_check(self):
         """Test that basic checking works for PWLs."""
@@ -1131,8 +1131,9 @@ class TestPWL(unittest.TestCase):
         d = request_pwl_dict(self._path())
         self.failIf(d.check("Flagen"))
         d.add("Esquilax")
+        d.add("Esquilam")
         self.assert_(d.check("Esquilax"))
-        self.assert_("Esquilax\n" in self.getPWLContents())
+        self.assert_("Esquilax" in self.getPWLContents())
         self.assert_(d.is_added("Esquilax"))
         
     def test_suggestions(self):
@@ -1157,7 +1158,7 @@ class TestPWL(unittest.TestCase):
         self.failIf(d.check("Flagen"))
         d.add("Flagen")
         self.assert_(d.check("Flagen"))
-        self.assert_("Flagen\n" in self.getPWLContents())
+        self.assert_("Flagen" in self.getPWLContents())
         d.remove("Lozz")
         d.remove("hello")
         self.failIf(d.check("Lozz"))
@@ -1174,7 +1175,7 @@ class TestPWL(unittest.TestCase):
         self.failIf(d.check("Flagen"))
         d.add("Flagen")
         self.assert_(d.check("Flagen"))
-        self.assert_("Flagen\n" in self.getPWLContents())
+        self.assert_("Flagen" in self.getPWLContents())
         d.remove("Lozz")
         self.failIf(d.check("Lozz"))
 
@@ -1214,13 +1215,65 @@ class TestPWL(unittest.TestCase):
         self._fileName = u'test_\xe5\xe4\xf6_ing'
         d = request_pwl_dict(self._path())
         self.assert_(d)
+
+
+class TestInstallEnv(unittest.TestCase):
+    """Run all testcases in a variety of install environments."""
+   
+    def setUp(self):
+        self._tempDir = self._mkdtemp()
+        self._insDir = "build"
+    
+    def tearDown(self):
+        import shutil
+        shutil.rmtree(self._tempDir)
+
+    def _mkdtemp(self):
+        """Backwards-compatability wrapper for tempfile.mkdtemp"""
+        import tempfile
+        try:
+            return tempfile.mkdtemp()
+        except (NameError,AttributeError):
+            nm = tempfile.mktemp()
+            os.mkdir(nm)
+            return nm
+
+    def install(self):
+        import os, sys, shutil
+        insdir = os.path.join(self._tempDir,self._insDir)
+        os.makedirs(insdir)
+        shutil.copytree("enchant",os.path.join(insdir,"enchant"))
+
+    def runtests(self):
+        import os, sys
+        insdir = os.path.join(self._tempDir,self._insDir)
+        if isinstance(insdir,unicode):
+          insdir = insdir.encode(sys.getfilesystemencoding())
+        os.environ["PYTHONPATH"] = insdir
+        script = os.path.join(insdir,"enchant","__init__.py")
+        res = os.system("\"%s\" %s" % (sys.executable,script,))
+        self.assertEquals(res,0)
+
+    def test_basic(self):
+        """Test proper functioning of TestInstallEnv suite."""
+        self.install()
+        self.runtests()
+
+    def test_UnicodeInstallPath(self):
+        """Test installation in a path containing unicode chars."""
+        self._insDir = u'test_\xe5\xe4\xf6_ing'
+        self.install()
+        self.runtests()
+
     
 
-def testsuite():
+def testsuite(recurse=True):
     from enchant.checker import TestChecker
     from enchant.tokenize import TestTokenization, TestFilters
     from enchant.tokenize.en import TestTokenizeEN
     suite = unittest.TestSuite()
+    if recurse:
+      suite.addTest(unittest.makeSuite(TestInstallEnv))
     suite.addTest(unittest.makeSuite(TestBroker))
     suite.addTest(unittest.makeSuite(TestDict))
     suite.addTest(unittest.makeSuite(TestPWL))
@@ -1231,10 +1284,14 @@ def testsuite():
     return suite
 
 def runtestsuite():
-    unittest.TextTestRunner().run(testsuite())
+    return unittest.TextTestRunner(verbosity=0).run(testsuite(recurse=False))
 
-# Run regression tests when called from comand-line
+# Run unit tests when called from comand-line
 if __name__ == "__main__":
-    runtestsuite()
+    import sys
+    res = runtestsuite()
+    if len(res.errors) > 0 or len(res.failures) > 0:
+        sys.exit(1)
+    sys.exit(0)
 
 
