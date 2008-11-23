@@ -1,8 +1,0 @@
-.project
-.cvsignore
-*.egg
-*.pyc
-dist
-pyenchant.egg-info
-MANIFEST
-build
