@@ -68,7 +68,8 @@
     so passing an ASCII string to a dictionary for a language requiring
     Unicode may result in UTF-8 strings being returned.
 
-    Errors that occur in this module are reported by raising 'Error'.
+    Errors that occur in this module are reported by raising subclasses
+    of 'Error'.
 
 """
 
@@ -85,7 +86,6 @@ __version__ = "%d.%d.%d%s" % (__ver_major__,__ver_minor__,
 class Error(Exception):
     """Base exception class for the enchant module."""
     pass
-
 
 import _enchant as _e
 import utils
@@ -129,6 +129,36 @@ class ProviderDesc(object):
     def __hash__(self):
         """Hash operator on ProviderDesc objects."""
         return hash(self.name + self.desc + self.file)
+
+class _EnchantString(object):
+    """String subclass for interfacing to enchant C-library.
+
+    This class encapsulates the necessary logic for interfacing
+    between python-level strings (which can be either ASCII or Unicode)
+    and the strings required by enchant, which must be utf-8 encoded.
+
+    All incoming strings should be wrapped in an instace of this class.
+    To get at the form required by enchant, call its encode() method.
+    To convert any outgoing strings into the form required by Python,
+    call its decode() method on those strings.
+
+    The class implements standard Python logic for handling unicode
+    strings - if unicode is passed in, it will be returned. Otherwise,
+    strings are used.
+    """
+
+    def __init__(self,value):
+        self._value = value
+
+    def encode(self):
+        if type(self._value) is unicode:
+            return self._value.encode("utf-8")
+        return self._value
+
+    def decode(self,value):
+        if type(self._value) is unicode:
+            return value.decode("utf-8")
+        return value
 
 
 class _EnchantObject(object):
@@ -271,7 +301,7 @@ class Broker(_EnchantObject):
         return Dict(tag,self)
 
     def _request_dict_data(self,tag):
-        """Request raw C-object data for a dictionary.
+        """Request raw C pointer data for a dictionary.
         This method call passes on the call to the C library, and does
         some internal bookkeeping.
         """
@@ -756,7 +786,7 @@ class DictWithPWL(Dict):
 
         The argument 'pwl', if not None, names a file containing the
         personal word list.  If this file does not exist, it is created
-       	with default permissions.
+        with default permissions.
 
         The argument 'pel', if not None, names a file containing the personal
         exclude list.  If this file does not exist, it is created with
@@ -766,16 +796,16 @@ class DictWithPWL(Dict):
         if pwl is not None:
             if not os.path.exists(pwl):
                 f = file(pwl,"wt")
-	        f.close()
-	        del f
+                f.close()
+                del f
             self.pwl = self._broker.request_pwl_dict(pwl)
         else:
             self.pwl = PyPWL()
         if pel is not None:
             if not os.path.exists(pel):
                 f = file(pel,"wt")
-	        f.close()
-	        del f
+                f.close()
+                del f
             self.pel = self._broker.request_pwl_dict(pel)
         else:
             self.pel = PyPWL()
@@ -1304,5 +1334,4 @@ if __name__ == "__main__":
     if len(res.errors) > 0 or len(res.failures) > 0:
         sys.exit(1)
     sys.exit(0)
-
 

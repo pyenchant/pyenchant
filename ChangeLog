@@ -1,3 +1,9 @@
+1.5.0:
+
+    * migrated from swig to ctypes
+        * now runs on pypy, potential for other
+    * compatability fixes for py3k
+
 1.4.2:
 
     * upgrade to enchant v1.4.2
