@@ -74,8 +74,8 @@
 
 # Make version info available
 __ver_major__ = 1
-__ver_minor__ = 4
-__ver_patch__ = 2
+__ver_minor__ = 5
+__ver_patch__ = 0
 __ver_sub__ = ""
 __version__ = "%d.%d.%d%s" % (__ver_major__,__ver_minor__,
                               __ver_patch__,__ver_sub__)
@@ -199,7 +199,7 @@ class Broker(_EnchantObject):
         arguments are required.
         """
         _EnchantObject.__init__(self)
-        self._this = _e.enchant_broker_init()
+        self._this = _e.broker_init()
         if not self._this:
             raise Error("Could not initialise an enchant broker.")
         self.__live_dicts = {}
@@ -211,7 +211,7 @@ class Broker(_EnchantObject):
             
     def _raise_error(self,default="Unspecified Error",eclass=Error):
         """Overrides _EnchantObject._raise_error to check broker errors."""
-        err = _e.enchant_broker_get_error(self._this)
+        err = _e.broker_get_error(self._this)
         if err == "" or err is None:
             raise eclass(default)
         raise eclass(err)
@@ -225,7 +225,7 @@ class Broker(_EnchantObject):
         Broker and any associated Dict objects must no longer be used.
         """
         if self._this is not None:
-            _e.enchant_broker_free(self._this)
+            _e.broker_free(self._this)
             self._this = None
             self.__live_dicts.clear()
             
@@ -278,7 +278,7 @@ class Broker(_EnchantObject):
         self._check_this()
         if type(tag) == unicode:
             tag = tag.encode("utf-8")
-        new_dict = _e.enchant_broker_request_dict(self._this,tag)
+        new_dict = _e.broker_request_dict(self._this,tag)
         if new_dict is None:
             eStr = "Dictionary for language '%s' could not be found"
             self._raise_error(eStr % (tag,),DictNotFoundError)
@@ -298,7 +298,7 @@ class Broker(_EnchantObject):
         self._check_this()
         if type(pwl) == unicode:
             pwl = pwl.encode("utf-8")
-        new_dict = _e.enchant_broker_request_pwl_dict(self._this,pwl)
+        new_dict = _e.broker_request_pwl_dict(self._this,pwl)
         if new_dict is None:
             eStr = "Personal Word List file '%s' could not be loaded"
             self._raise_error(eStr % (pwl,))
@@ -323,7 +323,7 @@ class Broker(_EnchantObject):
         else:
             key = dict.tag
         if self.__dec_live_dicts(key) == 0:
-            _e.enchant_broker_free_dict(self._this,dict._this)
+            _e.broker_free_dict(self._this,dict._this)
         dict._this = None
         dict._broker = None
 
@@ -335,7 +335,7 @@ class Broker(_EnchantObject):
         is available, and False otherwise.
         """
         self._check_this()
-        val = _e.enchant_broker_dict_exists(self._this,tag)
+        val = _e.broker_dict_exists(self._this,tag)
         return bool(val)
 
     def set_ordering(self,tag,ordering):
@@ -353,7 +353,7 @@ class Broker(_EnchantObject):
         self._check_this()
         if type(ordering) == unicode:
             ordering = ordering.encode("utf-8")
-        _e.enchant_broker_set_ordering(self._this,tag,ordering)
+        _e.broker_set_ordering(self._this,tag,ordering)
 
     def describe(self):
         """Return list of provider descriptions.
@@ -364,14 +364,14 @@ class Broker(_EnchantObject):
         """
         self._check_this()
         self.__describe_result = []
-        _e.enchant_broker_describe_py(self._this,self.__describe_callback)
+        _e.broker_describe(self._this,self.__describe_callback)
         return [ ProviderDesc(*r) for r in self.__describe_result]
 
     def __describe_callback(self,name,desc,file):
         """Collector callback for dictionary description.
         
         This method is used as a callback into the _enchant function
-        'enchant_broker_describe_py'.  It collects the given arguments in
+        'enchant_broker_describe'.  It collects the given arguments in
         a tuple and appends them to the list '__describe_result'.
         """
         name = name.decode("utf-8")
@@ -393,14 +393,14 @@ class Broker(_EnchantObject):
         """
         self._check_this()
         self.__list_dicts_result = []
-        _e.enchant_broker_list_dicts_py(self._this,self.__list_dicts_callback)
+        _e.broker_list_dicts(self._this,self.__list_dicts_callback)
         return [ (r[0],ProviderDesc(*r[1])) for r in self.__list_dicts_result]
     
     def __list_dicts_callback(self,tag,name,desc,file):
         """Collector callback for listing dictionaries.
         
         This method is used as a callback into the _enchant function
-        'enchant_broker_list_dicts_py'.  It collects the given arguments into
+        'enchant_broker_list_dicts'.  It collects the given arguments into
         an appropriate tuple and appends them to '__list_dicts_result'.
         """
         name = name.decode("utf-8")
@@ -434,7 +434,7 @@ class Broker(_EnchantObject):
             file = file.decode("utf-8")
             cb_result.append((tag,name,desc,file))
         # Actually call describer function
-        _e.enchant_dict_describe_py(dict_data,cb_func)
+        _e.dict_describe(dict_data,cb_func)
         return cb_result[0]
         
 
@@ -548,7 +548,7 @@ class Dict(_EnchantObject):
 
     def _raise_error(self,default="Unspecified Error",eclass=Error):
         """Overrides _EnchantObject._raise_error to check dict errors."""
-        err = _e.enchant_dict_get_error(self._this)
+        err = _e.dict_get_error(self._this)
         if err == "" or err is None:
             raise eclass(default)
         raise eclass(err)
@@ -574,7 +574,7 @@ class Dict(_EnchantObject):
             inWord = word.encode("utf-8")
         else:
             inWord = word
-        val = _e.enchant_dict_check(self._this,inWord,len(inWord))
+        val = _e.dict_check(self._this,inWord,len(inWord))
         if val == 0:
             return True
         if val > 0:
@@ -592,7 +592,7 @@ class Dict(_EnchantObject):
             inWord = word.encode("utf-8")
         else:
             inWord = word
-        suggs = _e.enchant_dict_suggest_py(self._this,inWord,len(inWord))
+        suggs = _e.dict_suggest(self._this,inWord,len(inWord))
         if type(word) == unicode:
             uSuggs = [w.decode("utf-8") for w in suggs]
             return uSuggs
@@ -605,7 +605,7 @@ class Dict(_EnchantObject):
             inWord = word.encode("utf-8")
         else:
             inWord = word
-        _e.enchant_dict_add(self._this,inWord,len(inWord))
+        _e.dict_add(self._this,inWord,len(inWord))
 
     def remove(self,word):
         """Add a word to the user's personal exclude list."""
@@ -614,7 +614,7 @@ class Dict(_EnchantObject):
             inWord = word.encode("utf-8")
         else:
             inWord = word
-        _e.enchant_dict_remove(self._this,inWord,len(inWord))
+        _e.dict_remove(self._this,inWord,len(inWord))
 
     def add_to_pwl(self,word):
         """Add a word to the user's personal word list."""
@@ -625,7 +625,7 @@ class Dict(_EnchantObject):
             inWord = word.encode("utf-8")
         else:
             inWord = word
-        _e.enchant_dict_add_to_pwl(self._this,inWord,len(inWord))
+        _e.dict_add_to_pwl(self._this,inWord,len(inWord))
 
     def add_to_session(self,word):
         """Add a word to the session personal list."""
@@ -634,7 +634,7 @@ class Dict(_EnchantObject):
             inWord = word.encode("utf-8")
         else:
             inWord = word
-        _e.enchant_dict_add_to_session(self._this,inWord,len(inWord))
+        _e.dict_add_to_session(self._this,inWord,len(inWord))
 
     def remove_from_session(self,word):
         """Add a word to the session exclude list."""
@@ -643,7 +643,7 @@ class Dict(_EnchantObject):
             inWord = word.encode("utf-8")
         else:
             inWord = word
-        _e.enchant_dict_remove_from_session(self._this,inWord,len(inWord))
+        _e.dict_remove_from_session(self._this,inWord,len(inWord))
 
     def is_added(self,word):
         """Check whether a word is in the personal word list."""
@@ -652,7 +652,7 @@ class Dict(_EnchantObject):
             inWord = word.encode("utf-8")
         else:
             inWord = word
-        return _e.enchant_dict_is_added(self._this,inWord,len(inWord))
+        return _e.dict_is_added(self._this,inWord,len(inWord))
 
     def is_removed(self,word):
         """Check whether a word is in the personal exclude list."""
@@ -661,16 +661,17 @@ class Dict(_EnchantObject):
             inWord = word.encode("utf-8")
         else:
             inWord = word
-        return _e.enchant_dict_is_removed(self._this,inWord,len(inWord))
+        return _e.dict_is_removed(self._this,inWord,len(inWord))
 
     def is_in_session(self,word):
         """Check whether a word is in the session list."""
+        # TODO:  deprecated?
         self._check_this()
         if type(word) == unicode:
             inWord = word.encode("utf-8")
         else:
             inWord = word
-        return _e.enchant_dict_is_in_session(self._this,inWord,len(inWord))
+        return _e.dict_is_in_session(self._this,inWord,len(inWord))
 
     def store_replacement(self,mis,cor):
         """Store a replacement spelling for a miss-spelled word.
@@ -689,7 +690,7 @@ class Dict(_EnchantObject):
             inCor = cor.encode("utf-8")
         else:
             inCor = cor
-        _e.enchant_dict_store_replacement(self._this,inMis,len(inMis),inCor,len(inCor))
+        _e.dict_store_replacement(self._this,inMis,len(inMis),inCor,len(inCor))
 
     def __describe(self,check_this=True):
         """Return a tuple describing the dictionary.
@@ -706,14 +707,14 @@ class Dict(_EnchantObject):
         """
         if check_this:
             self._check_this()
-        _e.enchant_dict_describe_py(self._this,self.__describe_callback)
+        _e.dict_describe(self._this,self.__describe_callback)
         return self.__describe_result
 
     def __describe_callback(self,tag,name,desc,file):
         """Collector callback for dictionary description.
         
         This method is used as a callback into the _enchant function
-        'enchant_dict_describe_py'.  It collects the given arguments in
+        'enchant_dict_describe'.  It collects the given arguments in
         a tuple and stores them in the attribute '__describe_result'.
         """
         name = name.decode("utf-8")
@@ -900,12 +901,22 @@ class TestBroker(unittest.TestCase):
                 continue
             # Canonicalize separators
             tag = tag.replace("-","_")
-            if langs.has_key(tag):
-                langs[tag].append(prov)
-            else:
-                langs[tag] = [prov]
-            if prov not in provs:
+            langs[tag] = []
+            # NOTE: we are excluding Zemberek here as it appears to return
+            #       a broker for any language, even nonexistent ones
+            if prov not in provs and prov.name != "zemberek":
                 provs.append(prov)
+        for prov in provs:
+            for tag in langs:
+                b2 = Broker()
+                b2.set_ordering(tag,prov.name)
+                try:
+                  d = b2.request_dict(tag)
+                  if d.provider != prov:
+                    raise ValueError()
+                  langs[tag].append(prov)
+                except:
+                  pass
         # Check availability using a single entry in ordering
         for tag in langs:
             for prov in langs[tag]:
@@ -962,7 +973,7 @@ class TestBroker(unittest.TestCase):
         """Test that unicode language tags are accepted"""
         d1 = self.broker._request_dict_data(u"en_US")
         self.assert_(d1)
-        _e.enchant_broker_free_dict(self.broker._this,d1)
+        _e.broker_free_dict(self.broker._this,d1)
         d1 = Dict(u"en_US")
         self.assert_(d1)
 
