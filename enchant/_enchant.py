@@ -64,7 +64,8 @@ def dict_suggest(dict,word,size):
     while n < numSuggsP.contents.value:
         suggs.append(suggs_c[n])
         n = n + 1
-    dict_free_string_list(dict,suggs_c)
+    if numSuggsP.contents.value > 0:
+        dict_free_string_list(dict,suggs_c)
     return suggs
 
 dict_add = e.enchant_dict_add
