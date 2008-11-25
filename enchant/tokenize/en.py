@@ -1,6 +1,6 @@
 # pyenchant
 #
-# Copyright (C) 2004-2005, Ryan Kelly
+# Copyright (C) 2004-2008, Ryan Kelly
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -41,6 +41,8 @@ import unicodedata
 
 import enchant.tokenize
 
+from enchant.utils import unicode, raw_unicode
+
 class tokenize(enchant.tokenize.tokenize):
     """Iterator splitting text into words, reporting position.
     
@@ -65,10 +67,10 @@ class tokenize(enchant.tokenize.tokenize):
         if isinstance(text,unicode):
             self._myIsAlpha = self._myIsAlpha_u
         else:
-            self._myIsAlpha = self._myIsAlpha_a
+            self._myIsAlpha = self._myIsAlpha_b
         self.offset = 0
     
-    def _myIsAlpha_a(self,c):
+    def _myIsAlpha_b(self,c):
         if c.isalpha() or c in self._valid_chars:
             return True
         return False
@@ -132,7 +134,7 @@ of words. Also need to "test" the handling of 'quoted' words."""
 
     def test_bug1591450(self):
         """Check for tokenization regressions identified in bug #1591450."""
-	input = """Testing <i>markup</i> and {y:i}so-forth...leading dots and trail--- well, you get-the-point. Also check numbers: 999 1,000 12:00 .45. Done?"""
+        input = """Testing <i>markup</i> and {y:i}so-forth...leading dots and trail--- well, you get-the-point. Also check numbers: 999 1,000 12:00 .45. Done?"""
         output = [
                   ("Testing",0),("i",9),("markup",11),("i",19),("and",22),
                   ("y",27),("i",29),("so",31),("forth",34),("leading",42),
@@ -145,7 +147,7 @@ of words. Also need to "test" the handling of 'quoted' words."""
 
     def test_unicodeBasic(self):
         """Test tokenization of a basic unicode string."""
-        input = u"Ik ben ge\u00EFnteresseerd in de co\u00F6rdinatie van mijn knie\u00EBn, maar kan niet \u00E9\u00E9n \u00E0 twee enqu\u00EAtes vinden die recht doet aan mijn carri\u00E8re op Cura\u00E7ao"
+        input = raw_unicode(r"Ik ben ge\u00EFnteresseerd in de co\u00F6rdinatie van mijn knie\u00EBn, maar kan niet \u00E9\u00E9n \u00E0 twee enqu\u00EAtes vinden die recht doet aan mijn carri\u00E8re op Cura\u00E7ao")
         output = input.split(" ")
         output[8] = output[8][0:-1]
         for (itmO,itmV) in zip(output,tokenize(input)):
@@ -154,7 +156,7 @@ of words. Also need to "test" the handling of 'quoted' words."""
 
     def test_unicodeCombining(self):
         """Test tokenization with unicode combining symbols."""
-        input = u"Ik ben gei\u0308nteresseerd in de co\u00F6rdinatie van mijn knie\u00EBn, maar kan niet e\u0301e\u0301n \u00E0 twee enqu\u00EAtes vinden die recht doet aan mijn carri\u00E8re op Cura\u00E7ao"
+        input = raw_unicode(r"Ik ben gei\u0308nteresseerd in de co\u00F6rdinatie van mijn knie\u00EBn, maar kan niet e\u0301e\u0301n \u00E0 twee enqu\u00EAtes vinden die recht doet aan mijn carri\u00E8re op Cura\u00E7ao")
         output = input.split(" ")
         output[8] = output[8][0:-1]
         for (itmO,itmV) in zip(output,tokenize(input)):

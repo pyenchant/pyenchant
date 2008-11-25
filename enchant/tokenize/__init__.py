@@ -1,6 +1,6 @@
 # pyenchant
 #
-# Copyright (C) 2004-2005, Ryan Kelly
+# Copyright (C) 2004-2008, Ryan Kelly
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -113,6 +113,9 @@ class tokenize:
 
     def next(self):
         raise NotImplementedError()
+
+    def __next__(self):
+        return self.next()
 
     def __iter__(self):
         return self
@@ -310,6 +313,9 @@ class Filter:
     
         def __iter__(self):
             return self
+
+        def __next__(self):
+            return self.next()
     
         def next(self):
             # Try to get the next sub-token from word currently being split.

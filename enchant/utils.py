@@ -1,6 +1,6 @@
 # pyenchant
 #
-# Copyright (C) 2004 Ryan Kelly
+# Copyright (C) 2004-2008 Ryan Kelly
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -35,6 +35,7 @@
     enchant spellchecking package.  Currently available functionality
     includes:
         
+        * string/unicode compatability wrappers
         * functions for dealing with locale/language settings
         * ability to list supporting data files (win32 only)
           
@@ -48,47 +49,110 @@ try:
 except ImportError:
     locale = None
 
-class _EnchantStr(str):
-    """String subclass for interfacing with enchant.
+
+#
+#  Unicode/Bytes compatabilty wrappers.
+#
+#  These allow us to support both Python 2.x and Python 3.x from
+#  the same codebase.
+#
+#  We provide explicit type objects "bytes" and "unicode" that can be
+#  used to construct instances of the appropriate type.  The class
+#  "EnchantStr" derives from the default "str" type and implements the
+#  necessary logic for encoding/decoding as strings are passed into
+#  the underlying C library (where they must always be utf-8 encoded
+#  byte strings).
+#
+
+try:
+    unicode = unicode
+except NameError:
+    str = str
+    unicode = str
+    bytes = bytes
+    basestring = (str,bytes)
+else:
+    str = str
+    unicode = unicode
+    bytes = str
+    basestring = basestring
+
+def raw_unicode(raw):
+    """Make a unicode string from a raw string.
+
+    This function takes a string containing unicode escape characters,
+    and returns the corresponding unicode string.  Useful for writing
+    unicode string literals in your python source while being upwards-
+    compatible with Python 3.  For example, instead of doing this:
+
+      s = u"hello\u2149"  # syntax error in Python 3
+
+    Or this:
+
+      s = "hello\u2149"   # not what you want in Python 2.x
+
+    You can do this:
+
+      s = raw_unicode(r"hello\u2149")  # works everywhere!
+
+    """
+    return raw.encode("ascii").decode("unicode-escape")
+
+
+class EnchantStr(str):
+    """String subclass for interfacing with enchant C library.
 
     This class encapsulate the logic for interfacing between python native
     string/unicode objects and the underlying enchant library, which expects
-    all strings to tbe UTF-8 character arrays.
+    all strings to be UTF-8 character arrays.  It is a subclass of the
+    default string class 'str' - on Python 2.x that makes it an ascii string,
+    on Python 3.x it is a unicode object.
 
-    Initialise it with a string or uniode object, and use the encode() method
+    Initialise it with a string or unicode object, and use the encode() method
     to obtain an object suitable for passing to the underlying C library.
     When strings are read back into python, use decode(s) to translate them
     back into the appropriate python-level string type.
 
     This allows us to following the common Python 2.x idiom of returning
-    unicode when unicode is passed in, and strings otherwise.  It also
+    unicode when unicode is passed in, and byte strings otherwise.  It also
     lets the interface be upwards-compatible with Python 3, in which string
     objects will be unicode by default.
     """
 
     def __new__(self,value):
-        """_EnchantStr data constructor.
+        """EnchantStr data constructor.
 
         This method records whether the initial string was unicode, then
         simply passes it along to the default string constructor.
         """
         if type(value) is unicode:
           self._was_unicode = True
-          value = value.encode("utf-8")
+          if str is not unicode:
+            value = value.encode("utf-8")
         else:
           self._was_unicode = False
+          if str is not bytes:
+            raise RuntimeError("Don't pass bytestrings to pyenchant")
         return str.__new__(self,value)
 
     def encode(self):
         """Encode this string into a form usable by the enchant C library."""
-        return self
+        if str is unicode:
+          return str.encode(self,"utf-8")
+        else:
+          return self
 
     def decode(self,value):
         """Decode a string returned by the enchant C library."""
         if self._was_unicode:
+          if str is unicode:
+            # TODO: why does ctypes convert c_char_p to str(),
+            #       rather than to bytes()?
+            return value.encode().decode("utf-8")
+          else:
             return value.decode("utf-8")
         else:
-            return value
+          return value
 
 
 def get_default_language(default=None):

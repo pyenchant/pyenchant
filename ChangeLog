@@ -1,10 +1,14 @@
+
 1.5.0:
 
-    * migrated from swig to ctypes
-        * now runs on pypy, potential for other
-    * compatability updated for Python 3.0
-        * tag, file, name, desc are now the default python string type
-    * dropped compatability with Python 2.2
+    * Migrated from SWIG to ctypes:
+        * runs works under PyPy!
+        * possibility for IronPython:
+            http://fepy.sourceforge.net/
+        * possibility for Jython:
+            http://morepypy.blogspot.com/2008/07/ep2008-pypy-meets-jython.html
+    * Compatability updates for Python 3.0, mostly around unicode strings
+    * Dropped compatability with Python 2.2
 
 1.4.2:
 

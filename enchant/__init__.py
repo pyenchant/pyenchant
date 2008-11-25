@@ -62,11 +62,14 @@
     can be obtained using one or more 'Broker' objects.  These objects are
     responsible for locating dictionaries for a specific language.
     
-    Unicode strings are supported transparently, as they are throughout
-    Python - if a unicode string is given as an argument, the result will
-    be a unicode string.  Note that Enchant works in UTF-8 internally,
-    so passing an ASCII string to a dictionary for a language requiring
-    Unicode may result in UTF-8 strings being returned.
+    In Python 2.x, unicode strings are supported transparently in the
+    standard manner - if a unicode string is given as an argument, the
+    result will be a unicode string. Note that Enchant works in UTF-8 
+    internally, so passing an ASCII string to a dictionary for a language
+    requiring Unicode may result in UTF-8 strings being returned.
+
+    In Python 3.x unicode strings are expected throughout.  Bytestrings
+    should not be passed into any functions.
 
     Errors that occur in this module are reported by raising subclasses
     of 'Error'.
@@ -89,7 +92,7 @@ class Error(Exception):
 
 from enchant import _enchant as _e
 from enchant import utils
-from enchant.utils import _EnchantStr
+from enchant.utils import EnchantStr, unicode, raw_unicode
 from enchant.pypwl import PyPWL
 
 import os
@@ -246,7 +249,7 @@ class Broker(_EnchantObject):
         some internal bookkeeping.
         """
         self._check_this()
-        tag = _EnchantStr(tag)
+        tag = EnchantStr(tag)
         new_dict = _e.broker_request_dict(self._this,tag.encode())
         if new_dict is None:
             eStr = "Dictionary for language '%s' could not be found"
@@ -262,7 +265,7 @@ class Broker(_EnchantObject):
         of custom dictionary entries, one word per line.
         """
         self._check_this()
-        pwl = _EnchantStr(pwl)
+        pwl = EnchantStr(pwl)
         new_dict = _e.broker_request_pwl_dict(self._this,pwl.encode())
         if new_dict is None:
             eStr = "Personal Word List file '%s' could not be loaded"
@@ -291,7 +294,7 @@ class Broker(_EnchantObject):
         is available, and False otherwise.
         """
         self._check_this()
-        tag = _EnchantStr(tag)
+        tag = EnchantStr(tag)
         val = _e.broker_dict_exists(self._this,tag.encode())
         return bool(val)
 
@@ -308,8 +311,8 @@ class Broker(_EnchantObject):
         for all languages for which one has not been set explicitly.
         """
         self._check_this()
-        tag = _EnchantStr(tag)
-        ordering = _EnchantStr(ordering)
+        tag = EnchantStr(tag)
+        ordering = EnchantStr(ordering)
         _e.broker_set_ordering(self._this,tag.encode(),ordering.encode())
 
     def describe(self):
@@ -331,7 +334,7 @@ class Broker(_EnchantObject):
         'enchant_broker_describe'.  It collects the given arguments in
         a tuple and appends them to the list '__describe_result'.
         """
-        s = _EnchantStr("")
+        s = EnchantStr("")
         name = s.decode(name)
         desc = s.decode(desc)
         file = s.decode(file)
@@ -361,7 +364,7 @@ class Broker(_EnchantObject):
         'enchant_broker_list_dicts'.  It collects the given arguments into
         an appropriate tuple and appends them to '__list_dicts_result'.
         """
-        s = _EnchantStr("")
+        s = EnchantStr("")
         tag = s.decode(tag)
         name = s.decode(name)
         desc = s.decode(desc)
@@ -389,7 +392,7 @@ class Broker(_EnchantObject):
         # Define local callback function
         cb_result = []
         def cb_func(tag,name,desc,file):
-            s = _EnchantStr("")
+            s = EnchantStr("")
             tag = s.decode(tag)
             name = s.decode(name)
             desc = s.decode(desc)
@@ -532,7 +535,7 @@ class Dict(_EnchantObject):
         True if it is correctly spelled, and false otherwise.
         """
         self._check_this()
-        word = _EnchantStr(word)
+        word = EnchantStr(word)
         val = _e.dict_check(self._this,word.encode())
         if val == 0:
             return True
@@ -547,58 +550,58 @@ class Dict(_EnchantObject):
         word, returning the possibilities in a list.
         """
         self._check_this()
-        word = _EnchantStr(word)
+        word = EnchantStr(word)
         suggs = _e.dict_suggest(self._this,word.encode())
         return [word.decode(w) for w in suggs]
 
     def add(self,word):
         """Add a word to the user's personal word list."""
         self._check_this()
-        word = _EnchantStr(word)
+        word = EnchantStr(word)
         _e.dict_add(self._this,word.encode())
 
     def remove(self,word):
         """Add a word to the user's personal exclude list."""
         self._check_this()
-        word = _EnchantStr(word)
+        word = EnchantStr(word)
         _e.dict_remove(self._this,word.encode())
 
     def add_to_pwl(self,word):
         """Add a word to the user's personal word list."""
         warnings.warn("Dict.add_to_pwl is deprecated, please use Dict.add",category=DeprecationWarning)
         self._check_this()
-        word = _EnchantStr(word)
+        word = EnchantStr(word)
         _e.dict_add_to_pwl(self._this,word.encode())
 
     def add_to_session(self,word):
         """Add a word to the session personal list."""
         self._check_this()
-        word = _EnchantStr(word)
+        word = EnchantStr(word)
         _e.dict_add_to_session(self._this,word.encode())
 
     def remove_from_session(self,word):
         """Add a word to the session exclude list."""
         self._check_this()
-        word = _EnchantStr(word)
+        word = EnchantStr(word)
         _e.dict_remove_from_session(self._this,word.encode())
 
     def is_added(self,word):
         """Check whether a word is in the personal word list."""
         self._check_this()
-        word = _EnchantStr(word)
+        word = EnchantStr(word)
         return _e.dict_is_added(self._this,word.encode())
 
     def is_removed(self,word):
         """Check whether a word is in the personal exclude list."""
         self._check_this()
-        word = _EnchantStr(word)
+        word = EnchantStr(word)
         return _e.dict_is_removed(self._this,word.encode())
 
     def is_in_session(self,word):
         """Check whether a word is in the session list."""
         warnings.warn("Dict.is_in_session is deprecated, please use Dict.is_added",category=DeprecationWarning)
         self._check_this()
-        word = _EnchantStr(word)
+        word = EnchantStr(word)
         return _e.dict_is_in_session(self._this,word.encode())
 
     def store_replacement(self,mis,cor):
@@ -610,8 +613,8 @@ class Dict(_EnchantObject):
         list of suggested spellings offered for later instances of <mis>.
         """
         self._check_this()
-        mis = _EnchantStr(mis)
-        cor = _EnchantStr(cor)
+        mis = EnchantStr(mis)
+        cor = EnchantStr(cor)
         _e.dict_store_replacement(self._this,mis.encode(),cor.encode())
 
     def __describe(self,check_this=True):
@@ -641,7 +644,7 @@ class Dict(_EnchantObject):
         'enchant_dict_describe'.  It collects the given arguments in
         a tuple and stores them in the attribute '__describe_result'.
         """
-        s = _EnchantStr("")
+        s = EnchantStr("")
         tag = s.decode(tag)
         name = s.decode(name)
         desc = s.decode(desc)
@@ -691,7 +694,7 @@ class DictWithPWL(Dict):
         Dict.__init__(self,tag,broker)
         if pwl is not None:
             if not os.path.exists(pwl):
-                f = file(pwl,"wt")
+                f = open(pwl,"wt")
                 f.close()
                 del f
             self.pwl = self._broker.request_pwl_dict(pwl)
@@ -699,7 +702,7 @@ class DictWithPWL(Dict):
             self.pwl = PyPWL()
         if pel is not None:
             if not os.path.exists(pel):
-                f = file(pel,"wt")
+                f = open(pel,"wt")
                 f.close()
                 del f
             self.pel = self._broker.request_pwl_dict(pel)
@@ -869,10 +872,10 @@ class TestBroker(unittest.TestCase):
 
     def test_UnicodeTag(self):
         """Test that unicode language tags are accepted"""
-        d1 = self.broker._request_dict_data(u"en_US")
+        d1 = self.broker._request_dict_data(raw_unicode("en_US"))
         self.assert_(d1)
         _e.broker_free_dict(self.broker._this,d1)
-        d1 = Dict(u"en_US")
+        d1 = Dict(raw_unicode("en_US"))
         self.assert_(d1)
 
 
@@ -920,24 +923,23 @@ class TestDict(unittest.TestCase):
 
     def test_unicode1(self):
         """Test checking/suggesting for unicode strings"""
-        # TODO: find something that actually returnes suggestions
-        us1 = u"\u21496"
-        self.assert_(type(us1) == unicode)
+        # TODO: find something that actually returns suggestions
+        us1 = raw_unicode(r"he\u2149lo")
+        self.assert_(type(us1) is unicode)
         self.failIf(self.dict.check(us1))
         for s in self.dict.suggest(us1):
-            self.assert_(type(s) == unicode)
-            
+            self.assert_(type(s) is unicode)
+
     def test_session(self):
         """Test that adding words to the session works as required."""
         self.failIf(self.dict.check("Lozz"))
-        self.failIf(self.dict.is_in_session("Lozz"))
+        self.failIf(self.dict.is_added("Lozz"))
         self.dict.add_to_session("Lozz")
-        self.assert_(self.dict.is_in_session("Lozz"))
         self.assert_(self.dict.is_added("Lozz"))
         self.assert_(self.dict.check("Lozz"))
         self.dict.remove_from_session("Lozz")
         self.failIf(self.dict.check("Lozz"))
-        self.failIf(self.dict.is_in_session("Lozz"))
+        self.failIf(self.dict.is_added("Lozz"))
         self.dict.remove_from_session("hello")
         self.failIf(self.dict.check("hello"))
         self.assert_(self.dict.is_removed("hello"))
@@ -1000,12 +1002,12 @@ class TestPWL(unittest.TestCase):
           nm = self._fileName
         nm = os.path.join(self._tempDir,nm)
         if not os.path.exists(nm):
-          file(nm,'w').close()
+          open(nm,'w').close()
         return nm
 
     def setPWLContents(self,contents):
         """Set the contents of the PWL file."""
-        pwlFile = file(self._path(),"w")
+        pwlFile = open(self._path(),"w")
         for ln in contents:
             pwlFile.write(ln)
             pwlFile.write("\n")
@@ -1013,7 +1015,7 @@ class TestPWL(unittest.TestCase):
         
     def getPWLContents(self):
         """Retreive the contents of the PWL file."""
-        pwlFile = file(self._path(),"r")
+        pwlFile = open(self._path(),"r")
         contents = pwlFile.readlines()
         pwlFile.close()
         return [c.strip() for c in contents]
@@ -1117,7 +1119,7 @@ class TestPWL(unittest.TestCase):
 
     def test_UnicodeCharsInPath(self):
         """Test that unicode chars in PWL paths are accepted."""
-        self._fileName = u'test_\xe5\xe4\xf6_ing'
+        self._fileName = raw_unicode(r"test_\xe5\xe4\xf6_ing")
         d = request_pwl_dict(self._path())
         self.assert_(d)
 
@@ -1161,7 +1163,7 @@ class TestInstallEnv(unittest.TestCase):
 
     def test_UnicodeInstallPath(self):
         """Test installation in a path containing unicode chars."""
-        self._insDir = u'test_\xe5\xe4\xf6_ing'
+        self._insDir = raw_unicode(r'test_\xe5\xe4\xf6_ing')
         self.install()
         self.runtests()
 

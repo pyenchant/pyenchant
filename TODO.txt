@@ -1,9 +1,6 @@
 
 Migration to ctypes:
 
-   - confirm working on pypy-c, including fixing refcounting-based tests
-   - use absolute imports everywhere, see if this allows __init__ to be run as a script
-   - finish _EnchantString class implementation
    - try things out on Py3k
 
 PyEnchant:
