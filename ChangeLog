@@ -3,6 +3,7 @@
     * migrated from swig to ctypes
         * now runs on pypy, potential for other
     * compatability updated for Python 3.0
+        * tag, file, name, desc are now the default python string type
     * dropped compatability with Python 2.2
 
 1.4.2:
