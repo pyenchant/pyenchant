@@ -35,14 +35,10 @@
     enchant spellchecking package.  Currently available functionality
     includes:
         
-        * 'backported' functionality for python2.2 compatability
         * functions for dealing with locale/language settings
         * ability to list supporting data files (win32 only)
           
 """
-
-# Get generators for python2.2
-from __future__ import generators
 
 import os
 
@@ -52,24 +48,48 @@ try:
 except ImportError:
     locale = None
 
-# Define basestring if it's not provided (e.g. python2.2)
-try:
-    basestring = basestring
-except NameError:
-    basestring = (str,unicode)
-    
-# Define enumerate() if it's not provided (e.g. python2.2)
-try:
-    enumerate = enumerate
-except NameError:
-    def enumerate(seq):
-        """Iterator producing (index,value) pairs for an interable."""
-        idx = 0
-        for itm in seq:
-            yield (idx,itm)
-            idx += 1
+class _EnchantStr(str):
+    """String subclass for interfacing with enchant.
 
-#  Allow looking up of default language on-demand.
+    This class encapsulate the logic for interfacing between python native
+    string/unicode objects and the underlying enchant library, which expects
+    all strings to tbe UTF-8 character arrays.
+
+    Initialise it with a string or uniode object, and use the encode() method
+    to obtain an object suitable for passing to the underlying C library.
+    When strings are read back into python, use decode(s) to translate them
+    back into the appropriate python-level string type.
+
+    This allows us to following the common Python 2.x idiom of returning
+    unicode when unicode is passed in, and strings otherwise.  It also
+    lets the interface be upwards-compatible with Python 3, in which string
+    objects will be unicode by default.
+    """
+
+    def __new__(self,value):
+        """_EnchantStr data constructor.
+
+        This method records whether the initial string was unicode, then
+        simply passes it along to the default string constructor.
+        """
+        if type(value) is unicode:
+          self._was_unicode = True
+          value = value.encode("utf-8")
+        else:
+          self._was_unicode = False
+        return str.__new__(self,value)
+
+    def encode(self):
+        """Encode this string into a form usable by the enchant C library."""
+        return self
+
+    def decode(self,value):
+        """Decode a string returned by the enchant C library."""
+        if self._was_unicode:
+            return value.decode("utf-8")
+        else:
+            return value
+
 
 def get_default_language(default=None):
     """Determine the user's default language, if possible.

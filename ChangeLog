@@ -2,7 +2,8 @@
 
     * migrated from swig to ctypes
         * now runs on pypy, potential for other
-    * compatability fixes for py3k
+    * compatability updated for Python 3.0
+    * dropped compatability with Python 2.2
 
 1.4.2:
 

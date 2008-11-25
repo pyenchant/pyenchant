@@ -50,7 +50,6 @@ import unittest
 import enchant
 import enchant.tokenize
 from enchant.tokenize import get_tokenizer
-from enchant.utils import basestring, enumerate
 
 class SpellChecker:
     """Class implementing stateful spellchecking behavior.

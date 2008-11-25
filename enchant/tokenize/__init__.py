@@ -88,7 +88,6 @@ import unittest
 import re
 
 import enchant
-from enchant.utils import enumerate
 
 class Error(enchant.Error):
     """Exception subclass for the tokenize module.

@@ -168,7 +168,7 @@ class PyPWL:
         If <pwl> is not specified or None, the list is maintained in
         memory only.
         """
-        self.provider= None
+        self.provider = None
         self._words = Trie()
         if pwl is not None:
             self.pwl = os.path.abspath(pwl)
@@ -245,6 +245,7 @@ class PyPWL:
                     
     def is_in_session(self,word):
         """Check whether a word is in the session list."""
+        warnings.warn("PyPWL.is_in_session is deprecated, please use PyPWL.is_added",category=DeprecationWarning)
         # Consider all words to be in the session list
         return self.check(word)
     

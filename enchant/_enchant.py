@@ -1,13 +1,70 @@
+# pyenchant
+#
+# Copyright (C) 2004-2008, Ryan Kelly
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPsE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the
+# Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+# Boston, MA 02111-1307, USA.
+#
+# In addition, as a special exception, you are
+# given permission to link the code of this program with
+# non-LGPL Spelling Provider libraries (eg: a MSFT Office
+# spell checker backend) and distribute linked combinations including
+# the two.  You must obey the GNU Lesser General Public License in all
+# respects for all of the code used other than said providers.  If you modify
+# this file, you may extend this exception to your version of the
+# file, but you are not obligated to do so.  If you do not wish to
+# do so, delete this exception statement from your version.
+#
+"""
+
+    enchant._enchant:  ctypes-based wrapper for enchant C library
+
+    This module implements the low-level interface to the underlying
+    C library for enchant.  The interface is based on ctypes and tries 
+    to do as little as possible while making the higher-level components
+    easier to write.
+
+    The following conveniences are provided that differ from the underlying
+    C API:
+
+        * the "enchant" prefix has been removed from all functions, since
+          python has a proper module system
+        * callback functions do not take a user_data argument, since
+          python has proper closures that can manage this internally
+        * string lengths are not passed into functions such as dict_check,
+          since python strings know how long they are
+
+"""
 
 from ctypes import *
 
+# TODO: windows definitions
+
 e = CDLL("libenchant.so")
 
+# Various callback function types
+t_broker_desc_func = CFUNCTYPE(None,c_char_p,c_char_p,c_char_p,c_void_p)
+t_dict_desc_func = CFUNCTYPE(None,c_char_p,c_char_p,c_char_p,c_char_p,c_void_p)
+
+# Simple typedefs for readability
 t_broker = c_void_p
 t_dict = c_void_p
 
-t_broker_desc_func = CFUNCTYPE(None,c_char_p,c_char_p,c_char_p,c_void_p)
-t_dict_desc_func = CFUNCTYPE(None,c_char_p,c_char_p,c_char_p,c_char_p,c_void_p)
+#
+# Now we can define the types of each function we are going to use
+#
 
 broker_init = e.enchant_broker_init
 broker_init.argtypes = []
@@ -49,16 +106,18 @@ def broker_describe(broker,cbfunc):
         cbfunc(*args[:-1])
     broker_describe1(broker,t_broker_desc_func(cbfunc1),None)
 
-dict_check = e.enchant_dict_check
-dict_check.argtypes = [t_dict,c_char_p,c_size_t]
-dict_check.restype = c_int
+dict_check1 = e.enchant_dict_check
+dict_check1.argtypes = [t_dict,c_char_p,c_size_t]
+dict_check1.restype = c_int
+def dict_check(dict,word):
+    return dict_check1(dict,word,len(word))
 
 dict_suggest1 = e.enchant_dict_suggest
 dict_suggest1.argtypes = [t_dict,c_char_p,c_size_t,POINTER(c_size_t)]
 dict_suggest1.restype = POINTER(c_char_p)
-def dict_suggest(dict,word,size):
+def dict_suggest(dict,word):
     numSuggsP = pointer(c_size_t(0))
-    suggs_c = dict_suggest1(dict,word,size,numSuggsP)
+    suggs_c = dict_suggest1(dict,word,len(word),numSuggsP)
     suggs = []
     n = 0
     while n < numSuggsP.contents.value:
@@ -68,41 +127,59 @@ def dict_suggest(dict,word,size):
         dict_free_string_list(dict,suggs_c)
     return suggs
 
-dict_add = e.enchant_dict_add
-dict_add.argtypes = [t_dict,c_char_p,c_size_t]
-dict_add.restype = None
+dict_add1 = e.enchant_dict_add
+dict_add1.argtypes = [t_dict,c_char_p,c_size_t]
+dict_add1.restype = None
+def dict_add(dict,word):
+    return dict_add1(dict,word,len(word))
 
-dict_add_to_pwl = e.enchant_dict_add
-dict_add_to_pwl.argtypes = [t_dict,c_char_p,c_size_t]
-dict_add_to_pwl.restype = None
+dict_add_to_pwl1 = e.enchant_dict_add
+dict_add_to_pwl1.argtypes = [t_dict,c_char_p,c_size_t]
+dict_add_to_pwl1.restype = None
+def dict_add_to_pwl(dict,word):
+    return dict_add_to_pwl1(dict,word,len(word))
 
-dict_add_to_session = e.enchant_dict_add_to_session
-dict_add_to_session.argtypes = [t_dict,c_char_p,c_size_t]
-dict_add_to_session.restype = None
+dict_add_to_session1 = e.enchant_dict_add_to_session
+dict_add_to_session1.argtypes = [t_dict,c_char_p,c_size_t]
+dict_add_to_session1.restype = None
+def dict_add_to_session(dict,word):
+    return dict_add_to_session1(dict,word,len(word))
 
-dict_remove = e.enchant_dict_remove
-dict_remove.argtypes = [t_dict,c_char_p,c_size_t]
-dict_remove.restype = None
+dict_remove1 = e.enchant_dict_remove
+dict_remove1.argtypes = [t_dict,c_char_p,c_size_t]
+dict_remove1.restype = None
+def dict_remove(dict,word):
+    return dict_remove1(dict,word,len(word))
 
-dict_remove_from_session = e.enchant_dict_remove_from_session
-dict_remove_from_session.argtypes = [t_dict,c_char_p,c_size_t]
-dict_remove_from_session.restype = c_int
+dict_remove_from_session1 = e.enchant_dict_remove_from_session
+dict_remove_from_session1.argtypes = [t_dict,c_char_p,c_size_t]
+dict_remove_from_session1.restype = c_int
+def dict_remove_from_session(dict,word):
+    return dict_remove_from_session1(dict,word,len(word))
 
-dict_is_added = e.enchant_dict_is_added
-dict_is_added.argtypes = [t_dict,c_char_p,c_size_t]
-dict_is_added.restype = c_int
+dict_is_added1 = e.enchant_dict_is_added
+dict_is_added1.argtypes = [t_dict,c_char_p,c_size_t]
+dict_is_added1.restype = c_int
+def dict_is_added(dict,word):
+    return dict_is_added1(dict,word,len(word))
 
-dict_is_removed = e.enchant_dict_is_removed
-dict_is_removed.argtypes = [t_dict,c_char_p,c_size_t]
-dict_is_removed.restype = c_int
+dict_is_removed1 = e.enchant_dict_is_removed
+dict_is_removed1.argtypes = [t_dict,c_char_p,c_size_t]
+dict_is_removed1.restype = c_int
+def dict_is_removed(dict,word):
+    return dict_is_removed1(dict,word,len(word))
 
-dict_is_in_session = e.enchant_dict_is_in_session
-dict_is_in_session.argtypes = [t_dict,c_char_p,c_size_t]
-dict_is_in_session.restype = c_int
+dict_is_in_session1 = e.enchant_dict_is_in_session
+dict_is_in_session1.argtypes = [t_dict,c_char_p,c_size_t]
+dict_is_in_session1.restype = c_int
+def dict_is_in_session(dict,word):
+    return dict_is_in_session1(dict,word,len(word))
 
-dict_store_replacement = e.enchant_dict_store_replacement
-dict_store_replacement.argtypes = [t_dict,c_char_p,c_size_t,c_char_p,c_size_t]
-dict_store_replacement.restype = None
+dict_store_replacement1 = e.enchant_dict_store_replacement
+dict_store_replacement1.argtypes = [t_dict,c_char_p,c_size_t,c_char_p,c_size_t]
+dict_store_replacement1.restype = None
+def dict_store_replacement(dict,mis,cor):
+    return dict_store_replacement1(dict,mis,len(mis),cor,len(cor))
 
 dict_free_string_list = e.enchant_dict_free_string_list
 dict_free_string_list.argtypes = [t_dict,POINTER(c_char_p)]
