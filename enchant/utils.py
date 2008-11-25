@@ -185,6 +185,21 @@ def get_default_language(default=None):
     return default
 
 
+def get_resource_filename(resname):
+    """Get the absolute path to the named resource file.
+
+    This serves widely the same purpose as pkg_resources.resource_filename(),
+    but tries to avoid loading pkg_resources unless we're actually in
+    an egg.
+    """
+    path = os.path.dirname(os.path.abspath(__file__))
+    path = os.path.join(path,resname)
+    if os.path.exists(path):
+        return path
+    import pkg_resources
+    return pkg_resources.resource_filename("enchant",resname)
+
+
 def win32_data_files():
     """Get list of supporting data files, for use with setup.py
     
@@ -198,7 +213,7 @@ def win32_data_files():
     which we ship our own supporting data files)
     """
     dataDirs = ("share/enchant/myspell","share/enchant/ispell","lib/enchant")
-    mainDir = os.path.abspath(os.path.dirname(__file__))
+    mainDir = os.path.dirname(get_resource_filename("libenchant.dll"))
     dataFiles = []
     for dataDir in dataDirs:
         files = []

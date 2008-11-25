@@ -45,6 +45,10 @@ EAGER_RES = []
 # the package directory so setuptools can locate them.
 #
 if sys.platform == "win32":
+    PKG_DATA["enchant"] = ["*.dll", "lib/enchant/*.dll",
+                           "share/enchant/myspell/*.*",
+                           "share/enchant/ispell/*.*"]
+    EAGER_RES = ["enchant/lib", "enchant/share"]
     # Copy local DLLs across if available
     if os.path.exists(WINDEPS):
       print "Copying win32 dependencies"
@@ -53,6 +57,7 @@ if sys.platform == "win32":
       for fName in os.listdir(libDir):
         if fName[-3:] == "dll":
           shutil.copy(os.path.join(libDir,fName),".\\enchant\\")
+          EAGER_RES.append("enchant/" + fName)
       # Enchant plugins
       plugDir = os.path.join(WINDEPS,"lib\\enchant")
       for fName in os.listdir(plugDir):
@@ -71,11 +76,6 @@ if sys.platform == "win32":
           if dictName.endswith("hash") or dictName == "README.txt":
             shutil.copy(os.path.join(dictPath,dictName),
 			".\\enchant\\share\\enchant\\ispell\\")
-    # Set up additional compile info for C extension
-    PKG_DATA["enchant"] = ["*.dll", "lib/enchant/*.dll",
-                           "share/enchant/myspell/*.*",
-                           "share/enchant/ispell/*.*"]
-    EAGER_RES = ["enchant/lib", "enchant/share"]
 
 ##
 ##  Main call to setup() function

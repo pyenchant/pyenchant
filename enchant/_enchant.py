@@ -52,11 +52,13 @@ import sys, os
 from ctypes import *
 from ctypes.util import find_library
 
+from enchant import utils
+
 # Locate and load the enchant dll.
 
 if sys.platform == "win32":
   # Add our bundled enchant libraries to DLL search path
-  mypath = os.path.dirname(__file__)
+  mypath = os.path.dirname(utils.get_resource_filename("libenchant.dll"))
   os.environ['PATH'] = os.environ['PATH'] + ";" + mypath
 
 e_path = find_library("enchant")
