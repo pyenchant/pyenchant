@@ -1,8 +1,4 @@
 
-Migration to ctypes:
-
-   - try things out on Py3k
-
 PyEnchant:
 
   * implement a tkSpellCheckerDialog to compliment the wx one

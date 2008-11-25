@@ -48,23 +48,39 @@
 
 """
 
+import sys, os
 from ctypes import *
+from ctypes.util import find_library
 
-# TODO: windows definitions
+# Locate and load the enchant dll.
 
-e = CDLL("libenchant.so")
+if sys.platform == "win32":
+  # Add our bundled enchant libraries to DLL search path
+  mypath = os.path.dirname(__file__)
+  os.environ['PATH'] = os.environ['PATH'] + ";" + mypath
 
-# Various callback function types
+e_path = find_library("enchant")
+if not e_path:
+  e_path = find_library("libenchant")
+if not e_path:
+  raise ImportError("enchant C library not found")
+
+e = cdll.LoadLibrary(e_path)
+
+
+# Define various callback function types
+
 t_broker_desc_func = CFUNCTYPE(None,c_char_p,c_char_p,c_char_p,c_void_p)
 t_dict_desc_func = CFUNCTYPE(None,c_char_p,c_char_p,c_char_p,c_char_p,c_void_p)
 
+
 # Simple typedefs for readability
+
 t_broker = c_void_p
 t_dict = c_void_p
 
-#
+
 # Now we can define the types of each function we are going to use
-#
 
 broker_init = e.enchant_broker_init
 broker_init.argtypes = []

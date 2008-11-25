@@ -9,6 +9,7 @@
             http://morepypy.blogspot.com/2008/07/ep2008-pypy-meets-jython.html
     * Compatability updates for Python 3.0, mostly around unicode strings
     * Dropped compatability with Python 2.2
+    * No longer shipping installers for < 2.5
 
 1.4.2:
 
