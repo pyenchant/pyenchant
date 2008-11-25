@@ -4,24 +4,4 @@ PyEnchant:
   * implement a tkSpellCheckerDialog to compliment the wx one
   * Expand CmdLineChecker and make it ispell-compatible
   * try things out on OSX
-  * try implementing the shared library with PyRex instead of SWIG,
-    see if we get better performance/memory handling/etc
 
-Misc:
-
-  * OSX install procedure:
-       - http://www.tenon.com/resources/revised/X_apps_1.shtml for glib?
-         Or possibly the gtk+osx project?
-       - compile for oneself?
-       - Needs:
-            - libiconv?
-            - pkg-config
-            - glib
-            - enchant
-       - distribute as a .mpkg, build using py2app.
-       - seems like most of the tools only available for >=10.3 ??
-
-       * install pkgconfig
-       * install libiconv
-       * install gettext - ho-hum, crashes PearPC
-       

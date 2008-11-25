@@ -1,6 +1,6 @@
 # pyenchant
 #
-# Copyright (C) 2004-2005, Ryan Kelly
+# Copyright (C) 2004-2008, Ryan Kelly
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -50,7 +50,8 @@ import unittest
 import enchant
 import enchant.tokenize
 from enchant.tokenize import get_tokenizer
-from enchant.utils import basestring, enumerate
+
+from enchant.utils import bytes, unicode, raw_unicode, basestring
 
 class SpellChecker:
     """Class implementing stateful spellchecking behavior.
@@ -70,15 +71,15 @@ class SpellChecker:
     to the next misspelled word.
     
     As a quick (and rather silly) example, the following code replaces
-    each misspelled word with the string "ERROR":
+    each misspelled word with the string "SPAM":
         
         >>> text = "This is sme text with a fw speling errors in it."
         >>> chkr = SpellChecker("en_US",text)
         >>> for err in chkr:
-        ...   err.replace("ERROR")
+        ...   err.replace("SPAM")
         ...
         >>> chkr.get_text()
-        'This is ERROR text with a ERROR ERROR errors in it.'
+        'This is SPAM text with a SPAM SPAM errors in it.'
         >>>
 
     Internally, the SpellChecker always works with arrays of (possibly
@@ -158,7 +159,7 @@ class SpellChecker:
         """
         # Convert to an array object if necessary
         if isinstance(text,basestring):
-            if type(text) == unicode:
+            if type(text) is unicode:
                 self._text = array.array('u',text)
             else:
                 self._text = array.array('c',text)
@@ -184,8 +185,8 @@ class SpellChecker:
         """Check whether the checker wants unicode strings.
         This method will return True if the checker wants unicode strings
         as input, False if it wants normal strings.  It's important to
-	    provide the correct type of string to the checker.
-	    """
+        provide the correct type of string to the checker.
+        """
         if self._text.typecode == 'u':
             return True
         return False
@@ -204,12 +205,15 @@ class SpellChecker:
                 else:
                     return text.decode(enc)
             return text
-        if not isinstance(text,str):
+        if not isinstance(text,bytes):
             if enc is None:
                 return text.encode()
             else:
                 return text.encode(enc)
         return text
+
+    def __next__(self):
+        return self.next()
         
     def next(self):
         """Process text up to the next spelling error.
@@ -366,7 +370,7 @@ class TestChecker(unittest.TestCase):
                 self.assertEqual(err.word,"erors")
                 self.assertEqual(err.leading_context(5),"ling ")
                 self.assertEqual(err.trailing_context(5)," in i")
-                err.replace(u"errors")
+                err.replace(raw_unicode("errors"))
             if n == 3:
                 # Replace-all on gret as it appears twice
                 self.assertEqual(err.word,"gret")
@@ -409,31 +413,35 @@ class TestChecker(unittest.TestCase):
         
     def test_unicode(self):
         """Test SpellChecker with a unicode string."""
-        text = u"""I am a unicode strng with unicode erors."""
+        text = raw_unicode("""I am a unicode strng with unicode erors.""")
         chkr = SpellChecker("en_US",text)
         for n,err in enumerate(chkr):
             if n == 0:
-                self.assertEqual(err.word,u"unicode")
+                self.assertEqual(err.word,raw_unicode("unicode"))
                 self.assertEqual(err.wordpos,7)
                 chkr.ignore_always()
             if n == 1:
-                self.assertEqual(err.word,u"strng")
+                self.assertEqual(err.word,raw_unicode("strng"))
                 chkr.replace_always("string")
-                self.assertEqual(chkr._replace_words[u"strng"],u"string")
+                self.assertEqual(chkr._replace_words[raw_unicode("strng")],raw_unicode("string"))
             if n == 2:
-                self.assertEqual(err.word,u"erors")
+                self.assertEqual(err.word,raw_unicode("erors"))
                 chkr.replace("erros")
                 chkr.set_offset(-6)
             if n == 3:
-                self.assertEqual(err.word,u"erros")
+                self.assertEqual(err.word,raw_unicode("erros"))
                 chkr.replace("errors")
         self.assertEqual(n,3)
-        self.assertEqual(chkr.get_text(),u"I am a unicode string with unicode errors.")
+        self.assertEqual(chkr.get_text(),raw_unicode("I am a unicode string with unicode errors."))
 
     def test_chararray(self):
         """Test SpellChecker with a character array as input."""
+        if str is unicode:
+           atype = 'u'
+        else:
+           atype = 'c'
         text = "I wll be stord in an aray"
-        txtarr = array.array('c',text)
+        txtarr = array.array(atype,text)
         chkr = SpellChecker("en_US",txtarr)
         for (n,err) in enumerate(chkr):
             if n == 0:
@@ -441,11 +449,14 @@ class TestChecker(unittest.TestCase):
                 self.assertEqual(err.word.__class__,str)
             if n == 1:
                 self.assertEqual(err.word,"stord")
-                txtarr[err.wordpos:err.wordpos+len(err.word)] = array.array('c',"stored")
+                txtarr[err.wordpos:err.wordpos+len(err.word)] = array.array(atype,"stored")
                 chkr.set_offset(-1*len(err.word))
             if n == 3:
                 self.assertEqual(err.word,"aray")
                 chkr.replace("array")
         self.assertEqual(n,3)
-        self.assertEqual(txtarr.tostring(),"I wll be stored in an array")
+        if str is unicode:
+          self.assertEqual(txtarr.tounicode(),"I wll be stored in an array")
+        else:
+          self.assertEqual(txtarr.tostring(),"I wll be stored in an array")
 

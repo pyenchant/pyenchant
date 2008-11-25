@@ -78,17 +78,12 @@ The credit for Enchant itself goes to Dom Lachowicz.  Find out more details
 on the Enchant website listed above.  Full marks to Dom for producing such
 a high-quality library.
 
-The heavy lifting of creating language bindings was taken care of using
-SWIG, an excellent open-source tool designed for just this purpose:
-
-    http://www.swig.org/
-
-Finally, the glue to put it all together was written by me, Ryan Kelly.
+The glue to pull Enchant into Python via ctypes was written by me, Ryan Kelly.
 I needed a decent spellchecker for another project I am working on, and
 all the solutions turned up by Google were either extremely non-portable
 (e.g. opening a pipe to ispell) or had completely disappeared from the web
 (what happened to SnakeSpell?)  It was also a great excuse to teach myself
-to use SWIG, and even a little bit of the Python/C API.
+about SWIG, ctypes, and even a little bit of the Python/C API.
 
 Bugs can be filed on the project's SourceForge project page:
 
