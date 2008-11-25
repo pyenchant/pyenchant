@@ -119,21 +119,23 @@ class EnchantStr(str):
     objects will be unicode by default.
     """
 
-    def __new__(self,value):
+    def __new__(cls,value):
         """EnchantStr data constructor.
 
         This method records whether the initial string was unicode, then
         simply passes it along to the default string constructor.
         """
         if type(value) is unicode:
-          self._was_unicode = True
+          was_unicode = True
           if str is not unicode:
             value = value.encode("utf-8")
         else:
-          self._was_unicode = False
+          was_unicode = False
           if str is not bytes:
             raise RuntimeError("Don't pass bytestrings to pyenchant")
-        return str.__new__(self,value)
+        self = str.__new__(cls,value)
+        self._was_unicode = was_unicode
+        return self
 
     def encode(self):
         """Encode this string into a form usable by the enchant C library."""
