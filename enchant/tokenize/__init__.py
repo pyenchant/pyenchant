@@ -111,11 +111,11 @@ class tokenize:
         self._text = text
         self.offset = 0
 
-    def next(self):
-        raise NotImplementedError()
-
     def __next__(self):
         return self.next()
+
+    def next(self):
+        raise NotImplementedError()
 
     def __iter__(self):
         return self
