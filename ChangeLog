@@ -1,4 +1,9 @@
 
+1.5.1:
+
+    * SpellChecker.add_to_personal renamed to SpellChecker.add and fixed
+      to use the corresponding Dict method.
+
 1.5.0:
 
     * Migrated from SWIG to ctypes:

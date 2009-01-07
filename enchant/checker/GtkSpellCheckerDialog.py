@@ -187,7 +187,8 @@ class GtkSpellCheckerDialog(gtk.Window):
 
     def _onAdd(self,*args):
         """Callback for the "add" button."""
-        self._checker.add_to_personal()
+        self._checker.add()
+        self._advance()
 
     def _onClose(self,w,*args):
         self.emit('delete_event',gtk.gdk.Event(gtk.gdk.BUTTON_PRESS))

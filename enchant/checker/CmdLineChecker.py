@@ -118,7 +118,7 @@ class CmdLineChecker:
             return True
             
         if cmd == "a":
-            self.error.add_to_personal()
+            self.error.add()
             return True
         
         if cmd == "e":

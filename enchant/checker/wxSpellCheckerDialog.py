@@ -182,7 +182,8 @@ class wxSpellCheckerDialog(wx.Dialog):
 
     def OnAdd(self, evt):
         """Callback for the "add" button."""
-        self._checker.add_to_pwl()
+        self._checker.add()
+        self.Advance()
 
     def OnDone(self, evt):
         """Callback for the "close" button."""

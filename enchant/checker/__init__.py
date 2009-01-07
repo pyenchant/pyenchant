@@ -46,6 +46,7 @@
 
 import array
 import unittest
+import warnings
 
 import enchant
 import enchant.tokenize
@@ -104,6 +105,7 @@ class SpellChecker:
     
     def __init__(self,lang,text=None,tokenize=None,filters=None):
         """Constructor for the SpellChecker class.
+
         SpellChecker objects can be created in two ways, depending on
         the nature of the first argument.  If it is a string, it
         specifies a language tag from which a dictionary is created.
@@ -154,6 +156,7 @@ class SpellChecker:
         
     def set_text(self,text):
         """Set the text to be spell-checked.
+
         This method must be called, or the 'text' argument supplied
         to the constructor, before calling the 'next()' method.
         """
@@ -183,6 +186,7 @@ class SpellChecker:
 
     def wants_unicode(self):
         """Check whether the checker wants unicode strings.
+
         This method will return True if the checker wants unicode strings
         as input, False if it wants normal strings.  It's important to
         provide the correct type of string to the checker.
@@ -193,6 +197,7 @@ class SpellChecker:
 
     def coerce_string(self,text,enc=None):
         """Coerce string into the required type.
+
         This method can be used to automatically ensure that strings
         are of the correct type required by this checker - either unicode
         or standard.  If there is a mis-match, conversion is done using
@@ -259,6 +264,7 @@ class SpellChecker:
     
     def replace_always(self,word,repl=None):
         """Always replace given word with given replacement.
+
         If a single argumet is given, this is used to replace the
         current erroneous word.  If two arguments are given, that
         combination is added to the list for future use.
@@ -274,6 +280,7 @@ class SpellChecker:
 
     def ignore_always(self,word=None):
         """Add given word to list of words to ignore.
+
         If no word is given, the current erroneous word is added.
         """
         if word is None:
@@ -284,14 +291,24 @@ class SpellChecker:
             
     def add_to_personal(self,word=None):
         """Add given word to the personal word list.
+
+        If no word is given, the current erroneous word is added.
+        """
+        warnings.warn("SpellChecker.add_to_personal is deprecated, please use SpellChecker.add",category=DeprecationWarning)
+        self.add(word)
+
+    def add(self,word=None):
+        """Add given word to the personal word list.
+
         If no word is given, the current erroneous word is added.
         """
         if word is None:
             word = self.word
-        self.dict.add_to_personal(word)
+        self.dict.add(word)
     
     def suggest(self,word=None):
         """Return suggested spellings for the given word.
+
         If no word is given, the current erroneous word is used.
         """
         if word is None:
@@ -305,6 +322,7 @@ class SpellChecker:
 
     def set_offset(self,off,whence=0):
         """Set the offset of the tokenisation routine.
+
         For more details on the purpose of the tokenisation offset,
         see the documentation of the 'enchant.tokenize' module.
         The optional argument whence indicates the method by
@@ -326,6 +344,7 @@ class SpellChecker:
     
     def leading_context(self,chars):
         """Get <chars> characters of leading context.
+
         This method returns up to <chars> characters of leading
         context - the text that occurs in the string immediately
         before the current erroneous word.
@@ -336,6 +355,7 @@ class SpellChecker:
     
     def trailing_context(self,chars):
         """Get <chars> characters of trailing context.
+
         This method returns up to <chars> characters of trailing
         context - the text that occurs in the string immediately
         after the current erroneous word.
@@ -436,6 +456,7 @@ class TestChecker(unittest.TestCase):
 
     def test_chararray(self):
         """Test SpellChecker with a character array as input."""
+        # Python 3 does not provide 'c' array type
         if str is unicode:
            atype = 'u'
         else:
@@ -459,4 +480,19 @@ class TestChecker(unittest.TestCase):
           self.assertEqual(txtarr.tounicode(),"I wll be stored in an array")
         else:
           self.assertEqual(txtarr.tostring(),"I wll be stored in an array")
+
+    def test_pwl(self):
+        """Test checker loop with PWL."""
+        from enchant import DictWithPWL
+        d = DictWithPWL("en_US",None,None)
+        txt = "I am sme text to be cheked with personal list of cheked words"
+        chkr = SpellChecker(d,txt)
+        for n,err in enumerate(chkr):
+            if n == 0:
+                self.assertEqual(err.word,"sme")
+            if n == 1:
+                self.assertEqual(err.word,"cheked")
+                chkr.add()
+        self.assertEqual(n,1)
+        
 
