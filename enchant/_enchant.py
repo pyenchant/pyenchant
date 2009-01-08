@@ -61,10 +61,12 @@ if sys.platform == "win32":
   mypath = os.path.dirname(utils.get_resource_filename("libenchant.dll"))
   os.environ['PATH'] = os.environ['PATH'] + ";" + mypath
 
+# ctypes is quite happy to return a directory if one exists with that name.
+# Check that the found library is actually a *file*.
 e_path = find_library("enchant")
-if not e_path:
+if not e_path or os.path.isdir(e_path):
   e_path = find_library("libenchant")
-if not e_path:
+if not e_path or os.path.isdir(e_path):
   raise ImportError("enchant C library not found")
 
 e = cdll.LoadLibrary(e_path)
