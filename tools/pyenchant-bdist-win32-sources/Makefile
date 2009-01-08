@@ -1,5 +1,5 @@
 
-BUILD_DIR = /home/rfk/pyenchant/tools/pyenchant-bdist-win32-sources/build
+BUILD_DIR = /c/pyenchant/tools/pyenchant-bdist-win32-sources/build
 ENCHANT_DIR = enchant-1.4.2
 
 ENCHANT_CONFIG_OPTS = --enable-ispell --enable-myspell --disable-aspell
