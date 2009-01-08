@@ -51,7 +51,6 @@ if sys.platform == "win32":
     EAGER_RES = ["enchant/lib", "enchant/share"]
     # Copy local DLLs across if available
     if os.path.exists(WINDEPS):
-      print "Copying win32 dependencies"
       # Main DLLs
       libDir = os.path.join(WINDEPS,"lib")
       for fName in os.listdir(libDir):
