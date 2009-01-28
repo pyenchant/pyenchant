@@ -65,27 +65,58 @@ class tokenize(enchant.tokenize.tokenize):
         self._valid_chars = valid_chars
         self._text = text
         if isinstance(text,unicode):
-            self._myIsAlpha = self._myIsAlpha_u
+            self._consume_alpha = self._consume_alpha_u
         else:
-            self._myIsAlpha = self._myIsAlpha_b
+            self._consume_alpha = self._consume_alpha_b
         self.offset = 0
     
-    def _myIsAlpha_b(self,c):
-        if c.isalpha() or c in self._valid_chars:
-            return True
-        return False
+    def _consume_alpha_b(self,text,offset):
+        """Consume an alphabetic character from the given bytestring.
 
-    def _myIsAlpha_u(self,c):
-        """Extra is-alpha tests for unicode characters.
-        As well as letter characters, treat combining marks as letters.
+        Given a bytestring and the current offset, this method returns
+        the number of characters occupied by the next alphabetic character
+        in the string.  Non-ASCII bytes are interpreted as utf-8 and can
+        result in multiple characters being consumed.
         """
-        if c.isalpha():
-            return True
-        if c in self._valid_chars:
-            return True
-        if unicodedata.category(c)[0] == "M":
-            return True
-        return False
+        if text[offset].isalpha():
+            return 1
+        elif text[offset] >= "\x80":
+            return self._consume_alpha_utf8(text,offset)
+        return 0
+
+    def _consume_alpha_utf8(self,text,offset):
+        """Consume a sequence of utf8 bytes forming an alphabetic character."""
+        incr = 2
+        u = ""
+        while not u and incr <= 4:
+            try:
+                u = text[offset:offset+incr].decode("utf8")
+            except UnicodeDecodeError:
+                incr += 1
+        if not u:
+            return 0
+        if u.isalpha():
+            return incr
+        if unicodedata.category(u)[0] == "M":
+            return incr
+        return 0
+
+    def _consume_alpha_u(self,text,offset):
+        """Consume an alphabetic character from the given unicode string.
+
+        Given a unicode string and the current offset, this method returns
+        the number of characters occupied by the next alphabetic character
+        in the string.  Trailing combining characters are consumed as a
+        single letter.
+        """
+        incr = 0
+        if text[offset].isalpha():
+            incr = 1
+            while offset + incr < len(text):
+                if unicodedata.category(text[offset+incr])[0] != "M":
+                    break
+                incr += 1
+        return incr
 
     def next(self):
         text = self._text
@@ -94,16 +125,29 @@ class tokenize(enchant.tokenize.tokenize):
             if offset >= len(text):
                 break
             # Find start of next word (must be alpha)
-            while offset < len(text) and not text[offset].isalpha():
+            while True:
+                incr = self._consume_alpha(text,offset)
+                if incr:
+                    break
                 offset += 1
+                if offset == len(text):
+                    break
             curPos = offset
-            # Find end of word using myIsAlpha
-            while offset < len(text) and self._myIsAlpha(text[offset]):
-                offset += 1
+            # Find end of word using, allowing valid_chars
+            while True:
+                incr = self._consume_alpha(text,offset)
+                if not incr:
+                    if text[offset] in self._valid_chars:
+                        incr = 1
+                    else:
+                        break
+                offset += incr
+                if offset == len(text):
+                    break
             # Return if word isnt empty
             if(curPos != offset):
-                # Make sure word ends with an alpha
-                while not text[offset-1].isalpha():
+                # Make sure word doesn't end with a valid_char
+                while text[offset-1] in self._valid_chars:
                     offset = offset - 1
                 self.offset = offset
                 return (text[curPos:offset],curPos)
@@ -159,6 +203,15 @@ of words. Also need to "test" the handling of 'quoted' words."""
         input = raw_unicode(r"Ik ben gei\u0308nteresseerd in de co\u00F6rdinatie van mijn knie\u00EBn, maar kan niet e\u0301e\u0301n \u00E0 twee enqu\u00EAtes vinden die recht doet aan mijn carri\u00E8re op Cura\u00E7ao")
         output = input.split(" ")
         output[8] = output[8][0:-1]
+        for (itmO,itmV) in zip(output,tokenize(input)):
+            self.assertEqual(itmO,itmV[0])
+            self.assert_(input[itmV[1]:].startswith(itmO))
+
+    def test_utf8_bytes(self):
+        """Test tokenization of UTF8-encoded bytes (bug #2500184)."""
+        input = 'A r\xc3\xa9sum\xc3\xa9, also spelled resum\xc3\xa9 or resume'
+        output = input.split(" ")
+        output[1] = output[1][0:-1]
         for (itmO,itmV) in zip(output,tokenize(input)):
             self.assertEqual(itmO,itmV[0])
             self.assert_(input[itmV[1]:].startswith(itmO))
