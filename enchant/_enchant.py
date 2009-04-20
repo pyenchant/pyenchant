@@ -48,7 +48,7 @@
 
 """
 
-import sys, os
+import sys, os, os.path
 from ctypes import *
 from ctypes.util import find_library
 
@@ -63,7 +63,9 @@ if sys.platform == "win32":
 
 # ctypes is quite happy to return a directory if one exists with that name.
 # Check that the found library is actually a *file*.
-e_path = find_library("enchant")
+e_path = os.environ.get('PYENCHANT_LIBRARY_PATH')
+if not e_path:
+   e_path = find_library("enchant")
 if not e_path or os.path.isdir(e_path):
   e_path = find_library("libenchant")
 if not e_path or os.path.isdir(e_path):

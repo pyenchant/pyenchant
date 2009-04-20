@@ -42,6 +42,7 @@
 """
 
 import os
+import sys
 
 # Attempt to access local language information
 try:
@@ -198,8 +199,15 @@ def get_resource_filename(resname):
     path = os.path.join(path,resname)
     if os.path.exists(path):
         return path
-    import pkg_resources
-    return pkg_resources.resource_filename("enchant",resname)
+    if hasattr(sys, "frozen"):
+        exe_dir = os.path.dirname(unicode(sys.executable,sys.getfilesystemencoding()))
+        path = os.path.join(exe_dir, resname)
+        if os.path.exists(path):
+            return path
+    else:
+        import pkg_resources
+        return pkg_resources.resource_filename("enchant",resname)
+    raise RuntimeError("Could not locate resource '%s'" % (resname,))
 
 
 def win32_data_files():
@@ -215,8 +223,9 @@ def win32_data_files():
     which we ship our own supporting data files)
     """
     dataDirs = ("share/enchant/myspell","share/enchant/ispell","lib/enchant")
-    mainDir = os.path.dirname(get_resource_filename("libenchant.dll"))
-    dataFiles = []
+    libEnchant = get_resource_filename("libenchant.dll")
+    mainDir = os.path.dirname(libEnchant)
+    dataFiles = [('',libEnchant)]
     for dataDir in dataDirs:
         files = []
         fullDir = os.path.join(mainDir,os.path.normpath(dataDir))
