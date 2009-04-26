@@ -1,5 +1,5 @@
 #
-#  A simple exampe of how to use pyenchant with py2exe.
+#  A simple example of how to use pyenchant with py2exe.
 #  This script is also used in unittests to test py2exe integration.
 #
 
