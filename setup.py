@@ -92,5 +92,6 @@ setup(name=NAME,
       package_data=PKG_DATA,
       eager_resources=EAGER_RES,
       test_suite="enchant.testsuite",
+      include_package_data=True,
      )
 

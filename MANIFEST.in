@@ -1,2 +1,6 @@
 
+include *.txt
+include tools
+include ez_setup.py
 prune tools/pyenchant-bdist-win32-sources
+
