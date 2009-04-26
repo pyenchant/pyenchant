@@ -1158,13 +1158,11 @@ class TestInstallEnv(unittest.TestCase):
 
     def test_basic(self):
         """Test proper functioning of TestInstallEnv suite."""
-        print ""
         self.install()
         self.runtests()
 
     def test_UnicodeInstallPath(self):
         """Test installation in a path containing unicode chars."""
-        print ""
         self._insDir = raw_unicode(r'test_\xe5\xe4\xf6_ing')
         self.install()
         self.runtests()
@@ -1185,16 +1183,13 @@ class TestPy2exe(unittest.TestCase):
         import os, sys, shutil
         from os import path
         from os.path import dirname
-        print ""
         try:
             import py2exe
         except ImportError:
-            print "....skipped"
             return
         os.environ["PYTHONPATH"] = dirname(dirname(__file__))
         setup_py = path.join(dirname(__file__),"..","tools","setup.py2exe.py")
         if not path.exists(setup_py):
-            print "....skipped"
             return
         buildCmd = '%s %s -q py2exe --dist-dir="%s"'
         buildCmd = buildCmd % (sys.executable,setup_py,self._tempDir)
