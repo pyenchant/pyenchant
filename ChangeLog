@@ -2,7 +2,7 @@
 1.5.2:
 
     * Modify utils.get_resource_filename and utils.win32_data_files for
-      compatability with py2exe (which was broken in the move to ctypes).
+      compatibility with py2exe (which was broken in the move to ctypes).
       Thanks to Stephen George for the fix.
 
 1.5.1:
