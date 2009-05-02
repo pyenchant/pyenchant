@@ -31,11 +31,11 @@
 
     enchant.utils:    Misc utilities for the enchant package
     
-    This module provies miscellaneous utilities for use with the
+    This module provides miscellaneous utilities for use with the
     enchant spellchecking package.  Currently available functionality
     includes:
         
-        * string/unicode compatability wrappers
+        * string/unicode compatibility wrappers
         * functions for dealing with locale/language settings
         * ability to list supporting data files (win32 only)
           
@@ -186,6 +186,7 @@ def get_default_language(default=None):
     except:
         pass
     return default
+get_default_language._DOC_ERRORS = ["LC"]
 
 
 def get_resource_filename(resname):
@@ -247,6 +248,7 @@ def win32_data_files():
                 files.append(fullFn)
         dataFiles.append((dataDir,files))
     return dataFiles
+win32_data_files._DOC_ERRORS = ["py","py","exe"]
 
 # Make enchant.Error available
 # Done at bottom of file to avoid circular imports

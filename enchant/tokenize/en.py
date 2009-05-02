@@ -29,7 +29,7 @@
 #
 """
 
-    enchant.tokenize.en:    Tokeniser for the English language
+    enchant.tokenize.en:    Tokenizer for the English language
     
     This module implements a PyEnchant text tokenizer for the English
     language, based on very simple rules.
@@ -60,6 +60,8 @@ class tokenize(enchant.tokenize.tokenize):
     By default, this list contains only the apostrophe ('). Note that
     these characters cannot appear at the start or end of a word.
     """
+
+    _DOC_ERRORS = ["pos","pos"]
     
     def __init__(self,text,valid_chars=("'",)):
         self._valid_chars = valid_chars
@@ -163,10 +165,10 @@ class tokenize(enchant.tokenize.tokenize):
 
 
 class TestTokenizeEN(unittest.TestCase):
-    """TestCases for checking behavior of English tokenization."""
+    """TestCases for checking behaviour of English tokenization."""
     
     def test_tokenize_en(self):
-        """Simple regression test for english tokenization."""
+        """Simple regression test for English tokenization."""
         input = """This is a paragraph.  It's not very special, but it's designed
 2 show how the splitter works with many-different combos
 of words. Also need to "test" the handling of 'quoted' words."""

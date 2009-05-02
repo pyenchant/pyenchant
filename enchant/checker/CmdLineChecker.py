@@ -47,8 +47,9 @@ class CmdLineChecker:
     be given a SpellChecker instance to operate on, and interacts with
     the user by printing instructions on stdout and reading commands from
     stdin.
-    
     """
+    _DOC_ERRORS = ["stdout","stdin"]
+
     def __init__(self):
         self._stop = False
         self._checker = None
@@ -163,6 +164,7 @@ class CmdLineChecker:
             outF = file(outfile,"w")
         outF.write(outStr)
         outF.close()
+    run_on_file._DOC_ERRORS = ["outfile","infile","outfile","stdout"]
         
 def _run_as_script():
     """Run the command-line spellchecker as a script.

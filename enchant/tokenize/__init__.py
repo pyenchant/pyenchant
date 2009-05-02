@@ -29,14 +29,14 @@
 #
 """
 
-    enchant.tokenize:    String tokenisation functions for PyEnchant
+    enchant.tokenize:    String tokenization functions for PyEnchant
 
     An important task in spellchecking is breaking up large bodies of
     text into their constituent words, each of which is then checked
     for correctness.  This package provides Python functions to split
     strings into words according to the rules of a particular language.
     
-    Each tokenisation function accepts a string as its only positional
+    Each tokenization function accepts a string as its only positional
     argument, and returns an iterator which will yield tuples of the
     following form, one for each word found:
         
@@ -52,20 +52,20 @@
     The iterator also provides the attribute 'offset' which may be used
     to get/set the current position of the tokenizer inside the string
     being split.  This can be used for example if the string's contents
-    have changed during the tokenisation process.
+    have changed during the tokenization process.
     
-    To obtain an appropriate tokenisation function for the language
+    To obtain an appropriate tokenization function for the language
     identified by <tag>, use the function 'get_tokenizer(tag)'.
     
-    This library is designed to be easily extendable by third-party
-    authors.  To register a tokenisation function for the language
+    This library is designed to be easily extendible by third-party
+    authors.  To register a tokenization function for the language
     <tag>, implement it as the function 'tokenize' within the
     module enchant.tokenize.<tag>.  The 'get_tokenizer' function
     will automatically detect it.  Note that the underscore must be
-    used as the tag component seperator in this case, in order to
+    used as the tag component separator in this case, in order to
     form a valid python module name. (e.g. "en_US" rather than "en-US")
     
-    Currently, a tokeniser has only been implemented for the English
+    Currently, a tokenizer has only been implemented for the English
     language.  Based on the author's limited experience, this should
     be at least partially suitable for other languages.
 
@@ -83,6 +83,8 @@
             do_something(word)
         
 """
+_DOC_ERRORS = ["pos","pos","tknzr","URLFilter","WikiWordFilter",
+               "tkns","tknzr","pos","tkns"]
 
 import unittest
 import re
@@ -100,13 +102,15 @@ class Error(enchant.Error):
 class tokenize:
     """Base class for all tokenizer objects.
     
-    Each tokenizer must be an interator and provide the 'offset'
+    Each tokenizer must be an iterator and provide the 'offset'
     attribute as described in the documentation for this module.
     
     While tokenizers are in fact classes, they should be treated
     like functions, and so are named using lower_case rather than
     the CamelCase more traditional of class names.
     """
+    _DOC_ERRORS = ["CamelCase"]
+
     def __init__(self,text):
         self._text = text
         self.offset = 0
@@ -123,6 +127,7 @@ class tokenize:
 
 class empty_tokenize(tokenize):
     """Tokenizer class that yields no elements."""
+    _DOC_ERRORS = []
 
     def __init__(self):
         tokenize.__init__(self,"")
@@ -133,6 +138,7 @@ class empty_tokenize(tokenize):
 
 class unit_tokenize(tokenize):
     """Tokenizer class that yields the text as a single token."""
+    _DOC_ERRORS = []
 
     def __init__(self,text):
         tokenize.__init__(self,text)
@@ -152,6 +158,7 @@ class basic_tokenize(tokenize):
     text into words based on whitespace boundaries, and removes basic
     punctuation symbols from the start and end of each word.
     """
+    _DOC_ERRORS = []
     
     # Chars to remove from start/end of words
     strip_from_start = '"' + "'`(["
@@ -197,7 +204,7 @@ def get_tokenizer(tag,filters=None):
     If given and not None, 'filters' must be a list of filter
     classes that will be applied to the tokenizer during creation.
     """
-    # Ensure only '_' used as seperator
+    # Ensure only '_' used as separator
     tag = tag.replace("-","_")
     # First try the whole tag
     tkFunc = _try_tokenizer(tag)
@@ -218,6 +225,7 @@ def get_tokenizer(tag,filters=None):
             tokenizer = f(tokenizer)
     tokenizer = wrap_tokenizer(tokenizer,tkFunc)
     return tokenizer
+get_tokenizer._DOC_ERRORS = ["py","py"]
     
 
 def _try_tokenizer(modName):
@@ -247,6 +255,7 @@ def wrap_tokenizer(tk1,tk2):
     tkW = Filter(tk1)
     tkW._split = tk2
     return tkW
+wrap_tokenizer._DOC_ERRORS = ["tk","tk","tk","tk"]
 
 
 class Filter:
@@ -258,7 +267,7 @@ class Filter:
       * skip over tokens
       * split tokens into sub-tokens
 
-    Subclasses has two basic options for customising their behavior.  The
+    Subclasses has two basic options for customising their behaviour.  The
     method _skip(word) may be overridden to return True for words that
     should be skipped, and false otherwise.  The method _split(word) may
     be overridden as tokenization function that will be applied to further
@@ -277,8 +286,8 @@ class Filter:
         """Filter method for identifying skippable tokens.
         
         If this method returns true, the given word will be skipped by
-        the filter.  This should be overriden in subclasses to produce the
-        desired functionality.  The default behavior is not to skip any
+        the filter.  This should be overridden in subclasses to produce the
+        desired functionality.  The default behaviour is not to skip any
         words.
         """
         return False
@@ -288,7 +297,7 @@ class Filter:
         
         This method must be a tokenization function that will split the
         given word into sub-tokens according to the needs of the filter.
-        The default behavior is not to split any words.
+        The default behaviour is not to split any words.
         """
         return unit_tokenize(word)
 
@@ -302,6 +311,8 @@ class Filter:
         perform the tokenization.  Since we need to manage a lot of state
         during tokenization, returning a class is the best option.
         """
+        _DOC_ERRORS = ["tknzr"]
+ 
         def __init__(self,tokenizer,skip,split):
             self._skip = skip
             self._split = split
@@ -360,6 +371,7 @@ class URLFilter(Filter):
         
     That is, any words that are URLs.
     """
+    _DOC_ERRORS = ["zA"]
     _pattern = re.compile(r"^[a-zA-z]+:\/\/[^\s].*")
     def _skip(self,word):
         if self._pattern.match(word):
@@ -381,7 +393,7 @@ class WikiWordFilter(Filter):
         return False
 
 class EmailFilter(Filter):
-    """Filter skipping over email addreses.
+    """Filter skipping over email addresses.
     This filter skips any words matching the following regular expression:
        
            ^.+@[^\.].*\.[a-z]{2,}$
@@ -482,7 +494,7 @@ of words. Also need to "test" the (handling) of 'quoted' words."""
             if n == 8:
                 self.assertEquals(pos,23)
                 self.assertEquals(word,"it")
-            # OK, I'm pretty happy with the behavior, no need to
+            # OK, I'm pretty happy with the behaviour, no need to
             # continue testing the rest of the string
 
 

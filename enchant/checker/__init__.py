@@ -31,7 +31,7 @@
 
     enchant.checker:  High-level spellchecking functionality
     
-    This package is designed to host higer-level spellchecking functionality
+    This package is designed to host higher-level spellchecking functionality
     than is available in the base enchant package.  It should make writing
     applications that follow common usage idioms significantly easier.
     
@@ -55,7 +55,7 @@ from enchant.tokenize import get_tokenizer
 from enchant.utils import bytes, unicode, raw_unicode, basestring
 
 class SpellChecker:
-    """Class implementing stateful spellchecking behavior.
+    """Class implementing stateful spellchecking behaviour.
         
     This class is designed to implement a spell-checking loop over
     a block of text, correcting/ignoring/replacing words as required.
@@ -98,10 +98,11 @@ class SpellChecker:
     
     If using an array of characters with this object and the
     array is modified outside of the spellchecking loop, use the
-    'set_offet' method to reposition the internal loop pointer
-    to make sure it doesnt skip any words.
+    'set_offset' method to reposition the internal loop pointer
+    to make sure it doesn't skip any words.
     
     """
+    _DOC_ERRORS = ["sme","fw","speling","chkr","chkr","chkr"]
     
     def __init__(self,lang,text=None,tokenize=None,filters=None):
         """Constructor for the SpellChecker class.
@@ -145,7 +146,7 @@ class SpellChecker:
         # Default to the empty string as the text to be checked
         self._text = array.array('u')
         self._use_tostring = False
-        self._tokens = ()
+        self._tokens = iter([])
         
         if text is not None:
             self.set_text(text)
@@ -200,7 +201,7 @@ class SpellChecker:
 
         This method can be used to automatically ensure that strings
         are of the correct type required by this checker - either unicode
-        or standard.  If there is a mis-match, conversion is done using
+        or standard.  If there is a mismatch, conversion is done using
         python's default encoding unless another encoding is specified.
         """
         if self.wants_unicode():
@@ -229,7 +230,7 @@ class SpellChecker:
         are found, it will raise StopIteration.
         
         The method will always return self, so that it can be used
-        sensibly in common idoms such as:
+        sensibly in common idioms such as:
 
             for err in checker:
                 err.do_something()
@@ -265,7 +266,7 @@ class SpellChecker:
     def replace_always(self,word,repl=None):
         """Always replace given word with given replacement.
 
-        If a single argumet is given, this is used to replace the
+        If a single argument is given, this is used to replace the
         current erroneous word.  If two arguments are given, that
         combination is added to the list for future use.
         """
@@ -321,9 +322,9 @@ class SpellChecker:
         return self.dict.check(word)
 
     def set_offset(self,off,whence=0):
-        """Set the offset of the tokenisation routine.
+        """Set the offset of the tokenization routine.
 
-        For more details on the purpose of the tokenisation offset,
+        For more details on the purpose of the tokenization offset,
         see the documentation of the 'enchant.tokenize' module.
         The optional argument whence indicates the method by
         which to change the offset:
@@ -367,7 +368,7 @@ class SpellChecker:
         
             
 class TestChecker(unittest.TestCase):
-    """TestCases for checking behavior of SpellChecker class."""
+    """TestCases for checking behaviour of SpellChecker class."""
     
     def test_basic(self):
         """Test a basic run of the SpellChecker class."""

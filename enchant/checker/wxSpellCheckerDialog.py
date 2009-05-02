@@ -45,6 +45,7 @@
     time.  Use ShowModal() when operating on a static string.
 
 """
+_DOC_ERRORS = ["ShowModal"]
 
 import wx
 
@@ -79,8 +80,11 @@ class wxSpellCheckerDialog(wx.Dialog):
     returned by wxPython - unicode or normal string depending on the
     underlying system.  This needs to be fixed, somehow...
     """
+    _DOC_ERRORS = ["dlg","chkr","dlg","SetSpellChecker","chkr","dlg",
+                   "dlg","chkr","dlg","SetSpellChecker","chkr","dlg",
+                   "ShowModal","dlg","GetSpellChecker"]
  
-    # Remember dialog size acorss invocations by storing it on the class
+    # Remember dialog size across invocations by storing it on the class
     sz = (300,70)
 
     def __init__(self, parent=None,id=-1,title="Checking Spelling..."):
@@ -129,6 +133,7 @@ class wxSpellCheckerDialog(wx.Dialog):
 
     def Advance(self):
         """Advance to the next error.
+
         This method advances the SpellChecker to the next error, if
         any.  It then displays the error and some surrounding context,
         and well as listing the suggested replacements.

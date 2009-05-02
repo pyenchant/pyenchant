@@ -1,6 +1,13 @@
 
 1.5.2:
 
+    * Fixed termination conditions in English tokenization loop.
+    * Improved unicode detection in English tokenizer.
+    * Made enchant spellcheck all of its docstrings as part of the
+      unittest suite.
+
+1.5.2:
+
     * Modify utils.get_resource_filename and utils.win32_data_files for
       compatibility with py2exe (which was broken in the move to ctypes).
       Thanks to Stephen George for the fix.

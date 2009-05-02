@@ -112,6 +112,7 @@ class ProviderDesc(object):
         * file:        Location of the library containing the provider
 
     """
+    _DOC_ERRORS = ["desc"]
 
     def __init__(self,name,desc,file):
         self.name = name
@@ -163,12 +164,13 @@ class _EnchantObject(object):
     def _raise_error(self,default="Unspecified Error",eclass=Error):
          """Raise an exception based on available error messages.
          This method causes an Error to be raised.  Subclasses should
-         override it to retreive an error indication from the underlying
-         API if possible.  If such a message cannot be retreived, the
+         override it to retrieve an error indication from the underlying
+         API if possible.  If such a message cannot be retrieved, the
          argument value <default> is used.  The class of the exception
          can be specified using the argument <eclass>
          """
          raise eclass(default)
+    _raise_error._DOC_ERRORS = ["eclass"]
 
 
 
@@ -401,6 +403,7 @@ class Broker(_EnchantObject):
         # Actually call the describer function
         _e.dict_describe(dict_data,cb_func)
         return cb_result[0]
+    __describe_dict._DOC_ERRORS = ["desc"]
         
 
 class Dict(_EnchantObject):
@@ -499,6 +502,7 @@ class Dict(_EnchantObject):
         desc = self.__describe(check_this=False)
         self.tag = desc[0]
         self.provider = ProviderDesc(*desc[1:])
+    _switch_this._DOC_ERRORS = ["init"]
             
     def _check_this(self,msg=None):
         """Extend _EnchantObject._check_this() to check Broker validity.
@@ -616,6 +620,7 @@ class Dict(_EnchantObject):
         mis = EnchantStr(mis)
         cor = EnchantStr(cor)
         _e.dict_store_replacement(self._this,mis.encode(),cor.encode())
+    store_replacement._DOC_ERRORS = ["mis","cor","cor","mis"]
 
     def __describe(self,check_this=True):
         """Return a tuple describing the dictionary.
@@ -661,7 +666,7 @@ class DictWithPWL(Dict):
            the default one.
     
     This class behaves as the standard Dict class, but also manages a
-    personal word list stored in a seperate file.  The file must be
+    personal word list stored in a separate file.  The file must be
     specified at creation time by the 'pwl' argument to the constructor.
     Words added to the dictionary are automatically appended to the pwl file.
 
@@ -679,6 +684,7 @@ class DictWithPWL(Dict):
     To create a DictWithPWL from the user's default language, use None
     as the 'tag' argument.
     """
+    _DOC_ERRORS = ["pel","pel","PEL","pel"]
     
     def __init__(self,tag,pwl=None,pel=None,broker=None):
         """DictWithPWL constructor.
@@ -734,7 +740,7 @@ class DictWithPWL(Dict):
         
         This method takes a word in the dictionary language and returns
         True if it is correctly spelled, and false otherwise.  It checks
-        both the dictionary and the personal wordlist.
+        both the dictionary and the personal word list.
         """
         if self.pel.check(word):
             return False
@@ -946,7 +952,7 @@ class TestDict(unittest.TestCase):
         self.dict.add_to_session("hello")
 
     def test_AddRemove(self):
-        """Testing adding/removing from default user dictionary."""
+        """Test adding/removing from default user dictionary."""
         nonsense = "kxhjsddsi"
         self.failIf(self.dict.check(nonsense))
         self.dict.add(nonsense)
@@ -963,7 +969,7 @@ class TestDict(unittest.TestCase):
         self.assert_(self.dict.check("pineapple"))
     
     def test_DefaultLang(self):
-        """Test behavior of default language selection."""
+        """Test behaviour of default language selection."""
         defLang = utils.get_default_language()
         if defLang is None:
             # If no default language, shouldnt work
@@ -993,7 +999,6 @@ class TestPWL(unittest.TestCase):
         shutil.rmtree(self._tempDir)
 
     def _mkdtemp(self):
-        """Simple wrapper for tempfile.mkdtemp"""
         import tempfile
         return tempfile.mkdtemp()
 
@@ -1014,7 +1019,7 @@ class TestPWL(unittest.TestCase):
         pwlFile.close()
         
     def getPWLContents(self):
-        """Retreive the contents of the PWL file."""
+        """Retrieve the contents of the PWL file."""
         pwlFile = open(self._path(),"r")
         contents = pwlFile.readlines()
         pwlFile.close()
@@ -1100,6 +1105,7 @@ class TestPWL(unittest.TestCase):
         self.assert_(d.check("hello"))
 
     def test_PyPWL(self):
+        """Test our pure-python PWL implementation."""
         d = PyPWL()
         self.assert_(list(d._words) == [])
         d.add("hello")
@@ -1124,6 +1130,84 @@ class TestPWL(unittest.TestCase):
         self.assert_(d)
 
 
+class TestDocStrings(unittest.TestCase):
+    """Test the spelling on all docstrings we can find in this module.
+
+    This serves two purposes - to provide a lot of test data for the
+    checker routines, and to make sure we don't suffer the embarrassment
+    of having spelling errors in a spellchecking package!
+    """
+
+    WORDS = ["spellchecking","utf","dict","unicode","bytestring","bytestrings",
+             "str","pyenchant","ascii", "utils","setup","distutils","pkg",
+             "filename", "tokenization", "tuple", "tuples", "tokenizer",
+             "tokenizers","testcase","testcases","whitespace","wxpython",
+             "spellchecker","dialog","urls","wikiwords","enchantobject",
+             "providerdesc", "spellcheck", "pwl", "aspell", "myspell",
+             "docstring", "docstrings", "stopiteration", "pwls","pypwl",
+             "dictwithpwl","skippable","dicts","dict's","filenames",
+             "trie","api","ctypes","wxspellcheckerdialog","stateful",
+             "cmdlinechecker","spellchecks"]
+
+    def test_docstrings(self):
+        """Test that all our docstrings are error-free."""
+        import enchant
+        import enchant.utils
+        import enchant.pypwl
+        import enchant.checker
+        import enchant.checker.CmdLineChecker
+        import enchant.checker.GtkSpellCheckerDialog
+        import enchant.checker.wxSpellCheckerDialog
+        import enchant.tokenize
+        import enchant.tokenize.en
+        errors = []
+        #  Naive recursion here would blow the stack, instead we
+        #  simulate it with our own stack
+        tocheck = [enchant]
+        checked = []
+        while tocheck:
+            obj = tocheck.pop()
+            checked.append(obj)
+            newobjs = list(self._check_docstrings(obj,errors))
+            tocheck.extend([obj for obj in newobjs if obj not in checked])
+        self.assertEqual(len(errors),0)
+
+    def _check_docstrings(self,obj,errors):
+        import enchant
+        if hasattr(obj,"__doc__"):
+            skip_errors = list(getattr(obj,"_DOC_ERRORS",[]))
+            chkr = enchant.checker.SpellChecker("en",obj.__doc__,filters=[enchant.tokenize.URLFilter])
+            for err in chkr:
+                if len(err.word) == 1:
+                    continue
+                if err.word.lower() in self.WORDS:
+                    continue
+                if skip_errors and skip_errors[0] == err.word:
+                   skip_errors.pop(0)
+                   continue
+                errors.append((obj,err.word,err.wordpos))
+                print ""
+                print "ERROR:", obj, err.word, err.wordpos, chkr.suggest()
+            if skip_errors:
+                print "NOT SKIPPED", obj, skip_errors
+        #  Find and yield all child objects that should be checked
+        for name in dir(obj):
+            if name.startswith("__"):
+                continue
+            child = getattr(obj,name)
+            if hasattr(child,"__file__"):
+                if not child.__file__.startswith(os.path.dirname(__file__)):
+                    continue
+            else:
+                cmod = getattr(child,"__module__",None)
+                if not cmod:
+                    cclass = getattr(child,"__class__",None)
+                    cmod = getattr(cclass,"__module__",None)
+                if cmod and not cmod.startswith("enchant"):
+                    continue
+            yield child
+
+
 class TestInstallEnv(unittest.TestCase):
     """Run all testcases in a variety of install environments."""
    
@@ -1136,7 +1220,6 @@ class TestInstallEnv(unittest.TestCase):
         shutil.rmtree(self._tempDir)
 
     def _mkdtemp(self):
-        """Simple wrapper for tempfile.mkdtemp"""
         import tempfile
         return tempfile.mkdtemp()
 
@@ -1160,6 +1243,7 @@ class TestInstallEnv(unittest.TestCase):
         """Test proper functioning of TestInstallEnv suite."""
         self.install()
         self.runtests()
+    test_basic._DOC_ERRORS = ["TestInstallEnv"]
 
     def test_UnicodeInstallPath(self):
         """Test installation in a path containing unicode chars."""
@@ -1170,6 +1254,7 @@ class TestInstallEnv(unittest.TestCase):
 
 class TestPy2exe(unittest.TestCase):
     """Run all testcases inside a py2exe executable"""
+    _DOC_ERRORS = ["py","exe"]
    
     def setUp(self):
         self._tempDir = self._mkdtemp()
@@ -1179,7 +1264,7 @@ class TestPy2exe(unittest.TestCase):
         shutil.rmtree(self._tempDir)
 
     def test_py2exe(self):
-        """Testing pyenchant running inside a py2exe executable."""
+        """Test pyenchant running inside a py2exe executable."""
         import os, sys, shutil
         from os import path
         from os.path import dirname
@@ -1199,9 +1284,9 @@ class TestPy2exe(unittest.TestCase):
         self.assertTrue(os.path.exists(testCmd))
         res = os.system(testCmd)
         self.assertEqual(res,0)
+    test_py2exe._DOC_ERRORS = ["py","exe"]
         
     def _mkdtemp(self):
-        """Simple wrapper for tempfile.mkdtemp"""
         import tempfile
         return tempfile.mkdtemp()
 
@@ -1212,11 +1297,12 @@ def testsuite(recurse=True):
     from enchant.tokenize.en import TestTokenizeEN
     suite = unittest.TestSuite()
     if recurse:
-      suite.addTest(unittest.makeSuite(TestInstallEnv))
-      suite.addTest(unittest.makeSuite(TestPy2exe))
+        suite.addTest(unittest.makeSuite(TestInstallEnv))
+        suite.addTest(unittest.makeSuite(TestPy2exe))
     suite.addTest(unittest.makeSuite(TestBroker))
     suite.addTest(unittest.makeSuite(TestDict))
     suite.addTest(unittest.makeSuite(TestPWL))
+    suite.addTest(unittest.makeSuite(TestDocStrings))
     suite.addTest(unittest.makeSuite(TestChecker))
     suite.addTest(unittest.makeSuite(TestTokenization))
     suite.addTest(unittest.makeSuite(TestTokenizeEN))
@@ -1225,6 +1311,10 @@ def testsuite(recurse=True):
 
 def runtestsuite():
     return unittest.TextTestRunner(verbosity=0).run(testsuite(recurse=False))
+
+
+_DOC_ERRORS = ['enchnt','enchnt']
+
 
 # Run unit tests when called from comand-line
 if __name__ == "__main__":
