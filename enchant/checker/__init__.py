@@ -494,5 +494,15 @@ class TestChecker(unittest.TestCase):
                 self.assertEqual(err.word,"cheked")
                 chkr.add()
         self.assertEqual(n,1)
-        
 
+    def test_bug2785373(self):
+        """Testcases for bug #2785373."""
+        c = SpellChecker(enchant.Dict("en"),"")
+        c.set_text("So, one dey when I wes 17, I left.")
+        for err in c:
+            pass
+        c = SpellChecker(enchant.Dict("en"),"")
+        c.set_text(raw_unicode("So, one dey when I wes 17, I left."))
+        for err in c:
+            pass
+ 

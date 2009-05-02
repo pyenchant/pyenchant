@@ -64,11 +64,22 @@ class tokenize(enchant.tokenize.tokenize):
     def __init__(self,text,valid_chars=("'",)):
         self._valid_chars = valid_chars
         self._text = text
-        if isinstance(text,unicode):
-            self._consume_alpha = self._consume_alpha_u
-        else:
-            self._consume_alpha = self._consume_alpha_b
         self.offset = 0
+        # Select proper implementation of self._consume_alpha.
+        # 'text' may not be a string here (it could be e.g. a mutable array)
+        # so we can't use isinstance(text,unicode) to detect unicode.
+        # Instead we typetest the first character of the text.
+        # If there's no characters then it doesn't matter what implementation
+        # we use since it won't be called anyway. 
+        try:
+            char1 = text[0]
+        except IndexError:
+            self._consume_alpha = self._consume_alpha_b
+        else:
+            if isinstance(char1,unicode):
+                self._consume_alpha = self._consume_alpha_u
+            else:
+                self._consume_alpha = self._consume_alpha_b
     
     def _consume_alpha_b(self,text,offset):
         """Consume an alphabetic character from the given bytestring.
@@ -213,10 +224,11 @@ of words. Also need to "test" the handling of 'quoted' words."""
             self.assertEqual(itmO,itmV)
 
     def test_bug2785373(self):
+        "Testcases for bug #2785373"
         input = "So, one dey when I wes 17, I left."
         for _ in tokenize(input):
             pass
-        input = u"So, one dey when I wes 17, I left."
+        input = raw_unicode("So, one dey when I wes 17, I left.")
         for _ in tokenize(input):
             pass
 
