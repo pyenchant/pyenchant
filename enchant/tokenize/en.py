@@ -78,6 +78,7 @@ class tokenize(enchant.tokenize.tokenize):
         in the string.  Non-ASCII bytes are interpreted as utf-8 and can
         result in multiple characters being consumed.
         """
+        assert offset < len(text)
         if text[offset].isalpha():
             return 1
         elif text[offset] >= "\x80":
@@ -109,6 +110,7 @@ class tokenize(enchant.tokenize.tokenize):
         in the string.  Trailing combining characters are consumed as a
         single letter.
         """
+        assert offset < len(text)
         incr = 0
         if text[offset].isalpha():
             incr = 1
@@ -121,20 +123,16 @@ class tokenize(enchant.tokenize.tokenize):
     def next(self):
         text = self._text
         offset = self.offset
-        while True:
-            if offset >= len(text):
-                break
+        while offset < len(text):
             # Find start of next word (must be alpha)
-            while True:
+            while offset < len(text):
                 incr = self._consume_alpha(text,offset)
                 if incr:
                     break
                 offset += 1
-                if offset == len(text):
-                    break
             curPos = offset
             # Find end of word using, allowing valid_chars
-            while True:
+            while offset < len(text):
                 incr = self._consume_alpha(text,offset)
                 if not incr:
                     if text[offset] in self._valid_chars:
@@ -142,8 +140,6 @@ class tokenize(enchant.tokenize.tokenize):
                     else:
                         break
                 offset += incr
-                if offset == len(text):
-                    break
             # Return if word isnt empty
             if(curPos != offset):
                 # Make sure word doesn't end with a valid_char
@@ -176,19 +172,6 @@ of words. Also need to "test" the handling of 'quoted' words."""
         for (itmO,itmV) in zip(output,tokenize(input)):
             self.assertEqual(itmO,itmV)
 
-    def test_bug1591450(self):
-        """Check for tokenization regressions identified in bug #1591450."""
-        input = """Testing <i>markup</i> and {y:i}so-forth...leading dots and trail--- well, you get-the-point. Also check numbers: 999 1,000 12:00 .45. Done?"""
-        output = [
-                  ("Testing",0),("i",9),("markup",11),("i",19),("and",22),
-                  ("y",27),("i",29),("so",31),("forth",34),("leading",42),
-                  ("dots",50),("and",55),("trail",59),("well",68),
-                  ("you",74),("get",78),("the",82),("point",86),
-                  ("Also",93),("check",98),("numbers",104),("Done",134),
-                 ]
-        for (itmO,itmV) in zip(output,tokenize(input)):
-            self.assertEqual(itmO,itmV)
-
     def test_unicodeBasic(self):
         """Test tokenization of a basic unicode string."""
         input = raw_unicode(r"Ik ben ge\u00EFnteresseerd in de co\u00F6rdinatie van mijn knie\u00EBn, maar kan niet \u00E9\u00E9n \u00E0 twee enqu\u00EAtes vinden die recht doet aan mijn carri\u00E8re op Cura\u00E7ao")
@@ -215,4 +198,25 @@ of words. Also need to "test" the handling of 'quoted' words."""
         for (itmO,itmV) in zip(output,tokenize(input)):
             self.assertEqual(itmO,itmV[0])
             self.assert_(input[itmV[1]:].startswith(itmO))
+
+    def test_bug1591450(self):
+        """Check for tokenization regressions identified in bug #1591450."""
+        input = """Testing <i>markup</i> and {y:i}so-forth...leading dots and trail--- well, you get-the-point. Also check numbers: 999 1,000 12:00 .45. Done?"""
+        output = [
+                  ("Testing",0),("i",9),("markup",11),("i",19),("and",22),
+                  ("y",27),("i",29),("so",31),("forth",34),("leading",42),
+                  ("dots",50),("and",55),("trail",59),("well",68),
+                  ("you",74),("get",78),("the",82),("point",86),
+                  ("Also",93),("check",98),("numbers",104),("Done",134),
+                 ]
+        for (itmO,itmV) in zip(output,tokenize(input)):
+            self.assertEqual(itmO,itmV)
+
+    def test_bug2785373(self):
+        input = "So, one dey when I wes 17, I left."
+        for _ in tokenize(input):
+            pass
+        input = u"So, one dey when I wes 17, I left."
+        for _ in tokenize(input):
+            pass
 
