@@ -75,6 +75,7 @@
     of 'Error'.
 
 """
+_DOC_ERRORS = ['enchnt','enchnt', 'fr']
 
 # Make version info available
 __ver_major__ = 1
@@ -244,6 +245,7 @@ class Broker(_EnchantObject):
                
         """
         return Dict(tag,self)
+    request_dict._DOC_ERRORS = ["fr"]
 
     def _request_dict_data(self,tag):
         """Request raw C pointer data for a dictionary.
@@ -620,7 +622,7 @@ class Dict(_EnchantObject):
         mis = EnchantStr(mis)
         cor = EnchantStr(cor)
         _e.dict_store_replacement(self._this,mis.encode(),cor.encode())
-    store_replacement._DOC_ERRORS = ["mis","cor","cor","mis"]
+    store_replacement._DOC_ERRORS = ["mis","mis"]
 
     def __describe(self,check_this=True):
         """Return a tuple describing the dictionary.
@@ -1147,19 +1149,26 @@ class TestDocStrings(unittest.TestCase):
              "docstring", "docstrings", "stopiteration", "pwls","pypwl",
              "dictwithpwl","skippable","dicts","dict's","filenames",
              "trie","api","ctypes","wxspellcheckerdialog","stateful",
-             "cmdlinechecker","spellchecks"]
+             "cmdlinechecker","spellchecks","callback","clunkier","iterator",
+             "ispell","cor"]
 
     def test_docstrings(self):
         """Test that all our docstrings are error-free."""
         import enchant
         import enchant.utils
         import enchant.pypwl
-        import enchant.checker
-        import enchant.checker.CmdLineChecker
-        import enchant.checker.GtkSpellCheckerDialog
-        import enchant.checker.wxSpellCheckerDialog
         import enchant.tokenize
         import enchant.tokenize.en
+        import enchant.checker
+        import enchant.checker.CmdLineChecker
+        try:
+            import enchant.checker.GtkSpellCheckerDialog
+        except ImportError:
+            pass
+        try:
+            import enchant.checker.wxSpellCheckerDialog
+        except ImportError:
+            pass
         errors = []
         #  Naive recursion here would blow the stack, instead we
         #  simulate it with our own stack
@@ -1175,7 +1184,7 @@ class TestDocStrings(unittest.TestCase):
     def _check_docstrings(self,obj,errors):
         import enchant
         if hasattr(obj,"__doc__"):
-            skip_errors = list(getattr(obj,"_DOC_ERRORS",[]))
+            skip_errors = [w for w in getattr(obj,"_DOC_ERRORS",[])]
             chkr = enchant.checker.SpellChecker("en",obj.__doc__,filters=[enchant.tokenize.URLFilter])
             for err in chkr:
                 if len(err.word) == 1:
@@ -1183,12 +1192,13 @@ class TestDocStrings(unittest.TestCase):
                 if err.word.lower() in self.WORDS:
                     continue
                 if skip_errors and skip_errors[0] == err.word:
-                   skip_errors.pop(0)
-                   continue
+                    skip_errors.pop(0)
+                    continue
                 errors.append((obj,err.word,err.wordpos))
                 print ""
                 print "ERROR:", obj, err.word, err.wordpos, chkr.suggest()
             if skip_errors:
+                print ""
                 print "NOT SKIPPED", obj, skip_errors
         #  Find and yield all child objects that should be checked
         for name in dir(obj):
@@ -1196,6 +1206,8 @@ class TestDocStrings(unittest.TestCase):
                 continue
             child = getattr(obj,name)
             if hasattr(child,"__file__"):
+                if not hasattr(globals(),"__file__"):
+                    continue
                 if not child.__file__.startswith(os.path.dirname(__file__)):
                     continue
             else:
@@ -1312,8 +1324,6 @@ def testsuite(recurse=True):
 def runtestsuite():
     return unittest.TextTestRunner(verbosity=0).run(testsuite(recurse=False))
 
-
-_DOC_ERRORS = ['enchnt','enchnt']
 
 
 # Run unit tests when called from comand-line

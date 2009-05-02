@@ -260,7 +260,7 @@ class PyPWL:
         """
         # Too much work for this simple spellchecker
         pass
-    store_replacement._DOC_ERRORS = ["mis","cor","cor","mis"]
+    store_replacement._DOC_ERRORS = ["mis","mis"]
 
     def is_added(self,word):
         """Check whether a word is in the personal word list."""

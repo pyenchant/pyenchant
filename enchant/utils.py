@@ -162,7 +162,7 @@ def get_default_language(default=None):
     """Determine the user's default language, if possible.
     
     This function uses the 'locale' module to try to determine
-    the user's prefered language.  The return value is as
+    the user's preferred language.  The return value is as
     follows:
         
         * if a locale is available for the LC_MESSAGES category,
