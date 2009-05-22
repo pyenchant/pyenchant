@@ -25,10 +25,9 @@ NAME = "pyenchant"
 DESCRIPTION = "Python bindings for the Enchant spellchecking system"
 AUTHOR = "Ryan Kelly"
 AUTHOR_EMAIL = "ryan@rfk.id.au"
-URL = "http://pyenchant.sourceforge.net/"
+URL = "http://www.rfk.id.au/software/pyenchant/"
 LICENSE = "LGPL"
 KEYWORDS = "spelling spellcheck enchant"
-
 
 #  Module Lists
 PACKAGES = find_packages()
