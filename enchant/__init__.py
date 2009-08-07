@@ -820,13 +820,17 @@ class TestBroker(unittest.TestCase):
     def test_LangsAreAvail(self):
         """Test whether all advertised languages are in fact available."""
         for lang in self.broker.list_languages():
-            self.assert_(self.broker.dict_exists(lang))
+            if not self.broker.dict_exists(lang):
+                assert False, "language '"+lang+"' advertised but non-existent"
             
     def test_ProvsAreAvail(self):
         """Test whether all advertised providers are in fact available."""
         for (lang,prov) in self.broker.list_dicts():
             self.assert_(self.broker.dict_exists(lang))
-            self.assert_(prov in self.broker.describe())
+            if not self.broker.dict_exists(lang):
+                assert False, "language '"+lang+"' advertised but non-existent"
+            if prov not in self.broker.describe():
+                assert False, "provier '"+str(prov)+"' advertised but non-existent"
     
     def test_ProvOrdering(self):
         """Test that provider ordering works correctly."""
