@@ -61,17 +61,24 @@ if sys.platform == "win32":
   mypath = os.path.dirname(utils.get_resource_filename("libenchant.dll"))
   os.environ['PATH'] = os.environ['PATH'] + ";" + mypath
 
-# ctypes is quite happy to return a directory if one exists with that name.
-# Check that the found library is actually a *file*.
-e_path = os.environ.get('PYENCHANT_LIBRARY_PATH')
-if not e_path:
-   e_path = find_library("enchant")
-if not e_path or os.path.isdir(e_path):
-  e_path = find_library("libenchant")
-if not e_path or os.path.isdir(e_path):
-  raise ImportError("enchant C library not found")
+def _e_path_possibilities():
+    yield os.environ.get("PYENCHANT_LIBRARY_PATH")
+    yield find_library("enchant")
+    yield find_library("libenchant")
+    if sys.platform == 'darwin':
+         # enchant lib installed by macports
+         yield "/opt/local/lib/libenchant.dylib"
 
-e = cdll.LoadLibrary(e_path)
+for e_path in _e_path_possibilities():
+    if e_path is not None:
+        try:
+            e = cdll.LoadLibrary(e_path)
+        except OSError:
+            pass
+        else:
+            break
+else:
+   raise ImportError("enchant C library not found")
 
 
 # Define various callback function types
