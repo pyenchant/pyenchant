@@ -1201,9 +1201,9 @@ class TestDocStrings(unittest.TestCase):
                 errors.append((obj,err.word,err.wordpos))
                 print ""
                 print "ERROR:", obj, err.word, err.wordpos, chkr.suggest()
-            if skip_errors:
-                print ""
-                print "NOT SKIPPED", obj, skip_errors
+            #if skip_errors:
+            #    print ""
+            #    print "NOT SKIPPED", obj, skip_errors
         #  Find and yield all child objects that should be checked
         for name in dir(obj):
             if name.startswith("__"):
