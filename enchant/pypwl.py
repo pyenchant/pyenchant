@@ -37,8 +37,8 @@ same effect can be achieved (with better performance) using the python
 bindings for Enchant, it requires a C extension.
 
 This pure-python implementation uses the same algorithm but without any
-external dependencies or C code. (Actually, it's the author's prototype
-for the C version found in Enchant.)
+external dependencies or C code (in fact, it was the author's original
+prototype for the C version found in Enchant).
 
 """
 
@@ -48,6 +48,7 @@ import os
 
 class Trie:
     """Class implementing a trie-based dictionary of words.
+
     A Trie is a recursive data structure storing words by their prefix.
     "Fuzzy matching" can be done by allowing a certain number of missteps
     when traversing the Trie.
@@ -84,7 +85,7 @@ class Trie:
                 subtrie.remove(word[1:])
     
     def search(self,word,nerrs=0):
-        """Search for the given word, but possibly making errors.
+        """Search for the given word, possibly making errors.
         
         This method searches the trie for the given <word>, making
         precisely <nerrs> errors.  It returns a list of words found.
