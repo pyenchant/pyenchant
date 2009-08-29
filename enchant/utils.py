@@ -43,6 +43,7 @@
 
 import os
 import sys
+import codecs
 
 from enchant.errors import *
 
@@ -101,6 +102,15 @@ def raw_unicode(raw):
     """
     return raw.encode("ascii").decode("unicode-escape")
 
+
+def raw_bytes(raw):
+    """Make a bytes object out of a raw string.
+
+    This is analogous to raw_unicode, but processes byte escape characters
+    to produce a bytes object.
+    """
+    return codecs.escape_decode(raw)[0]
+        
 
 class EnchantStr(str):
     """String subclass for interfacing with enchant C library.
