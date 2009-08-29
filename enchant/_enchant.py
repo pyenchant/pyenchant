@@ -53,6 +53,7 @@ from ctypes import *
 from ctypes.util import find_library
 
 from enchant import utils
+from enchant.errors import *
 
 # Locate and load the enchant dll.
 
@@ -148,7 +149,7 @@ try:
 except AttributeError, err:
     msg = err.message
     def broker_get_param(broker,param_name):
-        raise RuntimeError(msg)
+        raise Error(msg)
 else:
     broker_get_param.argtypes = [t_broker,c_char_p]
     broker_get_error.restype = c_char_p
@@ -158,7 +159,7 @@ try:
 except AttributeError, err:
     msg = err.message
     def broker_set_param(broker,param_name):
-        raise RuntimeError(msg)
+        raise Error(msg)
 else:
     broker_set_param.argtypes = [t_broker,c_char_p,c_char_p]
     broker_st_error.restype = None

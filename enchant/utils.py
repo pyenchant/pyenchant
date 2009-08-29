@@ -44,6 +44,8 @@
 import os
 import sys
 
+from enchant.errors import *
+
 # Attempt to access local language information
 try:
     import locale
@@ -103,7 +105,7 @@ def raw_unicode(raw):
 class EnchantStr(str):
     """String subclass for interfacing with enchant C library.
 
-    This class encapsulate the logic for interfacing between python native
+    This class encapsulates the logic for interfacing between python native
     string/unicode objects and the underlying enchant library, which expects
     all strings to be UTF-8 character arrays.  It is a subclass of the
     default string class 'str' - on Python 2.x that makes it an ascii string,
@@ -117,7 +119,7 @@ class EnchantStr(str):
     This allows us to following the common Python 2.x idiom of returning
     unicode when unicode is passed in, and byte strings otherwise.  It also
     lets the interface be upwards-compatible with Python 3, in which string
-    objects will be unicode by default.
+    objects are unicode by default.
     """
 
     def __new__(cls,value):
@@ -127,13 +129,13 @@ class EnchantStr(str):
         simply passes it along to the default string constructor.
         """
         if type(value) is unicode:
-          was_unicode = True
-          if str is not unicode:
-            value = value.encode("utf-8")
+            was_unicode = True
+            if str is not unicode:
+                value = value.encode("utf-8")
         else:
-          was_unicode = False
-          if str is not bytes:
-            raise RuntimeError("Don't pass bytestrings to pyenchant")
+            was_unicode = False
+            if str is not bytes:
+                raise Error("Don't pass bytestrings to pyenchant")
         self = str.__new__(cls,value)
         self._was_unicode = was_unicode
         return self
@@ -208,7 +210,7 @@ def get_resource_filename(resname):
     else:
         import pkg_resources
         return pkg_resources.resource_filename("enchant",resname)
-    raise RuntimeError("Could not locate resource '%s'" % (resname,))
+    raise Error("Could not locate resource '%s'" % (resname,))
 
 
 def win32_data_files():
@@ -249,9 +251,5 @@ def win32_data_files():
         dataFiles.append((dataDir,files))
     return dataFiles
 win32_data_files._DOC_ERRORS = ["py","py","exe"]
-
-# Make enchant.Error available
-# Done at bottom of file to avoid circular imports
-from enchant import Error
 
 

@@ -86,17 +86,12 @@
 _DOC_ERRORS = ["pos","pos","tknzr","URLFilter","WikiWordFilter",
                "tkns","tknzr","pos","tkns"]
 
-import unittest
 import re
 
 import enchant
-
-class Error(enchant.Error):
-    """Exception subclass for the tokenize module.
-    This exception is raised for errors within the enchant.tokenize
-    module.
-    """
-    pass
+from enchant.errors import *
+#  For backwards-compatability.  This will eventually be removed.
+Error = TokenizerNotFoundError
 
 
 class tokenize:
@@ -199,7 +194,7 @@ def get_tokenizer(tag,filters=None):
         * the entire tag (e.g. "en_AU.py")
         * the base country code of the tag (e.g. "en.py")
 
-    If a suitable function cannot be found, raises Error.
+    If a suitable function cannot be found, raises TokenizerNotFoundError.
     
     If given and not None, 'filters' must be a list of filter
     classes that will be applied to the tokenizer during creation.
@@ -213,7 +208,8 @@ def get_tokenizer(tag,filters=None):
         base = tag.split("_")[0]
         tkFunc = _try_tokenizer(base)
         if tkFunc is None:
-            raise Error("No tokenizer found for language '%s'" % (tag,))
+            msg = "No tokenizer found for language '%s'" % (tag,)
+            raise TokenizerNotFoundError(msg)
     # Given the language-specific tokenizer, we now build up the
     # end result as follows:
     #    * begin with basic whitespace tokenization
@@ -230,6 +226,7 @@ get_tokenizer._DOC_ERRORS = ["py","py"]
 
 def _try_tokenizer(modName):
     """Look for a tokenizer in the named module.
+
     Returns the function if found, None otherwise.
     """
     modBase = "enchant.tokenize."
@@ -410,146 +407,3 @@ class EmailFilter(Filter):
 #TODO: HTMLFilter, LaTeXFilter, ...
 
 
-# Test cases begin here
-
-class TestTokenization(unittest.TestCase):
-    """TestCases for testing the basic tokenization functionality."""
-    
-    def test_basic_tokenize(self):
-        """Simple regression test for basic white-space tokenization."""
-        input = """This is a paragraph.  It's not very special, but it's designed
-2 show how the splitter works with many-different combos
-of words. Also need to "test" the (handling) of 'quoted' words."""
-        output = [
-                  ("This",0),("is",5),("a",8),("paragraph",10),("It's",22),
-                  ("not",27),("very",31),("special",36),("but",45),("it's",49),
-                  ("designed",54),("2",63), ("show",65),("how",70),("the",74),
-                  ("splitter",78),("works",87),("with",93),("many-different",98),
-                  ("combos",113),("of",120),("words",123),
-                  ("Also",130),("need",135),
-                  ("to",140),("test",144),("the",150),("handling",155),
-                  ("of",165),("quoted",169),("words",177)
-                 ]
-        self.assertEqual(output,[i for i in basic_tokenize(input)])
-        for (itmO,itmV) in zip(output,basic_tokenize(input)):
-            self.assertEqual(itmO,itmV)
-
-    def test_tokenize_strip(self):
-        """Test special-char-stripping edge-cases in basic_tokenize."""
-        input = "((' <this> \"\" 'text' has (lots) of (special chars} >>]"
-        output = [ ("<this>",4),("text",15),("has",21),("lots",26),("of",32),
-                   ("special",36),("chars}",44),(">>",51)]
-        self.assertEqual(output,[i for i in basic_tokenize(input)])
-        for (itmO,itmV) in zip(output,basic_tokenize(input)):
-            self.assertEqual(itmO,itmV)
-            
-    def test_wrap_tokenizer(self):
-        """Test wrapping of one tokenizer with another."""
-        input = "this-string will be split@according to diff'rnt rules"
-        from enchant.tokenize import en
-        tknzr = wrap_tokenizer(basic_tokenize,en.tokenize)
-        tknzr = tknzr(input)
-        self.assertEquals(tknzr._tokenizer.__class__,basic_tokenize)
-        self.assertEquals(tknzr._tokenizer.offset,0)
-        for (n,(word,pos)) in enumerate(tknzr):
-            if n == 0:
-                self.assertEquals(pos,0)
-                self.assertEquals(word,"this")
-            if n == 1:
-                self.assertEquals(pos,5)
-                self.assertEquals(word,"string")
-            if n == 2:
-                self.assertEquals(pos,12)
-                self.assertEquals(word,"will")
-                # Test setting offset to a previous token
-                tknzr.offset = 5
-                self.assertEquals(tknzr.offset,5)
-                self.assertEquals(tknzr._tokenizer.offset,5)
-                self.assertEquals(tknzr._curtok.__class__,empty_tokenize)
-            if n == 3:
-                self.assertEquals(word,"string")
-                self.assertEquals(pos,5)
-            if n == 4:
-                self.assertEquals(pos,12)
-                self.assertEquals(word,"will")
-            if n == 5:
-                self.assertEquals(pos,17)
-                self.assertEquals(word,"be")
-                # Test setting offset past the current token
-                tknzr.offset = 20
-                self.assertEquals(tknzr.offset,20)
-                self.assertEquals(tknzr._tokenizer.offset,20)
-                self.assertEquals(tknzr._curtok.__class__,empty_tokenize)
-            if n == 6:
-                self.assertEquals(pos,20)
-                self.assertEquals(word,"split")
-            if n == 7:
-                self.assertEquals(pos,26)
-                self.assertEquals(word,"according")
-                # Test setting offset to middle of current token
-                tknzr.offset = 23
-                self.assertEquals(tknzr.offset,23)
-                self.assertEquals(tknzr._tokenizer.offset,23)
-                self.assertEquals(tknzr._curtok.offset,3)
-            if n == 8:
-                self.assertEquals(pos,23)
-                self.assertEquals(word,"it")
-            # OK, I'm pretty happy with the behaviour, no need to
-            # continue testing the rest of the string
-
-
-
-class TestFilters(unittest.TestCase):
-    """TestCases for the various Filter subclasses."""
-    
-    text = """this text with http://url.com and SomeLinksLike
-              ftp://my.site.com.au/some/file AndOthers not:/quite.a.url
-              with-an@aemail.address as well"""
-    
-    def setUp(self):
-        pass
-    
-    def test_URLFilter(self):
-        """Test filtering of URLs"""
-        tkns = get_tokenizer("en_US",(URLFilter,))(self.text)
-        out = [t for t in tkns]
-        exp = [("this",0),("text",5),("with",10),("and",30),
-               ("SomeLinksLike",34),("AndOthers",93),("not",103),("quite",108),
-               ("a",114),("url",116),("with",134),("an",139),("aemail",142),
-               ("address",149),("as",157),("well",160)]
-        self.assertEquals(out,exp)
-        
-    def test_WikiWordFilter(self):
-        """Test filtering of WikiWords"""
-        tkns = get_tokenizer("en_US",(WikiWordFilter,))(self.text)
-        out = [t for t in tkns]
-        exp = [("this",0),("text",5),("with",10),("http",15),("url",22),("com",26),
-               ("and",30), ("ftp",62),("my",68),("site",71),("com",76),("au",80),
-               ("some",83),("file",88),("not",103),("quite",108),
-               ("a",114),("url",116),("with",134),("an",139),("aemail",142),
-               ("address",149),("as",157),("well",160)]
-        self.assertEquals(out,exp)
-        
-    def test_EmailFilter(self):
-        """Test filtering of email addresses"""
-        tkns = get_tokenizer("en_US",(EmailFilter,))(self.text)
-        out = [t for t in tkns]
-        exp = [("this",0),("text",5),("with",10),("http",15),("url",22),("com",26),
-               ("and",30),("SomeLinksLike",34),
-               ("ftp",62),("my",68),("site",71),("com",76),("au",80),
-               ("some",83),("file",88),("AndOthers",93),("not",103),("quite",108),
-               ("a",114),("url",116),
-               ("as",157),("well",160)]
-        self.assertEquals(out,exp)
-        
-    def test_CombinedFilter(self):
-        """Test several filters combined"""
-        tkns=get_tokenizer("en_US",(URLFilter,WikiWordFilter,EmailFilter))(self.text)
-        out = [t for t in tkns]
-        exp = [("this",0),("text",5),("with",10),
-               ("and",30),("not",103),("quite",108),
-               ("a",114),("url",116),
-               ("as",157),("well",160)]
-        self.assertEquals(out,exp)
-        
-        
