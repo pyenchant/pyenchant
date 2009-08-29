@@ -135,6 +135,35 @@ def broker_describe(broker,cbfunc):
         cbfunc(*args[:-1])
     broker_describe1(broker,t_broker_desc_func(cbfunc1),None)
 
+broker_list_dicts1 = e.enchant_broker_list_dicts
+broker_list_dicts1.argtypes = [t_broker,t_dict_desc_func,c_void_p]
+broker_list_dicts1.restype = None
+def broker_list_dicts(broker,cbfunc):
+    def cbfunc1(*args):
+        cbfunc(*args[:-1])
+    broker_list_dicts1(broker,t_dict_desc_func(cbfunc1),None)
+
+try:
+    broker_get_param = e.enchant_broker_get_param
+except AttributeError, err:
+    msg = err.message
+    def broker_get_param(broker,param_name):
+        raise RuntimeError(msg)
+else:
+    broker_get_param.argtypes = [t_broker,c_char_p]
+    broker_get_error.restype = c_char_p
+
+try:
+    broker_set_param = e.enchant_broker_set_param
+except AttributeError, err:
+    msg = err.message
+    def broker_set_param(broker,param_name):
+        raise RuntimeError(msg)
+else:
+    broker_set_param.argtypes = [t_broker,c_char_p,c_char_p]
+    broker_st_error.restype = None
+
+
 dict_check1 = e.enchant_dict_check
 dict_check1.argtypes = [t_dict,c_char_p,c_size_t]
 dict_check1.restype = c_int
@@ -225,12 +254,4 @@ def dict_describe(dict,cbfunc):
     def cbfunc1(*args):
         cbfunc(*args[:-1])
     dict_describe1(dict,t_dict_desc_func(cbfunc1),None)
-
-broker_list_dicts1 = e.enchant_broker_list_dicts
-broker_list_dicts1.argtypes = [t_broker,t_dict_desc_func,c_void_p]
-broker_list_dicts1.restype = None
-def broker_list_dicts(broker,cbfunc):
-    def cbfunc1(*args):
-        cbfunc(*args[:-1])
-    broker_list_dicts1(broker,t_dict_desc_func(cbfunc1),None)
 

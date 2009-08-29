@@ -406,7 +406,26 @@ class Broker(_EnchantObject):
         _e.dict_describe(dict_data,cb_func)
         return cb_result[0]
     __describe_dict._DOC_ERRORS = ["desc"]
+
+    def get_param(self,name):
+        """Get the value of a named parameter on this broker.
+
+        Parameters are used to provide runtime information to individual
+        provider backends.  See the method 'set_param' for more details.
+        """
+        return _e.broker_get_param(self._this,name)
+
+    def set_param(self,name,value):
+        """Set the value of a named parameter on this broker.
+
+        Parameters are used to provide runtime information to individual
+        provider backends.  For example, the myspell provider will search
+        any directories given in the "enchant.myspell.dictionary.path" param
+        when looking for its dictionary files.
+        """
+        _e.broker_set_param(self._this,name,value)
         
+
 
 class Dict(_EnchantObject):
     """Dictionary object for the Enchant spellchecker.
