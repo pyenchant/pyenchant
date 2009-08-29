@@ -28,6 +28,16 @@ AUTHOR_EMAIL = "ryan@rfk.id.au"
 URL = "http://www.rfk.id.au/software/pyenchant/"
 LICENSE = "LGPL"
 KEYWORDS = "spelling spellcheck enchant"
+CLASSIFIERS = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 2",
+    "Programming Language :: Python :: 3",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Text Processing :: Linguistic",
+]
 
 #  Module Lists
 PACKAGES = find_packages()
@@ -87,10 +97,11 @@ setup(name=NAME,
       description=DESCRIPTION,
       license=LICENSE,
       keywords=KEYWORDS,
+      classifiers=CLASSIFIERS,
       packages=PACKAGES,
       package_data=PKG_DATA,
       eager_resources=EAGER_RES,
-      test_suite="enchant.testsuite",
+      test_suite="enchant.tests.buildtestsuite",
       include_package_data=True,
      )
 
