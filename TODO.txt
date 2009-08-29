@@ -3,5 +3,5 @@ PyEnchant:
 
   * implement a tkSpellCheckerDialog to compliment the wx one
   * Expand CmdLineChecker and make it ispell-compatible
-  * try things out on OSX
+  * build an installer for OSX
 
