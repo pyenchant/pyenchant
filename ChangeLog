@@ -1,4 +1,13 @@
 
+1.5.4:
+
+    * Upgrade to enchant v1.5.0:
+        * new Broker methods get_param() and set_param() allow
+          runtime customisation of provider data
+    * Move error classes into 'enchant.errors' for easier importing
+    * Move testcases into separate files so they're not loaded by default
+    * Compatability updates for Python 3
+
 1.5.3:
 
     * Fixed termination conditions in English tokenization loop.
