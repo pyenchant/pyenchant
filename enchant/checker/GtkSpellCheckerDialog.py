@@ -31,6 +31,8 @@
 import gtk
 import gobject
 
+from enchant.utils import printf, unicode
+
 #   columns
 COLUMN_SUGGESTION = 0
 def create_list_view(col_label,):
@@ -165,22 +167,22 @@ class GtkSpellCheckerDialog(gtk.Window):
         mainbox.show_all()
 
     def _onIgnore(self,w,*args):
-        print "ignore"
+        printf(["ignore"])
         self._advance()
 
     def _onIgnoreAll(self,w,*args):
-        print "ignore all"
+        printf(["ignore all"])
         self._checker.ignore_always()
         self._advance()
 
     def _onReplace(self,*args):
-        print "Replace"
+        printf(["Replace"])
         repl = self._getRepl()
         self._checker.replace(repl)
         self._advance()
 
     def _onReplaceAll(self,*args):
-        print "Replace all"
+        printf(["Replace all"])
         repl = self._getRepl()
         self._checker.replace_always(repl)
         self._advance()
@@ -196,7 +198,7 @@ class GtkSpellCheckerDialog(gtk.Window):
 
     def _onButtonPress(self,widget,event):
         if event.type == gtk.gdk._2BUTTON_PRESS:
-            print "Double click!"
+            printf(["Double click!"])
             self._onReplace()
             
     def _onSuggestionChanged(self,widget,*args):
@@ -216,7 +218,7 @@ class GtkSpellCheckerDialog(gtk.Window):
         model = self.suggestion_list_view.get_model()
         model.clear()
         for suggestion in suggestions:
-            value = u'%s'%(suggestion,)
+            value = unicode("%s"%(suggestion,))
             model.append([value,])
 
     def setSpellChecker(self,checker):
@@ -283,7 +285,7 @@ class GtkSpellCheckerDialog(gtk.Window):
 def _test():
     from enchant.checker import SpellChecker
     text = "This is sme text with a fw speling errors in it. Here are a fw more to tst it ut."
-    print "BEFORE:", text
+    printf(["BEFORE:", text])
     chk_dlg = GtkSpellCheckerDialog()
     chk_dlg.show()
     chk_dlg.connect('delete_event', gtk.main_quit)

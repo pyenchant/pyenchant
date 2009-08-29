@@ -89,6 +89,7 @@ _DOC_ERRORS = ["pos","pos","tknzr","URLFilter","WikiWordFilter",
 import re
 
 import enchant
+from enchant.utils import next
 from enchant.errors import *
 #  For backwards-compatability.  This will eventually be removed.
 Error = TokenizerNotFoundError
@@ -329,12 +330,12 @@ class Filter:
             # Try to get the next sub-token from word currently being split.
             # If unavailable, move on to the next word and try again.
             try:
-                (word,pos) = self._curtok.next()
+                (word,pos) = next(self._curtok)
                 return (word,pos + self._curpos)
             except StopIteration:
-                (word,pos) = self._tokenizer.next()
+                (word,pos) = next(self._tokenizer)
                 while self._skip(word):
-                    (word,pos) = self._tokenizer.next()
+                    (word,pos) = next(self._tokenizer)
                 self._curword = word
                 self._curpos = pos
                 self._curtok = self._split(word)

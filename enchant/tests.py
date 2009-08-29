@@ -34,16 +34,30 @@
 """
 
 import os
+import sys
 import unittest
+try:
+    import subprocess
+except ImportError:
+    subprocess is None
 
 import enchant
 from enchant import *
 from enchant import _enchant as _e
-from enchant.utils import unicode, raw_unicode
+from enchant.utils import unicode, raw_unicode, printf
+
+
+def runcmd(cmd):
+    if subprocess is not None:
+        kwds = dict(stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=True)
+        return subprocess.call(cmd,**kwds)
+    else:
+        return os.system(cmd)
 
 
 class TestBroker(unittest.TestCase):
     """Test cases for the proper functioning of Broker objects.
+
     These tests assume that there is at least one working provider
     with a dictionary for the "en_US" language.
     """
@@ -440,11 +454,8 @@ class TestDocStrings(unittest.TestCase):
                     skip_errors.pop(0)
                     continue
                 errors.append((obj,err.word,err.wordpos))
-                print ""
-                print "DOCSTRING SPELLING ERROR:", obj, err.word, err.wordpos, chkr.suggest()
-            #if skip_errors:
-            #    print ""
-            #    print "NOT SKIPPED", obj, skip_errors
+                msg = "\nDOCSTRING SPELLING ERROR: %s %s %d %s\n" % (obj,err.word,err.wordpos,chkr.suggest())
+                printf(msg,file=sys.stderr)
         #  Find and yield all child objects that should be checked
         for name in dir(obj):
             if name.startswith("__"):
@@ -493,7 +504,7 @@ class TestInstallEnv(unittest.TestCase):
             insdir = insdir.encode(sys.getfilesystemencoding())
         os.environ["PYTHONPATH"] = insdir
         script = os.path.join(insdir,"enchant","__init__.py")
-        res = os.system("\"%s\" %s" % (sys.executable,script,))
+        res = runcmd("\"%s\" %s" % (sys.executable,script,))
         self.assertEquals(res,0)
 
     def test_basic(self):
@@ -535,11 +546,11 @@ class TestPy2exe(unittest.TestCase):
             return
         buildCmd = '%s %s -q py2exe --dist-dir="%s"'
         buildCmd = buildCmd % (sys.executable,setup_py,self._tempDir)
-        res = os.system(buildCmd)
+        res = runcmd(buildCmd)
         self.assertEqual(res,0)
         testCmd = self._tempDir + "\\test_pyenchant.exe"
         self.assertTrue(os.path.exists(testCmd))
-        res = os.system(testCmd)
+        res = runcmd(testCmd)
         self.assertEqual(res,0)
     test_py2exe._DOC_ERRORS = ["py","exe"]
         

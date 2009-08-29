@@ -39,7 +39,7 @@
 import unicodedata
 
 import enchant.tokenize
-from enchant.utils import unicode, raw_unicode
+from enchant.utils import unicode
 
 
 class tokenize(enchant.tokenize.tokenize):

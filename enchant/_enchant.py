@@ -146,20 +146,20 @@ def broker_list_dicts(broker,cbfunc):
 
 try:
     broker_get_param = e.enchant_broker_get_param
-except AttributeError, err:
-    msg = err.message
+except AttributeError:
+    #  Make the lookup error occur at runtime
     def broker_get_param(broker,param_name):
-        raise Error(msg)
+        e.enchant_broker_get_param
 else:
     broker_get_param.argtypes = [t_broker,c_char_p]
     broker_get_error.restype = c_char_p
 
 try:
     broker_set_param = e.enchant_broker_set_param
-except AttributeError, err:
-    msg = err.message
+except AttributeError:
+    #  Make the lookup error occur at runtime
     def broker_set_param(broker,param_name):
-        raise Error(msg)
+        e.enchant_broker_set_param
 else:
     broker_set_param.argtypes = [t_broker,c_char_p,c_char_p]
     broker_st_error.restype = None

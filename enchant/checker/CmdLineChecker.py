@@ -38,7 +38,9 @@
 """
 
 import sys
+
 from enchant.checker import SpellChecker
+from enchant.utils import printf
 
 class CmdLineChecker:
     """A simple command-line spell checker.
@@ -65,8 +67,8 @@ class CmdLineChecker:
         self._stop = False
         for err in self._checker:
             self.error = err
-            print "ERROR:", err.word
-            print "HOW ABOUT:", err.suggest()
+            printf(["ERROR:", err.word])
+            printf(["HOW ABOUT:", err.suggest()])
             status = self.read_command()
             while not status and not self._stop:
                 status = self.read_command()
@@ -74,16 +76,16 @@ class CmdLineChecker:
                     break
     
     def print_help(self):
-        print "0..N:    replace with the numbered suggestion"
-        print "R0..rN:  always replace with the numbered suggestion"
-        print "i:       ignore this word"
-        print "I:       always ignore this word"
-        print "a:       add word to personal dictionary"
-        print "e:       edit the word"
-        print "q:       quit checking"
-        print "h:       print this help message"
-        print "----------------------------------------------------"
-        print "HOW ABOUT:", self.error.suggest()
+        printf(["0..N:    replace with the numbered suggestion"])
+        printf(["R0..rN:  always replace with the numbered suggestion"])
+        printf(["i:       ignore this word"])
+        printf(["I:       always ignore this word"])
+        printf(["a:       add word to personal dictionary"])
+        printf(["e:       edit the word"])
+        printf(["q:       quit checking"])
+        printf(["h:       print this help message"])
+        printf(["----------------------------------------------------"])
+        printf(["HOW ABOUT:", self.error.suggest()])
     
     def read_command(self):
         cmd = raw_input(">> ")
@@ -93,20 +95,20 @@ class CmdLineChecker:
             repl = int(cmd)
             suggs = self.error.suggest()
             if repl >= len(suggs):
-                print "No suggestion number", repl
+                printf(["No suggestion number", repl])
                 return False
-            print "Replacing '%s' with '%s'" % (self.error.word,suggs[repl])
+            printf(["Replacing '%s' with '%s'" % (self.error.word,suggs[repl])])
             self.error.replace(suggs[repl])
             return True
         
         if cmd[0] == "R":
             if not cmd[1:].isdigit():
-                print "Badly formatted command (try 'help')"
+                printf(["Badly formatted command (try 'help')"])
                 return False
             repl = int(cmd[1:])
             suggs = self.error.suggest()
             if repl >= len(suggs):
-                print "No suggestion number", repl
+                printf(["No suggestion number", repl])
                 return False
             self.error.replace_always(suggs[repl])
             return True
@@ -135,7 +137,7 @@ class CmdLineChecker:
             self.print_help()
             return False
         
-        print "Badly formatted command (try 'help')"
+        printf(["Badly formatted command (try 'help')"])
         return False
         
     def run_on_file(self,infile,outfile=None,enc=None):

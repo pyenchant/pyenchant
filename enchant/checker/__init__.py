@@ -51,7 +51,7 @@ import enchant
 import enchant.tokenize
 from enchant.tokenize import get_tokenizer
 
-from enchant.utils import bytes, unicode, basestring
+from enchant.utils import bytes, unicode, basestring, next
 
 class SpellChecker:
     """Class implementing stateful spellchecking behaviour.
@@ -236,10 +236,10 @@ class SpellChecker:
         
         """
         # Find the next spelling error.
-        # The uncaught StopIteration from self._tokens.next()
+        # The uncaught StopIteration from next(self._tokens)
         # will provide the StopIteration for this method
         while True:
-            (word,pos) = self._tokens.next()
+            (word,pos) = next(self._tokens)
             # decode back to a regular string
             word = self._array_to_string(word)
             if self.dict.check(word):

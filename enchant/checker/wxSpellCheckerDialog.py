@@ -49,6 +49,8 @@ _DOC_ERRORS = ["ShowModal"]
 
 import wx
 
+from enchant.utils import printf
+
 class wxSpellCheckerDialog(wx.Dialog):
     """Simple spellcheck dialog for wxPython
     
@@ -244,11 +246,11 @@ def _test():
             wx.EVT_CLOSE(self,self.OnClose)
         def OnClose(self,evnt):
             if self._checker is not None:
-                print "AFTER:", self._checker.get_text()
+                printf(["AFTER:", self._checker.get_text()])
             self.Destroy()
     from enchant.checker import SpellChecker
     text = "This is sme text with a fw speling errors in it. Here are a fw more to tst it ut."
-    print "BEFORE:", text
+    printf(["BEFORE:", text])
     app = wx.PySimpleApp()
     dlg = TestDialog()
     chkr = SpellChecker("en_US",text)

@@ -170,6 +170,26 @@ class EnchantStr(str):
           return value
 
 
+def printf(values,sep=" ",end="\n",file=None):
+    """Compatability wrapper from print statement/function.
+
+    This function is a simple Python2/Python3 compatability wrapper
+    for printing to stdout.
+    """
+    if file is None:
+        file = sys.stdout
+    file.write(sep.join(values))
+    file.write(end)
+
+
+try:
+    next = next
+except NameError:
+    def next(iter):
+        """Compatability wrapper for advancing an iterator."""
+        return iter.next()
+
+
 def get_default_language(default=None):
     """Determine the user's default language, if possible.
     
