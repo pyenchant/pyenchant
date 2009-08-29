@@ -17,7 +17,6 @@ import shutil
 # Location of the windows binaries, if available
 WINDEPS = ".\\tools\\pyenchant-bdist-win32-sources\\build"
 
-#  Cant seem to obtain version information from module, must hardcode
 import enchant
 VERSION = enchant.__version__
 
