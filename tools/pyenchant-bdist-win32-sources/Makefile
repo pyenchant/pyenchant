@@ -4,9 +4,8 @@
 BUILD_DIR = /s/software/pyenchant/tools/pyenchant-bdist-win32-sources/build
 ENCHANT_DIR = enchant-1.5.0
 
-ENCHANT_CONFIG_OPTS = --enable-ispell --enable-myspell --disable-aspell
-
 CFLAGS = -Wl,--enable-runtime-pseudo-reloc
+ENCHANT_CONFIG_OPTS = --enable-ispell --enable-myspell --disable-aspell
 ENCHANT_CFLAGS = -I$(BUILD_DIR)/include/glib-2.0
 ENCHANT_LIBS = -L$(BUILD_DIR)/lib -lglib-2.0-0 -lgmodule-2.0-0
 
@@ -15,9 +14,7 @@ all: $(BUILD_DIR)/lib/libenchant.dll $(BUILD_DIR)/myspell/en_GB.dic \
 	$(BUILD_DIR)/myspell/en_AU.dic $(BUILD_DIR)/myspell/fr_FR.dic
 
 #  Make enchant.
-$(BUILD_DIR)/lib/libenchant.dll: $(BUILD_DIR)/lib/pkgconfig/glib-2.0.pc \
-		$(BUILD_DIR)/lib/pkgconfig/gmodule-2.0.pc \
-		$(ENCHANT_DIR)
+$(BUILD_DIR)/lib/libenchant.dll: $(ENCHANT_DIR)
 	cd $(ENCHANT_DIR) && ./configure CFLAGS="$(CFLAGS)" ENCHANT_CFLAGS="$(ENCHANT_CFLAGS)" ENCHANT_LIBS="$(ENCHANT_LIBS)" $(ENCHANT_CONFIG_OPTS) && make
 	cp $(ENCHANT_DIR)/src/.libs/libenchant-1.dll $(BUILD_DIR)/lib/
 	mkdir -p $(BUILD_DIR)/lib/enchant
@@ -25,24 +22,9 @@ $(BUILD_DIR)/lib/libenchant.dll: $(BUILD_DIR)/lib/pkgconfig/glib-2.0.pc \
 	cp $(ENCHANT_DIR)/src/myspell/.libs/libenchant_myspell.dll $(BUILD_DIR)/lib/enchant/
 
 
-#  Make pkg-config files pointing to the right prefix
-$(BUILD_DIR)/lib/pkgconfig/%.pc: $(BUILD_DIR)/lib/pkgconfig/%.pc.in
-	echo "prefix=$(BUILD_DIR)" > $@
-	cat $< >> $@
-
 #  Make the enchant source dir
 $(ENCHANT_DIR): src/$(ENCHANT_DIR).tar.gz
 	tar -xzvf src/$(ENCHANT_DIR).tar.gz
-	# Apply local build patches
-	#cd $(ENCHANT_DIR)/src/ && patch < ../../patches/enchant.c.patch
-	#cd $(ENCHANT_DIR)/src/myspell && patch < ../../../patches/myspell_checker.cpp.patch
-	#cd $(ENCHANT_DIR)/src/myspell && patch < ../../../patches/hunspell.hxx.patch
-	#cd $(ENCHANT_DIR)/src/myspell && patch < ../../../patches/atypes.hxx.patch
-	#cd $(ENCHANT_DIR)/src/myspell && patch < ../../../patches/diffmgr.cxx.patch
-	#cd $(ENCHANT_DIR)/src/myspell && patch < ../../../patches/filemgr.cxx.patch
-	#cd $(ENCHANT_DIR)/src/myspell && patch < ../../../patches/hunzip.cxx.patch
-	#cd $(ENCHANT_DIR)/ && patch < ../patches/configure.patch
-	#cp patches/compile-resource $(ENCHANT_DIR)/compile-resource
 
 # Ability to extract MySpell dictionary files
 $(BUILD_DIR)/myspell/%.dic: $(BUILD_DIR)/myspell/%.zip
