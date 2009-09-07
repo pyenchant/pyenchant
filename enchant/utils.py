@@ -100,7 +100,7 @@ def raw_unicode(raw):
       s = raw_unicode(r"hello\u2149")  # works everywhere!
 
     """
-    return raw.encode("ascii").decode("unicode-escape")
+    return raw.encode("utf8").decode("unicode-escape")
 
 
 def raw_bytes(raw):

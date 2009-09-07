@@ -248,11 +248,23 @@ of words. Also need to "test" the handling of 'quoted' words."""
             self.assertEqual(itmO,itmV)
 
     def test_bug2785373(self):
-        "Testcases for bug #2785373"
+        """Testcases for bug #2785373"""
         input = "So, one dey when I wes 17, I left."
         for _ in tokenize_en(input):
             pass
         input = raw_unicode("So, one dey when I wes 17, I left.")
         for _ in tokenize_en(input):
             pass
+
+    def test_finnish_text(self):
+        """Test tokenizing some Finnish text.
+
+        This really should work since there are no special rules to apply,
+        just lots of non-ascii characters.
+        """
+        inputT = raw_unicode('T\\xe4m\\xe4 on kappale. Eip\\xe4 ole kovin 2 nen, mutta tarkoitus on n\\xe4ytt\\xe4\\xe4 miten sanastaja \\ntoimii useiden-erilaisten sanarypp\\xe4iden kimpussa.\\nPit\\xe4\\xe4p\\xe4 viel\\xe4 \'tarkistaa\' sanat jotka "lainausmerkeiss\\xe4". Heittomerkki ja vaa\'an.\\nUlkomaisia sanoja s\\xfcss, spa\\xdf.')
+        outputT = [
+(raw_unicode('T\\xe4m\\xe4'),0), (raw_unicode('on'),5), (raw_unicode('kappale'),8), (raw_unicode('Eip\\xe4'),17), (raw_unicode('ole'),22), (raw_unicode('kovin'),26), (raw_unicode('nen'),34), (raw_unicode('mutta'),39), (raw_unicode('tarkoitus'),45), (raw_unicode('on'),55), (raw_unicode('n\\xe4ytt\\xe4\\xe4'),58), (raw_unicode('miten'),66), (raw_unicode('sanastaja'),72), (raw_unicode('toimii'),83), (raw_unicode('useiden'),90), (raw_unicode('erilaisten'),98), (raw_unicode('sanarypp\\xe4iden'),109), (raw_unicode('kimpussa'),123), (raw_unicode('Pit\\xe4\\xe4p\\xe4'),133), (raw_unicode('viel\\xe4'),141), (raw_unicode('tarkistaa'),148), (raw_unicode('sanat'),159), (raw_unicode('jotka'),165), (raw_unicode('lainausmerkeiss\\xe4'),172), (raw_unicode('Heittomerkki'),191), (raw_unicode('ja'),204), (raw_unicode("vaa'an"),207), (raw_unicode('Ulkomaisia'),215), (raw_unicode('sanoja'),226), (raw_unicode('s\\xfcss'),233), (raw_unicode('spa\\xdf'),239),]
+        for (itmO,itmV) in zip(outputT,tokenize_en(inputT)):
+            self.assertEqual(itmO,itmV)
 
