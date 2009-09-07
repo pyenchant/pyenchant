@@ -66,6 +66,7 @@ def _e_path_possibilities():
     yield os.environ.get("PYENCHANT_LIBRARY_PATH")
     yield find_library("enchant")
     yield find_library("libenchant")
+    yield find_library("libenchant-1")
     if sys.platform == 'darwin':
          # enchant lib installed by macports
          yield "/opt/local/lib/libenchant.dylib"
@@ -152,7 +153,7 @@ except AttributeError:
         e.enchant_broker_get_param
 else:
     broker_get_param.argtypes = [t_broker,c_char_p]
-    broker_get_error.restype = c_char_p
+    broker_get_param.restype = c_char_p
 
 try:
     broker_set_param = e.enchant_broker_set_param
@@ -162,7 +163,7 @@ except AttributeError:
         e.enchant_broker_set_param
 else:
     broker_set_param.argtypes = [t_broker,c_char_p,c_char_p]
-    broker_st_error.restype = None
+    broker_set_param.restype = None
 
 
 dict_check1 = e.enchant_dict_check

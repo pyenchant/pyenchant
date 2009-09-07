@@ -1,4 +1,6 @@
 
+testcases for set_param/get_param
+
 PyEnchant:
 
   * implement a tkSpellCheckerDialog to compliment the wx one

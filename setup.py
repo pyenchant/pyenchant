@@ -17,9 +17,6 @@ import shutil
 # Location of the windows binaries, if available
 WINDEPS = ".\\tools\\pyenchant-bdist-win32-sources\\build"
 
-import enchant
-VERSION = enchant.__version__
-
 # Package MetaData
 NAME = "pyenchant"
 DESCRIPTION = "Python bindings for the Enchant spellchecking system"
@@ -64,6 +61,7 @@ if sys.platform == "win32":
       libDir = os.path.join(WINDEPS,"lib")
       for fName in os.listdir(libDir):
         if fName[-3:] == "dll":
+          print "COPYING:", fName
           shutil.copy(os.path.join(libDir,fName),".\\enchant\\")
           EAGER_RES.append("enchant/" + fName)
       # Enchant plugins
@@ -84,6 +82,12 @@ if sys.platform == "win32":
           if dictName.endswith("hash") or dictName == "README.txt":
             shutil.copy(os.path.join(dictPath,dictName),
 			".\\enchant\\share\\enchant\\ispell\\")
+
+##  Now we can import enchant to get at version info
+
+import enchant
+VERSION = enchant.__version__
+
 
 ##
 ##  Main call to setup() function
