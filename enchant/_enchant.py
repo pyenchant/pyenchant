@@ -153,7 +153,7 @@ try:
 except AttributeError:
     #  Make the lookup error occur at runtime
     def broker_get_param(broker,param_name):
-        e.enchant_broker_get_param
+        return e.enchant_broker_get_param(param_name)
 else:
     broker_get_param.argtypes = [t_broker,c_char_p]
     broker_get_param.restype = c_char_p
@@ -163,7 +163,7 @@ try:
 except AttributeError:
     #  Make the lookup error occur at runtime
     def broker_set_param(broker,param_name):
-        e.enchant_broker_set_param
+        return e.enchant_broker_set_param(param_name)
 else:
     broker_set_param.argtypes = [t_broker,c_char_p,c_char_p]
     broker_set_param.restype = None

@@ -145,6 +145,16 @@ class TestBroker(unittest.TestCase):
         d1 = Dict(raw_unicode("en_US"))
         self.assert_(d1)
 
+    def test_GetSetParam(self):
+        try:
+            self.broker.get_param("pyenchant.unittest")
+        except AttributeError:
+            return
+        self.assertEqual(self.broker.get_param("pyenchant.unittest"),None)
+        self.broker.set_param("pyenchant.unittest","testing")
+        self.assertEqual(self.broker.get_param("pyenchant.unittest"),"testing")
+        self.assertEqual(Broker().get_param("pyenchant.unittest"),None)
+
 
 class TestDict(unittest.TestCase):
     """Test cases for the proper functioning of Dict objects.
