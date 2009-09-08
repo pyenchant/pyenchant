@@ -59,7 +59,10 @@ from enchant.errors import *
 
 if sys.platform == "win32":
   # Add our bundled enchant libraries to DLL search path
-  mypath = os.path.dirname(utils.get_resource_filename("libenchant.dll"))
+  try:
+      mypath = os.path.dirname(utils.get_resource_filename("libenchant.dll"))
+  except Error:
+      mypath = os.path.dirname(utils.get_resource_filename("libenchant-1.dll"))
   os.environ['PATH'] = os.environ['PATH'] + ";" + mypath
 
 def _e_path_possibilities():

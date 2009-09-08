@@ -239,7 +239,13 @@ def get_resource_filename(resname):
             return path
     else:
         import pkg_resources
-        return pkg_resources.resource_filename("enchant",resname)
+        try:
+            path = os.path.abspath(pkg_resources.resource_filename("enchant",resname))
+        except KeyError:
+            pass
+        else:
+            if os.path.exists(path):
+                return path
     raise Error("Could not locate resource '%s'" % (resname,))
 
 
@@ -256,7 +262,10 @@ def win32_data_files():
     which we ship our own supporting data files)
     """
     #  Include the main enchant DLL
-    libEnchant = get_resource_filename("libenchant.dll")
+    try:
+        libEnchant = get_resource_filename("libenchant.dll")
+    except Error:
+        libEnchant = get_resource_filename("libenchant-1.dll")
     mainDir = os.path.dirname(libEnchant)
     dataFiles = [('',[libEnchant])]
     #  And some specific supporting DLLs

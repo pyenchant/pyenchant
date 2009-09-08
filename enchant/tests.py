@@ -277,6 +277,7 @@ class TestPWL(unittest.TestCase):
         for ln in contents:
             pwlFile.write(ln)
             pwlFile.write("\n")
+        pwlFile.flush()
         pwlFile.close()
         
     def getPWLContents(self):

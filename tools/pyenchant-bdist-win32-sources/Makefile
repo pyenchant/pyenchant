@@ -14,17 +14,19 @@ all: $(BUILD_DIR)/lib/libenchant.dll $(BUILD_DIR)/myspell/en_GB.dic \
 	$(BUILD_DIR)/myspell/en_AU.dic $(BUILD_DIR)/myspell/fr_FR.dic
 
 #  Make enchant.
-$(BUILD_DIR)/lib/libenchant.dll: $(ENCHANT_DIR)
-	cd $(ENCHANT_DIR) && ./configure CFLAGS="$(CFLAGS)" ENCHANT_CFLAGS="$(ENCHANT_CFLAGS)" ENCHANT_LIBS="$(ENCHANT_LIBS)" $(ENCHANT_CONFIG_OPTS) && make
+$(BUILD_DIR)/lib/libenchant.dll: $(ENCHANT_DIR)/Makefile
+	cd $(ENCHANT_DIR) && make
 	cp $(ENCHANT_DIR)/src/.libs/libenchant-1.dll $(BUILD_DIR)/lib/
 	mkdir -p $(BUILD_DIR)/lib/enchant
 	cp $(ENCHANT_DIR)/src/ispell/.libs/libenchant_ispell.dll $(BUILD_DIR)/lib/enchant/
 	cp $(ENCHANT_DIR)/src/myspell/.libs/libenchant_myspell.dll $(BUILD_DIR)/lib/enchant/
 
-
-#  Make the enchant source dir
-$(ENCHANT_DIR): src/$(ENCHANT_DIR).tar.gz
+$(ENCHANT_DIR)/Makefile: src/$(ENCHANT_DIR).tar.gz
+	rm -rf $(ENCHANT_DIR)
 	tar -xzvf src/$(ENCHANT_DIR).tar.gz
+	patch $(ENCHANT_DIR)/src/pwl.c < patches/pwl.patch
+	cd $(ENCHANT_DIR) && ./configure CFLAGS="$(CFLAGS)" ENCHANT_CFLAGS="$(ENCHANT_CFLAGS)" ENCHANT_LIBS="$(ENCHANT_LIBS)" $(ENCHANT_CONFIG_OPTS)
+
 
 # Ability to extract MySpell dictionary files
 $(BUILD_DIR)/myspell/%.dic: $(BUILD_DIR)/myspell/%.zip
@@ -35,7 +37,6 @@ clean:
 	rm -fr $(ENCHANT_DIR)
 
 clobber: clean
-	rm -f $(BUILD_DIR)/lib/pkgconfig/*.pc
 	rm -f $(BUILD_DIR)/lib/libenchant*
 	rm -rf $(BUILD_DIR)/lib/enchant
 	rm -f $(BUILD_DIR)/myspell/*.dic

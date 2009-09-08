@@ -1,0 +1,13 @@
+Index: src/pwl.c
+===================================================================
+--- src/pwl.c	(revision 28046)
++++ src/pwl.c	(working copy)
+@@ -264,7 +264,7 @@
+ 
+ 	g_return_val_if_fail (file != NULL, NULL);
+ 
+-	fd = enchant_fopen(file, "wb");
++	fd = enchant_fopen(file, "rb");
+ 	if(fd == NULL)
+ 		{
+ 			return NULL;
