@@ -6,7 +6,7 @@
           runtime customisation of provider data
     * Moved error classes into 'enchant.errors' for easier importing
     * Moved testcases into separate files so they're not loaded by default
-    * More compatability with Python 3
+    * Improved compatibility with Python 3
 
 1.5.3:
 
@@ -31,8 +31,8 @@
     * Migrated from SWIG to ctypes:
         * now runs under PyPy!
         * also opens possibilities for Jython, IronPython, ...
-    * Compatability updates for Python 3.0, mostly around unicode strings
-    * Dropped compatability with Python 2.2
+    * Compatibility updates for Python 3.0, mostly around unicode strings
+    * Dropped compatibility with Python 2.2
 
 1.4.2:
 
@@ -45,7 +45,7 @@
     * upgrade to enchant v1.4.0, with new functionality and APIs:
         * All dictionary providers now use a shared default personal word file
           (largely obsoleting the DictWithPWL class)
-        * Ability to exlude words using Dict.remove, remove_from_session
+        * Ability to exclude words using Dict.remove, remove_from_session
         * Dict.add_to_personal renamed to Dict.add
         * Dict.is_added/Dict.is_removed for checking membership of word lists
         * unicode PWL filenames now handled correctly on Windows
@@ -64,14 +64,14 @@
 
    * Re-worked the tokenization API to allow filters but still
      remove non-alpha-numeric characters from words by default.
-     This introduces some minor backward-incompatabilities to the
+     This introduces some minor backward-incompatibilities to the
      API, hence the full minor version bump.
      	* 'fallback' argument to get_tokenizer() was removed, just
      	  catch the Error and re-try with whatever is appropriate for
      	  your application.
      	* filters should be passed into get_tokenizer() as the second
-     	  argument, rather than applied as seperate functions.
-        * Basic whitespace-and-punctuation tokenization seperated from
+     	  argument, rather than applied as separate functions.
+        * Basic whitespace-and-punctuation tokenization separated from
           the language-specific parts.
         * Internal details of Filter classes expanded and generalized
         * English tokenization rules reverted to 1.1.5 version
@@ -84,7 +84,7 @@
         * PWLs can return a useful list of suggestions rather than
           the empty list
         * Hunspell replaces MySpell as the default Windows backend
-   * Tokenization doesnt split words at non-alpha characters by default
+   * Tokenization doesn't split words at non-alpha characters by default
    * GtkSpellCheckerDialog contributed by Fredrik Corneliusson
    * Removed deprecated functionality:
    		* Dict.add_to_personal
