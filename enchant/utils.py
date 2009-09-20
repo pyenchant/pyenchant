@@ -201,7 +201,7 @@ def get_default_language(default=None):
           that language is used
         * if a default locale is available, that language is used
         * if the keyword argument <default> is given, it is used
-        * None
+        * if nothing else works, None is returned
         
     Note that determining the user's language is in general only
     possible if they have set the necessary environment variables
@@ -215,7 +215,7 @@ def get_default_language(default=None):
             if tag is None:
                 raise Error("No default language available")
         return tag
-    except:
+    except Exception:
         pass
     return default
 get_default_language._DOC_ERRORS = ["LC"]
