@@ -37,7 +37,8 @@ import unittest
 
 import enchant
 import enchant.tokenize
-from enchant.utils import raw_unicode
+from enchant.utils import *
+from enchant.errors import *
 from enchant.checker import *
 
 
@@ -180,4 +181,12 @@ class TestChecker(unittest.TestCase):
         c.set_text(raw_unicode("So, one dey when I wes 17, I left."))
         for err in c:
             pass
+
+    def test_default_language(self):
+        lang = get_default_language()
+        if lang is None:
+            self.assertRaises(DefaultLanguageNotFoundError,SpellChecker)
+        else:
+            checker = SpellChecker()
+            self.assertEqual(checker.lang,lang)
  

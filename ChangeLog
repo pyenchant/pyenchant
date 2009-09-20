@@ -6,6 +6,7 @@
           runtime customisation of provider data
     * Moved error classes into 'enchant.errors' for easier importing
     * Moved testcases into separate files so they're not loaded by default
+    * Allowed SpellChecker to use default language if none is specified
     * Improved compatibility with Python 3
 
 1.5.3:

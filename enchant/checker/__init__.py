@@ -48,10 +48,11 @@ import array
 import warnings
 
 import enchant
-import enchant.tokenize
+from enchant.errors import *
 from enchant.tokenize import get_tokenizer
-
 from enchant.utils import bytes, unicode, basestring, next
+from enchant.utils import get_default_language
+
 
 class SpellChecker:
     """Class implementing stateful spellchecking behaviour.
@@ -103,7 +104,7 @@ class SpellChecker:
     """
     _DOC_ERRORS = ["sme","fw","speling","chkr","chkr","chkr"]
     
-    def __init__(self,lang,text=None,tokenize=None,filters=None):
+    def __init__(self,lang=None,text=None,tokenize=None,filters=None):
         """Constructor for the SpellChecker class.
 
         SpellChecker objects can be created in two ways, depending on
@@ -119,21 +120,27 @@ class SpellChecker:
         
         If <tokenize> is not given and the first argument is a Dict,
         its 'tag' attribute must be a language tag so that a tokenization
-        function can be created automatically.  In particular this means
-        that a PWL dictionary cannot be used without specifying a
-        tokenization function.
+        function can be created automatically.  If this attribute is missing
+        the user's default language will be used.
         """
+        if lang is None:
+            lang = get_default_language()
         if isinstance(lang,basestring):
             dict = enchant.Dict(lang)
         else:
             dict = lang
-            lang = dict.tag
+            try:
+                lang = dict.tag
+            except AttributeError:
+                lang = get_default_language()
+        if lang is None:
+            raise DefaultLanguageNotFoundError
         self.lang = lang
         self.dict = dict
         if tokenize is None:
             try:
                 tokenize = get_tokenizer(lang,filters)
-            except enchant.tokenize.Error:
+            except TokenizerNotFoundError:
                 # Fall back to English tokenization if no match for 'lang'
                 tokenize = get_tokenizer("en",filters)
         self._tokenize = tokenize

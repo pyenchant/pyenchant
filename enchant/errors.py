@@ -48,4 +48,6 @@ class TokenizerNotFoundError(Error):
     """Exception raised when a requested tokenizer could not be found."""
     pass
 
-
+class DefaultLanguageNotFoundError(Error):
+    """Exception raised when a default language could not be found."""
+    pass
