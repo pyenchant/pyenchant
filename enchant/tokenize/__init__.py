@@ -1,6 +1,6 @@
 # pyenchant
 #
-# Copyright (C) 2004-2008, Ryan Kelly
+# Copyright (C) 2004-2009, Ryan Kelly
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -37,17 +37,16 @@
     strings into words according to the rules of a particular language.
     
     Each tokenization function accepts a string as its only positional
-    argument, and returns an iterator which will yield tuples of the
-    following form, one for each word found:
+    argument, and returns an iterator that yields tuples of the following
+    form, one for each word found:
         
         (<word>,<pos>)
         
     The meanings of these fields should be clear: <word> is the word
     that was found and <pos> is the position within the text at which
     the word began (zero indexed, of course).  The function will work
-    on any string-like object that supports array-slicing - in
-    particular, character-array objects from the 'array' module may
-    be used.
+    on any string-like object that supports array-slicing; in particular
+    character-array objects from the 'array' module may be used.
     
     The iterator also provides the attribute 'offset' which may be used
     to get/set the current position of the tokenizer inside the string
@@ -55,7 +54,11 @@
     have changed during the tokenization process.
     
     To obtain an appropriate tokenization function for the language
-    identified by <tag>, use the function 'get_tokenizer(tag)'.
+    identified by <tag>, use the function 'get_tokenizer(tag)':
+        
+        tknzr = get_tokenizer("en_US")
+        for (word,pos) in tknzr("text to be tokenized goes here")
+            do_something(word)
     
     This library is designed to be easily extendible by third-party
     authors.  To register a tokenization function for the language
@@ -69,29 +72,41 @@
     language.  Based on the author's limited experience, this should
     be at least partially suitable for other languages.
 
-    This module also provides the Filter class and a variety of subclasses.
-    These are designed to allow skipping over certain types of word
-    during the spellchecking process.  You can pass a list of filters to
-    get_tokenizer as follows:
-        
-        tknzr = get_tokenizer("en_US",(URLFilter,WikiWordFilter))
-        
-    Use the tokenizer so returned as follows:
-        
-        tkns = tknzr("text to be tokenized goes here")
-        for (word,pos) in tkns:
-            do_something(word)
+    This module also provides various implementations of "Chunkers" and
+    "Filters".  These classes are designed to make it easy to work with
+    text in a vareity of common formats, by detecting and excluding parts
+    of the text that don't need to be checked.
+
+    A Chunker is a class designed to break a body of text into large chunks
+    of checkable content; for example the HTMLChunker class extracts the 
+    text content from all HTML tags but excludes the tags themselves.
+    A Filter is a class designed to skip individual words during the checking
+    process; for example the URLFilter class skips over any words that
+    have the format of a URL.
+
+    For exmaple, to spellcheck an HTML document it is necessary to split the
+    text into chunks based on HTML tags, and to filter out common word forms
+    such as URLs and WikiWords.  This would look something like the following:
+
+        tknzr = get_tokenier("en_US",(HTMLChunker,),(URLFilter,WikiWordFilter)))
+
+        text = "<html><body>the url is http://example.com</body></html>"
+        for (word,pos) in tknzer(text):
+            ...check each word and react accordingly...
         
 """
 _DOC_ERRORS = ["pos","pos","tknzr","URLFilter","WikiWordFilter",
                "tkns","tknzr","pos","tkns"]
 
 import re
+import warnings
 
 import enchant
 from enchant.utils import next
 from enchant.errors import *
-#  For backwards-compatability.  This will eventually be removed.
+
+#  For backwards-compatability.  This will eventually be removed, but how
+#  does one mark a module-level constant as deprecated?
 Error = TokenizerNotFoundError
 
 
@@ -119,6 +134,67 @@ class tokenize:
 
     def __iter__(self):
         return self
+
+
+def get_tokenizer(tag,chunkers=None,filters=None):
+    """Locate an appropriate tokenizer by language tag.
+
+    This requires importing the function 'tokenize' from an
+    appropriate module.  Modules tried are named after the
+    language tag, tried in the following order:
+        * the entire tag (e.g. "en_AU.py")
+        * the base country code of the tag (e.g. "en.py")
+
+    If a suitable function cannot be found, raises TokenizerNotFoundError.
+    
+    If given and not None, 'chunkers' and 'filters' must be lists of chunker
+    classes and filter classes resectively.  These will be applied to the
+    tokenizer during creation.
+    """
+    # "filters" used to be the second argument.  Try to catch cases
+    # where it is given positionally and issue a DeprecationWarning.
+    if chunkers is not None and filters is None:
+        chunkers = list(chunkers)
+        if chunkers:
+            try:
+                chunkers_are_filters = issubclass(chunkers[0],Filter)
+            except TypeError:
+                pass
+            else:
+                if chunkers_are_filters:
+                    msg = "passing 'filters' as a non-keyword argument "\
+                          "to get_tokenizer() is deprecated"
+                    warnings.warn(msg,category=DeprecationWarning)
+                    filters = chunkers
+                    chunkers = None
+    # Ensure only '_' used as separator
+    tag = tag.replace("-","_")
+    # First try the whole tag
+    tkFunc = _try_tokenizer(tag)
+    if tkFunc is None:
+        # Try just the base
+        base = tag.split("_")[0]
+        tkFunc = _try_tokenizer(base)
+        if tkFunc is None:
+            msg = "No tokenizer found for language '%s'" % (tag,)
+            raise TokenizerNotFoundError(msg)
+    # Given the language-specific tokenizer, we now build up the
+    # end result as follows:
+    #    * chunk the text using any given chunkers in turn
+    #    * begin with basic whitespace tokenization
+    #    * apply each of the given filters in turn
+    #    * apply language-specific rules
+    tokenizer = basic_tokenize
+    if chunkers is not None:
+        chunkers = list(chunkers)
+        for i in xrange(len(chunkers)-1,-1,-1):
+            tokenizer = wrap_tokenizer(chunkers[i],tokenizer)
+    if filters is not None:
+        for f in filters:
+            tokenizer = f(tokenizer)
+    tokenizer = wrap_tokenizer(tokenizer,tkFunc)
+    return tokenizer
+get_tokenizer._DOC_ERRORS = ["py","py"]
 
 
 class empty_tokenize(tokenize):
@@ -185,44 +261,6 @@ class basic_tokenize(tokenize):
                 return (text[sPos:ePos],sPos)
         raise StopIteration()
 
-
-def get_tokenizer(tag,filters=None):
-    """Locate an appropriate tokenizer by language tag.
-
-    This requires importing the function 'tokenize' from an
-    appropriate module.  Modules tried are named after the
-    language tag, tried in the following order:
-        * the entire tag (e.g. "en_AU.py")
-        * the base country code of the tag (e.g. "en.py")
-
-    If a suitable function cannot be found, raises TokenizerNotFoundError.
-    
-    If given and not None, 'filters' must be a list of filter
-    classes that will be applied to the tokenizer during creation.
-    """
-    # Ensure only '_' used as separator
-    tag = tag.replace("-","_")
-    # First try the whole tag
-    tkFunc = _try_tokenizer(tag)
-    if tkFunc is None:
-        # Try just the base
-        base = tag.split("_")[0]
-        tkFunc = _try_tokenizer(base)
-        if tkFunc is None:
-            msg = "No tokenizer found for language '%s'" % (tag,)
-            raise TokenizerNotFoundError(msg)
-    # Given the language-specific tokenizer, we now build up the
-    # end result as follows:
-    #    * begin with basic whitespace tokenization
-    #    * apply each of the given filters in turn
-    #    * apply language-specific rules
-    tokenizer = basic_tokenize
-    if filters is not None:
-        for f in filters:
-            tokenizer = f(tokenizer)
-    tokenizer = wrap_tokenizer(tokenizer,tkFunc)
-    return tokenizer
-get_tokenizer._DOC_ERRORS = ["py","py"]
     
 
 def _try_tokenizer(modName):
@@ -256,6 +294,15 @@ def wrap_tokenizer(tk1,tk2):
 wrap_tokenizer._DOC_ERRORS = ["tk","tk","tk","tk"]
 
 
+class Chunker(tokenize):
+    """Base class for text chunking functions.
+    
+    A chunker is designed to chunk text into large blocks of tokens.  It
+    has the same interface as a tokenizer but is for a different purpose.
+    """
+    pass
+ 
+
 class Filter:
     """Base class for token filtering functions.
     
@@ -265,7 +312,7 @@ class Filter:
       * skip over tokens
       * split tokens into sub-tokens
 
-    Subclasses has two basic options for customising their behaviour.  The
+    Subclasses have two basic options for customising their behaviour.  The
     method _skip(word) may be overridden to return True for words that
     should be skipped, and false otherwise.  The method _split(word) may
     be overridden as tokenization function that will be applied to further
@@ -359,7 +406,7 @@ class Filter:
         offset = property(_getOffset,_setOffset)
 
 
-#  Pre-defined filters start here
+#  Pre-defined chunkers and filters start here
 
 class URLFilter(Filter):
     """Filter skipping over URLs.
@@ -405,6 +452,37 @@ class EmailFilter(Filter):
         return False
 
 
-#TODO: HTMLFilter, LaTeXFilter, ...
+class HTMLChunker(Chunker):
+    """Chunker for breaking up HTML documents into chunks of checkable text.
+
+    The operation of this chunker is very simple - anything between a "<"
+    and a ">" will be ignored.  Later versions may improve the algorithm
+    slightly.
+    """
+
+    def next(self):
+        text = self._text
+        offset = self.offset
+        while True:
+            if offset >= len(text):
+                break
+            #  Skip to the end of the current tag, if any.
+            if text[offset] == "<":
+                while text[offset] != ">":
+                    offset += 1
+            offset += 1
+            sPos = offset
+            #  Find the start of the next tag.
+            while offset < len(text) and text[offset] != "<":
+                offset += 1
+            ePos = offset
+            self.offset = offset
+            # Return if chunk isnt empty
+            if(sPos < offset):
+                return (text[sPos:offset],sPos)
+        raise StopIteration()
+
+
+#TODO: LaTeXChunker
 
 

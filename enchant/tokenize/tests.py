@@ -139,7 +139,7 @@ class TestFilters(unittest.TestCase):
     
     def test_URLFilter(self):
         """Test filtering of URLs"""
-        tkns = get_tokenizer("en_US",(URLFilter,))(self.text)
+        tkns = get_tokenizer("en_US",filters=(URLFilter,))(self.text)
         out = [t for t in tkns]
         exp = [("this",0),("text",5),("with",10),("and",30),
                ("SomeLinksLike",34),("AndOthers",93),("not",103),("quite",108),
@@ -149,7 +149,7 @@ class TestFilters(unittest.TestCase):
         
     def test_WikiWordFilter(self):
         """Test filtering of WikiWords"""
-        tkns = get_tokenizer("en_US",(WikiWordFilter,))(self.text)
+        tkns = get_tokenizer("en_US",filters=(WikiWordFilter,))(self.text)
         out = [t for t in tkns]
         exp = [("this",0),("text",5),("with",10),("http",15),("url",22),("com",26),
                ("and",30), ("ftp",62),("my",68),("site",71),("com",76),("au",80),
@@ -160,7 +160,7 @@ class TestFilters(unittest.TestCase):
         
     def test_EmailFilter(self):
         """Test filtering of email addresses"""
-        tkns = get_tokenizer("en_US",(EmailFilter,))(self.text)
+        tkns = get_tokenizer("en_US",filters=(EmailFilter,))(self.text)
         out = [t for t in tkns]
         exp = [("this",0),("text",5),("with",10),("http",15),("url",22),("com",26),
                ("and",30),("SomeLinksLike",34),
@@ -172,7 +172,7 @@ class TestFilters(unittest.TestCase):
         
     def test_CombinedFilter(self):
         """Test several filters combined"""
-        tkns=get_tokenizer("en_US",(URLFilter,WikiWordFilter,EmailFilter))(self.text)
+        tkns=get_tokenizer("en_US",filters=(URLFilter,WikiWordFilter,EmailFilter))(self.text)
         out = [t for t in tkns]
         exp = [("this",0),("text",5),("with",10),
                ("and",30),("not",103),("quite",108),
@@ -180,6 +180,23 @@ class TestFilters(unittest.TestCase):
                ("as",157),("well",160)]
         self.assertEquals(out,exp)
 
+
+class TestChunkers(unittest.TestCase):
+    """TestCases for the various Chunker subclasses."""
+    
+    def test_HTMLChunker(self):
+        """Test filtering of URLs"""
+        text = """<html><head><title>my title</title></head><body>this is a
+                <b>simple</b> HTML document for <p> test<i>ing</i> purposes</p>
+                """
+        tkns = get_tokenizer("en_US",chunkers=(HTMLChunker,))(text)
+        out = [t for t in tkns]
+        exp = [("my",19),("title",22),("this",48),("is",53),("a",56),
+               ("simple",77),("HTML",88),("document",93),("for",102),
+               ("test",110),("ing",117),("purposes",125),]
+        self.assertEquals(out,exp)
+        for (word,pos) in out:
+            self.assertEquals(text[pos:pos+len(word)],word)
 
 
 

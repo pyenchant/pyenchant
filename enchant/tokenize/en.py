@@ -67,7 +67,7 @@ class tokenize(enchant.tokenize.tokenize):
         self._text = text
         self.offset = 0
         # Select proper implementation of self._consume_alpha.
-        # 'text' may not be a string here (it could be e.g. a mutable array)
+        # 'text' isn't necessarily a string (it could be e.g. a mutable array)
         # so we can't use isinstance(text,unicode) to detect unicode.
         # Instead we typetest the first character of the text.
         # If there's no characters then it doesn't matter what implementation

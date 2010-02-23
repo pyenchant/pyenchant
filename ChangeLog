@@ -1,9 +1,12 @@
 
-1.5.4:
+1.6.0:
 
     * Upgraded to enchant v1.5.0:
         * new Broker methods get_param() and set_param() allow
           runtime customisation of provider data
+    * Added the concept of 'chunkers' to enchant.tokenize.get_tokenizer().
+      These serve split split the text into large chunks of checkable tokens.
+        * implemented a simple HTMLChunker class
     * Moved error classes into 'enchant.errors' for easier importing
     * Moved testcases into separate files so they're not loaded by default
     * Allowed SpellChecker to use default language if none is specified

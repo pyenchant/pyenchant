@@ -106,6 +106,43 @@ class TestChecker(unittest.TestCase):
             # There are no errors once the WikiWords are skipped
             self.fail("Extraneous spelling errors were found")
         self.assertEqual(chkr.get_text(),text)
+
+    def test_chunkers(self):
+        """Test SpellChecker with the 'chunkers' argument."""
+        text = """I contain <html a=xjvf>tags</html> that should be skipped"""
+        chkr = SpellChecker("en_US",text=text,
+                            chunkers=[enchant.tokenize.HTMLChunker])
+        for err in chkr:
+            # There are no errors when the <html> tag is skipped
+            self.fail("Extraneous spelling errors were found")
+        self.assertEqual(chkr.get_text(),text)
+
+    def test_chunkers_and_filters(self):
+        """Test SpellChecker with the 'chunkers' and 'filters' arguments."""
+        text = """I contain <html a=xjvf>tags</html> that should be skipped
+                  along with a <a href='http://example.com/">link to
+                  http://example.com/</a> that should also be skipped"""
+        # There are no errors when things are correctly skipped
+        chkr = SpellChecker("en_US",text=text,
+                            filters=[enchant.tokenize.URLFilter],
+                            chunkers=[enchant.tokenize.HTMLChunker])
+        for err in chkr:
+            self.fail("Extraneous spelling errors were found")
+        self.assertEqual(chkr.get_text(),text)
+        # The "html" is an error when not using HTMLChunker
+        chkr = SpellChecker("en_US",text=text,
+                            filters=[enchant.tokenize.URLFilter])
+        for err in chkr:
+            self.assertEquals(err.word,"html")
+            break
+        self.assertEqual(chkr.get_text(),text)
+        # The "http" from the URL is an error when not using URLFilter
+        chkr = SpellChecker("en_US",text=text,
+                            chunkers=[enchant.tokenize.HTMLChunker])
+        for err in chkr:
+            self.assertEquals(err.word,"http")
+            break
+        self.assertEqual(chkr.get_text(),text)
         
     def test_unicode(self):
         """Test SpellChecker with a unicode string."""

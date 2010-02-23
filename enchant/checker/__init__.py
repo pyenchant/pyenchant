@@ -104,7 +104,7 @@ class SpellChecker:
     """
     _DOC_ERRORS = ["sme","fw","speling","chkr","chkr","chkr"]
     
-    def __init__(self,lang=None,text=None,tokenize=None,filters=None):
+    def __init__(self,lang=None,text=None,tokenize=None,chunkers=None,filters=None):
         """Constructor for the SpellChecker class.
 
         SpellChecker objects can be created in two ways, depending on
@@ -116,6 +116,7 @@ class SpellChecker:
             
             * text:  to set the text to be checked at creation time
             * tokenize:  a custom tokenization function to use
+            * chunkers:  a list of chunkers to apply during tokenization
             * filters:  a list of filters to apply during tokenization
         
         If <tokenize> is not given and the first argument is a Dict,
@@ -139,10 +140,10 @@ class SpellChecker:
         self.dict = dict
         if tokenize is None:
             try:
-                tokenize = get_tokenizer(lang,filters)
+                tokenize = get_tokenizer(lang,chunkers,filters)
             except TokenizerNotFoundError:
                 # Fall back to English tokenization if no match for 'lang'
-                tokenize = get_tokenizer("en",filters)
+                tokenize = get_tokenizer("en",chunkers,filters)
         self._tokenize = tokenize
         
         self.word = None
