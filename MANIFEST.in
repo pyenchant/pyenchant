@@ -1,6 +1,6 @@
 
 include *.txt
 include tools/setup.py2exe.py
-include ez_setup.py
+include distribute_setup.py
 prune tools/pyenchant-bdist-win32-sources
 
