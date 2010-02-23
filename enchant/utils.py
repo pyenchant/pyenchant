@@ -161,9 +161,11 @@ class EnchantStr(str):
         """Decode a string returned by the enchant C library."""
         if self._was_unicode:
           if str is unicode:
-            # TODO: why does ctypes convert c_char_p to str(),
-            #       rather than to bytes()?
-            return value.encode().decode("utf-8")
+            # On some python3 versions, ctypes converts c_char_p
+            # to str() rather than bytes()   
+            if isinstance(value,str):
+                value = value.encode()
+            return value.decode("utf-8")
           else:
             return value.decode("utf-8")
         else:
@@ -188,6 +190,11 @@ except NameError:
     def next(iter):
         """Compatability wrapper for advancing an iterator."""
         return iter.next()
+
+try:
+    xrange = xrange
+except NameError:
+    xrange = range
 
 
 def get_default_language(default=None):

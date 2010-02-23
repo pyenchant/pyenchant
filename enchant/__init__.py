@@ -406,7 +406,8 @@ class Broker(_EnchantObject):
         Parameters are used to provide runtime information to individual
         provider backends.  See the method 'set_param' for more details.
         """
-        return _e.broker_get_param(self._this,name)
+        name = EnchantStr(name)
+        return name.decode(_e.broker_get_param(self._this,name))
     get_param._DOC_ERRORS = ["param"]
 
     def set_param(self,name,value):
@@ -417,7 +418,7 @@ class Broker(_EnchantObject):
         any directories given in the "enchant.myspell.dictionary.path"
         parameter when looking for its dictionary files.
         """
-        _e.broker_set_param(self._this,name,value)
+        _e.broker_set_param(self._this,EnchantStr(name),EnchantStr(value))
         
 
 

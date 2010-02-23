@@ -50,7 +50,11 @@ from enchant.utils import unicode, raw_unicode, printf
 def runcmd(cmd):
     if subprocess is not None:
         kwds = dict(stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=True)
-        return subprocess.call(cmd,**kwds)
+        p = subprocess.Popen(cmd,**kwds)
+        (stdout,stderr) = p.communicate()
+        if p.returncode:
+            sys.stderr.write(stderr.decode())
+        return p.returncode
     else:
         return os.system(cmd)
 
@@ -511,7 +515,7 @@ class TestInstallEnv(unittest.TestCase):
     def runtests(self):
         import os, sys
         insdir = os.path.join(self._tempDir,self._insDir)
-        if isinstance(insdir,unicode):
+        if str is not unicode and isinstance(insdir,unicode):
             insdir = insdir.encode(sys.getfilesystemencoding())
         os.environ["PYTHONPATH"] = insdir
         script = os.path.join(insdir,"enchant","__init__.py")

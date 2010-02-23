@@ -102,7 +102,7 @@ import re
 import warnings
 
 import enchant
-from enchant.utils import next
+from enchant.utils import next, xrange
 from enchant.errors import *
 
 #  For backwards-compatability.  This will eventually be removed, but how
