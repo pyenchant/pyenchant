@@ -186,14 +186,14 @@ class TestChunkers(unittest.TestCase):
     
     def test_HTMLChunker(self):
         """Test filtering of URLs"""
-        text = """<html><head><title>my title</title></head><body>this is a
+        text = """hello<html><head><title>my title</title></head><body>this is a
                 <b>simple</b> HTML document for <p> test<i>ing</i> purposes</p>
                 """
         tkns = get_tokenizer("en_US",chunkers=(HTMLChunker,))(text)
         out = [t for t in tkns]
-        exp = [("my",19),("title",22),("this",48),("is",53),("a",56),
-               ("simple",77),("HTML",88),("document",93),("for",102),
-               ("test",110),("ing",117),("purposes",125),]
+        exp = [("hello",0),("my",24),("title",27),("this",53),("is",58),
+               ("a",61),("simple",82),("HTML",93),("document",98),("for",107),
+               ("test",115),("ing",122),("purposes",130),]
         self.assertEquals(out,exp)
         for (word,pos) in out:
             self.assertEquals(text[pos:pos+len(word)],word)

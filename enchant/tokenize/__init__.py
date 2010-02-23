@@ -470,7 +470,7 @@ class HTMLChunker(Chunker):
             if text[offset] == "<":
                 while text[offset] != ">":
                     offset += 1
-            offset += 1
+                offset += 1
             sPos = offset
             #  Find the start of the next tag.
             while offset < len(text) and text[offset] != "<":
