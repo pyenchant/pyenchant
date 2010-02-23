@@ -5,14 +5,19 @@
 #  This script is placed in the public domain.
 #
 
-import ez_setup
-ez_setup.use_setuptools()
 
+import distribute_setup
+distribute_setup.use_setuptools()
 from setuptools import setup, find_packages, Extension
 
 import sys
 import os
 import shutil
+
+setup_kwds = {}
+if sys.version_info > (3,):
+    setup_kwds["use_2to3"] = True
+
 
 # Location of the windows binaries, if available
 WINDEPS = ".\\tools\\pyenchant-bdist-win32-sources\\build"
@@ -61,7 +66,7 @@ if sys.platform == "win32":
       libDir = os.path.join(WINDEPS,"lib")
       for fName in os.listdir(libDir):
         if fName[-3:] == "dll":
-          print "COPYING:", fName
+          print("COPYING: " + fName)
           shutil.copy(os.path.join(libDir,fName),".\\enchant\\")
           EAGER_RES.append("enchant/" + fName)
       # Enchant plugins
@@ -105,7 +110,7 @@ setup(name=NAME,
       packages=PACKAGES,
       package_data=PKG_DATA,
       eager_resources=EAGER_RES,
-      test_suite="enchant.tests.buildtestsuite",
       include_package_data=True,
+      test_suite="enchant.tests.buildtestsuite",
      )
 
