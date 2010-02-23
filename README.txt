@@ -5,7 +5,7 @@ pyenchant:  Python bindings for the Enchant spellchecker
 This package provides a set of Python language bindings for the Enchant
 spellchecking library.  For more information, visit the project website:
 
-    http://pyenchant.sourceforge.net/
+    http://www.rfk.id.au/software/pyenchant/
 
 
 What is Enchant?
@@ -85,13 +85,13 @@ all the solutions turned up by Google were either extremely non-portable
 (what happened to SnakeSpell?)  It was also a great excuse to teach myself
 about SWIG, ctypes, and even a little bit of the Python/C API.
 
-Bugs can be filed on the project's SourceForge project page:
+Bugs can be filed on the project's github page:
 
-    http://www.sourceforge.net/projects/pyenchant/
+    http://github.com/rfk/pyenchant/issues
 
 Comments, suggestions, other feedback can be directed to the pyenchant-users
 mailing list:
 
-    pyenchant-users@lists.sourceforge.net
+    pyenchant-users@googlegroups.com
 
 
