@@ -1,4 +1,10 @@
 
+1.6.1:
+
+    * Fixed loading of enchant DLL on win32 without pkg_resources installed.
+    * Fixed HTMLChunker to handle unescaped < and > characters that are
+      clearly not part of a tag.
+
 1.6.0:
 
     * Upgraded to enchant v1.5.0:
