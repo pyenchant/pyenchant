@@ -61,7 +61,7 @@ if sys.platform == "win32":
   # Add our bundled enchant libraries to DLL search path
   try:
       mypath = os.path.dirname(utils.get_resource_filename("libenchant.dll"))
-  except Error:
+  except (Error,ImportError):
       mypath = os.path.dirname(utils.get_resource_filename("libenchant-1.dll"))
   os.environ['PATH'] = os.environ['PATH'] + ";" + mypath
 
