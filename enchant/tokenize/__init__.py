@@ -468,9 +468,17 @@ class HTMLChunker(Chunker):
                 break
             #  Skip to the end of the current tag, if any.
             if text[offset] == "<":
-                while text[offset] != ">":
-                    offset += 1
-                offset += 1
+                maybeTag = offset
+                if self._is_tag(text,offset):
+                    while text[offset] != ">":
+                        offset += 1
+                        if offset == len(text):
+                            offset = maybeTag+1
+                            break
+                    else:
+                        offset += 1
+                else:
+                    offset = maybeTag+1
             sPos = offset
             #  Find the start of the next tag.
             while offset < len(text) and text[offset] != "<":
@@ -481,6 +489,14 @@ class HTMLChunker(Chunker):
             if(sPos < offset):
                 return (text[sPos:offset],sPos)
         raise StopIteration()
+
+    def _is_tag(self,text,offset):
+        if offset+1 < len(text):
+            if text[offset+1].isalpha():
+                return True
+            if text[offset+1] == "/":
+                return True
+        return False
 
 
 #TODO: LaTeXChunker
