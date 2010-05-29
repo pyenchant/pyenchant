@@ -180,7 +180,7 @@ def printf(values,sep=" ",end="\n",file=None):
     """
     if file is None:
         file = sys.stdout
-    file.write(sep.join(values))
+    file.write(sep.join(map(str,values)))
     file.write(end)
 
 

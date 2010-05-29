@@ -1,4 +1,9 @@
 
+1.6.2:
+
+    * Fixed bug in printf() utility function; all input args are now converted
+      to strings before printing.
+
 1.6.1:
 
     * Fixed loading of enchant DLL on win32 without pkg_resources installed.
