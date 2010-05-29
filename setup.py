@@ -73,6 +73,7 @@ if sys.platform == "win32":
       plugDir = os.path.join(WINDEPS,"lib\\enchant")
       for fName in os.listdir(plugDir):
         if fName[-3:] == "dll":
+          print("COPYING: " + fName)
           shutil.copy(os.path.join(plugDir,fName),".\\enchant\\lib\\enchant\\")
       # Local Dictionaries
       dictPath = os.path.join(WINDEPS,"myspell")

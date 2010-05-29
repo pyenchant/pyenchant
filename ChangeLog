@@ -1,6 +1,7 @@
 
 1.6.2:
 
+    * Upgraded bundled enchant to v1.6.0.
     * Fixed bug in printf() utility function; all input args are now converted
       to strings before printing.
 

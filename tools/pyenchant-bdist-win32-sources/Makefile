@@ -2,7 +2,7 @@
 #  Makefile for building pyenchant win32 dependencies.
 #
 BUILD_DIR = /s/software/pyenchant/tools/pyenchant-bdist-win32-sources/build
-ENCHANT_DIR = enchant-1.5.0
+ENCHANT_DIR = enchant-1.6.0
 
 ENCHANT_CONFIG_OPTS = --enable-ispell --enable-myspell --disable-aspell
 ENCHANT_CFLAGS = -I$(BUILD_DIR)/include/glib-2.0
@@ -23,7 +23,7 @@ $(BUILD_DIR)/lib/libenchant.dll: $(ENCHANT_DIR)/Makefile
 $(ENCHANT_DIR)/Makefile: src/$(ENCHANT_DIR).tar.gz
 	rm -rf $(ENCHANT_DIR)
 	tar -xzvf src/$(ENCHANT_DIR).tar.gz
-	patch $(ENCHANT_DIR)/src/pwl.c < patches/pwl.patch
+	patch $(ENCHANT_DIR)/src/enchant.c < patches/relocatable.patch
 	cd $(ENCHANT_DIR) && ./configure CFLAGS="$(CFLAGS)" ENCHANT_CFLAGS="$(ENCHANT_CFLAGS)" ENCHANT_LIBS="$(ENCHANT_LIBS)" $(ENCHANT_CONFIG_OPTS)
 
 
