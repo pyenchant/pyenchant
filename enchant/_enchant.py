@@ -86,9 +86,9 @@ if sys.platform == "win32":
     if e_path is not None:
         # We need to use LoadLibraryEx with LOAD_WITH_ALTERED_SEARCH_PATH so
         # that we don't accidentally suck in other versions of e.g. glib.
-        if isinstance(e_path,unicode):
-            e_path = e_path.encode(sys.getfilesystemencoding())
-        LoadLibraryEx = windll.kernel32.LoadLibraryExA
+        if not isinstance(e_path,unicode):
+            e_path = unicode(e_path,sys.getfilesystemencoding())
+        LoadLibraryEx = windll.kernel32.LoadLibraryExW
         LOAD_WITH_ALTERED_SEARCH_PATH = 0x00000008
         e_handle = LoadLibraryEx(e_path,None,LOAD_WITH_ALTERED_SEARCH_PATH)
         if not e_handle:
