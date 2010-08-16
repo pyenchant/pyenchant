@@ -61,7 +61,10 @@ EAGER_RES = []
 # the package directory so setuptools can locate them.
 #
 if sys.platform in ("win32","darwin",):
-    PKG_DATA["enchant"] = ["*"+DYLIB_EXT, "lib/enchant/*"+DYLIB_EXT,
+    PKG_DATA["enchant"] = ["*"+DYLIB_EXT,"lib/*"+DYLIB_EXT,
+                           "lib/enchant/*"+DYLIB_EXT,
+                           "lib/enchant/*.so",
+                           "lib/enchant/*.txt",
                            "share/enchant/myspell/*.*",
                            "share/enchant/ispell/*.*"]
     EAGER_RES = ["enchant/lib", "enchant/share"]
@@ -74,16 +77,19 @@ if sys.platform in ("win32","darwin",):
           print("COPYING: " + fName)
           if sys.platform == "win32":
               libroot = os.path.join(".","enchant")
+              EAGER_RES.append("enchant/" + fName)
           else:
               libroot = os.path.join(".","enchant","lib")
+              EAGER_RES.append("enchant/lib/" + fName)
           shutil.copy(os.path.join(libDir,fName),libroot)
-          EAGER_RES.append("enchant/" + fName)
       # Enchant plugins
       plugDir = os.path.join(BINDEPS,"lib","enchant")
       for fName in os.listdir(plugDir):
         if fName.endswith(DYLIB_EXT) or fName.endswith(".so"):
           print("COPYING: " + fName)
-          shutil.copy(os.path.join(plugDir,fName),os.path.join(".","enchant","lib","enchant"))
+          EAGER_RES.append("enchant/lib/enchant/" + fName)
+          shutil.copy(os.path.join(plugDir,fName),
+                      os.path.join(".","enchant","lib","enchant"))
       # Local Dictionaries
       dictPath = os.path.join(BINDEPS,"share","enchant","myspell")
       if os.path.isdir(dictPath):
