@@ -5,3 +5,6 @@ PyEnchant:
   * Expand CmdLineChecker and make it ispell-compatible
   * build an installer for OSX
 
+  * rename "tokenize", it tends to conflict with the top-level stdlib
+    module of the same name (although I've no idea why)
+

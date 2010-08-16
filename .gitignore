@@ -8,3 +8,6 @@
 *.egg
 *.egg-info
 *.swp
+*.dll
+*.dic
+*.aff

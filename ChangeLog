@@ -1,4 +1,10 @@
 
+1.6.3:
+
+    * Improved handling of unicode paths on win32.
+    * Changed DLL loading logic for win32, to ensure that we don't accidentally
+      load older versions of e.g. glib that may be on the DLL search path.
+
 1.6.2:
 
     * Upgraded bundled enchant to v1.6.0.

@@ -53,7 +53,9 @@ def runcmd(cmd):
         p = subprocess.Popen(cmd,**kwds)
         (stdout,stderr) = p.communicate()
         if p.returncode:
-            sys.stderr.write(stderr.decode())
+            if sys.version_info[0] >= 3:
+                stderr = stderr.decode(sys.getdefaultencoding(),"replace")
+            sys.stderr.write(stderr)
         return p.returncode
     else:
         return os.system(cmd)
@@ -470,7 +472,7 @@ class TestDocStrings(unittest.TestCase):
                     continue
                 errors.append((obj,err.word,err.wordpos))
                 msg = "\nDOCSTRING SPELLING ERROR: %s %s %d %s\n" % (obj,err.word,err.wordpos,chkr.suggest())
-                printf(msg,file=sys.stderr)
+                printf([msg],file=sys.stderr)
         #  Find and yield all child objects that should be checked
         for name in dir(obj):
             if name.startswith("__"):
@@ -593,6 +595,6 @@ def buildtestsuite(recurse=True):
     return suite
 
 
-def runtestsuite():
-    return unittest.TextTestRunner(verbosity=0).run(buildtestsuite(recurse=False))
+def runtestsuite(recurse=False):
+    return unittest.TextTestRunner(verbosity=0).run(buildtestsuite(recurse=recurse))
 

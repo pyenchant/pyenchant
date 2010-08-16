@@ -240,17 +240,19 @@ def get_resource_filename(resname):
     if os.path.exists(path):
         return path
     if hasattr(sys, "frozen"):
-        exe_dir = os.path.dirname(unicode(sys.executable,sys.getfilesystemencoding()))
+        exe_path = unicode(sys.executable,sys.getfilesystemencoding())
+        exe_dir = os.path.dirname(exe_path)
         path = os.path.join(exe_dir, resname)
         if os.path.exists(path):
             return path
     else:
         import pkg_resources
         try:
-            path = os.path.abspath(pkg_resources.resource_filename("enchant",resname))
+            path = pkg_resources.resource_filename("enchant",resname)
         except KeyError:
             pass
         else:
+            path = os.path.abspath(path)
             if os.path.exists(path):
                 return path
     raise Error("Could not locate resource '%s'" % (resname,))

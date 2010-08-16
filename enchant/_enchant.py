@@ -54,18 +54,15 @@ from ctypes.util import find_library
 
 from enchant import utils
 from enchant.errors import *
+from enchant.utils import unicode
 
 # Locate and load the enchant dll.
+# We've got several options based on the host platform.
 
-if sys.platform == "win32":
-  # Add our bundled enchant libraries to DLL search path
-  try:
-      mypath = os.path.dirname(utils.get_resource_filename("libenchant.dll"))
-  except (Error,ImportError):
-      mypath = os.path.dirname(utils.get_resource_filename("libenchant-1.dll"))
-  os.environ['PATH'] = os.environ['PATH'] + ";" + mypath
+e = None
 
 def _e_path_possibilities():
+    """Generator yielding possible locations of the enchant library."""
     yield os.environ.get("PYENCHANT_LIBRARY_PATH")
     yield find_library("enchant")
     yield find_library("libenchant")
@@ -74,15 +71,45 @@ def _e_path_possibilities():
          # enchant lib installed by macports
          yield "/opt/local/lib/libenchant.dylib"
 
-for e_path in _e_path_possibilities():
-    if e_path is not None:
-        try:
-            e = cdll.LoadLibrary(e_path)
-        except OSError:
+
+# On win32 we ship a bundled version of the enchant DLLs.
+# Use them if they're present.
+if sys.platform == "win32":
+    e_path = None
+    try:
+        e_path = utils.get_resource_filename("libenchant.dll")
+    except (Error,ImportError):
+         try:
+            e_path = utils.get_resource_filename("libenchant-1.dll")
+         except (Error,ImportError):
             pass
-        else:
-            break
-else:
+    if e_path is not None:
+        # We need to use LoadLibraryEx with LOAD_WITH_ALTERED_SEARCH_PATH so
+        # that we don't accidentally suck in other versions of e.g. glib.
+        if isinstance(e_path,unicode):
+            e_path = e_path.encode(sys.getfilesystemencoding())
+        LoadLibraryEx = windll.kernel32.LoadLibraryExA
+        LOAD_WITH_ALTERED_SEARCH_PATH = 0x00000008
+        e_handle = LoadLibraryEx(e_path,None,LOAD_WITH_ALTERED_SEARCH_PATH)
+        if not e_handle:
+            raise WinError()
+        e = CDLL(e_path,handle=e_handle)
+
+
+# Not found yet, search various standard system locations.
+if e is None:
+    for e_path in _e_path_possibilities():
+        if e_path is not None:
+            try:
+                e = cdll.LoadLibrary(e_path)
+            except OSError:
+                pass
+            else:
+                break
+
+
+# No usable enchant install was found :-(
+if e is None:
    raise ImportError("enchant C library not found")
 
 
