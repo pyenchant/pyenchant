@@ -8,9 +8,9 @@ ENCHANT_CONFIG_OPTS = --enable-ispell --enable-myspell --disable-aspell
 ENCHANT_CFLAGS = -I$(BUILD_DIR)/include/glib-2.0
 ENCHANT_LIBS = -L$(BUILD_DIR)/lib -lglib-2.0-0 -lgmodule-2.0-0
 
-all: $(BUILD_DIR)/lib/libenchant.dll $(BUILD_DIR)/myspell/en_GB.dic \
-	$(BUILD_DIR)/myspell/en_US.dic $(BUILD_DIR)/myspell/de_DE.dic \
-	$(BUILD_DIR)/myspell/en_AU.dic $(BUILD_DIR)/myspell/fr_FR.dic
+all: $(BUILD_DIR)/lib/libenchant.dll $(BUILD_DIR)/share/enchant/myspell/en_GB.dic \
+	$(BUILD_DIR)/share/enchant/myspell/en_US.dic $(BUILD_DIR)/share/enchant/myspell/de_DE.dic \
+	$(BUILD_DIR)/share/enchant/myspell/en_AU.dic $(BUILD_DIR)/share/enchant/myspell/fr_FR.dic
 
 #  Make enchant.
 $(BUILD_DIR)/lib/libenchant.dll: $(ENCHANT_DIR)/Makefile
@@ -29,8 +29,8 @@ $(ENCHANT_DIR)/Makefile: src/$(ENCHANT_DIR).tar.gz
 
 
 # Ability to extract MySpell dictionary files
-$(BUILD_DIR)/myspell/%.dic: $(BUILD_DIR)/myspell/%.zip
-	cd $(BUILD_DIR)/myspell && unzip -n $< '*.dic' '*.aff'
+$(BUILD_DIR)/share/enchant/myspell/%.dic: $(BUILD_DIR)/share/enchant/myspell/%.zip
+	cd $(BUILD_DIR)/share/enchant/myspell && unzip -n $< '*.dic' '*.aff'
 
 
 clean:
@@ -39,7 +39,7 @@ clean:
 clobber: clean
 	rm -f $(BUILD_DIR)/lib/libenchant*
 	rm -rf $(BUILD_DIR)/lib/enchant
-	rm -f $(BUILD_DIR)/myspell/*.dic
-	rm -f $(BUILD_DIR)/myspell/*.aff
-	rm -f $(BUILD_DIR)/myspell/*.txt
+	rm -f $(BUILD_DIR)/share/enchant/myspell/*.dic
+	rm -f $(BUILD_DIR)/share/enchant/myspell/*.aff
+	rm -f $(BUILD_DIR)/share/enchant/myspell/*.txt
 

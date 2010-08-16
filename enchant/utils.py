@@ -38,6 +38,7 @@
         * string/unicode compatibility wrappers
         * functions for dealing with locale/language settings
         * ability to list supporting data files (win32 only)
+        * functions for bundling supporting data files from a build
           
 """
 
@@ -300,4 +301,51 @@ def win32_data_files():
     return dataFiles
 win32_data_files._DOC_ERRORS = ["py","py","exe"]
 
+
+def osx_make_dist_libraries(target_dir):
+    """Bundle libraries in the given dir so they are redistriutable.
+
+    This involved bundling in any needed dependencies, and mucking with the
+    linker info so that they are relocatable.
+    """
+    if sys.platform != "darwin":
+        raise RuntimeError("only works on osx")
+    import subprocess
+    import shutil
+    def do(*cmd):
+        subprocess.Popen(cmd).wait()
+    def bt(*cmd):
+        return subprocess.Popen(cmd,stdout=subprocess.PIPE).stdout.read()
+    #  Fix up all .dylib or .so files found in the target directory.
+    todo = []
+    for dirnm,_,filenms in os.walk(target_dir):
+        for nm in filenms:
+            if nm.endswith(".dylib") or nm.endswith(".so"):
+                todo.append(os.path.join(dirnm,nm))
+    for libpath in todo:
+        (dirnm,nm) = os.path.split(libpath)
+        #  Fix the installed name of the lib to be relative to rpath.
+        if libpath.endswith(".dylib"):
+            do("install_name_tool","-id","@loader_path/"+nm,libpath)
+        #  Fix references to any non-core dependencies, and copy them into
+        #  the target dir so they will be fixed up in turn.
+        deplines = bt("otool","-L",libpath).split("\n")
+        if libpath.endswith(".dylib"):
+            deplines = deplines[2:]
+        else:
+            deplines = deplines[1:]
+        for dep in deplines:
+            dep = dep.strip()
+            if not dep:
+                continue
+            dep = dep.split()[0]
+            if dep.startswith("/opt/local") or dep.startswith("/usr/local"):
+                depnm = os.path.basename(dep)
+                deppath = os.path.join(target_dir,depnm)
+                numdirs = len(dirnm[len(target_dir):].split("/")) - 1
+                loadpath = "@loader_path/" + ("../"*numdirs) + depnm
+                do("install_name_tool","-change",dep,loadpath,libpath)
+                if deppath not in todo:
+                    shutil.copy2(dep,deppath)
+                    todo.append(deppath)
 

@@ -1,0 +1,22 @@
+--- enchant-1.6.0/src/enchant.c	2010-06-29 20:31:46.000000000 +1000
++++ enchant-patched/src/enchant.c	2010-08-16 19:35:55.000000000 +1000
+@@ -60,6 +60,8 @@
+ 
+ ENCHANT_PLUGIN_DECLARE("Enchant")
+ 
++char** enchant_prefix_dir_p;
++
+ static char *
+ enchant_get_registry_value_ex (int current_user, const char * const prefix, const char * const key);
+ 
+@@ -2295,6 +2297,10 @@
+         printf("USING BINRELOC\n");
+ #endif
+ 
++	if (!prefix) {
++		prefix = g_strdup (*enchant_prefix_dir_p);
++	}
++
+ #if defined(ENCHANT_PREFIX_DIR)
+ 	if (!prefix) {
+ 		prefix = g_strdup (ENCHANT_PREFIX_DIR);

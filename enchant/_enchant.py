@@ -96,6 +96,26 @@ if sys.platform == "win32":
         e = CDLL(e_path,handle=e_handle)
 
 
+# On darwin we ship a bundled version of the enchant DLLs.
+# Use them if they're present.
+if e is None and sys.platform == "darwin":
+  try:
+      e_path = utils.get_resource_filename("lib/libenchant.1.dylib")
+  except (Error,ImportError):
+      pass
+  else:
+      # Enchant doesn't natively support relocatable binaries on OSX.
+      # We fake it by patching the enchant source to expose a char**, which
+      # we can write the runtime path into ourelves.
+      e = CDLL(e_path)
+      try:
+          e_dir = os.path.dirname(os.path.dirname(e_path))
+          prefix_dir = POINTER(c_char_p).in_dll(e,"enchant_prefix_dir_p")
+          prefix_dir.contents = c_char_p(e_dir)
+      except AttributeError:
+          e = None
+
+
 # Not found yet, search various standard system locations.
 if e is None:
     for e_path in _e_path_possibilities():

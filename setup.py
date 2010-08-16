@@ -19,8 +19,13 @@ if sys.version_info > (3,):
     setup_kwds["use_2to3"] = True
 
 
-# Location of the windows binaries, if available
-WINDEPS = ".\\tools\\pyenchant-bdist-win32-sources\\build"
+# Location of the prebuilt binaries, if available
+if sys.platform == "win32":
+    BINDEPS = ".\\tools\\pyenchant-bdist-win32-sources\\build"
+    DYLIB_EXT = ".dll"
+elif sys.platform == "darwin":
+    BINDEPS = "./tools/pyenchant-bdist-osx-sources/build"
+    DYLIB_EXT = ".dylib"
 
 # Package MetaData
 NAME = "pyenchant"
@@ -55,39 +60,45 @@ EAGER_RES = []
 # <WINDEPS> exists when this script is run.  They are copied into
 # the package directory so setuptools can locate them.
 #
-if sys.platform == "win32":
-    PKG_DATA["enchant"] = ["*.dll", "lib/enchant/*.dll",
+if sys.platform in ("win32","darwin",):
+    PKG_DATA["enchant"] = ["*"+DYLIB_EXT, "lib/enchant/*"+DYLIB_EXT,
                            "share/enchant/myspell/*.*",
                            "share/enchant/ispell/*.*"]
     EAGER_RES = ["enchant/lib", "enchant/share"]
     # Copy local DLLs across if available
-    if os.path.exists(WINDEPS):
+    if os.path.exists(BINDEPS):
       # Main DLLs
-      libDir = os.path.join(WINDEPS,"lib")
+      libDir = os.path.join(BINDEPS,"lib")
       for fName in os.listdir(libDir):
-        if fName[-3:] == "dll":
+        if fName.endswith(DYLIB_EXT) or fName.endswith(".so"):
           print("COPYING: " + fName)
-          shutil.copy(os.path.join(libDir,fName),".\\enchant\\")
+          if sys.platform == "win32":
+              libroot = os.path.join(".","enchant")
+          else:
+              libroot = os.path.join(".","enchant","lib")
+          shutil.copy(os.path.join(libDir,fName),libroot)
           EAGER_RES.append("enchant/" + fName)
       # Enchant plugins
-      plugDir = os.path.join(WINDEPS,"lib\\enchant")
+      plugDir = os.path.join(BINDEPS,"lib","enchant")
       for fName in os.listdir(plugDir):
-        if fName[-3:] == "dll":
+        if fName.endswith(DYLIB_EXT) or fName.endswith(".so"):
           print("COPYING: " + fName)
-          shutil.copy(os.path.join(plugDir,fName),".\\enchant\\lib\\enchant\\")
+          shutil.copy(os.path.join(plugDir,fName),os.path.join(".","enchant","lib","enchant"))
       # Local Dictionaries
-      dictPath = os.path.join(WINDEPS,"myspell")
+      dictPath = os.path.join(BINDEPS,"share","enchant","myspell")
       if os.path.isdir(dictPath):
         for dictName in os.listdir(dictPath):
           if dictName[-3:] in ["txt","dic","aff"]:
+            print("COPYING: " + dictName)
             shutil.copy(os.path.join(dictPath,dictName),
-			".\\enchant\\share\\enchant\\myspell\\")
-      dictPath = os.path.join(WINDEPS,"ispell")
+			os.path.join(".","enchant","share","enchant","myspell"))
+      dictPath = os.path.join(BINDEPS,"share","enchant","ispell")
       if os.path.isdir(dictPath):
         for dictName in os.listdir(dictPath):
           if dictName.endswith("hash") or dictName == "README.txt":
+            print("COPYING: " + dictName)
             shutil.copy(os.path.join(dictPath,dictName),
-			".\\enchant\\share\\enchant\\ispell\\")
+			os.path.join(".","enchant","share","enchant","ispell"))
 
 ##  Now we can import enchant to get at version info
 
