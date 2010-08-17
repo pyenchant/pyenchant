@@ -217,7 +217,8 @@ setup(name=NAME,
 
 
 dist_dir = os.path.join(os.path.dirname(__file__),"dist")
-for nm in os.listdir(dist_dir):
+if os.path.exists(dist_dir):
+  for nm in os.listdir(dist_dir):
     #  Rename any eggs to make it clear they're platform-specific.
     #  This isn't done by default because we don't build any extension modules,
     #  but rather bundle our libs as data_files.
