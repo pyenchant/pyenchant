@@ -1,5 +1,5 @@
 
-1.6.3a1:
+1.6.3:
 
     * Bundle pre-compiled libraries for Mac OSX 10.4 and later.
     * Improved handling of unicode paths on win32.
