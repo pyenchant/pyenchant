@@ -814,6 +814,11 @@ list_languages = _broker.list_languages
 get_param = _broker.get_param
 set_param = _broker.set_param
 
+#  Expose the "get_version" function.
+def get_enchant_version():
+    """Get the version string for the underlying enchant library."""
+    return _e.get_version()
+
 
 # Run unit tests when called from comand-line
 if __name__ == "__main__":
