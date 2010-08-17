@@ -215,6 +215,16 @@ else:
     broker_set_param.argtypes = [t_broker,c_char_p,c_char_p]
     broker_set_param.restype = None
 
+try:
+    get_version = e.enchant_get_version
+except AttributeError:
+    #  Make the lookup error occur at runtime
+    def get_version():
+        return e.enchant_get_version()
+else:
+    get_version.argtypes = []
+    get_version.restype = c_char_p
+
 
 dict_check1 = e.enchant_dict_check
 dict_check1.argtypes = [t_dict,c_char_p,c_size_t]

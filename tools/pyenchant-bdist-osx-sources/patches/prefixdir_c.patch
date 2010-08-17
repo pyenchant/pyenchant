@@ -13,7 +13,7 @@
          printf("USING BINRELOC\n");
  #endif
  
-+	if (!prefix) {
++	if (!prefix && enchant_prefix_dir_p && *enchant_prefix_dir_p) {
 +		prefix = g_strdup (*enchant_prefix_dir_p);
 +	}
 +

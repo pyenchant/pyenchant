@@ -52,8 +52,75 @@ EXT_MODULES = []
 PKG_DATA = {}
 EAGER_RES = []
 
+
 #
-# Build and distribution information is different on Windows.
+# Helper functions for packaging dynamic libs on OSX.
+#
+
+def osx_make_lib_relocatable(libpath,bundle_dir=None):
+    """Make an OSX dynamic lib re-locatable by changing dep paths.
+
+    This function adjusts the path information stored in the given dynamic
+    library, so that is can be bundled into a directory and restributed.
+    It returns a list of any dependencies that must also be included in the
+    bundle directory.
+    """
+    if sys.platform != "darwin":
+        raise RuntimeError("only works on osx")
+    import subprocess
+    import shutil
+    def do(*cmd):
+        subprocess.Popen(cmd).wait()
+    def bt(*cmd):
+        return subprocess.Popen(cmd,stdout=subprocess.PIPE).stdout.read()
+    (dirnm,nm) = os.path.split(libpath)
+    if bundle_dir is None:
+        bundle_dir = dirnm
+    #  Fix the installed name of the lib to be relative to rpath.
+    if libpath.endswith(".dylib"):
+        do("install_name_tool","-id","@loader_path/"+nm,libpath)
+    #  Fix references to any non-core dependencies, and copy them into
+    #  the target dir so they will be fixed up in turn.
+    deps = []
+    deplines = bt("otool","-L",libpath).split("\n")
+    if libpath.endswith(".dylib"):
+        deplines = deplines[2:]
+    else:
+        deplines = deplines[1:]
+    for dep in deplines:
+        dep = dep.strip()
+        if not dep:
+            continue
+        dep = dep.split()[0]
+        if dep.startswith("/System/") or dep.startswith("/usr/"):
+            continue
+        depnm = os.path.basename(dep)
+        numdirs = len(dirnm[len(bundle_dir):].split("/")) - 1
+        loadpath = "@loader_path/" + ("../"*numdirs) + depnm
+        do("install_name_tool","-change",dep,loadpath,libpath)
+        deps.append(dep)
+    return deps
+
+
+def osx_bundle_lib(libpath):
+    """Bundle dependencies into the same directory as the given library."""
+    if sys.platform != "darwin":
+        raise RuntimeError("only works on osx")
+    bundle_dir = os.path.dirname(libpath)
+    for nm in os.listdir(bundle_dir):
+        oldpath = os.path.join(bundle_dir,nm)
+        if oldpath != libpath and os.path.isfile(oldpath):
+            os.unlink(oldpath)
+    todo = osx_make_lib_relocatable(libpath,bundle_dir)
+    for deppath in todo:
+        depnm = os.path.basename(deppath)
+        bdeppath = os.path.join(bundle_dir,depnm)
+        if not os.path.exists(bdeppath):
+            shutil.copy2(deppath,bdeppath)
+            todo.extend(osx_make_lib_relocatable(bdeppath,bundle_dir))
+
+#
+# Build and distribution information is different on Windows and OSX.
 #
 # There's the possibility of including pre-built support DLLs
 # for the Windows installer.  They will be included if the directory
@@ -70,10 +137,10 @@ if sys.platform in ("win32","darwin",):
     EAGER_RES = ["enchant/lib", "enchant/share"]
     # Copy local DLLs across if available
     if os.path.exists(BINDEPS):
-      # Main DLLs
+      # Main enchant DLL
       libDir = os.path.join(BINDEPS,"lib")
       for fName in os.listdir(libDir):
-        if fName.endswith(DYLIB_EXT) or fName.endswith(".so"):
+        if "enchant" in fName and fName.endswith(DYLIB_EXT):
           print("COPYING: " + fName)
           if sys.platform == "win32":
               libroot = os.path.join(".","enchant")
@@ -82,14 +149,30 @@ if sys.platform in ("win32","darwin",):
               libroot = os.path.join(".","enchant","lib")
               EAGER_RES.append("enchant/lib/" + fName)
           shutil.copy(os.path.join(libDir,fName),libroot)
+          break
+      # Dependencies.  On win32 we just bundle everything, on OSX we call
+      # a helper function that tracks (and re-writes) dependencies
+      if sys.platform == "darwin":
+          osx_bundle_lib(os.path.join(libroot,fName))
+          for fName in os.listdir(libroot):
+              EAGER_RES.append("enchant/lib/" + fName)
+      else:
+        for fName in os.listdir(libDir):
+          if fName.endswith(DYLIB_EXT):
+              print("COPYING: " + fName)
+              libroot = os.path.join(".","enchant")
+              EAGER_RES.append("enchant/" + fName)
+              shutil.copy(os.path.join(libDir,fName),libroot)
       # Enchant plugins
       plugDir = os.path.join(BINDEPS,"lib","enchant")
       for fName in os.listdir(plugDir):
         if fName.endswith(DYLIB_EXT) or fName.endswith(".so"):
           print("COPYING: " + fName)
           EAGER_RES.append("enchant/lib/enchant/" + fName)
-          shutil.copy(os.path.join(plugDir,fName),
-                      os.path.join(".","enchant","lib","enchant"))
+          fDest = os.path.join(".","enchant","lib","enchant",fName)
+          shutil.copy(os.path.join(plugDir,fName),fDest)
+          if sys.platform == "darwin":
+              osx_make_lib_relocatable(fDest,libroot)
       # Local Dictionaries
       dictPath = os.path.join(BINDEPS,"share","enchant","myspell")
       if os.path.isdir(dictPath):
@@ -111,7 +194,6 @@ if sys.platform in ("win32","darwin",):
 import enchant
 VERSION = enchant.__version__
 
-
 ##
 ##  Main call to setup() function
 ##
@@ -131,4 +213,23 @@ setup(name=NAME,
       include_package_data=True,
       test_suite="enchant.tests.buildtestsuite",
      )
+
+
+#  Rename any eggs to make it clear they're platform-specific.
+#  This isn't done by default because we don't build any extension modules,
+#  but rather bundle our libs as data_files.
+dist_dir = os.path.join(os.path.dirname(__file__),"dist")
+for nm in os.listdir(dist_dir):
+    if nm.endswith("py%d.%d.egg" % sys.version_info[:2]):
+        if sys.platform == "win32":
+            platform = "win32"
+        elif sys.platform == "darwin":
+            platform = "macosx-10.4-universal"
+        else:
+            continue
+        newname = nm.rsplit(".",1)[0] + "-" + platform + ".egg"
+        newpath = os.path.join(dist_dir,newname)
+        if os.path.exists(newpath):
+            os.unlink(newpath)
+        os.rename(os.path.join(dist_dir,nm),newpath)
 
