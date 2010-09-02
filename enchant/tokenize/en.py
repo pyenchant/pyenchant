@@ -103,7 +103,16 @@ class tokenize(enchant.tokenize.tokenize):
         u = ""
         while not u and incr <= 4:
             try:
-                u = text[offset:offset+incr].decode("utf8")
+                try:
+                    #  In the common case this will be a string
+                    u = text[offset:offset+incr].decode("utf8")
+                except AttributeError:
+                    #  Looks like it was e.g. a mutable char array.
+                    try:
+                        s = text[offset:offset+incr].tostring()
+                    except AttributeError:
+                        s = "".join([c for c in text[offset:offset+incr]])
+                    u = s.decode("utf8")
             except UnicodeDecodeError:
                 incr += 1
         if not u:

@@ -34,6 +34,7 @@
 """
 
 import unittest
+import array
 
 from enchant.tokenize import *
 from enchant.tokenize.en import tokenize as tokenize_en
@@ -253,6 +254,20 @@ of words. Also need to "test" the handling of 'quoted' words."""
         for (itmO,itmV) in zip(output,tokenize_en(input)):
             self.assertEqual(itmO,itmV[0])
             self.assert_(input[itmV[1]:].startswith(itmO))
+
+    def test_utf8_bytes_in_an_array(self):
+        """Test tokenization of UTF8-encoded bytes stored in an array."""
+        # Python3 doesn't support bytestrings, don't run this test
+        if str is unicode:
+            return
+        input = "A r\xc3\xa9sum\xc3\xa9, also spelled resum\xc3\xa9 or resume"
+        output = input.split(" ")
+        output[1] = output[1][0:-1]
+        input = array.array('c',input)
+        output = [array.array('c',w) for w in output]
+        for (itmO,itmV) in zip(output,tokenize_en(array.array('c',input))):
+            self.assertEqual(itmO,itmV[0])
+            self.assertEqual(input[itmV[1]:itmV[1]+len(itmV[0])],itmO)
 
     def test_bug1591450(self):
         """Check for tokenization regressions identified in bug #1591450."""
