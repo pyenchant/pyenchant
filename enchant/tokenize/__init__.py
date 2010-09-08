@@ -136,14 +136,18 @@ class tokenize:
         return self
 
 
-def get_tokenizer(tag,chunkers=None,filters=None):
+def get_tokenizer(tag=None,chunkers=None,filters=None):
     """Locate an appropriate tokenizer by language tag.
 
-    This requires importing the function 'tokenize' from an
-    appropriate module.  Modules tried are named after the
-    language tag, tried in the following order:
+    This requires importing the function 'tokenize' from an appropriate
+    module.  Modules tried are named after the language tag, tried in the
+    following order:
         * the entire tag (e.g. "en_AU.py")
         * the base country code of the tag (e.g. "en.py")
+
+    If the language tag is None, a default tokenizer (actually the English
+    one) is returned.  It's unicode aware and should work OK for most
+    latin-derived languages.
 
     If a suitable function cannot be found, raises TokenizerNotFoundError.
     
@@ -151,6 +155,8 @@ def get_tokenizer(tag,chunkers=None,filters=None):
     classes and filter classes resectively.  These will be applied to the
     tokenizer during creation.
     """
+    if tag is None:
+        tag = "en"
     # "filters" used to be the second argument.  Try to catch cases
     # where it is given positionally and issue a DeprecationWarning.
     if chunkers is not None and filters is None:

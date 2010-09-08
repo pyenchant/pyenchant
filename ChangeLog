@@ -3,6 +3,7 @@
 
     * DictWithPWL:  use pwl and pel to adjust the words returned by suggest().
     * Fix tokenization of utf8 bytes in a mutable character array.
+    * get_tokenizer():  pass None as language tag to get default tokenizer.
 
 1.6.3:
 

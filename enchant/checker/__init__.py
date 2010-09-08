@@ -142,8 +142,8 @@ class SpellChecker:
             try:
                 tokenize = get_tokenizer(lang,chunkers,filters)
             except TokenizerNotFoundError:
-                # Fall back to English tokenization if no match for 'lang'
-                tokenize = get_tokenizer("en",chunkers,filters)
+                # Fall back to default tokenization if no match for 'lang'
+                tokenize = get_tokenizer(None,chunkers,filters)
         self._tokenize = tokenize
         
         self.word = None
