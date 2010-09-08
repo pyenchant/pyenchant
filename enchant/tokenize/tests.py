@@ -255,6 +255,17 @@ of words. Also need to "test" the handling of 'quoted' words."""
             self.assertEqual(itmO,itmV[0])
             self.assert_(input[itmV[1]:].startswith(itmO))
 
+    def test_utf8_bytes_at_end(self):
+        """Test tokenization of UTF8-encoded bytes at end of word."""
+        # Python3 doesn't support bytestrings, don't run this test
+        if str is unicode:
+            return
+        input = "A r\xc3\xa9sum\xc3\xa9, also spelled resum\xc3\xa9 or resume"
+        output = input.split(" ")
+        output[1] = output[1][0:-1]
+        for (itmO,itmV) in zip(output,tokenize_en(input)):
+            self.assertEqual(itmO,itmV[0])
+
     def test_utf8_bytes_in_an_array(self):
         """Test tokenization of UTF8-encoded bytes stored in an array."""
         # Python3 doesn't support bytestrings, don't run this test
