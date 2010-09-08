@@ -349,23 +349,11 @@ class TestPWL(unittest.TestCase):
         d.add("Flagen")
         self.assert_(d.check("Flagen"))
         self.assert_("Flagen" in self.getPWLContents())
-        d.remove("Lozz")
+        self.assert_("Flagen" in d.suggest("Flagn"))
+        self.assert_("hello" in d.suggest("helo"))
         d.remove("hello")
-        self.failIf(d.check("Lozz"))
         self.failIf(d.check("hello"))
-
-    def test_DWPEL(self):
-        """Test functionality of DictWithPWL using exclude list."""
-        self.setPWLContents(["Sazz","Lozz"])
-        d = DictWithPWL("en_US",self._path())
-        self.assert_(d.check("Sazz"))
-        self.assert_(d.check("Lozz"))
-        self.assert_(d.check("hello"))
-        self.failIf(d.check("helo"))
-        self.failIf(d.check("Flagen"))
-        d.add("Flagen")
-        self.assert_(d.check("Flagen"))
-        self.assert_("Flagen" in self.getPWLContents())
+        self.assert_("hello" not in d.suggest("helo"))
         d.remove("Lozz")
         self.failIf(d.check("Lozz"))
 

@@ -766,6 +766,19 @@ class DictWithPWL(Dict):
             return True
         return False
 
+    def suggest(self,word):
+        """Suggest possible spellings for a word.
+        
+        This method tries to guess the correct spelling for a given
+        word, returning the possibilities in a list.
+        """
+        suggs = Dict.suggest(self,word)
+        suggs.extend([w for w in self.pwl.suggest(word) if w not in suggs])
+        for i in xrange(len(suggs)-1,-1,-1):
+            if self.pel.check(suggs[i]):
+                del suggs[i]
+        return suggs
+
     def add(self,word):
         """Add a word to the associated personal word list.
         
