@@ -4,6 +4,8 @@
     * DictWithPWL:  use pwl and pel to adjust the words returned by suggest().
     * Fix tokenization of utf8 bytes in a mutable character array.
     * get_tokenizer():  pass None as language tag to get default tokenizer.
+    * prevent build-related files from being included in the source tarball.
+    * add "voikko" backend to binary distributions
 
 1.6.3:
 
