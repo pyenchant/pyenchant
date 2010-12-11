@@ -4,7 +4,7 @@
 BUILD_DIR = /s/software/pyenchant/tools/pyenchant-bdist-win32-sources/build
 ENCHANT_DIR = enchant-1.6.0
 
-ENCHANT_CONFIG_OPTS = --enable-ispell --enable-myspell --disable-aspell
+ENCHANT_CONFIG_OPTS = --enable-ispell --enable-myspell --disable-aspell --enable-voikko
 ENCHANT_CFLAGS = -I$(BUILD_DIR)/include/glib-2.0
 ENCHANT_LIBS = -L$(BUILD_DIR)/lib -lglib-2.0-0 -lgmodule-2.0-0
 
