@@ -16,7 +16,7 @@ CFLAGS = -isysroot $(BUILD_SDK) -mmacosx-version-min=10.4 -fexceptions -I$(BUILD
 CXXFLAGS = $(CFLAGS)
 105_CFLAGS = -isysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.5 -fexceptions -I$(BUILD_DIR)/include
 105_CXXFLAGS = $(105_CFLAGS)
-ENCHANT_CONFIG_OPTS = --enable-ispell --enable-myspell --disable-aspell --with-system-myspell=no --enable-voikko
+ENCHANT_CONFIG_OPTS = --enable-ispell --enable-myspell --disable-aspell --with-system-myspell=no
 ENCHANT_CFLAGS = `pkg-config --cflags gmodule-2.0` -fexceptions
 ENCHANT_LIBS = `pkg-config --libs gmodule-2.0`
 LDFLAGS = -L$(BUILD_DIR)/lib
