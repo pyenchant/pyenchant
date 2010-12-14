@@ -76,7 +76,7 @@ class TestBroker(unittest.TestCase):
 
     def test_HasENUS(self):
         """Test that the en_US language is available."""
-        self.assert_(self.broker.dict_exists("en_US"))
+        self.assertTrue(self.broker.dict_exists("en_US"))
     
     def test_LangsAreAvail(self):
         """Test whether all advertised languages are in fact available."""
@@ -87,7 +87,7 @@ class TestBroker(unittest.TestCase):
     def test_ProvsAreAvail(self):
         """Test whether all advertised providers are in fact available."""
         for (lang,prov) in self.broker.list_dicts():
-            self.assert_(self.broker.dict_exists(lang))
+            self.assertTrue(self.broker.dict_exists(lang))
             if not self.broker.dict_exists(lang):
                 assert False, "language '"+lang+"' advertised but non-existent"
             if prov not in self.broker.describe():
@@ -146,10 +146,10 @@ class TestBroker(unittest.TestCase):
     def test_UnicodeTag(self):
         """Test that unicode language tags are accepted"""
         d1 = self.broker._request_dict_data(raw_unicode("en_US"))
-        self.assert_(d1)
+        self.assertTrue(d1)
         _e.broker_free_dict(self.broker._this,d1)
         d1 = Dict(raw_unicode("en_US"))
-        self.assert_(d1)
+        self.assertTrue(d1)
 
     def test_GetSetParam(self):
         try:
@@ -176,18 +176,18 @@ class TestDict(unittest.TestCase):
 
     def test_HasENUS(self):
         """Test that the en_US language is available through default broker."""
-        self.assert_(dict_exists("en_US"))
+        self.assertTrue(dict_exists("en_US"))
     
     def test_check(self):
         """Test that check() works on some common words."""
-        self.assert_(self.dict.check("hello"))
-        self.assert_(self.dict.check("test"))
-        self.failIf(self.dict.check("helo"))
-        self.failIf(self.dict.check("testt"))
+        self.assertTrue(self.dict.check("hello"))
+        self.assertTrue(self.dict.check("test"))
+        self.assertFalse(self.dict.check("helo"))
+        self.assertFalse(self.dict.check("testt"))
         
     def test_broker(self):
         """Test that the dict's broker is set correctly."""
-        self.assert_(self.dict._broker is enchant._broker)
+        self.assertTrue(self.dict._broker is enchant._broker)
     
     def test_tag(self):
         """Test that the dict's tag is set correctly."""
@@ -195,55 +195,55 @@ class TestDict(unittest.TestCase):
     
     def test_suggest(self):
         """Test that suggest() gets simple suggestions right."""
-        self.assert_(self.dict.check("hello"))
-        self.assert_("hello" in self.dict.suggest("helo"))
+        self.assertTrue(self.dict.check("hello"))
+        self.assertTrue("hello" in self.dict.suggest("helo"))
 
     def test_suggestHang1(self):
         """Test whether suggest() hangs on some inputs (Bug #1404196)"""
-        self.assert_(len(self.dict.suggest("Thiis")) >= 0)
-        self.assert_(len(self.dict.suggest("Thiiis")) >= 0)
-        self.assert_(len(self.dict.suggest("Thiiiis")) >= 0)
+        self.assertTrue(len(self.dict.suggest("Thiis")) >= 0)
+        self.assertTrue(len(self.dict.suggest("Thiiis")) >= 0)
+        self.assertTrue(len(self.dict.suggest("Thiiiis")) >= 0)
 
     def test_unicode1(self):
         """Test checking/suggesting for unicode strings"""
         # TODO: find something that actually returns suggestions
         us1 = raw_unicode(r"he\u2149lo")
-        self.assert_(type(us1) is unicode)
-        self.failIf(self.dict.check(us1))
+        self.assertTrue(type(us1) is unicode)
+        self.assertFalse(self.dict.check(us1))
         for s in self.dict.suggest(us1):
-            self.assert_(type(s) is unicode)
+            self.assertTrue(type(s) is unicode)
 
     def test_session(self):
         """Test that adding words to the session works as required."""
-        self.failIf(self.dict.check("Lozz"))
-        self.failIf(self.dict.is_added("Lozz"))
+        self.assertFalse(self.dict.check("Lozz"))
+        self.assertFalse(self.dict.is_added("Lozz"))
         self.dict.add_to_session("Lozz")
-        self.assert_(self.dict.is_added("Lozz"))
-        self.assert_(self.dict.check("Lozz"))
+        self.assertTrue(self.dict.is_added("Lozz"))
+        self.assertTrue(self.dict.check("Lozz"))
         self.dict.remove_from_session("Lozz")
-        self.failIf(self.dict.check("Lozz"))
-        self.failIf(self.dict.is_added("Lozz"))
+        self.assertFalse(self.dict.check("Lozz"))
+        self.assertFalse(self.dict.is_added("Lozz"))
         self.dict.remove_from_session("hello")
-        self.failIf(self.dict.check("hello"))
-        self.assert_(self.dict.is_removed("hello"))
+        self.assertFalse(self.dict.check("hello"))
+        self.assertTrue(self.dict.is_removed("hello"))
         self.dict.add_to_session("hello")
 
     def test_AddRemove(self):
         """Test adding/removing from default user dictionary."""
         nonsense = "kxhjsddsi"
-        self.failIf(self.dict.check(nonsense))
+        self.assertFalse(self.dict.check(nonsense))
         self.dict.add(nonsense)
-        self.assert_(self.dict.is_added(nonsense))
-        self.assert_(self.dict.check(nonsense))
+        self.assertTrue(self.dict.is_added(nonsense))
+        self.assertTrue(self.dict.check(nonsense))
         self.dict.remove(nonsense)
-        self.failIf(self.dict.is_added(nonsense))
-        self.failIf(self.dict.check(nonsense))
+        self.assertFalse(self.dict.is_added(nonsense))
+        self.assertFalse(self.dict.check(nonsense))
         self.dict.remove("pineapple")
-        self.failIf(self.dict.check("pineapple"))
-        self.assert_(self.dict.is_removed("pineapple"))
-        self.failIf(self.dict.is_added("pineapple"))
+        self.assertFalse(self.dict.check("pineapple"))
+        self.assertTrue(self.dict.is_removed("pineapple"))
+        self.assertFalse(self.dict.is_added("pineapple"))
         self.dict.add("pineapple")
-        self.assert_(self.dict.check("pineapple"))
+        self.assertTrue(self.dict.check("pineapple"))
     
     def test_DefaultLang(self):
         """Test behaviour of default language selection."""
@@ -307,93 +307,93 @@ class TestPWL(unittest.TestCase):
         """Test that basic checking works for PWLs."""
         self.setPWLContents(["Sazz","Lozz"])
         d = request_pwl_dict(self._path())
-        self.assert_(d.check("Sazz"))
-        self.assert_(d.check("Lozz"))
-        self.failIf(d.check("hello"))
+        self.assertTrue(d.check("Sazz"))
+        self.assertTrue(d.check("Lozz"))
+        self.assertFalse(d.check("hello"))
 
     def test_UnicodeFN(self):
         """Test that unicode PWL filenames are accepted."""
         d = request_pwl_dict(unicode(self._path()))
-        self.assert_(d)
+        self.assertTrue(d)
 
     def test_add(self):
         """Test that adding words to a PWL works correctly."""
         d = request_pwl_dict(self._path())
-        self.failIf(d.check("Flagen"))
+        self.assertFalse(d.check("Flagen"))
         d.add("Esquilax")
         d.add("Esquilam")
-        self.assert_(d.check("Esquilax"))
-        self.assert_("Esquilax" in self.getPWLContents())
-        self.assert_(d.is_added("Esquilax"))
+        self.assertTrue(d.check("Esquilax"))
+        self.assertTrue("Esquilax" in self.getPWLContents())
+        self.assertTrue(d.is_added("Esquilax"))
         
     def test_suggestions(self):
         """Test getting suggestions from a PWL."""
         self.setPWLContents(["Sazz","Lozz"])
         d = request_pwl_dict(self._path())
-        self.assert_("Sazz" in d.suggest("Saz"))
-        self.assert_("Lozz" in d.suggest("laz"))
-        self.assert_("Sazz" in d.suggest("laz"))
+        self.assertTrue("Sazz" in d.suggest("Saz"))
+        self.assertTrue("Lozz" in d.suggest("laz"))
+        self.assertTrue("Sazz" in d.suggest("laz"))
         d.add("Flagen")
-        self.assert_("Flagen" in d.suggest("Flags"))
-        self.failIf("sazz" in d.suggest("Flags"))
+        self.assertTrue("Flagen" in d.suggest("Flags"))
+        self.assertFalse("sazz" in d.suggest("Flags"))
     
     def test_DWPWL(self):
         """Test functionality of DictWithPWL."""
         self.setPWLContents(["Sazz","Lozz"])
         d = DictWithPWL("en_US",self._path(),self._path("pel.txt"))
-        self.assert_(d.check("Sazz"))
-        self.assert_(d.check("Lozz"))
-        self.assert_(d.check("hello"))
-        self.failIf(d.check("helo"))
-        self.failIf(d.check("Flagen"))
+        self.assertTrue(d.check("Sazz"))
+        self.assertTrue(d.check("Lozz"))
+        self.assertTrue(d.check("hello"))
+        self.assertFalse(d.check("helo"))
+        self.assertFalse(d.check("Flagen"))
         d.add("Flagen")
-        self.assert_(d.check("Flagen"))
-        self.assert_("Flagen" in self.getPWLContents())
-        self.assert_("Flagen" in d.suggest("Flagn"))
-        self.assert_("hello" in d.suggest("helo"))
+        self.assertTrue(d.check("Flagen"))
+        self.assertTrue("Flagen" in self.getPWLContents())
+        self.assertTrue("Flagen" in d.suggest("Flagn"))
+        self.assertTrue("hello" in d.suggest("helo"))
         d.remove("hello")
-        self.failIf(d.check("hello"))
-        self.assert_("hello" not in d.suggest("helo"))
+        self.assertFalse(d.check("hello"))
+        self.assertTrue("hello" not in d.suggest("helo"))
         d.remove("Lozz")
-        self.failIf(d.check("Lozz"))
+        self.assertFalse(d.check("Lozz"))
 
     def test_DWPWL_empty(self):
         """Test functionality of DictWithPWL using transient dicts."""
         d = DictWithPWL("en_US",None,None)
-        self.assert_(d.check("hello"))
-        self.failIf(d.check("helo"))
-        self.failIf(d.check("Flagen"))
+        self.assertTrue(d.check("hello"))
+        self.assertFalse(d.check("helo"))
+        self.assertFalse(d.check("Flagen"))
         d.add("Flagen")
-        self.assert_(d.check("Flagen"))
+        self.assertTrue(d.check("Flagen"))
         d.remove("hello")
-        self.failIf(d.check("hello"))
+        self.assertFalse(d.check("hello"))
         d.add("hello")
-        self.assert_(d.check("hello"))
+        self.assertTrue(d.check("hello"))
 
     def test_PyPWL(self):
         """Test our pure-python PWL implementation."""
         d = PyPWL()
-        self.assert_(list(d._words) == [])
+        self.assertTrue(list(d._words) == [])
         d.add("hello")
         d.add("there")
         d.add("duck")
         ws = list(d._words)
-        self.assert_(len(ws) == 3)
-        self.assert_("hello" in ws)
-        self.assert_("there" in ws)
-        self.assert_("duck" in ws)
+        self.assertTrue(len(ws) == 3)
+        self.assertTrue("hello" in ws)
+        self.assertTrue("there" in ws)
+        self.assertTrue("duck" in ws)
         d.remove("duck")
         d.remove("notinthere")
         ws = list(d._words)
-        self.assert_(len(ws) == 2)
-        self.assert_("hello" in ws)
-        self.assert_("there" in ws)
+        self.assertTrue(len(ws) == 2)
+        self.assertTrue("hello" in ws)
+        self.assertTrue("there" in ws)
 
     def test_UnicodeCharsInPath(self):
         """Test that unicode chars in PWL paths are accepted."""
         self._fileName = raw_unicode(r"test_\xe5\xe4\xf6_ing")
         d = request_pwl_dict(self._path())
-        self.assert_(d)
+        self.assertTrue(d)
 
 
 class TestDocStrings(unittest.TestCase):
@@ -510,7 +510,7 @@ class TestInstallEnv(unittest.TestCase):
         os.environ["PYTHONPATH"] = insdir
         script = os.path.join(insdir,"enchant","__init__.py")
         res = runcmd("\"%s\" %s" % (sys.executable,script,))
-        self.assertEquals(res,0)
+        self.assertEqual(res,0)
 
     def test_basic(self):
         """Test proper functioning of TestInstallEnv suite."""

@@ -56,7 +56,7 @@ class TestChecker(unittest.TestCase):
                 # Fix up "sme" -> "some" properly
                 self.assertEqual(err.word,"sme")
                 self.assertEqual(err.wordpos,8)
-                self.assert_("some" in err.suggest())
+                self.assertTrue("some" in err.suggest())
                 err.replace("some")
             if n == 1:
                 # Ignore "speling"
@@ -133,14 +133,14 @@ class TestChecker(unittest.TestCase):
         chkr = SpellChecker("en_US",text=text,
                             filters=[enchant.tokenize.URLFilter])
         for err in chkr:
-            self.assertEquals(err.word,"html")
+            self.assertEqual(err.word,"html")
             break
         self.assertEqual(chkr.get_text(),text)
         # The "http" from the URL is an error when not using URLFilter
         chkr = SpellChecker("en_US",text=text,
                             chunkers=[enchant.tokenize.HTMLChunker])
         for err in chkr:
-            self.assertEquals(err.word,"http")
+            self.assertEqual(err.word,"http")
             break
         self.assertEqual(chkr.get_text(),text)
         

@@ -78,51 +78,51 @@ of words. Also need to "test" the (handling) of 'quoted' words."""
         from enchant.tokenize import en
         tknzr = wrap_tokenizer(basic_tokenize,en.tokenize)
         tknzr = tknzr(input)
-        self.assertEquals(tknzr._tokenizer.__class__,basic_tokenize)
-        self.assertEquals(tknzr._tokenizer.offset,0)
+        self.assertEqual(tknzr._tokenizer.__class__,basic_tokenize)
+        self.assertEqual(tknzr._tokenizer.offset,0)
         for (n,(word,pos)) in enumerate(tknzr):
             if n == 0:
-                self.assertEquals(pos,0)
-                self.assertEquals(word,"this")
+                self.assertEqual(pos,0)
+                self.assertEqual(word,"this")
             if n == 1:
-                self.assertEquals(pos,5)
-                self.assertEquals(word,"string")
+                self.assertEqual(pos,5)
+                self.assertEqual(word,"string")
             if n == 2:
-                self.assertEquals(pos,12)
-                self.assertEquals(word,"will")
+                self.assertEqual(pos,12)
+                self.assertEqual(word,"will")
                 # Test setting offset to a previous token
                 tknzr.offset = 5
-                self.assertEquals(tknzr.offset,5)
-                self.assertEquals(tknzr._tokenizer.offset,5)
-                self.assertEquals(tknzr._curtok.__class__,empty_tokenize)
+                self.assertEqual(tknzr.offset,5)
+                self.assertEqual(tknzr._tokenizer.offset,5)
+                self.assertEqual(tknzr._curtok.__class__,empty_tokenize)
             if n == 3:
-                self.assertEquals(word,"string")
-                self.assertEquals(pos,5)
+                self.assertEqual(word,"string")
+                self.assertEqual(pos,5)
             if n == 4:
-                self.assertEquals(pos,12)
-                self.assertEquals(word,"will")
+                self.assertEqual(pos,12)
+                self.assertEqual(word,"will")
             if n == 5:
-                self.assertEquals(pos,17)
-                self.assertEquals(word,"be")
+                self.assertEqual(pos,17)
+                self.assertEqual(word,"be")
                 # Test setting offset past the current token
                 tknzr.offset = 20
-                self.assertEquals(tknzr.offset,20)
-                self.assertEquals(tknzr._tokenizer.offset,20)
-                self.assertEquals(tknzr._curtok.__class__,empty_tokenize)
+                self.assertEqual(tknzr.offset,20)
+                self.assertEqual(tknzr._tokenizer.offset,20)
+                self.assertEqual(tknzr._curtok.__class__,empty_tokenize)
             if n == 6:
-                self.assertEquals(pos,20)
-                self.assertEquals(word,"split")
+                self.assertEqual(pos,20)
+                self.assertEqual(word,"split")
             if n == 7:
-                self.assertEquals(pos,26)
-                self.assertEquals(word,"according")
+                self.assertEqual(pos,26)
+                self.assertEqual(word,"according")
                 # Test setting offset to middle of current token
                 tknzr.offset = 23
-                self.assertEquals(tknzr.offset,23)
-                self.assertEquals(tknzr._tokenizer.offset,23)
-                self.assertEquals(tknzr._curtok.offset,3)
+                self.assertEqual(tknzr.offset,23)
+                self.assertEqual(tknzr._tokenizer.offset,23)
+                self.assertEqual(tknzr._curtok.offset,3)
             if n == 8:
-                self.assertEquals(pos,23)
-                self.assertEquals(word,"it")
+                self.assertEqual(pos,23)
+                self.assertEqual(word,"it")
             # OK, I'm pretty happy with the behaviour, no need to
             # continue testing the rest of the string
 
@@ -146,7 +146,7 @@ class TestFilters(unittest.TestCase):
                ("SomeLinksLike",34),("AndOthers",93),("not",103),("quite",108),
                ("a",114),("url",116),("with",134),("an",139),("aemail",142),
                ("address",149),("as",157),("well",160)]
-        self.assertEquals(out,exp)
+        self.assertEqual(out,exp)
         
     def test_WikiWordFilter(self):
         """Test filtering of WikiWords"""
@@ -157,7 +157,7 @@ class TestFilters(unittest.TestCase):
                ("some",83),("file",88),("not",103),("quite",108),
                ("a",114),("url",116),("with",134),("an",139),("aemail",142),
                ("address",149),("as",157),("well",160)]
-        self.assertEquals(out,exp)
+        self.assertEqual(out,exp)
         
     def test_EmailFilter(self):
         """Test filtering of email addresses"""
@@ -169,7 +169,7 @@ class TestFilters(unittest.TestCase):
                ("some",83),("file",88),("AndOthers",93),("not",103),("quite",108),
                ("a",114),("url",116),
                ("as",157),("well",160)]
-        self.assertEquals(out,exp)
+        self.assertEqual(out,exp)
         
     def test_CombinedFilter(self):
         """Test several filters combined"""
@@ -179,7 +179,7 @@ class TestFilters(unittest.TestCase):
                ("and",30),("not",103),("quite",108),
                ("a",114),("url",116),
                ("as",157),("well",160)]
-        self.assertEquals(out,exp)
+        self.assertEqual(out,exp)
 
 
 class TestChunkers(unittest.TestCase):
@@ -198,9 +198,9 @@ class TestChunkers(unittest.TestCase):
                ("test",115),("ing",122),("purposes",130),("It",160),
                ("contains",165),("various",176),("special",188),
                ("characters",196)]
-        self.assertEquals(out,exp)
+        self.assertEqual(out,exp)
         for (word,pos) in out:
-            self.assertEquals(text[pos:pos+len(word)],word)
+            self.assertEqual(text[pos:pos+len(word)],word)
 
 
 
@@ -232,7 +232,7 @@ of words. Also need to "test" the handling of 'quoted' words."""
         output[8] = output[8][0:-1]
         for (itmO,itmV) in zip(output,tokenize_en(input)):
             self.assertEqual(itmO,itmV[0])
-            self.assert_(input[itmV[1]:].startswith(itmO))
+            self.assertTrue(input[itmV[1]:].startswith(itmO))
 
     def test_unicodeCombining(self):
         """Test tokenization with unicode combining symbols."""
@@ -241,7 +241,7 @@ of words. Also need to "test" the handling of 'quoted' words."""
         output[8] = output[8][0:-1]
         for (itmO,itmV) in zip(output,tokenize_en(input)):
             self.assertEqual(itmO,itmV[0])
-            self.assert_(input[itmV[1]:].startswith(itmO))
+            self.assertTrue(input[itmV[1]:].startswith(itmO))
 
     def test_utf8_bytes(self):
         """Test tokenization of UTF8-encoded bytes (bug #2500184)."""
@@ -253,7 +253,7 @@ of words. Also need to "test" the handling of 'quoted' words."""
         output[1] = output[1][0:-1]
         for (itmO,itmV) in zip(output,tokenize_en(input)):
             self.assertEqual(itmO,itmV[0])
-            self.assert_(input[itmV[1]:].startswith(itmO))
+            self.assertTrue(input[itmV[1]:].startswith(itmO))
 
     def test_utf8_bytes_at_end(self):
         """Test tokenization of UTF8-encoded bytes at end of word."""
