@@ -86,12 +86,23 @@ __version__ = "%d.%d.%d%s" % (__ver_major__,__ver_minor__,
                               __ver_patch__,__ver_sub__)
 
 import os
-import warnings
 
 from enchant import _enchant as _e
 from enchant.errors import *
 from enchant.utils import EnchantStr, get_default_language
 from enchant.pypwl import PyPWL
+
+#  Due to the unfortunate name collision between the enchant "tokenize" module
+#  and the stdlib "tokenize" module, certain values of sys.path can cause
+#  the former to override the latter and break the "warnings" module.
+#  This hacks around it by making a dumming "warnings" module.
+try:
+    import warnings
+except ImportError:
+    class warnings(object):
+        def warn(self,*args,**kwds):
+            pass
+    warnings = warnings()
 
 
 class ProviderDesc(object):
@@ -407,7 +418,7 @@ class Broker(_EnchantObject):
         provider backends.  See the method 'set_param' for more details.
         """
         name = EnchantStr(name)
-        return name.decode(_e.broker_get_param(self._this,name))
+        return name.decode(_e.broker_get_param(self._this,name.encode()))
     get_param._DOC_ERRORS = ["param"]
 
     def set_param(self,name,value):
@@ -418,7 +429,9 @@ class Broker(_EnchantObject):
         any directories given in the "enchant.myspell.dictionary.path"
         parameter when looking for its dictionary files.
         """
-        _e.broker_set_param(self._this,EnchantStr(name),EnchantStr(value))
+        name = EnchantStr(name)
+        value = EnchantStr(value)
+        _e.broker_set_param(self._this,name.encode(),value.encode())
         
 
 
@@ -774,7 +787,7 @@ class DictWithPWL(Dict):
         """
         suggs = Dict.suggest(self,word)
         suggs.extend([w for w in self.pwl.suggest(word) if w not in suggs])
-        for i in xrange(len(suggs)-1,-1,-1):
+        for i in range(len(suggs)-1,-1,-1):
             if self.pel.check(suggs[i]):
                 del suggs[i]
         return suggs
