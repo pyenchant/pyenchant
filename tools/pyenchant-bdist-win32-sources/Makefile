@@ -5,6 +5,8 @@ BUILD_DIR = /s/software/pyenchant/tools/pyenchant-bdist-win32-sources/build
 ENCHANT_DIR = enchant-1.6.0
 
 ENCHANT_CONFIG_OPTS = --enable-ispell --enable-myspell --disable-aspell
+CC = gcc
+CXX = g++ -static-libgcc -static-libstdc++
 ENCHANT_CFLAGS = -I$(BUILD_DIR)/include/glib-2.0
 ENCHANT_LIBS = -L$(BUILD_DIR)/lib -lglib-2.0-0 -lgmodule-2.0-0
 
@@ -25,7 +27,7 @@ $(ENCHANT_DIR)/Makefile: src/$(ENCHANT_DIR).tar.gz
 	tar -xzvf src/$(ENCHANT_DIR).tar.gz
 	patch $(ENCHANT_DIR)/src/enchant.c < patches/relocatable.patch
 	patch $(ENCHANT_DIR)/src/myspell/myspell_checker.cpp < patches/myspell_checker.patch
-	cd $(ENCHANT_DIR) && ./configure CFLAGS="$(CFLAGS)" ENCHANT_CFLAGS="$(ENCHANT_CFLAGS)" ENCHANT_LIBS="$(ENCHANT_LIBS)" $(ENCHANT_CONFIG_OPTS)
+	cd $(ENCHANT_DIR) && ./configure CC="$(CC)" CXX="$(CXX)" ENCHANT_CFLAGS="$(ENCHANT_CFLAGS)" ENCHANT_LIBS="$(ENCHANT_LIBS)" $(ENCHANT_CONFIG_OPTS)
 
 
 # Ability to extract MySpell dictionary files
