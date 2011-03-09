@@ -14,6 +14,7 @@ from distutils.archive_util import make_archive
 import sys
 import os
 import shutil
+import errno
 
 setup_kwds = {}
 if sys.version_info > (3,):
@@ -129,6 +130,7 @@ def osx_bundle_lib(libpath):
 # the package directory so setuptools can locate them.
 #
 if sys.platform in ("win32","darwin",):
+  try:
     PKG_DATA["enchant"] = ["*"+DYLIB_EXT,"lib/*"+DYLIB_EXT,
                            "lib/enchant/*"+DYLIB_EXT,
                            "lib/enchant/*.so",
@@ -189,6 +191,12 @@ if sys.platform in ("win32","darwin",):
             print("COPYING: " + dictName)
             shutil.copy(os.path.join(dictPath,dictName),
 			os.path.join(".","enchant","share","enchant","ispell"))
+  except EnvironmentError, e:
+    if e.errno not in (errno.ENOENT,):
+        raise
+    import traceback
+    traceback.print_exc()
+    print >>sys.stderr, "COULD NOT COPY PRE-BUILT DEPENDENCIES"
 
 ##  Now we can import enchant to get at version info
 
