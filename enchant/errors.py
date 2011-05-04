@@ -28,11 +28,11 @@
 # do so, delete this exception statement from your version.
 #
 """
+enchant.errors:  Error class definitions for the enchant library
+================================================================
 
-    enchant.errors:  Error class definitions for the enchant library
-
-    All error classes are defined in this separate sub-module, so that they
-    can safely be imported without causing circular dependencies.
+All error classes are defined in this separate sub-module, so that they
+can safely be imported without causing circular dependencies.
 
 """
 

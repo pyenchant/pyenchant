@@ -1,6 +1,6 @@
 # pyenchant
 #
-# Copyright (C) 2004-2008, Ryan Kelly
+# Copyright (C) 2004-2011, Ryan Kelly
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -28,51 +28,52 @@
 # do so, delete this exception statement from your version.
 #
 """
-    enchant:  Access to the enchant spellchecking library
+enchant:  Access to the enchant spellchecking library
+=====================================================
 
-    This module provides several classes for performing spell checking
-    via the Enchant spellchecking library.  For more details on Enchant,
-    visit the project website:
+This module provides several classes for performing spell checking
+via the Enchant spellchecking library.  For more details on Enchant,
+visit the project website:
 
-        http://www.abisource.com/enchant/
+    http://www.abisource.com/enchant/
 
-    Spellchecking is performed using 'Dict' objects, which represent
-    a language dictionary.  Their use is best demonstrated by a quick
-    example:
+Spellchecking is performed using 'Dict' objects, which represent
+a language dictionary.  Their use is best demonstrated by a quick
+example::
 
-        >>> import enchant
-        >>> d = enchant.Dict("en_US")   # create dictionary for US English
-        >>> d.check("enchant")
-        True
-        >>> d.check("enchnt")
-        False
-        >>> d.suggest("enchnt")
-        ['enchant', 'enchants', 'enchanter', 'penchant', 'incant', 'enchain', 'enchanted']
+    >>> import enchant
+    >>> d = enchant.Dict("en_US")   # create dictionary for US English
+    >>> d.check("enchant")
+    True
+    >>> d.check("enchnt")
+    False
+    >>> d.suggest("enchnt")
+    ['enchant', 'enchants', 'enchanter', 'penchant', 'incant', 'enchain', 'enchanted']
 
-    Languages are identified by standard string tags such as "en" (English)
-    and "fr" (French).  Specific language dialects can be specified by
-    including an additional code - for example, "en_AU" refers to Australian
-    English.  The later form is preferred as it is more widely supported.
+Languages are identified by standard string tags such as "en" (English)
+and "fr" (French).  Specific language dialects can be specified by
+including an additional code - for example, "en_AU" refers to Australian
+English.  The later form is preferred as it is more widely supported.
 
-    To check whether a dictionary exists for a given language, the function
-    'dict_exists' is available.  Dictionaries may also be created using the
-    function 'request_dict'.
+To check whether a dictionary exists for a given language, the function
+'dict_exists' is available.  Dictionaries may also be created using the
+function 'request_dict'.
 
-    A finer degree of control over the dictionaries and how they are created
-    can be obtained using one or more 'Broker' objects.  These objects are
-    responsible for locating dictionaries for a specific language.
+A finer degree of control over the dictionaries and how they are created
+can be obtained using one or more 'Broker' objects.  These objects are
+responsible for locating dictionaries for a specific language.
     
-    In Python 2.x, unicode strings are supported transparently in the
-    standard manner - if a unicode string is given as an argument, the
-    result will be a unicode string. Note that Enchant works in UTF-8 
-    internally, so passing an ASCII string to a dictionary for a language
-    requiring Unicode may result in UTF-8 strings being returned.
+In Python 2.x, unicode strings are supported transparently in the
+standard manner - if a unicode string is given as an argument, the
+result will be a unicode string. Note that Enchant works in UTF-8 
+internally, so passing an ASCII string to a dictionary for a language
+requiring Unicode may result in UTF-8 strings being returned.
 
-    In Python 3.x unicode strings are expected throughout.  Bytestrings
-    should not be passed into any functions.
+In Python 3.x unicode strings are expected throughout.  Bytestrings
+should not be passed into any functions.
 
-    Errors that occur in this module are reported by raising subclasses
-    of 'Error'.
+Errors that occur in this module are reported by raising subclasses
+of 'Error'.
 
 """
 _DOC_ERRORS = ['enchnt','enchnt', 'fr']

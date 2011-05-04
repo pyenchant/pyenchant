@@ -4,13 +4,14 @@
 PyEnchant
 #########
 
-PyEnchant is a spellchecking library for Python, based on the excellent Enchant library. Read more below, or skip straight ahead to the :doc:`download<download>` page.
+PyEnchant is a spellchecking library for Python, based on the excellent `Enchant <http://www.abisource.com/enchant/>`_ library. Read more below, or skip straight ahead to the :doc:`download<download>` page.
 
 
 News
 ----
 
 2010-12-14:  Version 1.6.5 released
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Version 1.6.5 of PyEnchant has been released, with the following changes:
 
@@ -20,6 +21,7 @@ Version 1.6.5 of PyEnchant has been released, with the following changes:
 
 
 2010-12-13:  Version 1.6.4 released
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Version 1.6.4 of PyEnchant has been released, with the following changes:
 
@@ -33,9 +35,9 @@ Version 1.6.4 of PyEnchant has been released, with the following changes:
 About PyEnchant
 ---------------
 
-PyEnchant is a set of language bindings and some wrapper classes to make the excellent Enchant spellchecker available as a Python module. The bindings are created using ctypes. It includes all the functionality of Enchant with the flexibility of Python and a nice "Pythonic" object-oriented interface. It also aims to provide some higher-level functionality than is available in the C API.
+PyEnchant is a set of language bindings and some wrapper classes to make the excellent `Enchant <http://www.abisource.com/enchant/>`_ spellchecker available as a Python module. The bindings are created using `ctypes <http://docs.python.org/lib/module-ctypes.html>`_. It includes all the functionality of Enchant with the flexibility of Python and a nice "Pythonic" object-oriented interface. It also aims to provide some higher-level functionality than is available in the C API.
 
-To get started, check out the comprehensive pyenchant tutorial or the pydoc-generated API listing. If you just want to get up and running in a hurry, here's a quick sample of pyenchant in action::
+To get started, check out the comprehensive :doc:`tutorial<tutorial>` or the auto-generated :doc:`API listing<api/enchant>`. If you just want to get up and running in a hurry, here's a quick sample of pyenchant in action::
 
     >>> import enchant
     >>> d = enchant.Dict("en_US")
@@ -48,7 +50,7 @@ To get started, check out the comprehensive pyenchant tutorial or the pydoc-gene
     >>>
 
 
-You can report bugs and view the latest development progress at the github project page. There are more downloads available at the python package index, including all the old versions of pyenchant.
+You can report bugs and view the latest development progress at the `github project page <http://github.com/rfk/pyenchant/tree/master>`_. There are more downloads available at the `python package index <http://pypi.python.org/pypi/pyenchant/>`_, including all the `old versions of pyenchant <http://pypi.python.org/simple/pyenchant/>`_.
     
 
 Documentation

@@ -29,70 +29,71 @@
 #
 """
 
-    enchant.tokenize:    String tokenization functions for PyEnchant
+enchant.tokenize:    String tokenization functions for PyEnchant
+================================================================
 
-    An important task in spellchecking is breaking up large bodies of
-    text into their constituent words, each of which is then checked
-    for correctness.  This package provides Python functions to split
-    strings into words according to the rules of a particular language.
+An important task in spellchecking is breaking up large bodies of
+text into their constituent words, each of which is then checked
+for correctness.  This package provides Python functions to split
+strings into words according to the rules of a particular language.
     
-    Each tokenization function accepts a string as its only positional
-    argument, and returns an iterator that yields tuples of the following
-    form, one for each word found:
+Each tokenization function accepts a string as its only positional
+argument, and returns an iterator that yields tuples of the following
+form, one for each word found::
         
-        (<word>,<pos>)
+    (<word>,<pos>)
         
-    The meanings of these fields should be clear: <word> is the word
-    that was found and <pos> is the position within the text at which
-    the word began (zero indexed, of course).  The function will work
-    on any string-like object that supports array-slicing; in particular
-    character-array objects from the 'array' module may be used.
+The meanings of these fields should be clear: <word> is the word
+that was found and <pos> is the position within the text at which
+the word began (zero indexed, of course).  The function will work
+on any string-like object that supports array-slicing; in particular
+character-array objects from the 'array' module may be used.
     
-    The iterator also provides the attribute 'offset' which may be used
-    to get/set the current position of the tokenizer inside the string
-    being split.  This can be used for example if the string's contents
-    have changed during the tokenization process.
+The iterator also provides the attribute 'offset' which may be used
+to get/set the current position of the tokenizer inside the string
+being split.  This can be used for example if the string's contents
+have changed during the tokenization process.
     
-    To obtain an appropriate tokenization function for the language
-    identified by <tag>, use the function 'get_tokenizer(tag)':
+To obtain an appropriate tokenization function for the language
+identified by <tag>, use the function 'get_tokenizer(tag)'::
         
-        tknzr = get_tokenizer("en_US")
-        for (word,pos) in tknzr("text to be tokenized goes here")
-            do_something(word)
+    tknzr = get_tokenizer("en_US")
+    for (word,pos) in tknzr("text to be tokenized goes here")
+        do_something(word)
     
-    This library is designed to be easily extendible by third-party
-    authors.  To register a tokenization function for the language
-    <tag>, implement it as the function 'tokenize' within the
-    module enchant.tokenize.<tag>.  The 'get_tokenizer' function
-    will automatically detect it.  Note that the underscore must be
-    used as the tag component separator in this case, in order to
-    form a valid python module name. (e.g. "en_US" rather than "en-US")
+This library is designed to be easily extendible by third-party
+authors.  To register a tokenization function for the language
+<tag>, implement it as the function 'tokenize' within the
+module enchant.tokenize.<tag>.  The 'get_tokenizer' function
+will automatically detect it.  Note that the underscore must be
+used as the tag component separator in this case, in order to
+form a valid python module name. (e.g. "en_US" rather than "en-US")
     
-    Currently, a tokenizer has only been implemented for the English
-    language.  Based on the author's limited experience, this should
-    be at least partially suitable for other languages.
+Currently, a tokenizer has only been implemented for the English
+language.  Based on the author's limited experience, this should
+be at least partially suitable for other languages.
 
-    This module also provides various implementations of "Chunkers" and
-    "Filters".  These classes are designed to make it easy to work with
-    text in a vareity of common formats, by detecting and excluding parts
-    of the text that don't need to be checked.
+This module also provides various implementations of "Chunkers" and
+"Filters".  These classes are designed to make it easy to work with
+text in a vareity of common formats, by detecting and excluding parts
+of the text that don't need to be checked.
 
-    A Chunker is a class designed to break a body of text into large chunks
-    of checkable content; for example the HTMLChunker class extracts the 
-    text content from all HTML tags but excludes the tags themselves.
-    A Filter is a class designed to skip individual words during the checking
-    process; for example the URLFilter class skips over any words that
-    have the format of a URL.
+A Chunker is a class designed to break a body of text into large chunks
+of checkable content; for example the HTMLChunker class extracts the 
+text content from all HTML tags but excludes the tags themselves.
+A Filter is a class designed to skip individual words during the checking
+process; for example the URLFilter class skips over any words that
+have the format of a URL.
 
-    For exmaple, to spellcheck an HTML document it is necessary to split the
-    text into chunks based on HTML tags, and to filter out common word forms
-    such as URLs and WikiWords.  This would look something like the following:
+For exmaple, to spellcheck an HTML document it is necessary to split the
+text into chunks based on HTML tags, and to filter out common word forms
+such as URLs and WikiWords.  This would look something like the following::
 
-        tknzr = get_tokenier("en_US",(HTMLChunker,),(URLFilter,WikiWordFilter)))
+    tknzr = get_tokenier("en_US",(HTMLChunker,),(URLFilter,WikiWordFilter)))
 
-        text = "<html><body>the url is http://example.com</body></html>"
-        for (word,pos) in tknzer(text):
-            ...check each word and react accordingly...
+    text = "<html><body>the url is http://example.com</body></html>"
+    for (word,pos) in tknzer(text):
+        ...check each word and react accordingly...
         
 """
 _DOC_ERRORS = ["pos","pos","tknzr","URLFilter","WikiWordFilter",

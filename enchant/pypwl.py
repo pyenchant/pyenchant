@@ -1,6 +1,6 @@
 # pyenchant
 #
-# Copyright (C) 2004-2008 Ryan Kelly
+# Copyright (C) 2004-2011 Ryan Kelly
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -29,7 +29,8 @@
 #
 """
 
-  pypwl:  pure-python personal word list in the style of Enchant
+pypwl:  pure-python personal word list in the style of Enchant
+==============================================================
 
 This module provides a pure-python version of the personal word list
 functionality found in the spellchecking package Enchant.  While the

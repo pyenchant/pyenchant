@@ -29,18 +29,19 @@
 #
 """
 
-    enchant.checker:  High-level spellchecking functionality
+enchant.checker:  High-level spellchecking functionality
+========================================================
     
-    This package is designed to host higher-level spellchecking functionality
-    than is available in the base enchant package.  It should make writing
-    applications that follow common usage idioms significantly easier.
+This package is designed to host higher-level spellchecking functionality
+than is available in the base enchant package.  It should make writing
+applications that follow common usage idioms significantly easier.
     
-    The most useful class is SpellChecker, which implements a spellchecking
-    loop over a block of text.  It is capable of modifying the text in-place
-    if given an array of characters to work with.
+The most useful class is SpellChecker, which implements a spellchecking
+loop over a block of text.  It is capable of modifying the text in-place
+if given an array of characters to work with.
     
-    This package also contains several interfaces to the SpellChecker class,
-    such as a wxPython GUI dialog and a command-line interface.
+This package also contains several interfaces to the SpellChecker class,
+such as a wxPython GUI dialog and a command-line interface.
 
 """
 

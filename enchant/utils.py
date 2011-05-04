@@ -29,17 +29,18 @@
 #
 """
 
-    enchant.utils:    Misc utilities for the enchant package
+enchant.utils:    Misc utilities for the enchant package
+========================================================
     
-    This module provides miscellaneous utilities for use with the
-    enchant spellchecking package.  Currently available functionality
-    includes:
+This module provides miscellaneous utilities for use with the
+enchant spellchecking package.  Currently available functionality
+includes:
         
-        * string/unicode compatibility wrappers
-        * functions for dealing with locale/language settings
-        * ability to list supporting data files (win32 only)
-        * functions for bundling supporting data files from a build
-          
+    * string/unicode compatibility wrappers
+    * functions for dealing with locale/language settings
+    * ability to list supporting data files (win32 only)
+    * functions for bundling supporting data files from a build
+      
 """
 
 import os

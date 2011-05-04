@@ -1,0 +1,4 @@
+
+.. automodule:: enchant.tokenize
+   :members:
+
