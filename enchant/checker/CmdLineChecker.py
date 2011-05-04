@@ -73,7 +73,8 @@ class CmdLineChecker:
             while not status and not self._stop:
                 status = self.read_command()
             if self._stop:
-                    break
+                break
+        printf(["DONE"])
     
     def print_help(self):
         printf(["0..N:    replace with the numbered suggestion"])
