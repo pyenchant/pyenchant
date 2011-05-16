@@ -13,3 +13,4 @@
 *.aff
 *.dylib
 *.tar.gz
+docs/_build
