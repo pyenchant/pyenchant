@@ -1,0 +1,301 @@
+// ========================================================= //
+// =             Boilerplate Less CSS Styles               = //
+// =  by Michael P. Geraci, 2011 - www.michaelgeraci.com   = //
+// =  tell me what's missing: mgeraci@gmail.com | @mgeraci = //
+// =     free for all to use and modify (MIT License)      = //
+// ========================================================= //
+
+
+// ============= //
+// = CSS Reset = //
+// ============= //
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, tt, var, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video{
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  vertical-align: baseline;
+  background: transparent;
+  font-weight: inherit;
+  font-style: inherit;
+  font-size: 100%;
+  font-family: inherit;
+}
+
+// HTML5 display-role reset for older browsers
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section{
+  display: block;
+}
+
+
+// ================ //
+// = CSS3 Helpers = //
+// ================ //
+
+// Rounded Corners
+.borderRadius(@radius){
+  -moz-border-radius: @radius; // FF 1+
+  -webkit-border-radius: @radius; // FF 1+
+  border-radius: @radius; // Opera 10.5, IE 9, Saf5, Chrome
+}
+
+// Top-to-Bottom Gradient
+.gradientV(@start, @end){
+  background: (@start + @end) / 2; // Non CSS3 browsers get the average color
+  background-image: -moz-linear-gradient(top,  @start, @end); // FF 3.6
+  background-image: -webkit-gradient(linear, left top, left bottom, from(@start), to(@end)); // Safari 4+, Chrome
+  background-image: -webkit-linear-gradient(top, @start, @end); // Chrome 10+, Safari 5.1+
+  background-image: -o-linear-gradient(top, @start, @end); // Opera 11.10+
+  background-image: linear-gradient(top, @start, @end); // CSS3
+  filter: %("progid:DXImageTransform.Microsoft.gradient(startColorstr=%d, endColorstr=%d)", @start, @end); // IE6 & 7
+  -ms-filter: %("progid:DXImageTransform.Microsoft.gradient(startColorstr=%d, endColorstr=%d)", @start, @end); // IE8
+  background-image: -ms-linear-gradient(top, @end, @end); // IE10
+}
+
+// Left-to-Right Gradient
+.gradientH(@start, @end){
+  background: (@start + @end) / 2; // Non CSS3 browsers get the average color
+  background-image: -moz-linear-gradient(left,  @start, @end); // FF 3.6
+  background-image: -webkit-gradient(linear, left center, right center, from(@start), to(@end)); // Safari 4+, Chrome
+  background-image: -webkit-linear-gradient(left center, right center, from(@start), to(@end)); // Chrome 10+, Safari 5.1+
+  background-image: -o-linear-gradient(left, @start, @end); // Opera 11.10+
+  background-image: linear-gradient(left, @start, @end); // CSS3
+  filter: %("progid:DXImageTransform.Microsoft.gradient(startColorstr=%d, endColorstr=%d, GradientType=1)", @start, @end); // IE6 & 7
+  -ms-filter: %("progid:DXImageTransform.Microsoft.gradient(startColorstr=%d, endColorstr=%d, GradientType=1)", @start, @end); // IE8
+  background-image: -ms-linear-gradient(left, @end, @end); // IE10
+}
+
+// Top-to-Bottom 3 Stop Gradient
+.gradientV3(@start, @middle, @middlePos, @end){
+  background: (@start + @end) / 2; // Non CSS3 browsers get the average color
+  background-image: -moz-linear-gradient(top,  @start, @middle @middlePos * 1%, @end); // FF 3.6
+  background-image: -webkit-gradient(linear, left top, left bottom, from(@start), color-stop(@middlePos / 100, @middle), to(@end)); // Safari 4+, Chrome
+  background-image: -webkit-linear-gradient(top, from(@start), color-stop(@middlePos / 100, @middle), to(@end)); // Chrome 10+, Safari 5.1+
+  background-image: -o-linear-gradient(top, @start 0%, @middle @middlePos * 1%, @end 100%); // Opera 11.10+
+  filter: %("progid:DXImageTransform.Microsoft.gradient(startColorstr=%d, endColorstr=%d)", @start, @end); // IE6 & 7
+  -ms-filter: %("progid:DXImageTransform.Microsoft.gradient(startColorstr=%d, endColorstr=%d)", @start, @end); // IE8
+  background-image: linear-gradient(top, @start 0%, @middle @middlePos * 1%, @end 100%); // CSS3
+}
+
+// Left-to-Right 3 Stop Gradient
+.gradientH3(@start, @middle, @middlePos, @end){
+  background: (@start + @end) / 2; // Non CSS3 browsers get the average color
+  background-image: -moz-linear-gradient(left,  @start, @middle @middlePos * 1%, @end); // FF 3.6
+  background-image: -webkit-gradient(linear, left center, right center, from(@start), color-stop(@middlePos / 100, @middle), to(@end)); // Safari 4+, Chrome
+  background-image: -webkit-linear-gradient(left, from(@start), color-stop(@middlePos / 100, @middle), to(@end)); // Chrome 10+, Safari 5.1+
+  background-image: -o-linear-gradient(left, @start 0%, @middle @middlePos * 1%, @end 100%); // Opera 11.10+
+  filter: %("progid:DXImageTransform.Microsoft.gradient(startColorstr=%d, endColorstr=%d)", @start, @end); // IE6 & 7
+  -ms-filter: %("progid:DXImageTransform.Microsoft.gradient(startColorstr=%d, endColorstr=%d)", @start, @end); // IE8
+  background-image: linear-gradient(left, @start 0%, @middle @middlePos * 1%, @end 100%); // CSS3
+}
+
+// Top-to-Bottom 4 Stop Gradient
+.gradientV4(@color1, @color2, @position2, @color3, @position3, @color4){
+  background: (@color1 + @color4) / 2; // Non CSS3 browsers get the average color
+  background-image: -moz-linear-gradient(top,  @color1, @color2 @position2 * 1%, @color3 @position3 * 1%, @color4); // FF 3.6
+  background-image: -webkit-gradient(linear, left top, left bottom, from(@color1), color-stop(@position2 / 100, @color2), color-stop(@position3 / 100, @color3), to(@color4)); // Safari 4+, Chrome
+  background-image: -webkit-linear-gradient(top, from(@color1), color-stop(@position2 / 100, @color2), color-stop(@position3 / 100, @color3), to(@color4)); // Chrome 10+, Safari 5.1+
+  background-image: -o-linear-gradient(top, @color1 0%, @color2 @position2 * 1%, @color3 @position3 * 1%, @color4 100%); // Opera 11.10+
+  filter: %("progid:DXImageTransform.Microsoft.gradient(startColorstr=%d, endColorstr=%d)", @color1, @color4); // IE6 & 7
+  -ms-filter: %("progid:DXImageTransform.Microsoft.gradient(startColorstr=%d, endColorstr=%d)", @color1, @color4); // IE8
+  background-image: linear-gradient(top, @color1 0%, @color2 @position2 * 1%, @color3 @position3 * 1%, @color4 100%); // CSS3
+}
+
+// Left-to-Right 4 Stop Gradient
+.gradientH4(@color1, @color2, @position2, @color3, @position3, @color4){
+  background: (@color1 + @color4) / 2; // Non CSS3 browsers get the average color
+  background-image: -moz-linear-gradient(left,  @color1, @color2 @position2 * 1%, @color3 @position3 * 1%, @color4); // FF 3.6
+  background-image: -webkit-gradient(linear, left center, right center, from(@color1), color-stop(@position2 / 100, @color2), color-stop(@position3 / 100, @color3), to(@color4)); // Safari 4+, Chrome
+  background-image: -webkit-linear-gradient(left center, right center, from(@color1), color-stop(@position2 / 100, @color2), color-stop(@position3 / 100, @color3), to(@color4)); // Chrome 10+, Safari 5.1+
+  background-image: -o-linear-gradient(left, @color1 0%, @color2 @position2 * 1%, @color3 @position3 * 1%, @color4 100%); // Opera 11.10+
+  filter: %("progid:DXImageTransform.Microsoft.gradient(startColorstr=%d, endColorstr=%d, GradientType=1)", @color1, @color4); // IE6 & 7
+  -ms-filter: %("progid:DXImageTransform.Microsoft.gradient(startColorstr=%d, endColorstr=%d, GradientType=1)", @color1, @color4); // IE8
+  background-image: linear-gradient(left, @color1 0%, @color2 @position2 * 1%, @color3 @position3 * 1%, @color4 100%); // CSS3
+}
+
+// Drop shadow
+.boxShadow(@params){
+  -moz-box-shadow: @params; // FF3.5+
+  -webkit-box-shadow: @params; // Saf3.0+, Chrome
+  box-shadow: @params; // Opera 10.5, IE9+, Chrome 10+
+}
+
+// Transition
+.transition(@params){
+  -moz-transition: @params; // FF4+
+  -o-transition: @params; // Opera 10.5+
+  -webkit-transition: @params; // Safari 3.2+, Chrome
+  -ms-transition: @params; // IE10
+  transition: @params; // CSS3
+}
+
+
+// =========================== //
+// = Centered Content Blocks = //
+// =========================== //
+
+// For designs that involve a centered column of fixed with, I've found that
+// for great browser compatability, it's useful to separate page elements
+// into discreet horizontal chunks when possible. These two classes help.
+//
+// example:
+// <div class="wrapOut">
+//   <div class="wrapIn">
+//     header content here
+//   </div>
+// </div>
+// <div class="wrapOut">
+//   <div class="wrapIn">
+//     your main content goes here
+//   </div>
+// </div>
+
+// set the width of your body column
+@contentWidth: 960px;
+
+html{
+  width: 100%;
+  height: 100%;
+  min-width: @contentWidth; // set so that browsers resized smaller do not change column content
+}
+
+body{
+  position: relative; // to enable correct absolute positioning
+}
+
+.wrapOut{
+  width: 100%;
+  .floatClear;
+  min-width: @contentWidth;
+}
+
+.wrapIn{
+  width: @contentWidth;
+  margin: 0 auto;
+}
+
+
+// ====================================================== //
+// = Horizontal Centering for Objects of Variable Width = //
+// ====================================================== //
+
+// example:
+//<div class="outer">
+//  <div class="inner">The amount of text in this div can change, and it would still be centered</div>
+//</div>
+
+// It's worth noting that since .outer is positioned in the middle, it could protrude relatively
+// far off to the right depending on the width of the object being centered. I usually set
+// .outer's parent to overflow: hidden to make sure this doesn't affect the layout.
+
+.outer{
+  .floatClear;
+  position: relative;
+  left: 50%;
+}
+
+.inner{
+  position: relative;
+  left: -50%;
+}
+
+
+// ========================= //
+// = Call To Action Button = //
+// ========================= //
+
+// Shiny buttons make people want to click them! Just add the class callToAction to any link!
+// Or mix it in with the color as a parameter!
+
+.callToAction(@buttonColor: #c97200){
+  // slave colors
+  @defaultStart: @buttonColor + 35%;
+  @defaultEnd: @buttonColor;
+  @borderColor: @buttonColor - 50%;
+  
+  // button positioning
+  .floatClear;
+  margin: 10px 0 0 0;
+  padding: 4px 13px 2px 13px;
+  
+  // text styles
+  font-size: 30px;
+  color: #fff;
+  text-decoration: none;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  text-shadow: rgba(0,0,0,0.2) -1px 0, rgba(0,0,0,0.2) 0 -1px, rgba(255,255,255,0.2) 0 1px;
+  
+  // box styles
+  border: 1px solid @borderColor;
+  .borderRadius(6px);
+  .boxShadow(0px 0px 2px @borderColor);
+  .gradientV4(@defaultStart, @defaultStart, 46, @defaultEnd, 54, @defaultEnd);
+  
+  // hover state
+  &:hover{
+    color: #fff;
+    
+    // gradient colors
+    @start: @defaultStart - 20%;
+    @end: @defaultEnd - 20%;
+    
+    .gradientV4(@start, @start, 46, @end, 54, @end);
+  }
+  
+  // active (click) state
+  &:active{
+    color: #fff;
+    
+    // gradient colors
+    @start: @defaultStart - 40%;
+    @end: @defaultEnd - 40%;
+    
+    .gradientV4(@start, @start, 46, @end, 54, @end);
+  }
+}
+
+
+// ================== //
+// = General Styles = //
+// ================== //
+
+// No margin or padding on docroot
+html{
+  margin: 0;
+  padding: 0;
+}
+
+// No margin or padding on body, sensible font defaults
+body{
+  margin: 0;
+  padding: 0;
+  font-family: helvetica, arial, verdana, sans-serif;
+  text-rendering: optimizeLegibility; // enable better kerning and ligatures for Webkit. FF has this enabled by default for fonts >= 20px. IE does not support this
+}
+
+// Stack your boxes easily with this
+.floatClear{
+  float: left;
+  clear: both;
+}
+
+// Do you hate borders on your images and image links? Because I do.
+img{border: 0;}
+
+// Wow! You also don't like bullets? Great to meet you.
+ul{list-style-type: none;}
+
+// clearfix (thanks for the mixin-able syntax, Mark Otto!)
+.clearfix{
+  zoom: 1;
+  
+  &:after{
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+  }
+}
