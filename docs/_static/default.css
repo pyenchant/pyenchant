@@ -933,7 +933,7 @@ p.rubric {
   width: 100%;
   height: 5px;
   font-size: 1px;
-  margin-bottom: 5px;
+  margin-bottom: 20px;
   background: #0d73a5;
   background-image: -moz-linear-gradient(top, #000064, #19e6e6);
   background-image: -webkit-gradient(linear, left top, left bottom, from(#000064), to(#19e6e6));
@@ -1018,4 +1018,9 @@ p.rubric {
 #nav-menu li.selected a {
   color: #19e6e6;
   text-decoration: underline;
+}
+.highlight {
+  border: dotted 1px #19e6e6;
+  background: #EEFFFF;
+  margin: 0.5em;
 }

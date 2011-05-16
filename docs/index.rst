@@ -1,5 +1,21 @@
 
-PyEnchant is a spellchecking library for Python, based on the excellent `Enchant <http://www.abisource.com/enchant/>`_ library. Read more below, or skip straight ahead to the :doc:`download<download>` page.
+
+PyEnchant is a spellchecking library for Python, based on the excellent `Enchant <http://www.abisource.com/enchant/>`_ library.
+
+To get started, check out the comprehensive :doc:`tutorial<tutorial>` or the auto-generated :doc:`API listing<api/enchant>`. If you just want to get up and running in a hurry, here's a quick sample of PyEnchant in action::
+
+    >>> import enchant
+    >>> d = enchant.Dict("en_US")
+    >>> d.check("Hello")
+    True
+    >>> d.check("Helo")
+    False
+    >>> d.suggest("Helo")
+    ['He lo', 'He-lo', 'Hello', 'Helot', 'Help', 'Halo', 'Hell', 'Held', 'Helm', 'Hero', "He'll"]
+    >>> 
+
+
+You can report bugs and view the latest development progress at the `github project page <http://github.com/rfk/pyenchant/tree/master>`_. There are more downloads available at the `python package index <http://pypi.python.org/pypi/pyenchant/>`_, including all the `old versions of PyEnchant <http://pypi.python.org/simple/pyenchant/>`_.
 
 
 News
@@ -26,30 +42,8 @@ Version 1.6.4 of PyEnchant has been released, with the following changes:
     * prevent build-related files from being included in the source tarball
 
 
-
-About PyEnchant
----------------
-
-PyEnchant is a set of language bindings and some wrapper classes to make the excellent `Enchant <http://www.abisource.com/enchant/>`_ spellchecker available as a Python module. The bindings are created using `ctypes <http://docs.python.org/lib/module-ctypes.html>`_. It includes all the functionality of Enchant with the flexibility of Python and a nice "Pythonic" object-oriented interface. It also aims to provide some higher-level functionality than is available in the C API.
-
-To get started, check out the comprehensive :doc:`tutorial<tutorial>` or the auto-generated :doc:`API listing<api/enchant>`. If you just want to get up and running in a hurry, here's a quick sample of pyenchant in action::
-
-    >>> import enchant
-    >>> d = enchant.Dict("en_US")
-    >>> d.check("Hello")
-    True
-    >>> d.check("Helo")
-    False
-    >>> d.suggest("Helo")
-    ['He lo', 'He-lo', 'Hello', 'Helot', 'Help', 'Halo', 'Hell', 'Held', 'Helm', 'Hero', "He'll"]
-    >>>
-
-
-You can report bugs and view the latest development progress at the `github project page <http://github.com/rfk/pyenchant/tree/master>`_. There are more downloads available at the `python package index <http://pypi.python.org/pypi/pyenchant/>`_, including all the `old versions of pyenchant <http://pypi.python.org/simple/pyenchant/>`_.
-    
-
-Documentation
--------------
+Documentation Index
+-------------------
 
 .. toctree::
    :maxdepth: 2
