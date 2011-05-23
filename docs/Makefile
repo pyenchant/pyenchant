@@ -88,8 +88,8 @@ doctest:
 	@echo "Testing of doctests in the sources finished, look at the " \
 	      "results in $(BUILDDIR)/doctest/output.txt."
 
-themefiles: _static/default.css
+#themefiles: _static/default.css
 
-%.css: %.less
-	lessc $< $@
+#%.css: %.less
+#	lessc $< $@
 

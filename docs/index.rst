@@ -1,4 +1,6 @@
 
+PyEnchant
+=========
 
 PyEnchant is a spellchecking library for Python, based on the excellent `Enchant <http://www.abisource.com/enchant/>`_ library.
 
