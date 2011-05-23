@@ -53,7 +53,7 @@ copyright = u'2011, Ryan Kelly'
 # built documents.
 #
 # The short X.Y version.
-version = 1.6.5 #enchant.__version__
+version = "1.6.5" #enchant.__version__
 # The full version, including alpha/beta/rc tags.
 release = version # enchant.__version__
 
