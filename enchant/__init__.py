@@ -88,7 +88,13 @@ __version__ = "%d.%d.%d%s" % (__ver_major__,__ver_minor__,
 
 import os
 
-from enchant import _enchant as _e
+try:
+    from enchant import _enchant as _e
+except ImportError:
+    if not os.environ.get("PYENCHANT_IGNORE_MISSING_LIB",False):
+        raise
+    _e = None
+
 from enchant.errors import *
 from enchant.utils import EnchantStr, get_default_language
 from enchant.pypwl import PyPWL
@@ -203,9 +209,12 @@ class Broker(_EnchantObject):
         arguments are required.
         """
         _EnchantObject.__init__(self)
-        self._this = _e.broker_init()
-        if not self._this:
-            raise Error("Could not initialise an enchant broker.")
+        #  To be importable when enchant C lib is missing, we need
+        #  to create a dummy default broker.
+        if _e is not None:
+            self._this = _e.broker_init()
+            if not self._this:
+                raise Error("Could not initialise an enchant broker.")
 
     def __del__(self):
         """Broker object destructor."""
