@@ -1,0 +1,49 @@
+---
+title: PyEnchant | Provider Shootout
+---
+
+<h2>PyEnchant Provider Shootout</h2>
+
+<p>The PyEnchant source distribution contains the script
+&quot;tools\shootout.py&quot;,
+which can be used to run a comparative test between the different providers
+available in an enchant installation.  The idea is loosly based on the
+aspell comparison tests run by Kevin Atkinson
+(<a href="http://aspell.net/test/">http://aspell.net/test/</a>) and used
+the test data that he provides, but the code is pure Python and written
+from scratch.</p>
+
+<p>The following table summarises results from three spellchecking
+providers, all using PyEnchant 1.1.0 and Enchant 1.1.5:</p>
+<ul>
+<li><em>aspell:</em> Aspell backend, version 0.60.2</li>
+<li><em>ispell:</em> Ispell backend, with dictionaries from AbiWord's <a href="http://sourceforge.net/project/showfiles.php?group_id=15518&amp;package_id=25690">AbiSpell component</a></li>
+<li><em>myspell:</em> MySpell backend, with dictionaries from <a href="http://lingucomponent.openoffice.org/spell_dic.html">OpenOffice.org</a></li>
+</ul>
+
+
+<table cellpadding="5" summary="Spellchecker provider comparison results" border="2">
+<tr><th>Provider</th><th>EXISTED</th><th>SUGGESTED</th><th>FIRST</th><th>FIRST5</th><th>FIRST10</th><th>AVG DIST</th></tr>
+<tr><td>aspell</td><td>97.9</td><td>87.2</td><td>50.0</td><td>77.6</td><td>84.4</td><td>1.77</td></tr>
+<tr><td>ispell</td><td>99.8</td><td>53.4</td><td>34.0</td><td>50.6</td><td>51.7</td><td>1.10</td></tr>
+<tr><td>myspell</td><td>99.2</td><td>69.5</td><td>45.9</td><td>64.1</td><td>68.8</td><td>1.06</td></tr>
+</table>
+
+<p>The statistics were collected on test data containing over 500 words and
+express the following quantities:</p>
+<ul>
+<li><em>EXISTED:</em> percentage of correctly-spelled test words that were marked correct by the spellchecker.  This tests the provider's coverage of the language.</li>
+<li><em>SUGGESTED:</em> percentage of misspelled test words for which the correct spelling was suggested by the spellchecker.  This tests the ability of the provider to guess the correct spelling of a word.</li>
+<li><em>FIRST:</em> percentage of misspelled test words for which the correct spelling was the first suggestion made by the spellchecker.</li>
+<li><em>FIRST5:</em> percentage of misspelled test words for which the correct spelling was in the first five suggestions made by the spellchecker.</li>
+<li><em>FIRST10:</em> percentage of misspelled test words for which the correct spelling was in the first ten suggestions made by the spellchecker.</li>
+<li><em>AVG DIST:</em> average position of the correct speling of a word within the list of suggestions returned by the spellchecker, with zero meaning the word was at the front of the list.</li>
+</ul>
+
+<p>On the basis of this data, the default provider for the stand-alone
+Windows distribution was changed from ispell to myspell for version 1.1.0.
+The two have
+similar language coverage and quality of suggestions (EXISTED and
+AVG DIST respectively) but myspell has a significantly better ability to
+guess the intended spelling of a word (SUGGESTED).</p>
+

@@ -1,0 +1,4 @@
+---
+uses_template: false
+---
+# empty robots.txt stops 404 errors appearing in my logs

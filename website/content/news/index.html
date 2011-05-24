@@ -1,0 +1,19 @@
+---
+title: PyEnchant | News
+extends: base.j2
+---
+
+{% block page_meta %}
+<link rel="alternate" title="PyEnchant | News | Atom Feed" href="http://packages.python.org/pyenchant/news/feeds/atom.xml" type="application/atom+xml" />
+{% endblock %}
+
+
+{% from "macros.j2" import render_excerpt with context  %}
+{% block page_content %}
+
+{% for res in resource.node.walk_resources_sorted_by_time()[:5] %}
+    {{ render_excerpt(res) }}
+    <hr />
+{% endfor %}
+
+{% endblock %}

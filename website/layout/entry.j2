@@ -1,0 +1,100 @@
+{% extends "base.j2" %}
+
+{% block page_meta %}
+<link rel="alternate" title="RFK | Blog | Atom Feed" href="http://www.rfk.id.au/blog/feeds/atom.xml" type="application/atom+xml" />
+{% endblock %}
+
+
+{% block page_content -%}
+
+{% from "macros.j2" import render_entry_header with context %}
+{{ render_entry_header(resource) }}
+
+{% block blog_post_body -%}{%- endblock %}
+
+<hr />
+
+<div class="blog-footer">
+
+<div class="blog-footer-left">
+{% if resource.next_by_time %}
+<a class="next{{' disabled' if not resource.next_by_time }}"
+    title="{{ resource.next_by_time.meta.title }}"
+    {% if resource.next_by_time %}
+    href="{{ content_url(resource.next_by_time.url) }}"{% endif %}>
+    &lt;&lt;&lt; {{ resource.next_by_time.meta.title }}
+</a>
+{% endif %}
+</div>
+
+<div class="blog-footer-right">
+{% if resource.prev_by_time %}
+<a class="prev{{' disabled' if not resource.prev_by_time }}"
+    title="{{ resource.prev_by_time.meta.title }}"
+    {% if resource.prev_by_time %}
+    href="{{ content_url(resource.prev_by_time.url) }}"{% endif %}>
+    {{ resource.prev_by_time.meta.title }} &gt;&gt;&gt;
+</a>
+{% endif %}
+</div>
+
+</div>
+
+<hr />
+<div class="blog-entry-comments" id="disqus_thread"></div>
+<script type="text/javascript">
+  /**
+    * var disqus_identifier; [Optional but recommended: Define a unique identifier (e.g. post id or slug) for this thread] 
+    */
+  var disqus_identifier = "{{ resource.meta.slug }}";
+  (function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = 'http://rfkelly.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript=rfkelly">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+{%- endblock %}
+
+{% block page_sidebar_extra %}
+
+<br /><hr /><br />
+
+<div id="reddit_share">
+<script type="text/javascript" src="http://www.reddit.com/static/button/button1.js"></script>
+</div>
+
+<div id="twitter_share">
+<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="rfkelly">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+</div>
+
+
+<div id="flattr_share">
+</div>
+
+{%- endblock %}
+
+
+{%- block page_js_extra %}
+
+    <script type="text/javascript" src="http://api.flattr.com/js/0.6/load.js"> </script>
+    <script type="text/javascript">
+    $(function() {
+      FlattrLoader.render({
+          mode: "manual",
+          uid: "rfk",
+          language: "en_GB",
+          category: "text",
+          button: "compact",
+          url: "http://www.rfk.id.au/blog/entry/{{ resource.meta.slug }}",
+          title: "{{ resource.meta.title.strip() }}",
+          description: "{{ resource.meta.title.strip() }}"
+      },$("#flattr_share").get(0),"append");
+    });
+/* ]]> */
+    </script>
+
+{%- endblock %}

@@ -1,0 +1,53 @@
+---
+title: PyEnchant
+---
+
+<p>PyEnchant is a spellchecking library for Python, based on the excellent <a href="http://www.abisource.com/enchant/">Enchant</a> library. Read more below, or skip straight ahead to the <a href="./download.html">download page</a>.</p>
+
+<h3>2010-12-14:&nbsp;&nbsp;Version 1.6.5 released</h3>
+<p>Version 1.6.5 of PyEnchant has been released, with the following changes:</p>
+<ul>
+<li>restore compatability with Python 3 (including 3.2 beta1)</li>
+<li>fix unittest DeprecationWarnings on Python 3</li>
+<li>statically compile libstdc++ into pre-built windows binaries</li>
+</ul>
+
+<h3>2010-12-13:&nbsp;&nbsp;Version 1.6.4 released</h3>
+<p>Version 1.6.4 of PyEnchant has been released, with the following changes:</p>
+<ul>
+<li>DictWithPWL:  use pwl and pel to adjust the words returned by suggest()</li>
+<li>Fix tokenization of utf8 bytes in a mutable character array</li>
+<li>get_tokenizer():  pass None as language tag to get default tokenizer</li>
+<li>prevent build-related files from being included in the source tarball</li>
+</ul>
+
+
+<h3>More about PyEnchant</h3>
+
+<p>PyEnchant is a set of language bindings and some wrapper classes
+to make the excellent <a href="http://www.abisource.com/enchant/">Enchant</a>
+spellchecker available as a Python module.
+The bindings are created using <a href="http://docs.python.org/lib/module-ctypes.html">ctypes</a>.
+It includes all the functionality of Enchant with the flexibility of Python
+and a nice "Pythonic" object-oriented interface.  It also aims to provide
+some higher-level functionality than is available in the C API.
+</p>
+
+<p>To get started, check out the comprehensive <a href="./tutorial.html">pyenchant tutorial</a> or the pydoc-generated <a href="./api/enchant.html">API listing</a>.  If you just want to get up and running in a hurry, here's a quick sample of pyenchant in action:</p>
+
+{% syntax python %}
+>>> import enchant
+>>> d = enchant.Dict("en_US")
+>>> d.check("Hello")
+True
+>>> d.check("Helo")
+False
+>>> d.suggest("Helo")
+['He lo', 'He-lo', 'Hello', 'Helot', 'Help', 'Halo', 'Hell', 'Held', 'Helm', 'Hero', "He'll"]
+>>>
+{% endsyntax %}
+
+<p>You can <a href="http://github.com/rfk/pyenchant/issues/">report bugs</a> and view the latest development progress at the <a href="http://github.com/rfk/pyenchant/tree/master">github project page</a>.
+There are more downloads available at the <a href="http://pypi.python.org/pypi/pyenchant/">python package index</a>, including all the <a href="http://pypi.python.org/simple/pyenchant/">old versions of pyenchant</a>.</p>
+
+

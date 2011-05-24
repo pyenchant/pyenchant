@@ -1,0 +1,92 @@
+---
+title: PyEnchant | FAQ
+---
+
+<h2>PyEnchant FAQ</h2>
+
+<p>This page contains some frequently asked questions about PyEnchant,
+along with some questions which havent technically been asked but which
+are probably of interest to many readers.</p>
+
+<ul>
+<li><a href="#faq_feedback">How do I report bugs, give feedback etc?</a></li>
+<li><a href="#faq_license">How is PyEnchant licensed?</a></li>
+<li><a href="#faq_similar_projects">Are there similar projects available?</a></li>
+<li><a href="#faq_advantages">What are the advantages/disadvantages of PyEnchant over other solutions?</a></li>
+<li><a href="#faq_unicode">How does PyEnchant handle Unicode/non-ASCII text?</a></li>
+<li><a href="#faq_shootout">Which Enchant provider should I use? (Aspell, Ispell, MySpell...?)</a></li>
+</ul>
+
+<h3 id="faq_feedback">How do I report bugs, give feedback etc?</h3>
+<p>
+You can use the issue reporting tools on the <a href="http://github.com/rfk/pyenchant/issues">github project page</a> or send the author an email at
+&#114;y&#097;&#110;&#064;&#114;f&#107;.&#099;&#111;&#109;&#046;&#097;&#117;.  For general questions, please use the <a href="http://groups.google.com/group/pyenchant-users">PyEnchant mailing list</a>.
+</p>
+
+<h3 id="faq_license">How is PyEnchant licensed?</h3>
+<p>
+Like the underlying Enchant library, PyEnchant is made available under the
+<a href="http://www.gnu.org/copyleft/lesser.html">GNU LGPL</a> with a
+special exemption allowing linking with proprietary spellchecking plugins.
+</p>
+
+<h3 id="faq_similar_projects">Are there similar projects available?</h3>
+<p>
+There are several projects to produce Python bindings for the
+<a href="http://aspell.sourceforge.net/">aspell</a>
+spellchecking library, including <a href="http://www.republika.pl/wmula/proj/aspell-python/index.html">aspell-python</a> and <a href="http://savannah.nongnu.org/projects/pyaspell/">pyaspell</a>.
+The <a href="http://developer.berlios.de/projects/myspell-python/">myspell-python</a> package offers a Python wrapper for the MySpell engine.  It is also
+possible to invoke a command-line program such as ispell, as shown in this
+<a href="http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/117221">ASPN Python Recipie</a>.
+</p>
+
+
+<h3 id="faq_advantages">What are the advantages/disadvantages of PyEnchant over other solutions?</h3>
+<p>
+Most of the solutions listed above are tied to a single spellchecking
+platform, such as aspell or MySpell.  By contrast, Enchant supports
+multiple spellchecking platforms.  A good discussion of why this is
+an advantage can be found on the <a href="http://www.abisource.com/enchant/">Enchant website</a> under the heading "Enchant and Multiple Backends".</p>
+<ul>
+<li>Different backends can be used for different languages, depending on which
+does a better job</li>
+<li>Integration with the user's "native" spellchecker, whatever that may be</li>
+<li>This flexibility is transparent to the application programmer</li>
+</ul>
+<p>As explained above, PyEnchant is available under the GNU LGPL.  This may
+mean it can be used in some projects where other libraries (such as
+GPL-licensed libraries) cannot.</p>
+<p>
+The Enchant API is also generally simpler than that provided by other
+spellchecking solutions.  This can be an advantage or disadvantage depending
+on the needs of your program.
+</p>
+
+<h3 id="faq_unicode">How does PyEnchant handle Unicode/non-ASCII text?</h3>
+<p>
+As of version 1.1, PyEnchant supports input of both standard Python
+strings and unicode strings.  It follows the standard Python practice
+of returning unicode strings when unicode strings are given, and 
+standard strings when standard strings are given.
+</p>
+<p>
+As of version 1.5, PyEnchant is compatible with the new string infrastructure
+of Python 3, and uses it unicode strings consistently throughout.  It does
+not accept bytestrings in Python 3.
+<p>
+Unfortunately, the author (a native English speaker) does not have
+a great deal of experience with the use of unicode.  Any help with
+testing the support for unicode input/output would be greatly
+appreciated.
+</p>
+
+<h3 id="faq_shootout">Which Enchant provider should I use? (Aspell, Ispell, MySpell...?)</h3>
+<p>The simple answer is: whichever works best for your language of choice.
+The source distribution contains a tool to conduct a <a href="shootout.html">
+Provider Shootout</a> given an appropriate set of test data, which can be
+used to determine which provider performs the best for your language.</p>
+<p>Ideally, this choice should be made by the system administrator when
+enchant is installed.
+One of the premises of the Enchant library is to relieve the user from making
+such low-level choices.</p>
+

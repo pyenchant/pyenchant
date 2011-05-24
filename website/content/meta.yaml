@@ -1,0 +1,2 @@
+extends: base.j2
+default_block: page_content

@@ -1,0 +1,3 @@
+extends: entry.j2
+default_block: blog_post_body
+listable: true
