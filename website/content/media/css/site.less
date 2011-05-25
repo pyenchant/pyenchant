@@ -7,8 +7,9 @@
 //@import "blueprint/ie";
 
 
-@colour_dark: #000064;
-@colour_light: #19e6e6;
+@colour_dark: #003300;
+@colour_mid: #00FF00;
+@colour_light: #EEFFEE;
 
 
 html, body {
@@ -24,7 +25,7 @@ a {
     color: @colour_dark;
   }
   &:hover {
-    color: @colour_light;
+    color: @colour_mid;
   }
 }
 
@@ -39,7 +40,7 @@ a {
   width: 100%;
   height: 5px;
   font-size: 1px;
-  .gradientV(@colour_dark, @colour_light);
+  .gradientV(@colour_dark, @colour_mid);
 }
 
 
@@ -125,13 +126,13 @@ a {
       color: #FFFFFF;
 
       &:hover {
-        color: @colour_light;
+        color: @colour_mid;
       }
     }
 
     &.selected {
       a {
-        color: @colour_light;
+        color: @colour_mid;
         text-decoration: underline;
       }
     }
@@ -143,8 +144,8 @@ input, textarea {
 }
 
 .code {
-  border: dotted 1px #19e6e6;
-  background: #EEFFFF;
+  border: dotted 1px @colour_dark;
+  background: @colour_light;
   margin: 1em;
   padding: 1em;
   white-space: pre;
@@ -188,29 +189,6 @@ input, textarea {
     font-size: x-small;
     float: right;
     text-align: right;
-}
-
-.calendar-table {
-    text-align: center;
-    font-size: xx-small;
-    margin: 0px;
-    margin-left: auto;
-    margin-right: auto;
-    border: none;
-}
-
-.calendar-table tr, th, td {
-    border: none;
-}
-
-.calendar-table td a {
-    border: dotted 1px #000064;
-    padding: 1px;
-}
-
-.calendar-table td a:hover {
-    background: #19e6e6;
-    color: #000064;
 }
 
 .blog-entry-comments {

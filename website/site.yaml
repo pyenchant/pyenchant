@@ -1,4 +1,4 @@
-mode: development
+mode: production
 
 media_root: media # Relative path from content folder.
 media_url: /pyenchant/media # URL where the media files are served from.
