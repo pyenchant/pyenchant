@@ -4,6 +4,8 @@
     * New documentation, generated with sphinx.
     * Ability to import the module even when the enchant C library isn't
       installed, by setting PYENCHANT_IGNORE_MISSING_LIB env var.
+    * New utility function "trim_suggestions", useful for trimming the
+      list of suggestions to a fixed maximum length.
 
 1.6.5:
 
