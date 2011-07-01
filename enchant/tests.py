@@ -44,7 +44,7 @@ except ImportError:
 import enchant
 from enchant import *
 from enchant import _enchant as _e
-from enchant.utils import unicode, raw_unicode, printf
+from enchant.utils import unicode, raw_unicode, printf, trim_suggestions
 
 
 def runcmd(cmd):
@@ -396,6 +396,20 @@ class TestPWL(unittest.TestCase):
         self.assertTrue(d)
 
 
+class TestUtils(unittest.TestCase):
+    """Test cases for various utility functions."""
+
+    def test_trim_suggestions(self):
+        word = "gud"
+        suggs = ["good","god","bad+"]
+        self.assertEquals(trim_suggestions(word,suggs,40),["god","good","bad+"])
+        self.assertEquals(trim_suggestions(word,suggs,4),["god","good","bad+"])
+        self.assertEquals(trim_suggestions(word,suggs,3),["god","good","bad+"])
+        self.assertEquals(trim_suggestions(word,suggs,2),["god","good"])
+        self.assertEquals(trim_suggestions(word,suggs,1),["god"])
+        self.assertEquals(trim_suggestions(word,suggs,0),[])
+
+
 class TestDocStrings(unittest.TestCase):
     """Test the spelling on all docstrings we can find in this module.
 
@@ -575,6 +589,7 @@ def buildtestsuite(recurse=True):
     suite.addTest(unittest.makeSuite(TestBroker))
     suite.addTest(unittest.makeSuite(TestDict))
     suite.addTest(unittest.makeSuite(TestPWL))
+    suite.addTest(unittest.makeSuite(TestUtils))
     suite.addTest(unittest.makeSuite(TestDocStrings))
     suite.addTest(unittest.makeSuite(TestChecker))
     suite.addTest(unittest.makeSuite(TestTokenization))
