@@ -313,7 +313,8 @@ dict_describe1 = e.enchant_dict_describe
 dict_describe1.argtypes = [t_dict,t_dict_desc_func,c_void_p]
 dict_describe1.restype = None
 def dict_describe(dict,cbfunc):
-    def cbfunc1(*args):
-        cbfunc(*args[:-1])
+    def cbfunc1(tag,name,desc,file,data):
+        cbfunc(tag,name,desc,file)
     dict_describe1(dict,t_dict_desc_func(cbfunc1),None)
+
 
