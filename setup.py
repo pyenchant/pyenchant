@@ -191,7 +191,8 @@ if sys.platform in ("win32","darwin",):
             print("COPYING: " + dictName)
             shutil.copy(os.path.join(dictPath,dictName),
 			os.path.join(".","enchant","share","enchant","ispell"))
-  except EnvironmentError, e:
+  except EnvironmentError:
+    (_,e,_) = sys.exc_info()
     if e.errno not in (errno.ENOENT,):
         raise
     import traceback
