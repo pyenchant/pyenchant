@@ -81,7 +81,7 @@ _DOC_ERRORS = ['enchnt','enchnt', 'fr']
 # Make version info available
 __ver_major__ = 1
 __ver_minor__ = 6
-__ver_patch__ = 5
+__ver_patch__ = 6
 __ver_sub__ = ""
 __version__ = "%d.%d.%d%s" % (__ver_major__,__ver_minor__,
                               __ver_patch__,__ver_sub__)
@@ -162,6 +162,10 @@ class _EnchantObject(object):
     def __init__(self):
         """_EnchantObject constructor."""
         self._this = None
+        #  To be importable when enchant C lib is missing, we need
+        #  to create a dummy default broker.
+        if _e is not None:
+            self._init_this()
         
     def _check_this(self,msg=None):
          """Check that self._this is set to a pointer, rather than None."""
@@ -170,6 +174,10 @@ class _EnchantObject(object):
             msg = msg % (self.__class__.__name__,)
          if self._this is None:
             raise Error(msg)
+
+    def _init_this(self):
+        """Initialise the underlying C-library object pointer."""
+        raise NotImplementedError
              
     def _raise_error(self,default="Unspecified Error",eclass=Error):
          """Raise an exception based on available error messages.
@@ -182,6 +190,20 @@ class _EnchantObject(object):
          """
          raise eclass(default)
     _raise_error._DOC_ERRORS = ["eclass"]
+
+    def __getstate__(self):
+        """Customize pickling of PyEnchant objects.
+
+        Since it's not safe for multiple objects to share the same C-library
+        object, we make sure it's unset when pickling.
+        """
+        state = self.__dict__.copy()
+        state["_this"] = None
+        return state
+
+    def __setstate__(self,state):
+        self.__dict__.update(state)
+        self._init_this()
 
 
 
@@ -209,18 +231,17 @@ class Broker(_EnchantObject):
         arguments are required.
         """
         _EnchantObject.__init__(self)
-        #  To be importable when enchant C lib is missing, we need
-        #  to create a dummy default broker.
-        if _e is not None:
-            self._this = _e.broker_init()
-            if not self._this:
-                raise Error("Could not initialise an enchant broker.")
+
+    def _init_this(self):
+        self._this = _e.broker_init()
+        if not self._this:
+            raise Error("Could not initialise an enchant broker.")
 
     def __del__(self):
         """Broker object destructor."""
         if _e is not None:
           self._free()
-            
+
     def _raise_error(self,default="Unspecified Error",eclass=Error):
         """Overrides _EnchantObject._raise_error to check broker errors."""
         err = _e.broker_get_error(self._this)
@@ -489,27 +510,30 @@ class Dict(_EnchantObject):
         may be specified using <broker>.  If not given, the default broker
         is used.
         """
-        # Superclass initialisation
-        _EnchantObject.__init__(self)
-        # Initialise object attributes to None
-        self._broker = None
-        self.tag = None
+        # Initialise misc object attributes to None
         self.provider = None
-        # Create dead object if False was given
-        if tag is False:
-            self._this = None
-        else:
+        # If no tag was given, use the default language
+        if tag is None:
+            tag = get_default_language()
             if tag is None:
-                tag = get_default_language()
-                if tag is None:
-                    err = "No tag specified and default language could not "
-                    err = err + "be determined."
-                    raise Error(err)
-            # Use module-level broker if none given
-            if broker is None:
-                broker = _broker
-            # Use the broker to get C-library pointer data
-            self._switch_this(broker._request_dict_data(tag),broker)
+                err = "No tag specified and default language could not "
+                err = err + "be determined."
+                raise Error(err)
+        self.tag = tag
+        # If no broker was given, use the default broker
+        if broker is None:
+            broker = _broker
+        self._broker = broker
+        # Now let the superclass initialise the C-library object
+        _EnchantObject.__init__(self)
+
+    def _init_this(self):
+        # Create dead object if False was given.
+        # Otherwise, use the broker to get C-library pointer data.
+        self._this = None
+        if self.tag:
+            this = self._broker._request_dict_data(self.tag)
+            self._switch_this(this,self._broker)
 
     def __del__(self):
         """Dict object destructor."""
@@ -518,7 +542,7 @@ class Dict(_EnchantObject):
             self._free()
         except AttributeError:
             pass
-            
+
     def _switch_this(self,this,broker):
         """Switch the underlying C-library pointer for this object.
         
@@ -568,7 +592,7 @@ class Dict(_EnchantObject):
         Once it has been called, the Dict object must no longer be used.
         It is called automatically when the object is garbage collected.
         """
-        if self._broker is not None:
+        if self._broker is not None and self._this is not None:
             self._broker._free_dict(self)
 
     def check(self,word):

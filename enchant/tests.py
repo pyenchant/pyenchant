@@ -36,10 +36,11 @@
 import os
 import sys
 import unittest
+import pickle
 try:
     import subprocess
 except ImportError:
-    subprocess is None
+    subprocess = None
 
 import enchant
 from enchant import *
@@ -259,6 +260,16 @@ class TestDict(unittest.TestCase):
                 self.assertEqual(d.tag,defLang)
             except DictNotFoundError:
                 pass
+
+    def test_pickling(self):
+        """Test that pickling doensn't corrupt internal state."""
+        d1 = Dict("en")
+        self.assertTrue(d1.check("hello"))
+        d2 = pickle.loads(pickle.dumps(d1))
+        self.assertTrue(d1.check("hello"))
+        self.assertTrue(d2.check("hello"))
+        d1._free()
+        self.assertTrue(d2.check("hello"))
 
 
 class TestPWL(unittest.TestCase):

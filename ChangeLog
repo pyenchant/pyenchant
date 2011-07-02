@@ -2,6 +2,8 @@
 1.6.6:
 
     * New documentation, generated with sphinx.
+    * Make Dict class pickle-safe.  Among other things, this should help
+      with strange deadlocks when used with the multiprocessing module.
     * Ability to import the module even when the enchant C library isn't
       installed, by setting PYENCHANT_IGNORE_MISSING_LIB env var.
     * New utility function "trim_suggestions", useful for trimming the
