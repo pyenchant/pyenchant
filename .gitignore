@@ -13,5 +13,5 @@
 *.aff
 *.dylib
 *.tar.gz
-docs/_build
 website/deploy
+website/.hyde_deps
