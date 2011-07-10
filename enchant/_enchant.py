@@ -135,8 +135,16 @@ if e is None:
 
 # Define various callback function types
 
-t_broker_desc_func = CFUNCTYPE(None,c_char_p,c_char_p,c_char_p,c_void_p)
-t_dict_desc_func = CFUNCTYPE(None,c_char_p,c_char_p,c_char_p,c_char_p,c_void_p)
+def CALLBACK(restype,*argtypes):
+    """Factory for generating callback function prototypes.
+
+    This is factored into a factory so I can easily change the definition
+    for experimentation or debugging.
+    """
+    return CFUNCTYPE(restype,*argtypes)
+
+t_broker_desc_func = CALLBACK(None,c_char_p,c_char_p,c_char_p,c_void_p)
+t_dict_desc_func = CALLBACK(None,c_char_p,c_char_p,c_char_p,c_char_p,c_void_p)
 
 
 # Simple typedefs for readability
