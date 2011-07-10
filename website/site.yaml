@@ -73,10 +73,6 @@ publisher:
         type: hyde.ext.publishers.pypi.PyPI
         project: pyenchant
 
-sphinx:
-    block_map:
-        body:  page_content
-
 syntax:
     use_figure: false
     options:
