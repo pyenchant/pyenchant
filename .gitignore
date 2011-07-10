@@ -15,3 +15,5 @@
 *.tar.gz
 website/deploy
 website/.hyde_deps
+.tox
+.coverage
