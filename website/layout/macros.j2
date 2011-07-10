@@ -18,8 +18,12 @@
 {% macro render_excerpt(res, class=None) %}
 {{ render_entry_header(res) }}
 {% refer to res.url as post %}
+{% if post.excerpt %}
 {{ post.excerpt }}
 <p><a href="{{ content_url(res.url) }}">Continue reading...</a></p>
+{% else %}
+{{ post.noexcerpt }}
+{% endif %}
 {% endmacro %}
 
 

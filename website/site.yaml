@@ -40,8 +40,13 @@ context:
                 name: API
                 description: API Reference
                 type: page
+                url: api/index.html
+            -
+                name: Code
+                description: Code
+                type: page
                 url: >
-                     http://www.readthedocs.org/docs/pyenchant/
+                     http://github.com/rfk/pyenchant/
 
 meta:
     nodemeta: meta.yaml
@@ -71,3 +76,11 @@ publisher:
 sphinx:
     block_map:
         body:  page_content
+
+syntax:
+    use_figure: false
+    options:
+        cssclass: code
+        style: default
+        classprefix: code-token
+
