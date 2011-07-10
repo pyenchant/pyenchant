@@ -108,13 +108,12 @@ Creating and Using Dictionary Objects
 
 The most important object in the PyEnchant module is the Dict object, which represents a dictionary. These objects are used to check the spelling of words and to get suggestions for misspelled words. The following shows how to construct a simple Dict and use it to check some words::
 
-  >>> import enchant
-  >>> d = enchant.Dict("en_US")
-  >>> d.check("Hello")
-  True
-  >>> d.check("Helo")
-  False
-  >>> 
+    >>> import enchant
+    >>> d = enchant.Dict("en_US")
+    >>> d.check("Hello")
+    True
+    >>> d.check("Helo")
+    False
 
 Dictionaries are created using a language tag which specifies the language to be checked - in this case, "en_US" signifies American English. If the language tag is not specified, an attempt is made to determine the language currently in use. This is not always possible, in which case an Error is raised.
 
@@ -125,7 +124,6 @@ When the current language can be determined, it operates as follows::
   'en_AU'
   >>> print d.tag
   en_AU
-  >>> 
 
 Of course, this may still fail if the appropriate dictionary is not available. If it cannot be determined, the behavior is as follows::
 
@@ -135,7 +133,6 @@ Of course, this may still fail if the appropriate dictionary is not available. I
     File "enchant/__init__.py", line 467, in __init__
       raise Error(err)
   enchant.Error: No tag specified and default language could not be determined.
-  >>> 
 
 
 There are several top-level functions in the enchant module which can be used to deal with dictionaries:
@@ -155,13 +152,11 @@ There are several top-level functions in the enchant module which can be used to
   <enchant.Dict object at 0x2aaaabdffa50>cl
   >>> enchant.list_languages()
   ['en', 'en_CA', 'en_GB', 'en_US', 'eo', 'fr', 'fr_CH', 'fr_FR']
-  >>> 
 
 As shown previously, the check method of a Dict object can be used to check whether a word is correctly spelled. To get suggestions for a misspelled word, use the suggest method as shown below::
 
   >>> d.suggest("Helo")
   ['He lo', 'He-lo', 'Hello', 'Helot', 'Help', 'Halo', 'Hell', 'Held', 'Helm', 'Hero', "He'll"]
-  >>> 
 
 The suggestions are returned in a list, ordered from most likely replacement to least likely.
 
@@ -179,7 +174,6 @@ Personal Word Lists
 Dict objects can also be used to check words against a custom list of correctly-spelled words known as a Personal Word List. This is simply a file listing the words to be considered, one word per line. The following example creates a Dict object for the personal word list stored in "mywords.txt"::
 
   >>> pwl = enchant.request_pwl_dict("mywords.txt")
-  >>> 
 
 The personal word list Dict object can be used in the same way as Dict objects which reference a language dictionary. When the object's add method is called, new entries will be appended to the bottom of the file.
 
@@ -188,7 +182,6 @@ PyEnchant also provides the class DictWithPWL which can be used to combine a lan
   >>> d2 = enchant.DictWithPWL("en_US","mywords.txt")
   >>> d2.check("Hello")
   True
-  >>> 
 
 
 Checking entire blocks of text
@@ -207,14 +200,12 @@ SpellChecker objects are created in the same way as Dict objects - by passing a 
   ERROR: sme
   ERROR: txt
   ERROR: erors
-  >>> 
 
 The SpellChecker can use filters to ignore certain word forms, by passing a list of filters in as a keyword argument::
 
   >>> from enchant.checker import SpellChecker
   >>> from enchant.tokenize import EmailFilter, URLFilter
   >>> chkr = SpellChecker("en_US",filters=[EmailFilter,URLFilter])
-  >>> 
 
 The iterator paradigm can be used to implement a wide variety of spellchecking functionality. As examples of how this can be done, PyEnchant provides a wxPython-based spellchecking dialog and a command-line spellchecking program. While intended mainly as functionality demos, they are also quite useful in their own right.
 
@@ -282,7 +273,6 @@ The module enchant.checker.CmdLineChecker provides the class CmdLineChecker whic
   >>> 
   >>> chkr.get_text()
   'this is some example txt'
-  >>> 
 
 As shown by this simple example, the CmdLineChecker prints each error it encounters, along with a list of suggested replacements. The user enters the desired behavior using short alphanumeric commands, as explained by the output of the 'help' command.
 
@@ -298,7 +288,6 @@ An important task in spellchecking is splitting a body of text up into its const
   <class enchant.tokenize.en.tokenize at 0x2aaaaab531d0>
   >>> [w for w in tknzr("this is some simple text")]
   [('this', 0), ('is', 5), ('some', 8), ('simple', 13), ('text', 20)]
-  >>> 
 
 As shown in the example above, the function get_tokenizer takes a language tag as input, and returns a tokenization class that is appropriate for that language. Instantiating this class with some text returns an iterator which will yield the words contained in that text. This is exactly the mechanism that the SpellChecker class uses internally to split text into a series of words.
 
@@ -344,7 +333,6 @@ A filter is simply a wrapper around a tokenizer that can (1) drop certain words 
   >>> tknzr = get_tokenizer("en_US",[EmailFilter])
   >>> [w for w in tknzr("send an email to fake@example.com please")]
   [('send', 0), ('an', 5), ('email', 8), ('to', 14), ('please', 34)]
-  >>> 
 
 When the EmailFilter is applied to the tokenizer, the email address is removed from the list of words.
 
@@ -371,7 +359,6 @@ The provider which is managing a particular Dict object can be determined by acc
   u'Aspell Provider'
   >>> d.provider.file
   u'/usr/lib64/enchant/libenchant_aspell.so'
-  >>> 
 
 
 Brokers
@@ -391,7 +378,6 @@ The details of which provider is used to create a particular dictionary are mana
   >>> d = b.request_dict("en_US")
   >>> d
   <enchant.Dict object at 0x2aaaabdff8d0>
-  >>> 
 
 Brokers also have the method describe which determines which providers are available, and the method list_dicts which lists the dictionaries available through each provider::
 
@@ -400,7 +386,6 @@ Brokers also have the method describe which determines which providers are avail
   [<Enchant: Aspell Provider>, <Enchant: Myspell Provider>, <Enchant: Ispell Provider>]
   >>> b.list_dicts()
   [('en', <Enchant: Aspell Provider>), ('en_CA', <Enchant: Aspell Provider>), ('en_GB', <Enchant: Aspell Provider>), ('en_US', <Enchant: Aspell Provider>), ('eo', <Enchant: Aspell Provider>), ('fr', <Enchant: Aspell Provider>), ('fr_CH', <Enchant: Aspell Provider>), ('fr_FR', <Enchant: Aspell Provider>)]
-  >>> 
 
 
 The Default Broker
@@ -413,7 +398,6 @@ In normal use, the functionality provided by brokers is not useful to the progra
   >>> d = enchant.Dict("en_US")
   >>> d._broker
   <enchant.Broker object at 0x2aaaabdff590>
-  >>> 
 
 You may have noticed that the top-level functions provided by the enchant module (such as request_dict, dict_exists and list_languages) match the methods provided by the Broker class. These functions are in fact the instance methods of the default Broker object::
 
@@ -423,7 +407,6 @@ You may have noticed that the top-level functions provided by the enchant module
   <enchant.Broker object at 0x2aaaabdff590>
   >>> enchant.dict_exists.im_self
   <enchant.Broker object at 0x2aaaabdff590>
-  >>> 
 
 
 Provider Ordering
@@ -440,7 +423,6 @@ The following example states that for American English the MySpell provider shou
   <Enchant: Myspell Provider>
   >>> b.request_dict("en_GB").provider
   <Enchant: Aspell Provider>
-  >>> 
 
 The user can also set their prefered ordering using enchant configuration files. For this reason, application programmers are discouraged from explicitly setting an ordering unless there is a compelling reason to do so.
 

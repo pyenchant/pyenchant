@@ -80,7 +80,6 @@ sphinx:
 syntax:
     use_figure: false
     options:
-        cssclass: code
+        cssclass: highlight
         style: default
-        classprefix: code-token
 
