@@ -65,7 +65,7 @@ class tokenize(enchant.tokenize.tokenize):
     def __init__(self,text,valid_chars=("'",)):
         self._valid_chars = valid_chars
         self._text = text
-        self.offset = 0
+        self._offset = 0
         # Select proper implementation of self._consume_alpha.
         # 'text' isn't necessarily a string (it could be e.g. a mutable array)
         # so we can't use isinstance(text,unicode) to detect unicode.
@@ -143,7 +143,7 @@ class tokenize(enchant.tokenize.tokenize):
 
     def next(self):
         text = self._text
-        offset = self.offset
+        offset = self._offset
         while offset < len(text):
             # Find start of next word (must be alpha)
             while offset < len(text):
@@ -166,8 +166,8 @@ class tokenize(enchant.tokenize.tokenize):
                 # Make sure word doesn't end with a valid_char
                 while text[offset-1] in self._valid_chars:
                     offset = offset - 1
-                self.offset = offset
+                self._offset = offset
                 return (text[curPos:offset],curPos)
-        self.offset = offset
+        self._offset = offset
         raise StopIteration()
 

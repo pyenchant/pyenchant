@@ -185,10 +185,10 @@ class TestChecker(unittest.TestCase):
                 self.assertEqual(err.word,"stord")
                 txtarr[err.wordpos:err.wordpos+len(err.word)] = array.array(atype,"stored")
                 chkr.set_offset(-1*len(err.word))
-            if n == 3:
+            if n == 2:
                 self.assertEqual(err.word,"aray")
                 chkr.replace("array")
-        self.assertEqual(n,3)
+        self.assertEqual(n,2)
         if str is unicode:
           self.assertEqual(txtarr.tounicode(),"I wll be stored in an array")
         else:

@@ -2,6 +2,9 @@
 1.6.6:
 
     * New website and documentation, generated with Hyde and Sphinx.
+    * Fix SpellChecker.replace() when the replacement is shorter than
+      the erroroneous word; previously this would corrupt the internal
+      state of the tokenizer.  Thanks Steckelfisch.
     * Make Dict class pickle-safe.  Among other things, this should help
       with strange deadlocks when used with the multiprocessing module.
     * Ability to import the module even when the enchant C library isn't

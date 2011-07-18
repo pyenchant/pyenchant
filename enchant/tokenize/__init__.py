@@ -49,10 +49,11 @@ the word began (zero indexed, of course).  The function will work
 on any string-like object that supports array-slicing; in particular
 character-array objects from the 'array' module may be used.
     
-The iterator also provides the attribute 'offset' which may be used
-to get/set the current position of the tokenizer inside the string
-being split.  This can be used for example if the string's contents
-have changed during the tokenization process.
+The iterator also provides the attribute 'offset' which gives the current
+position of the tokenizer inside the string being split, and the method
+'set_offset' for manually adjusting this position.  This can be used for
+example if the string's contents have changed during the tokenization
+process.
     
 To obtain an appropriate tokenization function for the language
 identified by <tag>, use the function 'get_tokenizer(tag)'::
@@ -125,7 +126,7 @@ class tokenize:
 
     def __init__(self,text):
         self._text = text
-        self.offset = 0
+        self._offset = 0
 
     def __next__(self):
         return self.next()
@@ -136,6 +137,17 @@ class tokenize:
     def __iter__(self):
         return self
 
+    def set_offset(self,offset,replaced=False):
+        self._offset = offset
+
+    def _get_offset(self):
+        return self._offset
+    def _set_offset(self,offset):
+        msg = "changing a tokenizers 'offset' attribute is deprecated;"\
+              " use the 'set_offset' method"
+        warnings.warn(msg,category=DeprecationWarning)
+        self.set_offset(offset)
+    offset = property(_get_offset,_set_offset)
 
 def get_tokenizer(tag=None,chunkers=None,filters=None):
     """Locate an appropriate tokenizer by language tag.
@@ -245,7 +257,7 @@ class basic_tokenize(tokenize):
     
     def next(self):
         text = self._text
-        offset = self.offset
+        offset = self._offset
         while True:
             if offset >= len(text):
                 break
@@ -257,7 +269,7 @@ class basic_tokenize(tokenize):
             while offset < len(text) and not text[offset].isspace():
                 offset += 1
             ePos = offset
-            self.offset = offset
+            self._offset = offset
             # Strip chars from font/end of word
             while sPos < len(text) and text[sPos] in self.strip_from_start:
                 sPos += 1
@@ -310,7 +322,7 @@ class Chunker(tokenize):
     pass
  
 
-class Filter:
+class Filter(object):
     """Base class for token filtering functions.
     
     A filter is designed to wrap a tokenizer (or another filter) and do
@@ -339,8 +351,7 @@ class Filter:
         
         If this method returns true, the given word will be skipped by
         the filter.  This should be overridden in subclasses to produce the
-        desired functionality.  The default behaviour is not to skip any
-        words.
+        desired functionality.  The default behaviour is not to skip any words.
         """
         return False
 
@@ -394,23 +405,28 @@ class Filter:
                 self._curpos = pos
                 self._curtok = self._split(word)
                 return self.next()
-            
         
         # Pass on access to 'offset' to the underlying tokenizer.
-        def _getOffset(self):
+        def _get_offset(self):
             return self._tokenizer.offset
-        def _setOffset(self,val):
-            self._tokenizer.offset = val
+        def _set_offset(self,offset):
+            msg = "changing a tokenizers 'offset' attribute is deprecated;"\
+                  " use the 'set_offset' method"
+            warnings.warn(msg,category=DeprecationWarning)
+            self.set_offset(offset)
+        offset = property(_get_offset,_set_offset)
+
+        def set_offset(self,val,replaced=False):
+            self._tokenizer.set_offset(val,replaced=replaced)
             # If we stay within the current word, also set on _curtok.
             # Otherwise, throw away _curtok and set to empty iterator.
             subval = val - self._curpos
-            if subval >= 0 and subval < len(self._curword):
-                self._curtok.offset = subval
+            if subval >= 0 and subval < len(self._curword) and not replaced:
+                self._curtok.set_offset(subval)
             else:
                 self._curtok = empty_tokenize()
                 self._curword = ""
                 self._curpos = 0
-        offset = property(_getOffset,_setOffset)
 
 
 #  Pre-defined chunkers and filters start here
@@ -491,7 +507,7 @@ class HTMLChunker(Chunker):
             while offset < len(text) and text[offset] != "<":
                 offset += 1
             ePos = offset
-            self.offset = offset
+            self._offset = offset
             # Return if chunk isnt empty
             if(sPos < offset):
                 return (text[sPos:offset],sPos)

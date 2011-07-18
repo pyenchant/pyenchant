@@ -91,7 +91,7 @@ of words. Also need to "test" the (handling) of 'quoted' words."""
                 self.assertEqual(pos,12)
                 self.assertEqual(word,"will")
                 # Test setting offset to a previous token
-                tknzr.offset = 5
+                tknzr.set_offset(5)
                 self.assertEqual(tknzr.offset,5)
                 self.assertEqual(tknzr._tokenizer.offset,5)
                 self.assertEqual(tknzr._curtok.__class__,empty_tokenize)
@@ -105,7 +105,7 @@ of words. Also need to "test" the (handling) of 'quoted' words."""
                 self.assertEqual(pos,17)
                 self.assertEqual(word,"be")
                 # Test setting offset past the current token
-                tknzr.offset = 20
+                tknzr.set_offset(20)
                 self.assertEqual(tknzr.offset,20)
                 self.assertEqual(tknzr._tokenizer.offset,20)
                 self.assertEqual(tknzr._curtok.__class__,empty_tokenize)
@@ -116,7 +116,7 @@ of words. Also need to "test" the (handling) of 'quoted' words."""
                 self.assertEqual(pos,26)
                 self.assertEqual(word,"according")
                 # Test setting offset to middle of current token
-                tknzr.offset = 23
+                tknzr.set_offset(23)
                 self.assertEqual(tknzr.offset,23)
                 self.assertEqual(tknzr._tokenizer.offset,23)
                 self.assertEqual(tknzr._curtok.offset,3)

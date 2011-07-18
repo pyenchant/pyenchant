@@ -269,7 +269,8 @@ class SpellChecker:
         aRepl = array.array(self._text.typecode,repl)
         self.dict.store_replacement(self.word,repl)
         self._text[self.wordpos:self.wordpos+len(self.word)] = aRepl
-        self._tokens.offset = self._tokens.offset + (len(repl)-len(self.word))
+        incr = len(repl) - len(self.word)
+        self._tokens.set_offset(self._tokens.offset + incr,replaced=True)
     
     def replace_always(self,word,repl=None):
         """Always replace given word with given replacement.
@@ -341,13 +342,13 @@ class SpellChecker:
             * 2 treats <off> as a distance from the end
         """
         if whence == 0:
-            self._tokens.offset = self._tokens.offset + off
+            self._tokens.set_offset(self._tokens.offset + off)
         elif whence == 1:
             assert(off > 0)
-            self._tokens.offset= off
+            self._tokens.set_offset(off)
         elif whence == 2:
             assert(off > 0)
-            self._tokens.offset = len(self._text) - 1 - off
+            self._tokens.set_offset(len(self._text) - 1 - off)
         else:
             raise ValueError("Invalid value for whence: %s"%(whence,))
     
