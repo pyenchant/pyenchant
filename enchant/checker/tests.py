@@ -226,4 +226,15 @@ class TestChecker(unittest.TestCase):
         else:
             checker = SpellChecker()
             self.assertEqual(checker.lang,lang)
+
+    def test_replace_with_shorter_string(self):
+        """Testcase for replacing with a shorter string (bug #10)"""
+        text = ". I Bezwaar tegen verguning."
+        chkr = SpellChecker("en_US",text)
+        for i,err in enumerate(chkr):
+            err.replace("SPAM")
+            assert i < 3
+        self.assertEquals(chkr.get_text(),". I SPAM SPAM SPAM.")
+
+
  
