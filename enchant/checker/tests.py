@@ -236,5 +236,14 @@ class TestChecker(unittest.TestCase):
             assert i < 3
         self.assertEquals(chkr.get_text(),". I SPAM SPAM SPAM.")
 
+    def test_replace_with_empty_string(self):
+        """Testcase for replacing with an empty string (bug #10)"""
+        text = ". I Bezwaar tegen verguning."
+        chkr = SpellChecker("en_US",text)
+        for i,err in enumerate(chkr):
+            err.replace("")
+            assert i < 3
+        self.assertEquals(chkr.get_text(),". I   .")
+
 
  

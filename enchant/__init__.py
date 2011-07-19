@@ -679,6 +679,10 @@ class Dict(_EnchantObject):
         a suggestion will typically mean that <cor> appears early in the
         list of suggested spellings offered for later instances of <mis>.
         """
+        if not mis:
+            raise ValueError("can't store replacement for an empty string")
+        if not cor:
+            raise ValueError("can't store empty string as a replacement")
         self._check_this()
         mis = EnchantStr(mis)
         cor = EnchantStr(cor)
