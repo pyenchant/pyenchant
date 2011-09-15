@@ -305,7 +305,9 @@ class SpellChecker:
 
         If no word is given, the current erroneous word is added.
         """
-        warnings.warn("SpellChecker.add_to_personal is deprecated, please use SpellChecker.add",category=DeprecationWarning)
+        warnings.warn("SpellChecker.add_to_personal is deprecated, "\
+                      "please use SpellChecker.add",
+                      category=DeprecationWarning,stacklevel=2)
         self.add(word)
 
     def add(self,word=None):

@@ -635,7 +635,8 @@ class Dict(_EnchantObject):
 
     def add_to_pwl(self,word):
         """Add a word to the user's personal word list."""
-        warnings.warn("Dict.add_to_pwl is deprecated, please use Dict.add",category=DeprecationWarning)
+        warnings.warn("Dict.add_to_pwl is deprecated, please use Dict.add",
+                      category=DeprecationWarning,stacklevel=2)
         self._check_this()
         word = EnchantStr(word)
         _e.dict_add_to_pwl(self._this,word.encode())
@@ -666,7 +667,9 @@ class Dict(_EnchantObject):
 
     def is_in_session(self,word):
         """Check whether a word is in the session list."""
-        warnings.warn("Dict.is_in_session is deprecated, please use Dict.is_added",category=DeprecationWarning)
+        warnings.warn("Dict.is_in_session is deprecated, "\
+                      "please use Dict.is_added",
+                      category=DeprecationWarning,stacklevel=2)
         self._check_this()
         word = EnchantStr(word)
         return _e.dict_is_in_session(self._this,word.encode())

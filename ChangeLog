@@ -11,6 +11,9 @@
       installed, by setting PYENCHANT_IGNORE_MISSING_LIB env var.
     * New utility function "trim_suggestions", useful for trimming the
       list of suggestions to a fixed maximum length.
+    * Change the way DeprecationWarnings are issued, to point to the line
+      line in user code rather than inside pyenchant.  Thanks eriolv.
+
 
 1.6.5:
 

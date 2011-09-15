@@ -46,6 +46,7 @@ prototype for the C version found in Enchant).
 from __future__ import generators
 
 import os
+import warnings
 
 class Trie:
     """Class implementing a trie-based dictionary of words.
@@ -228,7 +229,7 @@ class PyPWL:
         For a PWL, this means appending it to the file.
         """
         warnings.warn("PyPWL.add_to_pwl is deprecated, please use PyPWL.add",
-                      category=DeprecationWarning)
+                      category=DeprecationWarning,stacklevel=2)
         self.add(word)
 
     def remove(self,word):

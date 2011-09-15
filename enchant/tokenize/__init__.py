@@ -145,7 +145,7 @@ class tokenize:
     def _set_offset(self,offset):
         msg = "changing a tokenizers 'offset' attribute is deprecated;"\
               " use the 'set_offset' method"
-        warnings.warn(msg,category=DeprecationWarning)
+        warnings.warn(msg,category=DeprecationWarning,stacklevel=2)
         self.set_offset(offset)
     offset = property(_get_offset,_set_offset)
 
@@ -183,7 +183,7 @@ def get_tokenizer(tag=None,chunkers=None,filters=None):
                 if chunkers_are_filters:
                     msg = "passing 'filters' as a non-keyword argument "\
                           "to get_tokenizer() is deprecated"
-                    warnings.warn(msg,category=DeprecationWarning)
+                    warnings.warn(msg,category=DeprecationWarning,stacklevel=2)
                     filters = chunkers
                     chunkers = None
     # Ensure only '_' used as separator
@@ -412,7 +412,7 @@ class Filter(object):
         def _set_offset(self,offset):
             msg = "changing a tokenizers 'offset' attribute is deprecated;"\
                   " use the 'set_offset' method"
-            warnings.warn(msg,category=DeprecationWarning)
+            warnings.warn(msg,category=DeprecationWarning,stacklevel=2)
             self.set_offset(offset)
         offset = property(_get_offset,_set_offset)
 
