@@ -13,6 +13,7 @@
       list of suggestions to a fixed maximum length.
     * Change the way DeprecationWarnings are issued, to point to the line
       line in user code rather than inside pyenchant.  Thanks eriolv.
+    * Add GetSpellChecker() method to wxSpellCheckerDialog.  Thanks bjosey.
 
 
 1.6.5:

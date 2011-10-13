@@ -232,6 +232,10 @@ class wxSpellCheckerDialog(wx.Dialog):
         opt = self.replace_list.GetString(sel)
         self.replace_text.SetValue(opt)
 
+    def GetSpellChecker(self):
+        """Get the spell checker object."""
+        return self._checker
+
     def SetSpellChecker(self,chkr):
         """Set the spell checker, advancing to the first error.
         Return True if error(s) to correct, else False."""
@@ -245,8 +249,9 @@ def _test():
             wxSpellCheckerDialog.__init__(self,*args)
             wx.EVT_CLOSE(self,self.OnClose)
         def OnClose(self,evnt):
-            if self._checker is not None:
-                printf(["AFTER:", self._checker.get_text()])
+            chkr = dlg.GetSpellChecker()
+            if chkr is not None:
+                printf(["AFTER:", chkr.get_text()])
             self.Destroy()
     from enchant.checker import SpellChecker
     text = "This is sme text with a fw speling errors in it. Here are a fw more to tst it ut."
