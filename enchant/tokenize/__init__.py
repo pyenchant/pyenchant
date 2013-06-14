@@ -102,6 +102,7 @@ _DOC_ERRORS = ["pos","pos","tknzr","URLFilter","WikiWordFilter",
 
 import re
 import warnings
+import array
 
 import enchant
 from enchant.utils import next, xrange
@@ -399,13 +400,21 @@ class Filter(object):
                 return (word,pos + self._curpos)
             except StopIteration:
                 (word,pos) = next(self._tokenizer)
-                while self._skip(word):
+                while self._skip(self._to_string(word)):
                     (word,pos) = next(self._tokenizer)
                 self._curword = word
                 self._curpos = pos
                 self._curtok = self._split(word)
                 return self.next()
-        
+
+        def _to_string(self, word):
+            if type(word) is array.array:
+                if word.typecode == 'u':
+                    return word.tounicode()
+                elif word.typecode == 'c':
+                    return word.tostring()
+            return word
+
         # Pass on access to 'offset' to the underlying tokenizer.
         def _get_offset(self):
             return self._tokenizer.offset
