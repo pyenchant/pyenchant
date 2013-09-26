@@ -1,7 +1,7 @@
 
 include *.txt
 include tools/*.py
-include distribute_setup.py
+include ez_setup.py
 recursive-include docs/ *
 prune docs/_build
 prune tools/pyenchant-bdist-win32-sources
