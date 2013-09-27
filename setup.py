@@ -5,10 +5,13 @@
 #  This script is placed in the public domain.
 #
 
+try:
+    from setuptools import setup, find_packages, Extension
+except ImportError:
+    import ez_setup
+    ez_setup.use_setuptools()
+    from setuptools import setup, find_packages, Extension
 
-import distribute_setup
-distribute_setup.use_setuptools()
-from setuptools import setup, find_packages, Extension
 from distutils.archive_util import make_archive
 
 import sys
