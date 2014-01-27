@@ -200,7 +200,7 @@ if sys.platform in ("win32","darwin",):
         raise
     import traceback
     traceback.print_exc()
-    print >>sys.stderr, "COULD NOT COPY PRE-BUILT DEPENDENCIES"
+    sys.stderr.write("COULD NOT COPY PRE-BUILT DEPENDENCIES\n")
 
 ##  Now we can import enchant to get at version info
 
