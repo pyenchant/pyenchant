@@ -89,7 +89,10 @@ class CmdLineChecker:
         printf(["HOW ABOUT:", self.error.suggest()])
     
     def read_command(self):
-        cmd = raw_input(">> ")
+        try:
+            cmd = raw_input(">> ") # Python 2.x
+        except NameError:
+            cmd = input(">> ") # Python 3.x
         cmd = cmd.strip()
         
         if cmd.isdigit():
