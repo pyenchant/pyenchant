@@ -1,5 +1,5 @@
 #
-#  Makefile for building pyenchant win32 dependencies.
+#  Makefile for building pyenchant OSX dependencies.
 #
 BUILD_DIR = /Users/rfk/software/pyenchant/tools/pyenchant-bdist-osx-sources/build
 MACPORTS_DIR = /opt/local/

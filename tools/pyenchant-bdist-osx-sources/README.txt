@@ -7,8 +7,5 @@ of the GPL/LGPL.
 The enchant library is a very slightly modified version of the latest
 enchant release, the patches can be found in the "patches" directory.
 
-The remaining libraries were built by Tor Lillqvist and were obtained
-from his website at:
-
-    http://www.gimp.org/~tml/gimp/win32
+The remaining libraries are built unmodified.
 

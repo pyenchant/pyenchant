@@ -27,6 +27,7 @@ $(ENCHANT_DIR)/Makefile: src/$(ENCHANT_DIR).tar.gz
 	tar -xzvf src/$(ENCHANT_DIR).tar.gz
 	patch $(ENCHANT_DIR)/src/enchant.c < patches/relocatable.patch
 	patch $(ENCHANT_DIR)/src/myspell/myspell_checker.cpp < patches/myspell_checker.patch
+	patch $(ENCHANT_DIR)/src/enchant-provider.h < patches/dllmain.patch
 	cd $(ENCHANT_DIR) && ./configure CC="$(CC)" CXX="$(CXX)" ENCHANT_CFLAGS="$(ENCHANT_CFLAGS)" ENCHANT_LIBS="$(ENCHANT_LIBS)" $(ENCHANT_CONFIG_OPTS)
 
 
