@@ -1,7 +1,7 @@
 #
 #  Makefile for building pyenchant win32 dependencies.
 #
-BUILD_DIR = /s/software/pyenchant/tools/pyenchant-bdist-win32-sources/build
+BUILD_DIR = /c/Users/rfk/Documents/GitHub/pyenchant/tools/pyenchant-bdist-win32-sources/build
 ENCHANT_DIR = enchant-1.6.0
 
 ENCHANT_CONFIG_OPTS = --enable-ispell --enable-myspell --disable-aspell
