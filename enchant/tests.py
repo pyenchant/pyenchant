@@ -439,7 +439,7 @@ class TestDocStrings(unittest.TestCase):
              "dictwithpwl","skippable","dicts","dict's","filenames",
              "trie","api","ctypes","wxspellcheckerdialog","stateful",
              "cmdlinechecker","spellchecks","callback","clunkier","iterator",
-             "ispell","cor","backends"]
+             "ispell","cor","backends","subclasses","initialise","runtime"]
 
     def test_docstrings(self):
         """Test that all our docstrings are error-free."""

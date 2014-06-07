@@ -76,7 +76,7 @@ Errors that occur in this module are reported by raising subclasses
 of 'Error'.
 
 """
-_DOC_ERRORS = ['enchnt','enchnt', 'fr']
+_DOC_ERRORS = ['enchnt','enchnt','incant','fr']
 
 # Make version info available
 __ver_major__ = 1

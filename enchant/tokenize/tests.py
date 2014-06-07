@@ -119,7 +119,6 @@ of words. Also need to "test" the (handling) of 'quoted' words."""
                 tknzr.set_offset(23)
                 self.assertEqual(tknzr.offset,23)
                 self.assertEqual(tknzr._tokenizer.offset,23)
-                self.assertEqual(tknzr._curtok.offset,3)
             if n == 8:
                 self.assertEqual(pos,23)
                 self.assertEqual(word,"it")

@@ -426,12 +426,20 @@ class Filter(object):
         offset = property(_get_offset,_set_offset)
 
         def set_offset(self,val,replaced=False):
+            old_offset = self._tokenizer.offset
             self._tokenizer.set_offset(val,replaced=replaced)
-            # If we stay within the current word, also set on _curtok.
+            # If we move forward within the current word, also set on _curtok.
             # Otherwise, throw away _curtok and set to empty iterator.
-            subval = val - self._curpos
-            if subval >= 0 and subval < len(self._curword) and not replaced:
-                self._curtok.set_offset(subval)
+            keep_curtok = True
+            curtok_offset = val - self._curpos
+            if old_offset > val:
+                keep_curtok = False
+            if curtok_offset < 0:
+                keep_curtok = False
+            if curtok_offset >= len(self._curword):
+                keep_curtok = False
+            if keep_curtok and not replaced:
+                self._curtok.set_offset(curtok_offset)
             else:
                 self._curtok = empty_tokenize()
                 self._curword = ""
