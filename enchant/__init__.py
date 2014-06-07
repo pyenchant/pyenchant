@@ -102,7 +102,7 @@ from enchant.pypwl import PyPWL
 #  Due to the unfortunate name collision between the enchant "tokenize" module
 #  and the stdlib "tokenize" module, certain values of sys.path can cause
 #  the former to override the latter and break the "warnings" module.
-#  This hacks around it by making a dumming "warnings" module.
+#  This hacks around it by making a dummy "warnings" module.
 try:
     import warnings
 except ImportError:
@@ -168,17 +168,17 @@ class _EnchantObject(object):
             self._init_this()
         
     def _check_this(self,msg=None):
-         """Check that self._this is set to a pointer, rather than None."""
-         if msg is None:
-            msg = "%s unusable: the underlying C-library object has been freed."
-            msg = msg % (self.__class__.__name__,)
-         if self._this is None:
+        """Check that self._this is set to a pointer, rather than None."""
+        if self._this is None:
+            if msg is None:
+               msg = "%s unusable: the underlying C-library object has been freed."
+               msg = msg % (self.__class__.__name__,)
             raise Error(msg)
 
     def _init_this(self):
         """Initialise the underlying C-library object pointer."""
         raise NotImplementedError
-             
+
     def _raise_error(self,default="Unspecified Error",eclass=Error):
          """Raise an exception based on available error messages.
 
@@ -240,7 +240,7 @@ class Broker(_EnchantObject):
     def __del__(self):
         """Broker object destructor."""
         if _e is not None:
-          self._free()
+            self._free()
 
     def _raise_error(self,default="Unspecified Error",eclass=Error):
         """Overrides _EnchantObject._raise_error to check broker errors."""
@@ -528,7 +528,7 @@ class Dict(_EnchantObject):
         _EnchantObject.__init__(self)
 
     def _init_this(self):
-        # Create dead object if False was given.
+        # Create dead object if False was given as the tag.
         # Otherwise, use the broker to get C-library pointer data.
         self._this = None
         if self.tag:
