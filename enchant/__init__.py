@@ -236,11 +236,17 @@ class Broker(_EnchantObject):
         self._this = _e.broker_init()
         if not self._this:
             raise Error("Could not initialise an enchant broker.")
+        self._live_dicts = {}
 
     def __del__(self):
         """Broker object destructor."""
         if _e is not None:
             self._free()
+
+    def __getstate__(self):
+        state = super(Broker,self).__getstate__()
+        state.pop("_live_dicts")
+        return state
 
     def _raise_error(self,default="Unspecified Error",eclass=Error):
         """Overrides _EnchantObject._raise_error to check broker errors."""
@@ -258,6 +264,12 @@ class Broker(_EnchantObject):
         Broker and any associated Dict objects must no longer be used.
         """
         if self._this is not None:
+            # During shutdown, this finalizer may be called before
+            # some Dict finalizers.  Ensure all pointers are freed.
+            for (dict,count) in list(self._live_dicts.items()):
+                while count:
+                    self._free_dict_data(dict)
+                    count -= 1
             _e.broker_free(self._this)
             self._this = None
             
@@ -293,6 +305,10 @@ class Broker(_EnchantObject):
         if new_dict is None:
             eStr = "Dictionary for language '%s' could not be found"
             self._raise_error(eStr % (tag,),DictNotFoundError)
+        if new_dict not in self._live_dicts:
+            self._live_dicts[new_dict] = 1
+        else:
+            self._live_dicts[new_dict] += 1
         return new_dict
 
     def request_pwl_dict(self,pwl):
@@ -309,6 +325,10 @@ class Broker(_EnchantObject):
         if new_dict is None:
             eStr = "Personal Word List file '%s' could not be loaded"
             self._raise_error(eStr % (pwl,))
+        if new_dict not in self._live_dicts:
+            self._live_dicts[new_dict] = 1
+        else:
+            self._live_dicts[new_dict] += 1
         d = Dict(False)
         d._switch_this(new_dict,self)
         return d
@@ -320,10 +340,17 @@ class Broker(_EnchantObject):
         It is equivalent to calling the object's 'free' method.  Once this
         method has been called on a dictionary, it must not be used again.
         """
-        self._check_this()
-        _e.broker_free_dict(self._this,dict._this)
+        self._free_dict_data(dict._this)
         dict._this = None
         dict._broker = None
+
+    def _free_dict_data(self,dict):
+        """Free the underlying pointer for a dict."""
+        self._check_this()
+        _e.broker_free_dict(self._this,dict)
+        self._live_dicts[dict] -= 1
+        if self._live_dicts[dict] == 0:
+            del self._live_dicts[dict]
 
     def dict_exists(self,tag):
         """Check availability of a dictionary.
@@ -592,8 +619,11 @@ class Dict(_EnchantObject):
         Once it has been called, the Dict object must no longer be used.
         It is called automatically when the object is garbage collected.
         """
-        if self._broker is not None and self._this is not None:
-            self._broker._free_dict(self)
+        if self._this is not None:
+            # The broker may have been freed before the dict.
+            # It will have freed the underlying pointers already.
+            if self._broker is not None and self._broker._this is not None:
+                self._broker._free_dict(self)
 
     def check(self,word):
         """Check spelling of a word.

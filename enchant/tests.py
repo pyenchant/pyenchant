@@ -148,7 +148,7 @@ class TestBroker(unittest.TestCase):
         """Test that unicode language tags are accepted"""
         d1 = self.broker._request_dict_data(raw_unicode("en_US"))
         self.assertTrue(d1)
-        _e.broker_free_dict(self.broker._this,d1)
+        self.broker._free_dict_data(d1)
         d1 = Dict(raw_unicode("en_US"))
         self.assertTrue(d1)
 
