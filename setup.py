@@ -84,8 +84,8 @@ def osx_make_lib_relocatable(libpath,bundle_dir=None):
     #  Fix the installed name of the lib to be relative to rpath.
     if libpath.endswith(".dylib"):
         do("install_name_tool","-id","@loader_path/"+nm,libpath)
-    #  Fix references to any non-core dependencies, and copy them into
-    #  the target dir so they will be fixed up in turn.
+    #  Fix references to any non-core dependencies, and add them to the list
+    #  so they will be copied and fixed-up in turn.
     deps = []
     deplines = bt("otool","-L",libpath).split("\n")
     if libpath.endswith(".dylib"):
@@ -97,7 +97,9 @@ def osx_make_lib_relocatable(libpath,bundle_dir=None):
         if not dep:
             continue
         dep = dep.split()[0]
-        if dep.startswith("/System/") or dep.startswith("/usr/"):
+        if dep.startswith("/System/"):
+            continue
+        if dep.startswith("/usr/") and not dep.startswith("/usr/local"):
             continue
         depnm = os.path.basename(dep)
         numdirs = len(dirnm[len(bundle_dir):].split("/")) - 1
@@ -112,16 +114,19 @@ def osx_bundle_lib(libpath):
     if sys.platform != "darwin":
         raise RuntimeError("only works on osx")
     bundle_dir = os.path.dirname(libpath)
+    # Remove any old libraries from  previous build.
     for nm in os.listdir(bundle_dir):
         oldpath = os.path.join(bundle_dir,nm)
         if oldpath != libpath and os.path.isfile(oldpath):
             os.unlink(oldpath)
+    # Copy in and relocate all its dependencies, and theirs, and so-on.
     todo = osx_make_lib_relocatable(libpath,bundle_dir)
     for deppath in todo:
+        print "MAKING RELOCATABLE:", deppath
         depnm = os.path.basename(deppath)
         bdeppath = os.path.join(bundle_dir,depnm)
         if not os.path.exists(bdeppath):
-            shutil.copy2(deppath,bdeppath)
+            shutil.copyfile(deppath,bdeppath)
             todo.extend(osx_make_lib_relocatable(bdeppath,bundle_dir))
 
 #
@@ -159,6 +164,7 @@ if sys.platform in ("win32","darwin",):
       # Dependencies.  On win32 we just bundle everything, on OSX we call
       # a helper function that tracks (and re-writes) dependencies
       if sys.platform == "darwin":
+          print "DARMIN", fName, libroot
           osx_bundle_lib(os.path.join(libroot,fName))
           for fName in os.listdir(libroot):
               EAGER_RES.append("enchant/lib/" + fName)
