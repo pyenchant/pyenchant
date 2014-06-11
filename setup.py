@@ -122,7 +122,7 @@ def osx_bundle_lib(libpath):
     # Copy in and relocate all its dependencies, and theirs, and so-on.
     todo = osx_make_lib_relocatable(libpath,bundle_dir)
     for deppath in todo:
-        print "MAKING RELOCATABLE:", deppath
+        print("MAKING RELOCATABLE: " + deppath)
         depnm = os.path.basename(deppath)
         bdeppath = os.path.join(bundle_dir,depnm)
         if not os.path.exists(bdeppath):
@@ -164,7 +164,6 @@ if sys.platform in ("win32","darwin",):
       # Dependencies.  On win32 we just bundle everything, on OSX we call
       # a helper function that tracks (and re-writes) dependencies
       if sys.platform == "darwin":
-          print "DARMIN", fName, libroot
           osx_bundle_lib(os.path.join(libroot,fName))
           for fName in os.listdir(libroot):
               EAGER_RES.append("enchant/lib/" + fName)
