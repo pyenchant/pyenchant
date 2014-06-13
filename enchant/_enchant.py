@@ -63,12 +63,19 @@ e = None
 
 def _e_path_possibilities():
     """Generator yielding possible locations of the enchant library."""
+    # Allow it to be overridden using an environment variable.
     yield os.environ.get("PYENCHANT_LIBRARY_PATH")
+    # For linuxish systems, allow default soname lookup a chance to succeed.
+    if sys.platform not in ("win32", "darwin"):
+        yield "libenchant.so.1.6.0"
+        yield "libenchant.so.1"
+        yield "libenchant.so"
+    # See if ctypes can find the library for us, under various names.
     yield find_library("enchant")
     yield find_library("libenchant")
     yield find_library("libenchant-1")
+    # Special-case handling for enchant installed by macports.
     if sys.platform == 'darwin':
-         # enchant lib installed by macports
          yield "/opt/local/lib/libenchant.dylib"
 
 
