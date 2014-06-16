@@ -12,40 +12,17 @@ This page offers a quick tutorial to get up and running with the PyEnchant packa
 Installing PyEnchant
 ====================
 
-Windows Users
--------------
-
-Download the pre-built Windows installer from the download page and run it to install PyEnchant. It will place the 'enchant' module in your Python site-packages directory.
-
-As of PyEnchant 1.5.0 there is a single installer for all versions of Python. It has been successfully testing with Python 2.5 and Python 2.6.
-
-
-Mac OS X Users
---------------
-
-Download the pre-built OSX installer from the download page and execute it in the finder. It will place the 'enchant' module in your Python site-packages directory.
-
-There are also eggs available for users who prefer them.
-
-
-Other Platforms
----------------
+Installing the Package
+----------------------
 
 Your operating system distributor may provide PyEnchant via their own packaging system - please check there first.
 
-If a package is not provided by your operating system distributor, you will need to install from source.
+If a package is not provided by your operating system distributor, you will need to install one of the pre-build binary distributions or build the package from source.  The easiest way to install PyEnchant is via `pip <<a href="http://pip.readthedocs.org/en/latest/">`_ which will locate and install the appropriate pre-built distribution for your platform.  Simply::
 
-If you have an active internet connection, the following procedure will automatically download any additional files required to complete the installation. If not, you need to ensure that you have the latest version of setuptools installed. The `Easy Install Setup Guide <http://peak.telecommunity.com/DevCenter/EasyInstall#installation-instructions>`_ might help you here.
+    pip install pyenchant
 
-   1. Install Enchant as described on the `enchant website <http://www.abisource.com/enchant/>`_.
-   2. Install PyEnchant using the standard Python setuptools procedure:
-         1. :doc:`Download<download>` and untar the source files.
-         2. Enter the distribution directory, which contains the file 'setup.py'.
-         3. Execute the command::
 
-                python setup.py install
-
-         4. Please refer to the `distutils documentation <http://docs.python.org/inst/inst.html>`_ and the following `notes on setuptools <http://peak.telecommunity.com/DevCenter/setuptools#what-your-users-should-know>`_ for help on installing Python modules in this manner. 
+Windows users may also download the pre-built Windows installer from the download page and run it to install PyEnchant. It will place the 'enchant' module in your Python site-packages directory.
 
 
 Adding Language Dictionaries
