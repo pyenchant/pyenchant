@@ -7,3 +7,7 @@ PyEnchant:
   * rename "tokenize", it tends to conflict with the top-level stdlib
     module of the same name (although I've no idea why)
 
+Distribution:
+
+  * mark our wheels as "platlib" when bundling dependencies
+
