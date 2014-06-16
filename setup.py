@@ -12,8 +12,6 @@ except ImportError:
     ez_setup.use_setuptools()
     from setuptools import setup, find_packages, Extension
 
-from distutils.archive_util import make_archive
-
 import sys
 import os
 import shutil
@@ -231,41 +229,3 @@ setup(name=NAME,
       include_package_data=True,
       test_suite="enchant.tests.buildtestsuite",
      )
-
-
-dist_dir = os.path.join(os.path.dirname(__file__),"dist")
-if os.path.exists(dist_dir):
-  for nm in os.listdir(dist_dir):
-    #  Rename any eggs to make it clear they're platform-specific.
-    #  This isn't done by default because we don't build any extension modules,
-    #  but rather bundle our libs as data_files.
-    if nm.endswith("py%d.%d.egg" % sys.version_info[:2]):
-        if sys.platform == "win32":
-            platform = "win32"
-        elif sys.platform == "darwin":
-            platform = "macosx-10.4-universal"
-        else:
-            continue
-        newname = nm.rsplit(".",1)[0] + "-" + platform + ".egg"
-        newpath = os.path.join(dist_dir,newname)
-        if os.path.exists(newpath):
-            os.unlink(newpath)
-        os.rename(os.path.join(dist_dir,nm),newpath)
-    #  Rename any mpkgs to give better platform info, and zip them up
-    #  for easy uploading to PyPI.
-    elif nm.endswith(".mpkg"):
-        if sys.platform != "darwin":
-            continue
-        platform = "macosx-10.4-universal"
-        if platform in nm:
-            continue
-        newname = nm.rsplit("macosx",1)[0] + platform + ".mpkg"
-        newpath = os.path.join(dist_dir,newname)
-        if os.path.exists(newpath):
-            shutil.rmtree(newpath)
-        os.rename(os.path.join(dist_dir,nm),newpath)
-        if os.path.exists(newpath+".zip"):
-            os.unlink(newpath+".zip")
-        make_archive(newpath,"zip",dist_dir,newname)
-        shutil.rmtree(newpath)
-
