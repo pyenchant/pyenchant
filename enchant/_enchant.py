@@ -137,7 +137,10 @@ if e is None:
 
 # No usable enchant install was found :-(
 if e is None:
-   raise ImportError("enchant C library not found")
+   msg = "The 'enchant' C library was not found. "\
+         "Please install it via your OS package manager, "\
+         "or use a pre-built binary wheel from PyPI."
+   raise ImportError(msg)
 
 
 # Define various callback function types
@@ -331,5 +334,4 @@ def dict_describe(dict,cbfunc):
     def cbfunc1(tag,name,desc,file,data):
         cbfunc(tag,name,desc,file)
     dict_describe1(dict,t_dict_desc_func(cbfunc1),None)
-
 
