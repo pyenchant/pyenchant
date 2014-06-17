@@ -24,49 +24,21 @@ More information is available on the Enchant website:
 How do I use it?
 ----------------
 
-For Windows users, there is an executable installer program which can be
-used to install the software with a minimum of effort.  Other users will
-need to install from source.
+For Windows and OSX users, install the pre-built binary packages using
+pip::
+
+    pip install pyenchant
+
+
+These packages bundle a pre-built copy of the underlying enchant library.
+Users on other platforms will need to install "enchant" using their system
+package manager.
 
 Once the software is installed, python's on-line help facilities can
 get you started.  Launch python and issue the following commands:
 
     >>> import enchant
     >>> help(enchant)
-
-
-Installing with the Windows Installer
--------------------------------------
-
-Download and run the windows installer program.  It will automatically
-detect your python installation and set up pyenchant accordingly.
-
-The windows installer version provides a pre-compiled enchant library
-as well as several supporting libraries.  Several commonly-used
-dictionaries are installed into:
-
-    <YOUR_PYTHON_ROOT>\Lib\site-packages\enchant\share\enchant\myspell.
-
-Additional language dictionaries are available from the OpenOffice.org
-project, and are available at:
-
-    http://wiki.services.openoffice.org/wiki/Dictionaries
-    
-Download the appropriate zip for for the language of interest, and
-unzip its contents into the "myspell" directory mentioned above.
-
-
-Installing from Source
-----------------------
-
-First, you must already have the enchant library installed on our system.
-You will also need access to a C compiler.
-
-This package is distributed using the Python 'setuptools' framework.
-If you have the necessary prerequisites, all that should be required to
-install is to execute the following command in the current directory:
-
-    python setup.py install
 
 
 
