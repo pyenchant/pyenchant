@@ -117,6 +117,8 @@ if e is None and sys.platform == "darwin":
       e = CDLL(e_path)
       try:
           e_dir = os.path.dirname(os.path.dirname(e_path))
+          if isinstance(e_dir,unicode):
+              e_dir = e_dir.encode(sys.getfilesystemencoding())
           prefix_dir = POINTER(c_char_p).in_dll(e,"enchant_prefix_dir_p")
           prefix_dir.contents = c_char_p(e_dir)
       except AttributeError:
