@@ -185,6 +185,7 @@ class TestDict(unittest.TestCase):
         self.assertTrue(self.dict.check("test"))
         self.assertFalse(self.dict.check("helo"))
         self.assertFalse(self.dict.check("testt"))
+        self.assertRaises(ValueError, self.dict.check, "")
         
     def test_broker(self):
         """Test that the dict's broker is set correctly."""
@@ -198,6 +199,7 @@ class TestDict(unittest.TestCase):
         """Test that suggest() gets simple suggestions right."""
         self.assertTrue(self.dict.check("hello"))
         self.assertTrue("hello" in self.dict.suggest("helo"))
+        self.assertRaises(ValueError, self.dict.suggest, "")
 
     def test_suggestHang1(self):
         """Test whether suggest() hangs on some inputs (Bug #1404196)"""

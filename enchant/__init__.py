@@ -633,6 +633,10 @@ class Dict(_EnchantObject):
         """
         self._check_this()
         word = EnchantStr(word)
+        # Enchant asserts that the word is non-empty.
+        # Check it up-front to avoid nasty warnings on stderr.
+        if len(word) == 0:
+            raise ValueError("can't check spelling of empty string")
         val = _e.dict_check(self._this,word.encode())
         if val == 0:
             return True
@@ -648,6 +652,10 @@ class Dict(_EnchantObject):
         """
         self._check_this()
         word = EnchantStr(word)
+        # Enchant asserts that the word is non-empty.
+        # Check it up-front to avoid nasty warnings on stderr.
+        if len(word) == 0:
+            raise ValueError("can't suggest spellings for empty string")
         suggs = _e.dict_suggest(self._this,word.encode())
         return [word.decode(w) for w in suggs]
 
