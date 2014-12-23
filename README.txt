@@ -1,8 +1,8 @@
-pyenchant:  Python bindings for the Enchant spellchecker
+pyenchant:  Python bindings for the Enchant spell checker
 ========================================================
 
 This package provides a set of Python language bindings for the Enchant
-spellchecking library.  For more information, visit the project website:
+spell checking library.  For more information, visit the project website:
 
     http://packages.python.org/pyenchant/
 
@@ -11,7 +11,7 @@ What is Enchant?
 ----------------
 
 Enchant is used to check the spelling of words and suggest corrections
-for words that are miss-spelled.  It can use many popular spellchecking
+for words that are miss-spelled.  It can use many popular spell checking
 packages to perform this task, including ispell, aspell and MySpell.  It
 is quite flexible at handling multiple dictionaries and multiple
 languages.
@@ -50,15 +50,15 @@ on the Enchant website listed above.  Full marks to Dom for producing such
 a high-quality library.
 
 The glue to pull Enchant into Python via ctypes was written by me, Ryan Kelly.
-I needed a decent spellchecker for another project I am working on, and
+I needed a decent spell checker for another project I am working on, and
 all the solutions turned up by Google were either extremely non-portable
 (e.g. opening a pipe to ispell) or had completely disappeared from the web
 (what happened to SnakeSpell?)  It was also a great excuse to teach myself
 about SWIG, ctypes, and even a little bit of the Python/C API.
 
-Bugs can be filed on the project's github page:
+Bugs can be filed on the project's Github page:
 
-    http://github.com/rfk/pyenchant/issues
+    http://Github.com/rfk/pyenchant/issues
 
 Comments, suggestions, other feedback can be directed to the pyenchant-users
 mailing list:
