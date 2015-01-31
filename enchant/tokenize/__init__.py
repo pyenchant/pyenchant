@@ -90,7 +90,7 @@ For exmaple, to spellcheck an HTML document it is necessary to split the
 text into chunks based on HTML tags, and to filter out common word forms
 such as URLs and WikiWords.  This would look something like the following::
 
-    tknzr = get_tokenier("en_US",(HTMLChunker,),(URLFilter,WikiWordFilter)))
+    tknzr = get_tokenizer("en_US",(HTMLChunker,),(URLFilter,WikiWordFilter)))
 
     text = "<html><body>the url is http://example.com</body></html>"
     for (word,pos) in tknzer(text):

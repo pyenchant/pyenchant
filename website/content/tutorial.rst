@@ -305,7 +305,8 @@ A filter is simply a wrapper around a tokenizer that can (1) drop certain words 
   >>> from enchant.tokenize import get_tokenizer, EmailFilter
   >>> 
   >>> tknzr = get_tokenizer("en_US")
-  >>> [w for w in tknzr("send an email to fake@example.com please")] [('send', 0), ('an', 5), ('email', 8), ('to', 14), ('fake@example.com', 17), ('please', 34)]
+  >>> [w for w in tknzr("send an email to fake@example.com please")]
+  [('send', 0), ('an', 5), ('email', 8), ('to', 14), ('fake@example.com', 17), ('please', 34)]
   >>> 
   >>> tknzr = get_tokenizer("en_US",[EmailFilter])
   >>> [w for w in tknzr("send an email to fake@example.com please")]
