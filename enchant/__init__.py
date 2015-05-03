@@ -240,8 +240,11 @@ class Broker(_EnchantObject):
 
     def __del__(self):
         """Broker object destructor."""
-        if _e is not None:
+        # Calling free() might fail if python is shutting down
+        try:
             self._free()
+        except (AttributeError, TypeError):
+            pass
 
     def __getstate__(self):
         state = super(Broker,self).__getstate__()
