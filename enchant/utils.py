@@ -160,11 +160,17 @@ class EnchantStr(str):
     def encode(self):
         """Encode this string into a form usable by the enchant C library."""
         if str is unicode:
-          utf16_safe_string = "".join(c if ord(c) < 2**16 else REPLACEMENT_CHAR
-                                      for c in self)
-          return str.encode(utf16_safe_string, "utf-8")
+          unicode_chars = self
         else:
-          return self
+          unicode_chars = unicode(self, 'utf8', errors='replace')
+
+        utf16_safe_string = "".join(c if ord(c) < 2**16 else REPLACEMENT_CHAR
+                                    for c in unicode_chars)
+
+        if str is unicode:
+            return bytes(utf16_safe_string, "utf8")
+        else:
+            return utf16_safe_string.encode("utf8")
 
     def decode(self,value):
         """Decode a string returned by the enchant C library."""
