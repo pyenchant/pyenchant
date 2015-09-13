@@ -31,21 +31,21 @@
 
 enchant.utils:    Misc utilities for the enchant package
 ========================================================
-    
+
 This module provides miscellaneous utilities for use with the
 enchant spellchecking package.  Currently available functionality
 includes:
-        
+
     * string/unicode compatibility wrappers
     * functions for dealing with locale/language settings
     * ability to list supporting data files (win32 only)
     * functions for bundling supporting data files from a build
-      
+
 """
 
+import codecs
 import os
 import sys
-import codecs
 
 from enchant.errors import *
 
@@ -77,11 +77,16 @@ except NameError:
     unicode = str
     bytes = bytes
     basestring = (str,bytes)
+    chr = chr
 else:
     str = str
     unicode = unicode
     bytes = str
     basestring = basestring
+    chr = unichr
+
+# Defines the UNICODE replacement character
+REPLACEMENT_CHAR = chr(2**16 - 3)
 
 def raw_unicode(raw):
     """Make a unicode string from a raw string.
@@ -112,7 +117,7 @@ def raw_bytes(raw):
     to produce a bytes object.
     """
     return codecs.escape_decode(raw)[0]
-        
+
 
 class EnchantStr(str):
     """String subclass for interfacing with enchant C library.
@@ -155,7 +160,9 @@ class EnchantStr(str):
     def encode(self):
         """Encode this string into a form usable by the enchant C library."""
         if str is unicode:
-          return str.encode(self,"utf-8")
+          utf16_safe_string = "".join(c if ord(c) < 2**16 else REPLACEMENT_CHAR
+                                      for c in self)
+          return str.encode(utf16_safe_string, "utf-8")
         else:
           return self
 
@@ -164,7 +171,7 @@ class EnchantStr(str):
         if self._was_unicode:
           if str is unicode:
             # On some python3 versions, ctypes converts c_char_p
-            # to str() rather than bytes()   
+            # to str() rather than bytes()
             if isinstance(value,str):
                 value = value.encode()
             return value.decode("utf-8")
@@ -213,7 +220,7 @@ def levenshtein(s1, s2):
         return levenshtein(s2, s1)
     if not s1:
         return len(s2)
- 
+
     previous_row = xrange(len(s2) + 1)
     for i, c1 in enumerate(s1):
         current_row = [i + 1]
@@ -223,7 +230,7 @@ def levenshtein(s1, s2):
             substitutions = previous_row[j] + (c1 != c2)
             current_row.append(min(insertions, deletions, substitutions))
         previous_row = current_row
- 
+
     return previous_row[-1]
 
 
@@ -245,22 +252,22 @@ def trim_suggestions(word,suggs,maxlen,calcdist=None):
     decorated = [(calcdist(word,s),s) for s in suggs]
     decorated.sort()
     return [s for (l,s) in decorated[:maxlen]]
-    
+
 
 
 def get_default_language(default=None):
     """Determine the user's default language, if possible.
-    
+
     This function uses the 'locale' module to try to determine
     the user's preferred language.  The return value is as
     follows:
-        
+
         * if a locale is available for the LC_MESSAGES category,
           that language is used
         * if a default locale is available, that language is used
         * if the keyword argument <default> is given, it is used
         * if nothing else works, None is returned
-        
+
     Note that determining the user's language is in general only
     possible if they have set the necessary environment variables
     on their system.
@@ -313,13 +320,13 @@ def get_resource_filename(resname):
 
 def win32_data_files():
     """Get list of supporting data files, for use with setup.py
-    
+
     This function returns a list of the supporting data files available
     to the running version of PyEnchant.  This is in the format expected
     by the data_files argument of the distutils setup function.  It's
     very useful, for example, for including the data files in an executable
     produced by py2exe.
-    
+
     Only really tested on the win32 platform (it's the only platform for
     which we ship our own supporting data files)
     """
@@ -352,4 +359,3 @@ def win32_data_files():
         dataFiles.append((dataDir,files))
     return dataFiles
 win32_data_files._DOC_ERRORS = ["py","py","exe"]
-
