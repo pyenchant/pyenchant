@@ -32,7 +32,7 @@
     enchant._enchant:  ctypes-based wrapper for enchant C library
 
     This module implements the low-level interface to the underlying
-    C library for enchant.  The interface is based on ctypes and tries 
+    C library for enchant.  The interface is based on ctypes and tries
     to do as little as possible while making the higher-level components
     easier to write.
 
@@ -117,10 +117,11 @@ if e is None and sys.platform == "darwin":
       e = CDLL(e_path)
       try:
           e_dir = os.path.dirname(os.path.dirname(e_path))
-          if isinstance(e_dir,unicode):
-              e_dir = e_dir.encode(sys.getfilesystemencoding())
           prefix_dir = POINTER(c_char_p).in_dll(e,"enchant_prefix_dir_p")
-          prefix_dir.contents = c_char_p(e_dir)
+          if sys.version_info >= 3:
+              prefix_dir.contents = c_char_p(bytes(e_dir, 'utf-8'))
+          else:
+              prefix_dir.contents = c_char_p(e_dir)
       except AttributeError:
           e = None
 
