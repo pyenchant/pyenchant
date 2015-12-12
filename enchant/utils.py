@@ -57,7 +57,7 @@ except ImportError:
 
 
 #
-#  Unicode/Bytes compatabilty wrappers.
+#  Unicode/Bytes compatibility wrappers.
 #
 #  These allow us to support both Python 2.x and Python 3.x from
 #  the same codebase.
@@ -175,9 +175,9 @@ class EnchantStr(str):
 
 
 def printf(values,sep=" ",end="\n",file=None):
-    """Compatability wrapper from print statement/function.
+    """Compatibility wrapper from print statement/function.
 
-    This function is a simple Python2/Python3 compatability wrapper
+    This function is a simple Python2/Python3 compatibility wrapper
     for printing to stdout.
     """
     if file is None:
@@ -190,7 +190,7 @@ try:
     next = next
 except NameError:
     def next(iter):
-        """Compatability wrapper for advancing an iterator."""
+        """Compatibility wrapper for advancing an iterator."""
         return iter.next()
 
 try:

@@ -113,7 +113,7 @@ if e is None and sys.platform == "darwin":
   else:
       # Enchant doesn't natively support relocatable binaries on OSX.
       # We fake it by patching the enchant source to expose a char**, which
-      # we can write the runtime path into ourelves.
+      # we can write the runtime path into ourselves.
       e = CDLL(e_path)
       try:
           e_dir = os.path.dirname(os.path.dirname(e_path))

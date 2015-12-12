@@ -925,7 +925,7 @@ def get_enchant_version():
     return _e.get_version()
 
 
-# Run unit tests when called from comand-line
+# Run unit tests when called from command-line
 if __name__ == "__main__":
     import sys
     import enchant.tests

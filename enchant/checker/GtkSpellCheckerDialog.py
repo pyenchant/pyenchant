@@ -79,8 +79,8 @@ class GtkSpellCheckerDialog(gtk.Window):
         hbox.pack_start(box1,padding=5)
         conditional(box1)
 
-        # unreconized word
-        text_view_lable = gtk.Label('Unreconized word')
+        # unrecognized word
+        text_view_lable = gtk.Label('Unrecognized word')
         text_view_lable.set_justify(gtk.JUSTIFY_LEFT)
         box1.pack_start(text_view_lable,False,False)
 
@@ -222,7 +222,7 @@ class GtkSpellCheckerDialog(gtk.Window):
             model.append([value,])
 
     def setSpellChecker(self,checker):
-        assert checker,'checker cant be None'
+        assert checker,'checker can't be None'
         self._checker = checker
         self._dict_lable.set_text('Dictionary:%s'%(checker.dict.tag,))
 

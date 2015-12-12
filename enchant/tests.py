@@ -130,7 +130,7 @@ class TestBroker(unittest.TestCase):
                 self.assertEqual((d.provider,tag),(prov,tag))
                 del d
                 del b2
-        # Place providers that dont have the language in the ordering
+        # Place providers that don't have the language in the ordering
         for tag in langs:
             for prov in langs[tag]:
                 order = prov.name
@@ -252,7 +252,7 @@ class TestDict(unittest.TestCase):
         """Test behaviour of default language selection."""
         defLang = utils.get_default_language()
         if defLang is None:
-            # If no default language, shouldnt work
+            # If no default language, shouldn't work
             self.assertRaises(Error,Dict)
         else:
             # If there is a default language, should use it
@@ -264,7 +264,7 @@ class TestDict(unittest.TestCase):
                 pass
 
     def test_pickling(self):
-        """Test that pickling doensn't corrupt internal state."""
+        """Test that pickling doesn't corrupt internal state."""
         d1 = Dict("en")
         self.assertTrue(d1.check("hello"))
         d2 = pickle.loads(pickle.dumps(d1))
