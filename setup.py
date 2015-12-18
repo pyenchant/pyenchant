@@ -64,7 +64,7 @@ def osx_make_lib_relocatable(libpath,bundle_dir=None):
     """Make an OSX dynamic lib re-locatable by changing dep paths.
 
     This function adjusts the path information stored in the given dynamic
-    library, so that is can be bundled into a directory and restributed.
+    library, so that is can be bundled into a directory and redistributed.
     It returns a list of any dependencies that must also be included in the
     bundle directory.
     """

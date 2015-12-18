@@ -161,7 +161,7 @@ class tokenize(enchant.tokenize.tokenize):
                     else:
                         break
                 offset += incr
-            # Return if word isnt empty
+            # Return if word isn't empty
             if(curPos != offset):
                 # Make sure word doesn't end with a valid_char
                 while text[offset-1] in self._valid_chars:

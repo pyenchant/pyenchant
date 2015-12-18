@@ -3,7 +3,7 @@
 
     * New website and documentation, generated with Hyde and Sphinx.
     * Fix SpellChecker.replace() when the replacement is shorter than
-      the erroroneous word; previously this would corrupt the internal
+      the erroneous word; previously this would corrupt the internal
       state of the tokenizer.  Thanks Steckelfisch.
     * Make Dict class pickle-safe.  Among other things, this should help
       with strange deadlocks when used with the multiprocessing module.
@@ -18,7 +18,7 @@
 
 1.6.5:
 
-    * restore compatability with Python 3 (including 3.2 beta1).
+    * restore compatibility with Python 3 (including 3.2 beta1).
     * fix unittest DeprecationWarnings on Python 3.
     * statically compile libstdc++ into pre-built windows binaries.
 
@@ -35,7 +35,7 @@
     * Improved handling of unicode paths on win32.
     * Changed DLL loading logic for win32, to ensure that we don't accidentally
       load older versions of e.g. glib that may be on the DLL search path.
-    * Added function get_enchant_version() to retreive the version string for
+    * Added function get_enchant_version() to retrieve the version string for
       the underlying enchant library.
 
 1.6.2:

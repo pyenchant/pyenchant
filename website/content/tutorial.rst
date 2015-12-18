@@ -194,10 +194,10 @@ The module enchant.checker.wxSpellCheckerDialog provides the class wxSpellChecke
 
 It will pop up a simple spellchecking dialog like the one shown here. Each spelling error is highlighted in turn, with the buttons offering a range of options for how to deal with the error:
 
-    * Ignore: ignore the current occurence of the word
-    * Ignore All: ignore the current and all future occurances of the word
-    * Replace: replace the current occurence with the corrected word
-    * Replace All: replace the current and all future occurences with the corrected word
+    * Ignore: ignore the current occurrence of the word
+    * Ignore All: ignore the current and all future occurrences of the word
+    * Replace: replace the current occurrence with the corrected word
+    * Replace All: replace the current and all future occurrences with the corrected word
     * Add: add the word to the user's personal dictionary
 
 ::
@@ -257,7 +257,7 @@ As shown by this simple example, the CmdLineChecker prints each error it encount
 Tokenization: splitting text into words
 ---------------------------------------
 
-An important task in spellchecking is splitting a body of text up into its constituative words, each of which is then passed to a Dict object for checking. PyEnchant provides the enchant.tokenize module to assist with this task. The purpose of this module is to provide an appropriate tokenization function which can be used to split the text. Usually, all that is required is the get_tokenizer function::
+An important task in spellchecking is splitting a body of text up into its constitutive words, each of which is then passed to a Dict object for checking. PyEnchant provides the enchant.tokenize module to assist with this task. The purpose of this module is to provide an appropriate tokenization function which can be used to split the text. Usually, all that is required is the get_tokenizer function::
 
   >>> from enchant.tokenize import get_tokenizer
   >>> tknzr = get_tokenizer("en_US")
@@ -402,7 +402,7 @@ The following example states that for American English the MySpell provider shou
   >>> b.request_dict("en_GB").provider
   <Enchant: Aspell Provider>
 
-The user can also set their prefered ordering using enchant configuration files. For this reason, application programmers are discouraged from explicitly setting an ordering unless there is a compelling reason to do so.
+The user can also set their preferred ordering using enchant configuration files. For this reason, application programmers are discouraged from explicitly setting an ordering unless there is a compelling reason to do so.
 
 
 Extending enchant.tokenize
@@ -423,8 +423,8 @@ Packaging PyEnchant with py2exe
 -------------------------------
 
 
-PyEnchant depends on a large number of auxilliary files such as plugin libraries, dictionary files, etc. While py2exe does an excellent job of detecting static file dependencies, it cannot detect these files which are located at runtime.
+PyEnchant depends on a large number of auxiliary files such as plugin libraries, dictionary files, etc. While py2exe does an excellent job of detecting static file dependencies, it cannot detect these files which are located at runtime.
 
-To successfully package an application that uses PyEnchant, these auxilliary files must be explicitly included in the "data_files" argument to the setup function. The function enchant.utils.win32_data_files returns a list of files which can be used for this purpose.
+To successfully package an application that uses PyEnchant, these auxiliary files must be explicitly included in the "data_files" argument to the setup function. The function enchant.utils.win32_data_files returns a list of files which can be used for this purpose.
 
 
