@@ -53,7 +53,7 @@ lang = "en_US"
 #wordsfile = "/usr/share/dict/words"
 wordsfile = "words"
 
-# Corrections to make the the 'correct' words in the tests
+# Corrections to make the 'correct' words in the tests
 # This is so we can use unmodified tests published by third parties
 corrections = (("caesar","Caesar"),("confucianism","Confucianism"),("february","February"),("gandhi","Gandhi"),("muslims","Muslims"),("israel","Israel"))
 
