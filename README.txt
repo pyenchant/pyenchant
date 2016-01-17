@@ -58,7 +58,7 @@ about SWIG, ctypes, and even a little bit of the Python/C API.
 
 Bugs can be filed on the project's github page:
 
-    http://github.com/rfk/pyenchant/issues
+    https://github.com/rfk/pyenchant/issues
 
 Comments, suggestions, other feedback can be directed to the pyenchant-users
 mailing list:
