@@ -46,7 +46,7 @@ context:
                 description: Code
                 type: page
                 url: >
-                     http://github.com/rfk/pyenchant/
+                     https://github.com/rfk/pyenchant/
 
 meta:
     nodemeta: meta.yaml
