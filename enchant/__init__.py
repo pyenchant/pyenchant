@@ -9,7 +9,7 @@
 #
 # This library is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPsE.  See the GNU
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Lesser General Public License for more details.
 #
 # You should have received a copy of the GNU Lesser General Public
@@ -219,7 +219,7 @@ class Broker(_EnchantObject):
 
         * dict_exists:   check existence of a specific language dictionary
         * request_dict:  obtain a dictionary for specific language
-        * set_ordering:  specify which dictionaries to try for for a
+        * set_ordering:  specify which dictionaries to try for a
                          given language.
 
     """
