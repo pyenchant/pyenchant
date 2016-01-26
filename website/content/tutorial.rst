@@ -390,7 +390,7 @@ You may have noticed that the top-level functions provided by the enchant module
 Provider Ordering
 ~~~~~~~~~~~~~~~~~
 
-Which provider is used for which language is determined by the provider ordering of the Broker. This can be altered using the set_ordering method. This method accepts a language tag and a comma-seperated list of provider names in the order that they should be checked. A language tag of "*" means that the ordering should be the default for all languages where an explicit ordering has not been given.
+Which provider is used for which language is determined by the provider ordering of the Broker. This can be altered using the set_ordering method. This method accepts a language tag and a comma-separated list of provider names in the order that they should be checked. A language tag of "*" means that the ordering should be the default for all languages where an explicit ordering has not been given.
 
 The following example states that for American English the MySpell provider should be tried first, followed by the aspell provider. For all other languages, the ordering is reversed::
 
