@@ -58,6 +58,18 @@ colors = {
     'bold'           : "\x1b[1m"
 }
 
+def color(string, color='normal', prefix=''):
+    """
+    Change text color for the Linux terminal.
+
+    Args:
+        string (str): String to colorify
+        color (str): Color to colorify the string in the following list:
+            black, red, green, yellow, blue, purple, cyan, gr[ae]y
+        prefix (str): Prefix to add to string (ex: Beginning of line graphics)
+    """
+    return colors[color] + prefix + string + colors['normal']
+
 class CmdLineChecker:
     """A simple command-line spell checker.
 
