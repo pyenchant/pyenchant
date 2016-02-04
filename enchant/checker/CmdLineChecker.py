@@ -70,6 +70,18 @@ def color(string, color='normal', prefix=''):
     """
     return colors[color] + prefix + string + colors['normal']
 
+def success(string):
+    return "[" + color("+", color='green') + "] " + string
+
+def error(string):
+    return "[" + color("!", color='red') + "] " + string
+
+def warning(string):
+    return "[" + color("*", color='yellow') + "] " + string
+
+def info(string):
+    return "[" + color(".", color='blue') + "] " + string
+
 class CmdLineChecker:
     """A simple command-line spell checker.
 
