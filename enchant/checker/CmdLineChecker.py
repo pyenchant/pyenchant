@@ -107,8 +107,8 @@ class CmdLineChecker:
         self._stop = False
         for err in self._checker:
             self.error = err
-            printf(["ERROR:", err.word.encode('utf8')])
-            self.print_suggestions(err)
+            self.print_error()
+            self.print_suggestions()
             status = self.read_command()
             while not status and not self._stop:
                 status = self.read_command()
