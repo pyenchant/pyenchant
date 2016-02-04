@@ -117,15 +117,15 @@ class CmdLineChecker:
         printf(["DONE"])
 
     def print_help(self):
-        printf([color("0", color='yellow') + ".." + color("N", color='yellow') + ":\t" + color("replace", color='bold') + " with the numbered suggestion"])
-        printf([color("R", color='cyan') + color("0", color='yellow') + ".." + color("R", color='cyan') + color("N", color='yellow') + ":\t" + color("always replace", color='bold') + " with the numbered suggestion"])
-        printf([color("i", color='cyan') + ":\t" + color("ignore", color='bold') + " this word"])
-        printf([color("I", color='cyan') + ":\t" + color("always ignore", color='bold') + " this word"])
-        printf([color("a", color='cyan') + ":\t" + color("add", color='bold') + " word to personal dictionary"])
-        printf([color("e", color='cyan') + ":\t" + color("edit", color='bold') + " the word"])
-        printf([color("q", color='cyan') + ":\t" + color("quit", color='bold') + " checking"])
-        printf([color("h", color='cyan') + ":\tprint this " + color("help", color='bold') + " message"])
-        printf(["----------------------------------------------------"])
+        printf([info(color("0", color='yellow') + ".." + color("N", color='yellow') + ":\t" + color("replace", color='bold') + " with the numbered suggestion")])
+        printf([info(color("R", color='cyan') + color("0", color='yellow') + ".." + color("R", color='cyan') + color("N", color='yellow') + ":\t" + color("always replace", color='bold') + " with the numbered suggestion")])
+        printf([info(color("i", color='cyan') + ":\t\t" + color("ignore", color='bold') + " this word")])
+        printf([info(color("I", color='cyan') + ":\t\t" + color("always ignore", color='bold') + " this word")])
+        printf([info(color("a", color='cyan') + ":\t\t" + color("add", color='bold') + " word to personal dictionary")])
+        printf([info(color("e", color='cyan') + ":\t\t" + color("edit", color='bold') + " the word")])
+        printf([info(color("q", color='cyan') + ":\t\t" + color("quit", color='bold') + " checking")])
+        printf([info(color("h", color='cyan') + ":\t\tprint this " + color("help", color='bold') + " message")])
+        printf([info("----------------------------------------------------")])
         printf(["HOW ABOUT:", self.error.suggest()])
 
     def read_command(self):
