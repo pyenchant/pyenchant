@@ -116,6 +116,16 @@ class CmdLineChecker:
                 break
         printf(["DONE"])
 
+    def print_suggestions(self, error):
+        result = ""
+        suggestions = error.suggest()
+        for index, sugg in enumerate(suggestions):
+            if index is 0:
+                result = result + color(str(index), color='yellow') + ": " + color(sugg, color='bold')
+            else:
+                result = result + " | " + color(str(index), color='yellow') + ": " + color(sugg, color='bold')
+        printf([info("HOW ABOUT:"), result])
+
     def print_help(self):
         printf([info(color("0", color='yellow') + ".." + color("N", color='yellow') + ":\t" + color("replace", color='bold') + " with the numbered suggestion")])
         printf([info(color("R", color='cyan') + color("0", color='yellow') + ".." + color("R", color='cyan') + color("N", color='yellow') + ":\t" + color("always replace", color='bold') + " with the numbered suggestion")])
