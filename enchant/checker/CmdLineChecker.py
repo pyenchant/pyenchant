@@ -30,7 +30,7 @@
 """
 
     enchant.checker.CmdLineChecker:  Command-Line spell checker
-    
+
     This module provides the class CmdLineChecker, which interactively
     spellchecks a piece of text by interacting with the user on the
     command line.  It can also be run as a script to spellcheck a file.
@@ -42,9 +42,25 @@ import sys
 from enchant.checker import SpellChecker
 from enchant.utils import printf
 
+# Helpers
+
+colors = {
+    'normal'         : "\x1b[0m",
+    'black'          : "\x1b[30m",
+    'red'            : "\x1b[31m",
+    'green'          : "\x1b[32m",
+    'yellow'         : "\x1b[33m",
+    'blue'           : "\x1b[34m",
+    'purple'         : "\x1b[35m",
+    'cyan'           : "\x1b[36m",
+    'grey'           : "\x1b[90m",
+    'gray'           : "\x1b[90m",
+    'bold'           : "\x1b[1m"
+}
+
 class CmdLineChecker:
     """A simple command-line spell checker.
-    
+
     This class implements a simple command-line spell checker.  It must
     be given a SpellChecker instance to operate on, and interacts with
     the user by printing instructions on stdout and reading commands from
@@ -55,13 +71,13 @@ class CmdLineChecker:
     def __init__(self):
         self._stop = False
         self._checker = None
-        
+
     def set_checker(self,chkr):
         self._checker = chkr
-    
+
     def get_checker(self,chkr):
         return self._checker
-        
+
     def run(self):
         """Run the spellchecking loop."""
         self._stop = False
@@ -75,7 +91,7 @@ class CmdLineChecker:
             if self._stop:
                 break
         printf(["DONE"])
-    
+
     def print_help(self):
         printf(["0..N:    replace with the numbered suggestion"])
         printf(["R0..rN:  always replace with the numbered suggestion"])
@@ -87,14 +103,14 @@ class CmdLineChecker:
         printf(["h:       print this help message"])
         printf(["----------------------------------------------------"])
         printf(["HOW ABOUT:", self.error.suggest()])
-    
+
     def read_command(self):
         try:
             cmd = raw_input(">> ") # Python 2.x
         except NameError:
             cmd = input(">> ") # Python 3.x
         cmd = cmd.strip()
-        
+
         if cmd.isdigit():
             repl = int(cmd)
             suggs = self.error.suggest()
@@ -104,7 +120,7 @@ class CmdLineChecker:
             printf(["Replacing '%s' with '%s'" % (self.error.word,suggs[repl])])
             self.error.replace(suggs[repl])
             return True
-        
+
         if cmd[0] == "R":
             if not cmd[1:].isdigit():
                 printf(["Badly formatted command (try 'help')"])
@@ -116,34 +132,34 @@ class CmdLineChecker:
                 return False
             self.error.replace_always(suggs[repl])
             return True
-        
+
         if cmd == "i":
             return True
-        
+
         if cmd == "I":
             self.error.ignore_always()
             return True
-            
+
         if cmd == "a":
             self.error.add()
             return True
-        
+
         if cmd == "e":
             repl = raw_input("New Word: ")
             self.error.replace(repl.strip())
             return True
-             
+
         if cmd == "q":
             self._stop = True
             return True
-        
+
         if "help".startswith(cmd.lower()):
             self.print_help()
             return False
-        
+
         printf(["Badly formatted command (try 'help')"])
         return False
-        
+
     def run_on_file(self,infile,outfile=None,enc=None):
         """Run spellchecking on the named file.
         This method can be used to run the spellchecker over the named file.
@@ -171,7 +187,7 @@ class CmdLineChecker:
         outF.write(outStr)
         outF.close()
     run_on_file._DOC_ERRORS = ["outfile","infile","outfile","stdout"]
-        
+
 def _run_as_script():
     """Run the command-line spellchecker as a script.
     This function allows the spellchecker to be invoked from the command-line
@@ -197,8 +213,8 @@ def _run_as_script():
     cmdln = CmdLineChecker()
     cmdln.set_checker(chkr)
     cmdln.run_on_file(args[0],opts.outfile,opts.enc)
-    
 
-    
+
+
 if __name__ == "__main__":
     _run_as_script()
