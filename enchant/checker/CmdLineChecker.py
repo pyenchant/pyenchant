@@ -143,7 +143,7 @@ class CmdLineChecker:
         printf([info(color("q", color='cyan') + ":\t\t" + color("quit", color='bold') + " checking")])
         printf([info(color("h", color='cyan') + ":\t\tprint this " + color("help", color='bold') + " message")])
         printf([info("----------------------------------------------------")])
-        self.print_suggestions(self.error)
+        self.print_suggestions()
 
     def read_command(self):
         try:
