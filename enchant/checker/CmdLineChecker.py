@@ -116,9 +116,16 @@ class CmdLineChecker:
                 break
         printf(["DONE"])
 
-    def print_suggestions(self, error):
+    def print_error(self):
+        error_string = self.error.leading_context(100) + color(self.error.word, color='red') + self.error.trailing_context(100)
+        printf([error("ERROR: %s" % color(self.error.word, color='red'))])
+        printf([info("")])
+        for line in error_string.split("\n"):
+            printf([info(line)])
+
+    def print_suggestions(self):
         result = ""
-        suggestions = error.suggest()
+        suggestions = self.error.suggest()
         for index, sugg in enumerate(suggestions):
             if index is 0:
                 result = result + color(str(index), color='yellow') + ": " + color(sugg, color='bold')
