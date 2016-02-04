@@ -106,13 +106,13 @@ class CmdLineChecker:
 
     def print_help(self):
         printf([color("0", color='yellow') + ".." + color("N", color='yellow') + ":\t" + color("replace", color='bold') + " with the numbered suggestion"])
-        printf(["R" + color("0", color='yellow') + "..R" + color("N", color='yellow') + ":\t" + color("always replace", color='bold') + " with the numbered suggestion"])
-        printf(["i:\t" + color("ignore", color='bold') + " this word"])
-        printf(["I:\t" + color("always ignore", color='bold') + " this word"])
-        printf(["a:\t" + color("add", color='bold') + " word to personal dictionary"])
-        printf(["e:\t" + color("edit", color='bold') + " the word"])
-        printf(["q:\t" + color("quit", color='bold') + " checking"])
-        printf(["h:\tprint this " + color("help", color='bold') + " message"])
+        printf([color("R", color='cyan') + color("0", color='yellow') + ".." + color("R", color='cyan') + color("N", color='yellow') + ":\t" + color("always replace", color='bold') + " with the numbered suggestion"])
+        printf([color("i", color='cyan') + ":\t" + color("ignore", color='bold') + " this word"])
+        printf([color("I", color='cyan') + ":\t" + color("always ignore", color='bold') + " this word"])
+        printf([color("a", color='cyan') + ":\t" + color("add", color='bold') + " word to personal dictionary"])
+        printf([color("e", color='cyan') + ":\t" + color("edit", color='bold') + " the word"])
+        printf([color("q", color='cyan') + ":\t" + color("quit", color='bold') + " checking"])
+        printf([color("h", color='cyan') + ":\tprint this " + color("help", color='bold') + " message"])
         printf(["----------------------------------------------------"])
         printf(["HOW ABOUT:", self.error.suggest()])
 
