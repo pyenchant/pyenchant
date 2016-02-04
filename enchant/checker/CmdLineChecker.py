@@ -224,7 +224,11 @@ class CmdLineChecker:
         if enc is not None:
             inStr = inStr.decode(enc)
         self._checker.set_text(inStr)
+        begin_msg = "Beginning spell check of %s" % infile
+        printf([info(begin_msg)])
+        printf([info("-" * len(begin_msg))])
         self.run()
+        printf([success("Completed spell check of %s" % infile)])
         outStr = self._checker.get_text()
         if enc is not None:
             outStr = outStr.encode(enc)
