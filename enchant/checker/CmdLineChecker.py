@@ -165,20 +165,20 @@ class CmdLineChecker:
             repl = int(cmd)
             suggs = self.error.suggest()
             if repl >= len(suggs):
-                printf(["No suggestion number", repl])
+                printf([warning("No suggestion number"), repl])
                 return False
-            printf(["Replacing '%s' with '%s'" % (self.error.word,suggs[repl])])
+            printf([success("Replacing '%s' with '%s'" % (color(self.error.word, color='red'),color(suggs[repl], color='green')))])
             self.error.replace(suggs[repl])
             return True
 
         if cmd[0] == "R":
             if not cmd[1:].isdigit():
-                printf(["Badly formatted command (try 'help')"])
+                printf([warning("Badly formatted command (try 'help')")])
                 return False
             repl = int(cmd[1:])
             suggs = self.error.suggest()
             if repl >= len(suggs):
-                printf(["No suggestion number", repl])
+                printf([warning("No suggestion number"), repl])
                 return False
             self.error.replace_always(suggs[repl])
             return True
@@ -195,7 +195,7 @@ class CmdLineChecker:
             return True
 
         if cmd == "e":
-            repl = raw_input("New Word: ")
+            repl = raw_input(info("New Word: "))
             self.error.replace(repl.strip())
             return True
 
@@ -207,7 +207,7 @@ class CmdLineChecker:
             self.print_help()
             return False
 
-        printf(["Badly formatted command (try 'help')"])
+        printf([warning("Badly formatted command (try 'help')")])
         return False
 
     def run_on_file(self,infile,outfile=None,enc=None):
@@ -263,8 +263,6 @@ def _run_as_script():
     cmdln = CmdLineChecker()
     cmdln.set_checker(chkr)
     cmdln.run_on_file(args[0],opts.outfile,opts.enc)
-
-
 
 if __name__ == "__main__":
     _run_as_script()
