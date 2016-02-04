@@ -105,14 +105,14 @@ class CmdLineChecker:
         printf(["DONE"])
 
     def print_help(self):
-        printf(["0..N:    replace with the numbered suggestion"])
-        printf(["R0..rN:  always replace with the numbered suggestion"])
-        printf(["i:       ignore this word"])
-        printf(["I:       always ignore this word"])
-        printf(["a:       add word to personal dictionary"])
-        printf(["e:       edit the word"])
-        printf(["q:       quit checking"])
-        printf(["h:       print this help message"])
+        printf([color("0", color='yellow') + ".." + color("N", color='yellow') + ":\t" + color("replace", color='bold') + " with the numbered suggestion"])
+        printf(["R" + color("0", color='yellow') + "..R" + color("N", color='yellow') + ":\t" + color("always replace", color='bold') + " with the numbered suggestion"])
+        printf(["i:\t" + color("ignore", color='bold') + " this word"])
+        printf(["I:\t" + color("always ignore", color='bold') + " this word"])
+        printf(["a:\t" + color("add", color='bold') + " word to personal dictionary"])
+        printf(["e:\t" + color("edit", color='bold') + " the word"])
+        printf(["q:\t" + color("quit", color='bold') + " checking"])
+        printf(["h:\tprint this " + color("help", color='bold') + " message"])
         printf(["----------------------------------------------------"])
         printf(["HOW ABOUT:", self.error.suggest()])
 
