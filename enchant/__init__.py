@@ -256,7 +256,7 @@ class Broker(_EnchantObject):
         err = _e.broker_get_error(self._this)
         if err == "" or err is None:
             raise eclass(default)
-        raise eclass(err)
+        raise eclass(EnchantStr("").decode(err))
 
     def _free(self):
         """Free system resource associated with a Broker object.
@@ -613,7 +613,7 @@ class Dict(_EnchantObject):
         err = _e.dict_get_error(self._this)
         if err == "" or err is None:
             raise eclass(default)
-        raise eclass(err)
+        raise eclass(EnchantStr("").decode(err))
 
     def _free(self):
         """Free the system resources associated with a Dict object.
