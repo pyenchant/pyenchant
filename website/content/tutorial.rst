@@ -17,7 +17,7 @@ Installing the Package
 
 Your operating system distributor may provide PyEnchant via their own packaging system - please check there first.
 
-If a package is not provided by your operating system distributor, you will need to install one of the pre-build binary distributions or build the package from source.  The easiest way to install PyEnchant is via `pip <<a href="http://pip.readthedocs.org/en/latest/">`_ which will locate and install the appropriate pre-built distribution for your platform.  Simply::
+If a package is not provided by your operating system distributor, you will need to install one of the pre-build binary distributions or build the package from source.  The easiest way to install PyEnchant is via `pip <http://pip.readthedocs.org/en/latest/>`_ which will locate and install the appropriate pre-built distribution for your platform.  Simply::
 
     pip install pyenchant
 
