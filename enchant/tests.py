@@ -438,7 +438,7 @@ class TestDocStrings(unittest.TestCase):
              "spellchecker","dialog","urls","wikiwords","enchantobject",
              "providerdesc", "spellcheck", "pwl", "aspell", "myspell",
              "docstring", "docstrings", "stopiteration", "pwls","pypwl",
-             "dictwithpwl","skippable","dicts","dict's","filenames",
+             "dictwithpwl","skippable","dicts","dict's","filenames","fr",
              "trie","api","ctypes","wxspellcheckerdialog","stateful",
              "cmdlinechecker","spellchecks","callback","clunkier","iterator",
              "ispell","cor","backends","subclasses","initialise","runtime"]
