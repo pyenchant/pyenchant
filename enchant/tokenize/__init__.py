@@ -395,17 +395,17 @@ class Filter(object):
         def next(self):
             # Try to get the next sub-token from word currently being split.
             # If unavailable, move on to the next word and try again.
-            try:
-                (word,pos) = next(self._curtok)
-                return (word,pos + self._curpos)
-            except StopIteration:
-                (word,pos) = next(self._tokenizer)
-                while self._skip(self._to_string(word)):
+            while True:
+                try:
+                    (word,pos) = next(self._curtok)
+                    return (word,pos + self._curpos)
+                except StopIteration:
                     (word,pos) = next(self._tokenizer)
-                self._curword = word
-                self._curpos = pos
-                self._curtok = self._split(word)
-                return self.next()
+                    while self._skip(self._to_string(word)):
+                        (word,pos) = next(self._tokenizer)
+                    self._curword = word
+                    self._curpos = pos
+                    self._curtok = self._split(word)
 
         def _to_string(self, word):
             if type(word) is array.array:
