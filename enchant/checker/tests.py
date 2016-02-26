@@ -234,7 +234,7 @@ class TestChecker(unittest.TestCase):
         for i,err in enumerate(chkr):
             err.replace("SPAM")
             assert i < 3
-        self.assertEquals(chkr.get_text(),". I SPAM SPAM SPAM.")
+        self.assertEqual(chkr.get_text(),". I SPAM SPAM SPAM.")
 
     def test_replace_with_empty_string(self):
         """Testcase for replacing with an empty string (bug #10)"""
@@ -243,7 +243,7 @@ class TestChecker(unittest.TestCase):
         for i,err in enumerate(chkr):
             err.replace("")
             assert i < 3
-        self.assertEquals(chkr.get_text(),". I   .")
+        self.assertEqual(chkr.get_text(),". I   .")
 
 
  
