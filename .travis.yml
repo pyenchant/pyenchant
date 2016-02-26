@@ -1,0 +1,18 @@
+#sudo: false
+
+language: python
+python:
+        - "2.6"
+        - "2.7"
+        - "3.4"
+        - "3.5"
+        - "pypy"
+
+install:
+        - "sudo apt-get install libenchant"
+
+script:
+        - python setup.py test
+
+notifications:
+        - email: ryan@rfk.id.au
