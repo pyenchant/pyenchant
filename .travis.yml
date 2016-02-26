@@ -12,7 +12,7 @@ python:
 addons:
   apt:
     packages:
-      - libenchant
+      - libenchant-dev
 
 script:
         - python setup.py test
