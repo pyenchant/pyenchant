@@ -85,9 +85,6 @@ else:
     basestring = basestring
     chr = unichr
 
-# Defines the UNICODE replacement character
-REPLACEMENT_CHAR = chr(2**16 - 3)
-
 def raw_unicode(raw):
     """Make a unicode string from a raw string.
 
@@ -160,17 +157,9 @@ class EnchantStr(str):
     def encode(self):
         """Encode this string into a form usable by the enchant C library."""
         if str is unicode:
-          unicode_chars = self
+          return str.encode(self,"utf-8")
         else:
-          unicode_chars = unicode(self, 'utf8', errors='replace')
-
-        utf16_safe_string = "".join(c if ord(c) < 2**16 else REPLACEMENT_CHAR
-                                    for c in unicode_chars)
-
-        if str is unicode:
-            return bytes(utf16_safe_string, "utf8")
-        else:
-            return utf16_safe_string.encode("utf8")
+          return self
 
     def decode(self,value):
         """Decode a string returned by the enchant C library."""
@@ -185,6 +174,29 @@ class EnchantStr(str):
             return value.decode("utf-8")
         else:
           return value
+
+
+class UTF16EnchantStr(EnchantStr):
+
+    # Defines the UNICODE replacement character
+    REPLACEMENT_CHAR = chr(2**16 - 3)
+
+    def encode(self):
+        """Encode this string into a form usable by the enchant C library."""
+        if str is unicode:
+            unicode_chars = self
+        else:
+            unicode_chars = unicode(self, 'utf8', errors='replace')
+
+        utf16_safe_string = "".join(c if ord(c) < 2**16
+                                      else self.REPLACEMENT_CHAR
+                                    for c in unicode_chars)
+
+        if str is unicode:
+            return bytes(utf16_safe_string, "utf8")
+        else:
+            return utf16_safe_string.encode("utf8")
+
 
 
 def printf(values,sep=" ",end="\n",file=None):

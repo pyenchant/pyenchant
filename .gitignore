@@ -5,6 +5,8 @@
 # *.[oa]
 *~
 *.pyc
+__pycache__/
+build/
 *.egg
 *.egg-info
 *.swp
