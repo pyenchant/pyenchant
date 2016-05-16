@@ -189,14 +189,14 @@ if sys.platform in ("win32","darwin",):
           if dictName[-3:] in ["txt","dic","aff"]:
             print("COPYING: " + dictName)
             shutil.copy(os.path.join(dictPath,dictName),
-			os.path.join(".","enchant","share","enchant","myspell"))
+                        os.path.join(".","enchant","share","enchant","myspell"))
       dictPath = os.path.join(BINDEPS,"share","enchant","ispell")
       if os.path.isdir(dictPath):
         for dictName in os.listdir(dictPath):
           if dictName.endswith("hash") or dictName == "README.txt":
             print("COPYING: " + dictName)
             shutil.copy(os.path.join(dictPath,dictName),
-			os.path.join(".","enchant","share","enchant","ispell"))
+                        os.path.join(".","enchant","share","enchant","ispell"))
   except EnvironmentError:
     (_,e,_) = sys.exc_info()
     if e.errno not in (errno.ENOENT,):

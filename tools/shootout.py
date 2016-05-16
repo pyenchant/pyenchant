@@ -109,7 +109,7 @@ for testcase in testcases:
             missed[dictnum].append(cor)
         # Check on the suggestions provided
         suggs = dict.suggest(mis)
-	if cor not in suggs:
+        if cor not in suggs:
             incorrect[dictnum].append((mis,cor))
             dists[dictnum].append(-1)
         else:
