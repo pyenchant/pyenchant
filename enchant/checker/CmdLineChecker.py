@@ -116,7 +116,9 @@ class CmdLineChecker:
                 break
 
     def print_error(self):
-        """Prints the misspelled word along with 100 characters of
+        """print the spelling error to the console.
+
+        Prints the misspelled word along with 100 characters of
         context on either side.  This number was arbitrarily chosen
         and could be modified to be tunable or changed entirely.
         It seems to be enough context to be helpful though
@@ -128,7 +130,8 @@ class CmdLineChecker:
             printf([info(line)])
 
     def print_suggestions(self):
-        """Prints out the suggestions for a given error
+        """Prints out the suggestions for a given error.
+
         This function will add vertical pipes to separate choices
         as well as the index of the replacement as expected by the replace function.
         I don't believe zero indexing is a problem as long as the user can see the numbers :)
