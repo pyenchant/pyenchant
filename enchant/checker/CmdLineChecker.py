@@ -68,7 +68,10 @@ def color(string, color='normal', prefix=''):
             black, red, green, yellow, blue, purple, cyan, gr[ae]y
         prefix (str): Prefix to add to string (ex: Beginning of line graphics)
     """
-    return colors[color] + prefix + string + colors['normal']
+    if sys.stdout.isatty():
+        return colors[color] + prefix + string + colors['normal']
+    else:
+        return prefix + string
 
 def success(string):
     return "[" + color("+", color='green') + "] " + string
