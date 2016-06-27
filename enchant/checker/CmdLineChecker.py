@@ -126,11 +126,23 @@ class CmdLineChecker:
         and could be modified to be tunable or changed entirely.
         It seems to be enough context to be helpful though
         """
-        error_string = self.error.leading_context(100) + color(self.error.word, color='red') + self.error.trailing_context(100)
+        error_string = self._build_context(self.error.get_text(), self.error.word, self.error.wordpos)
         printf([error("ERROR: %s" % color(self.error.word, color='red'))])
         printf([info("")])
-        for line in error_string.split("\n"):
-            printf([info(line)])
+        printf([info(error_string)])
+        printf([info("")])
+
+    @staticmethod
+    def _build_context(text, error_word, error_start):
+        """creates the context line.
+
+        This function will search forward and backward
+        from the error word to find the nearest newlines.
+        it will return this line with the error word
+        colored red."""
+        start_newline = text.rfind('\n', 0, error_start)
+        end_newline = text.find('\n', error_start)
+        return text[start_newline+1:end_newline].replace(error_word, color(error_word, color="red"))
 
     def print_suggestions(self):
         """Prints out the suggestions for a given error.
