@@ -7,6 +7,8 @@
 *.pyc
 __pycache__/
 build/
+dist/
+tools/pyenchant-bdist-osx-sources/enchant-1.*
 *.egg
 *.egg-info
 *.swp

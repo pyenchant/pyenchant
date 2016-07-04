@@ -6,7 +6,7 @@ ENCHANT_DIR = enchant-1.6.0
 
 CC = clang
 CXX = clang++ 
-CFLAGS =
+CFLAGS = -arch i386 -arch x86_64
 CXXFLAGS = $(CFLAGS)
 ENCHANT_CONFIG_OPTS = --enable-ispell --enable-myspell --disable-aspell --with-system-myspell=no
 ENCHANT_CFLAGS = `pkg-config --cflags gmodule-2.0`
