@@ -357,14 +357,10 @@ def win32_data_files():
     dataFiles = [('',[libEnchant])]
     #  And some specific supporting DLLs
     for dll in os.listdir(mainDir):
-        if not dll.endswith(".dll"):
-            continue
-        for prefix in ("iconv","intl","libglib","libgmodule"):
-            if dll.startswith(prefix):
-                break
-        else:
-            continue
-        dataFiles[0][1].append(os.path.join(mainDir,dll))
+        if dll.endswith(".dll"):
+            for prefix in ("iconv","intl","libglib","libgmodule"):
+                if dll.startswith(prefix):
+                    dataFiles[0][1].append(os.path.join(mainDir,dll))
     #  And anything found in the supporting data directories
     dataDirs = ("share/enchant/myspell","share/enchant/ispell","lib/enchant")
     for dataDir in dataDirs:
