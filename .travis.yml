@@ -3,11 +3,11 @@ sudo: false
 language: python
 
 python:
-        - "2.6"
-        - "2.7"
-        - "3.4"
-        - "3.5"
-        - "pypy"
+  - "2.6"
+  - "2.7"
+  - "3.4"
+  - "3.5"
+  - "pypy"
 
 addons:
   apt:
@@ -15,7 +15,7 @@ addons:
       - libenchant-dev
 
 script:
-        - python setup.py test
+  - python setup.py test
 
 notifications:
-        - email: ryan@rfk.id.au
+  - email: ryan@rfk.id.au

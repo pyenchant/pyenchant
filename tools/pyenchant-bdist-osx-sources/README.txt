@@ -7,14 +7,12 @@ In addition to enchant, we also ship some dependencies:
 
   * glib
   * gettext
-  * libiconv
+  * pcre
 
 These must be installed onto the build host using e.g. homebrew, and will be
 copied into place as required.  You might like to do something like:
 
-   brew install glib --universal
-
-In order to install them.
+   brew reinstall glib gettext pcre --universal --build-bottle
 
 In strict complince with the LGPL, I will provide copies of the source for
 these dependencies on request.  But I'm pretty sure everyone these days knows
