@@ -6,12 +6,13 @@ ENCHANT_DIR = enchant-1.6.0
 
 CC = clang
 CXX = clang++ 
-CFLAGS = -arch i386 -arch x86_64
+CFLAGS = -arch i386 -arch x86_64  -mmacosx-version-min=10.6
 CXXFLAGS = $(CFLAGS)
 ENCHANT_CONFIG_OPTS = --enable-ispell --enable-myspell --disable-aspell --with-system-myspell=no
 ENCHANT_CFLAGS = `pkg-config --cflags gmodule-2.0`
 ENCHANT_LIBS = `pkg-config --libs gmodule-2.0`
 LDFLAGS = -L$(BUILD_DIR)/lib
+ENV = OSX_DEPLOYMENT_TARGET=10.6
 
 
 all: $(BUILD_DIR)/lib/libenchant.1.dylib $(BUILD_DIR)/share/enchant/myspell/en_GB.dic \
@@ -30,7 +31,7 @@ $(ENCHANT_DIR)/Makefile:
 	patch $(ENCHANT_DIR)/src/enchant.c < patches/relocatable.patch
 	patch $(ENCHANT_DIR)/src/enchant.c < patches/prefixdir_c.patch
 	patch $(ENCHANT_DIR)/src/enchant.h < patches/prefixdir_h.patch
-	cd $(ENCHANT_DIR) && ./configure CC=$(CC) CXX=$(CXX) CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" LDFLAGS=$(LDFLAGS) ENCHANT_CFLAGS="$(ENCHANT_CFLAGS)" ENCHANT_LIBS="$(ENCHANT_LIBS)" $(ENCHANT_CONFIG_OPTS) --prefix=$(BUILD_DIR);
+	cd $(ENCHANT_DIR) && $(ENV) ./configure CC=$(CC) CXX=$(CXX) CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" LDFLAGS=$(LDFLAGS) ENCHANT_CFLAGS="$(ENCHANT_CFLAGS)" ENCHANT_LIBS="$(ENCHANT_LIBS)" $(ENCHANT_CONFIG_OPTS) --prefix=$(BUILD_DIR);
 
 
 $(BUILD_DIR)/share/enchant/myspell/%.dic: $(BUILD_DIR)/share/enchant/myspell/%.zip
