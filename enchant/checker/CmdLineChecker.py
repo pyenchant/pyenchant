@@ -42,6 +42,12 @@ import sys
 from enchant.checker import SpellChecker
 from enchant.utils import printf
 
+try:
+  get_input = raw_input # Python 2.x
+except NameError:
+  get_input = input # Python 3.x
+
+
 class CmdLineChecker:
     """A simple command-line spell checker.
     
@@ -89,10 +95,7 @@ class CmdLineChecker:
         printf(["HOW ABOUT:", self.error.suggest()])
     
     def read_command(self):
-        try:
-            cmd = raw_input(">> ") # Python 2.x
-        except NameError:
-            cmd = input(">> ") # Python 3.x
+        cmd = get_input(">> ") # Python 2.x
         cmd = cmd.strip()
         
         if cmd.isdigit():
@@ -129,7 +132,7 @@ class CmdLineChecker:
             return True
         
         if cmd == "e":
-            repl = raw_input("New Word: ")
+            repl = get_input("New Word: ")
             self.error.replace(repl.strip())
             return True
              
