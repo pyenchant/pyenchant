@@ -280,7 +280,7 @@ A chunker is simply a special tokenizer function that breaks text up into large 
 
   >>> from enchant.tokenize import get_tokenizer, HTMLChunker
   >>> 
-  >>> tknzr = get_tokenizer("en_US"])
+  >>> tknzr = get_tokenizer("en_US")
   >>> [w for w in tknzr("this is <span class='important'>really important</span> text")]
   [('this', 0), ('is', 5), ('span', 9), ('class', 14), ('important', 21), ('really', 32), ('important', 39), ('span', 50), ('text', 56)]
   >>> 
