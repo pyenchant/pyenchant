@@ -491,6 +491,36 @@ class EmailFilter(Filter):
             return True
         return False
 
+class MentionFilter(Filter):
+    r"""Filter skipping over @mention.
+    This filter skips any words matching the following regular expression:
+       
+           (\A|\s)@(\w+)
+        
+    That is, any words that are @mention.
+    """
+    _DOC_ERRORS = ["zA"]
+    _pattern = re.compile(r"(\A|\s)@(\w+)")
+    def _skip(self,word):
+        if self._pattern.match(word):
+            return True
+        return False
+
+class HashtagFilter(Filter):
+    r"""Filter skipping over #hashtag.
+    This filter skips any words matching the following regular expression:
+       
+           (\A|\s)#(\w+)
+        
+    That is, any words that are #hashtag.
+    """
+    _DOC_ERRORS = ["zA"]
+    _pattern = re.compile(r"(\A|\s)#(\w+)")
+    def _skip(self,word):
+        if self._pattern.match(word):
+            return True
+        return False
+
 
 class HTMLChunker(Chunker):
     """Chunker for breaking up HTML documents into chunks of checkable text.
