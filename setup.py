@@ -73,9 +73,11 @@ def osx_make_lib_relocatable(libpath,bundle_dir=None):
     import subprocess
     import shutil
     def do(*cmd):
+        cmd = [c.encode("utf8") for c in cmd]
         subprocess.Popen(cmd).wait()
     def bt(*cmd):
-        return subprocess.Popen(cmd,stdout=subprocess.PIPE).stdout.read()
+        cmd = [c.encode("utf8") for c in cmd]
+        return subprocess.Popen(cmd,stdout=subprocess.PIPE).stdout.read().decode("utf8")
     (dirnm,nm) = os.path.split(libpath)
     if bundle_dir is None:
         bundle_dir = dirnm
