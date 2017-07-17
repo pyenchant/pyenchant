@@ -938,10 +938,14 @@ def get_enchant_version():
 
 
 # Run unit tests when called from command-line
-if __name__ == "__main__":
+def _runtestsuite():
     import sys
     import enchant.tests
     res = enchant.tests.runtestsuite()
     if len(res.errors) > 0 or len(res.failures) > 0:
         sys.exit(1)
     sys.exit(0)
+
+
+if __name__ == "__main__":
+    _runtestsuite()
