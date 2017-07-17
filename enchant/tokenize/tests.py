@@ -317,6 +317,9 @@ of words. Also need to "test" the handling of 'quoted' words."""
         """"Typographic apostrophes shouldn't be word separators in English."""
         from enchant.tokenize import en
         tknzr = wrap_tokenizer(basic_tokenize, en.tokenize)
-        input = u"They\u2019ve"
-        output = [(u"They\u2019ve", 0)]
+        input = u"They\u2019re here"
+        output = [(u"They\u2019re", 0), (u"here", 8)]
         self.assertEqual(output, [i for i in tknzr(input)])
+        # Typographic apostrophe is only support for unicode inputs.
+        output = [("They", 0), ("re", 7), ("here", 10)]
+        self.assertEqual(output, [i for i in tknzr(input.encode('utf8'))])
