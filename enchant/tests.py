@@ -153,9 +153,8 @@ class TestBroker(unittest.TestCase):
         self.assertTrue(d1)
 
     def test_GetSetParam(self):
-        try:
-            self.broker.get_param("pyenchant.unittest")
-        except AttributeError:
+        # Older enchnt versions do not have these functions.
+        if not hasattr(_e.broker_get_param,"argtypes"):
             return
         self.assertEqual(self.broker.get_param("pyenchant.unittest"),None)
         self.broker.set_param("pyenchant.unittest","testing")

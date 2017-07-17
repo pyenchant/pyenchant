@@ -479,7 +479,10 @@ class Broker(_EnchantObject):
         provider backends.  See the method 'set_param' for more details.
         """
         name = EnchantStr(name)
-        return name.decode(_e.broker_get_param(self._this,name.encode()))
+        param = _e.broker_get_param(self._this,name.encode())
+        if param is not None:
+            param = name.decode(param)
+        return param
     get_param._DOC_ERRORS = ["param"]
 
     def set_param(self,name,value):
@@ -490,9 +493,10 @@ class Broker(_EnchantObject):
         any directories given in the "enchant.myspell.dictionary.path"
         parameter when looking for its dictionary files.
         """
-        name = EnchantStr(name)
-        value = EnchantStr(value)
-        _e.broker_set_param(self._this,name.encode(),value.encode())
+        name = EnchantStr(name).encode()
+        if value is not None:
+            value = EnchantStr(value).encode()
+        _e.broker_set_param(self._this,name,value)
 
 
 
