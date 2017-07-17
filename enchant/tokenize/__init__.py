@@ -449,7 +449,7 @@ class Filter(object):
 #  Pre-defined chunkers and filters start here
 
 class URLFilter(Filter):
-    """Filter skipping over URLs.
+    r"""Filter skipping over URLs.
     This filter skips any words matching the following regular expression:
        
            ^[a-zA-Z]+:\/\/[^\s].*
@@ -464,7 +464,7 @@ class URLFilter(Filter):
         return False
 
 class WikiWordFilter(Filter):
-    """Filter skipping over WikiWords.
+    r"""Filter skipping over WikiWords.
     This filter skips any words matching the following regular expression:
        
            ^([A-Z]\w+[A-Z]+\w+)
@@ -478,7 +478,7 @@ class WikiWordFilter(Filter):
         return False
 
 class EmailFilter(Filter):
-    """Filter skipping over email addresses.
+    r"""Filter skipping over email addresses.
     This filter skips any words matching the following regular expression:
        
            ^.+@[^\.].*\.[a-z]{2,}$
@@ -486,6 +486,36 @@ class EmailFilter(Filter):
     That is, any words that resemble email addresses.
     """
     _pattern = re.compile(r"^.+@[^\.].*\.[a-z]{2,}$")
+    def _skip(self,word):
+        if self._pattern.match(word):
+            return True
+        return False
+
+class MentionFilter(Filter):
+    r"""Filter skipping over @mention.
+    This filter skips any words matching the following regular expression:
+       
+           (\A|\s)@(\w+)
+        
+    That is, any words that are @mention.
+    """
+    _DOC_ERRORS = ["zA"]
+    _pattern = re.compile(r"(\A|\s)@(\w+)")
+    def _skip(self,word):
+        if self._pattern.match(word):
+            return True
+        return False
+
+class HashtagFilter(Filter):
+    r"""Filter skipping over #hashtag.
+    This filter skips any words matching the following regular expression:
+       
+           (\A|\s)#(\w+)
+        
+    That is, any words that are #hashtag.
+    """
+    _DOC_ERRORS = ["zA"]
+    _pattern = re.compile(r"(\A|\s)#(\w+)")
     def _skip(self,word):
         if self._pattern.match(word):
             return True

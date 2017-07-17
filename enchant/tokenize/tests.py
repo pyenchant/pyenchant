@@ -313,3 +313,13 @@ of words. Also need to "test" the handling of 'quoted' words."""
         for (itmO,itmV) in zip(outputT,tokenize_en(inputT)):
             self.assertEqual(itmO,itmV)
 
+    def test_typographic_apostrophe_en(self):
+        """"Typographic apostrophes shouldn't be word separators in English."""
+        from enchant.tokenize import en
+        tknzr = wrap_tokenizer(basic_tokenize, en.tokenize)
+        input = u"They\u2019re here"
+        output = [(u"They\u2019re", 0), (u"here", 8)]
+        self.assertEqual(output, [i for i in tknzr(input)])
+        # Typographic apostrophe is only support for unicode inputs.
+        output = [("They", 0), ("re", 7), ("here", 10)]
+        self.assertEqual(output, [i for i in tknzr(input.encode('utf8'))])

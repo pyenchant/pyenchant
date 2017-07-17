@@ -62,7 +62,7 @@ class tokenize(enchant.tokenize.tokenize):
 
     _DOC_ERRORS = ["pos","pos"]
     
-    def __init__(self,text,valid_chars=("'",)):
+    def __init__(self,text,valid_chars=None):
         self._valid_chars = valid_chars
         self._text = text
         self._offset = 0
@@ -75,12 +75,23 @@ class tokenize(enchant.tokenize.tokenize):
         try:
             char1 = text[0]
         except IndexError:
-            self._consume_alpha = self._consume_alpha_b
+            self._initialize_for_binary()
         else:
             if isinstance(char1,unicode):
-                self._consume_alpha = self._consume_alpha_u
+                self._initialize_for_unicode()
             else:
-                self._consume_alpha = self._consume_alpha_b
+                self._initialize_for_binary()
+
+    def _initialize_for_binary(self):
+        self._consume_alpha = self._consume_alpha_b
+        if self._valid_chars is None:
+            self._valid_chars = ("'",)
+
+    def _initialize_for_unicode(self):
+        self._consume_alpha = self._consume_alpha_u
+        if self._valid_chars is None:
+            # Allow unicode typographic apostrophe
+            self._valid_chars = (u"'",u"\u2019")
     
     def _consume_alpha_b(self,text,offset):
         """Consume an alphabetic character from the given bytestring.

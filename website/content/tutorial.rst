@@ -17,7 +17,7 @@ Installing the Package
 
 Your operating system distributor may provide PyEnchant via their own packaging system - please check there first.
 
-If a package is not provided by your operating system distributor, you will need to install one of the pre-build binary distributions or build the package from source.  The easiest way to install PyEnchant is via `pip <http://pip.readthedocs.org/en/latest/>`_ which will locate and install the appropriate pre-built distribution for your platform.  Simply::
+If a package is not provided by your operating system distributor, you will need to install one of the pre-build binary distributions or build the package from source.  The easiest way to install PyEnchant is via `pip <https://pip.readthedocs.io/en/latest/>`_ which will locate and install the appropriate pre-built distribution for your platform.  Simply::
 
     pip install pyenchant
 
@@ -280,7 +280,7 @@ A chunker is simply a special tokenizer function that breaks text up into large 
 
   >>> from enchant.tokenize import get_tokenizer, HTMLChunker
   >>> 
-  >>> tknzr = get_tokenizer("en_US"])
+  >>> tknzr = get_tokenizer("en_US")
   >>> [w for w in tknzr("this is <span class='important'>really important</span> text")]
   [('this', 0), ('is', 5), ('span', 9), ('class', 14), ('important', 21), ('really', 32), ('important', 39), ('span', 50), ('text', 56)]
   >>> 
