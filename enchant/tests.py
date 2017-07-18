@@ -48,9 +48,11 @@ from enchant import _enchant as _e
 from enchant.utils import unicode, raw_unicode, printf, trim_suggestions
 
 
-def runcmd(cmd):
+def runcmd(cmd, **kwds):
     if subprocess is not None:
-        kwds = dict(stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=True)
+        kwds["stdout"] = subprocess.PIPE
+        kwds["stderr"] = subprocess.PIPE
+        kwds["shell"] = True
         p = subprocess.Popen(cmd,**kwds)
         (stdout,stderr) = p.communicate()
         if p.returncode:
@@ -534,8 +536,14 @@ class TestInstallEnv(unittest.TestCase):
         if str is not unicode and isinstance(insdir,unicode):
             insdir = insdir.encode(sys.getfilesystemencoding())
         os.environ["PYTHONPATH"] = insdir
-        script = os.path.join(insdir,"enchant","__init__.py")
-        res = runcmd("\"%s\" %s" % (sys.executable,script,))
+        testCmd = "import enchant, os; " \
+                  "from os.path import abspath; " \
+                  "import sys; from enchant.utils import printf; " \
+                  "printf(abspath(enchant.__file__), file=sys.stderr); " \
+                  "printf(abspath(os.curdir), file=sys.stderr); " \
+                  "assert abspath(os.curdir) in abspath(enchant.__file__); " \
+                  "enchant._runtestsuite()"
+        res = runcmd("\"%s\" -c %r" % (sys.executable, testCmd), cwd=insdir)
         self.assertEqual(res,0)
 
     def test_basic(self):
