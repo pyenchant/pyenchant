@@ -538,12 +538,9 @@ class TestInstallEnv(unittest.TestCase):
         os.environ["PYTHONPATH"] = insdir
         testCmd = "import enchant, os; " \
                   "from os.path import abspath; " \
-                  "import sys; from enchant.utils import printf; " \
-                  "printf(abspath(enchant.__file__), file=sys.stderr); " \
-                  "printf(abspath(os.curdir), file=sys.stderr); " \
                   "assert abspath(os.curdir) in abspath(enchant.__file__); " \
                   "enchant._runtestsuite()"
-        res = runcmd("\"%s\" -c %r" % (sys.executable, testCmd), cwd=insdir)
+        res = runcmd("\"%s\" -c \"%s\"" % (sys.executable, testCmd), cwd=insdir)
         self.assertEqual(res,0)
 
     def test_basic(self):
