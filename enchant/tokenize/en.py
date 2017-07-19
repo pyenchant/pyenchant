@@ -90,8 +90,11 @@ class tokenize(enchant.tokenize.tokenize):
     def _initialize_for_unicode(self):
         self._consume_alpha = self._consume_alpha_u
         if self._valid_chars is None:
+            # XXX TODO: this doesn't seem to work correctly with the
+            # MySpell provider, disabling for now.
             # Allow unicode typographic apostrophe
-            self._valid_chars = (u"'",u"\u2019")
+            #self._valid_chars = (u"'",u"\u2019")
+            self._valid_chars = (u"'",)
     
     def _consume_alpha_b(self,text,offset):
         """Consume an alphabetic character from the given bytestring.
