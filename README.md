@@ -5,7 +5,7 @@ Python bindings for the Enchant spellchecker
 This package provides a set of Python language bindings for the Enchant
 spellchecking library.  For more information, visit the project website:
 
-[http://packages.python.org/pyenchant/](https://github.com/AbiWord/enchant)
+[http://packages.python.org/pyenchant/](http://packages.python.org/pyenchant/)
 
 
 ## What is Enchant?
