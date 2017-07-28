@@ -1,28 +1,29 @@
-pyenchant:  Python bindings for the Enchant spellchecker
-========================================================
+# PyEnchant
+
+Python bindings for the Enchant spellchecker
 
 This package provides a set of Python language bindings for the Enchant
 spellchecking library.  For more information, visit the project website:
 
-    http://packages.python.org/pyenchant/
+[http://packages.python.org/pyenchant/](https://github.com/AbiWord/enchant)
 
 
-What is Enchant?
-----------------
+## What is Enchant?
 
-Enchant is used to check the spelling of words and suggest corrections
-for words that are miss-spelled.  It can use many popular spellchecking
-packages to perform this task, including ispell, aspell and MySpell.  It
-is quite flexible at handling multiple dictionaries and multiple
-languages.
+Enchant aims to provide a simple but comprehensive abstraction for dealing
+with different spell checking libraries in a consistent way. A client, such
+as a text editor or word processor, need not know anything about a specific
+spell-checker, and since all back-ends are plugins, new spell-checkers can
+be added without needing any change to the program using Enchant.
 
 More information is available on the Enchant website:
 
-    http://www.abisource.com/enchant/
+[https://github.com/AbiWord/enchant](https://github.com/AbiWord/enchant)
+
+*[old] [https://github.com/AbiWord/enchant](http://www.abisource.com/enchant/)*
 
 
-How do I use it?
-----------------
+## How do I use it?
 
 For Windows and OSX users, install the pre-built binary packages using
 pip::
@@ -37,13 +38,13 @@ package manager.
 Once the software is installed, python's on-line help facilities can
 get you started.  Launch python and issue the following commands:
 
-    >>> import enchant
-    >>> help(enchant)
+```python
+import enchant
+help(enchant)
+```
 
 
-
-Who is responsible for all this?
---------------------------------
+## Who is responsible for all this?
 
 The credit for Enchant itself goes to Dom Lachowicz.  Find out more details
 on the Enchant website listed above.  Full marks to Dom for producing such
@@ -58,11 +59,11 @@ about SWIG, ctypes, and even a little bit of the Python/C API.
 
 Bugs can be filed on the project's github page:
 
-    https://github.com/rfk/pyenchant/issues
+[https://github.com/rfk/pyenchant/issues](https://github.com/rfk/pyenchant/issues)
 
 Comments, suggestions, other feedback can be directed to the pyenchant-users
 mailing list:
 
-    pyenchant-users@googlegroups.com
+[pyenchant-users@googlegroups.com](pyenchant-users@googlegroups.com)
 
 
