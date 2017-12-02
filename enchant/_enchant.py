@@ -309,12 +309,6 @@ dict_is_removed1.restype = c_int
 def dict_is_removed(dict,word):
     return dict_is_removed1(dict,word,len(word))
 
-dict_is_in_session1 = e.enchant_dict_is_in_session
-dict_is_in_session1.argtypes = [t_dict,c_char_p,c_size_t]
-dict_is_in_session1.restype = c_int
-def dict_is_in_session(dict,word):
-    return dict_is_in_session1(dict,word,len(word))
-
 dict_store_replacement1 = e.enchant_dict_store_replacement
 dict_store_replacement1.argtypes = [t_dict,c_char_p,c_size_t,c_char_p,c_size_t]
 dict_store_replacement1.restype = None
