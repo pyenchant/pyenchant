@@ -247,12 +247,6 @@ class PyPWL:
         """Add a word to the session list."""
         self._words.insert(word)
                     
-    def is_in_session(self,word):
-        """Check whether a word is in the session list."""
-        warnings.warn("PyPWL.is_in_session is deprecated, please use PyPWL.is_added",category=DeprecationWarning)
-        # Consider all words to be in the session list
-        return self.check(word)
-    
     def store_replacement(self,mis,cor):
         """Store a replacement spelling for a miss-spelled word.
         
