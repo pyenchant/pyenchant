@@ -1,4 +1,10 @@
 
+2.0.0:
+
+    * Removed deprecated `is_in_session` method, for compatibility
+      with enchant 2.
+
+
 1.6.6:
 
     * New website and documentation, generated with Hyde and Sphinx.
