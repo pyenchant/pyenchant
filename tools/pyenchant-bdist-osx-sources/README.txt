@@ -14,7 +14,7 @@ copied into place as required.  You might like to do something like:
 
    brew reinstall glib gettext pcre --universal --build-bottle
 
-In strict complince with the LGPL, I will provide copies of the source for
+In strict compliance with the LGPL, I will provide copies of the source for
 these dependencies on request.  But I'm pretty sure everyone these days knows
 how to find them on the internet...
 
