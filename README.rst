@@ -1,3 +1,13 @@
+Status: Unmaintained
+====================
+
+.. image:: http://unmaintained.tech/badge.svg
+     :target: http://unmaintained.tech/
+     :alt: No Maintenance Intended
+
+I am `no longer actively maintaining this project <https://rfk.id.au/blog/entry/archiving-open-source-projects/>`_.
+
+
 pyenchant:  Python bindings for the Enchant spellchecker
 ========================================================
 
@@ -55,14 +65,4 @@ all the solutions turned up by Google were either extremely non-portable
 (e.g. opening a pipe to ispell) or had completely disappeared from the web
 (what happened to SnakeSpell?)  It was also a great excuse to teach myself
 about SWIG, ctypes, and even a little bit of the Python/C API.
-
-Bugs can be filed on the project's github page:
-
-    https://github.com/rfk/pyenchant/issues
-
-Comments, suggestions, other feedback can be directed to the pyenchant-users
-mailing list:
-
-    pyenchant-users@googlegroups.com
-
 

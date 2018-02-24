@@ -195,7 +195,7 @@ if sys.platform in ("win32","darwin",):
       dictPath = os.path.join(BINDEPS,"share","enchant","ispell")
       if os.path.isdir(dictPath):
         for dictName in os.listdir(dictPath):
-          if dictName.endswith("hash") or dictName == "README.txt":
+          if dictName.endswith("hash") or dictName == "README.rst":
             print("COPYING: " + dictName)
             shutil.copy(os.path.join(dictPath,dictName),
                         os.path.join(".","enchant","share","enchant","ispell"))
