@@ -187,7 +187,22 @@ class TestDict(unittest.TestCase):
         self.assertFalse(self.dict.check("helo"))
         self.assertFalse(self.dict.check("testt"))
         self.assertRaises(ValueError, self.dict.check, "")
-        
+
+    def test_check_apostrophes(self):
+        """Test that check() works on some common words."""
+        self.assertTrue(self.dict.check("isn't"))
+        self.assertTrue(self.dict.check("They're"))
+        self.assertTrue(self.dict.check("Python's"))
+        self.assertFalse(self.dict.check("is't"))
+        self.assertFalse(self.dict.check("They*re"))
+        self.assertFalse(self.dict.check("Python|s"))
+        self.assertTrue(self.dict.check(u"isn\u2019t"))
+        self.assertTrue(self.dict.check(u"They\u2019re"))
+        self.assertTrue(self.dict.check(u"Python\u2019s"))
+        self.assertFalse(self.dict.check(u"is\u2019t"))
+        self.assertFalse(self.dict.check(u"They\u2017re"))
+        self.assertFalse(self.dict.check(u"Python\u2020s"))
+
     def test_broker(self):
         """Test that the dict's broker is set correctly."""
         self.assertTrue(self.dict._broker is enchant._broker)
