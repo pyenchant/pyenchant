@@ -72,6 +72,7 @@ def _e_path_possibilities():
         yield "libenchant.so"
     # See if ctypes can find the library for us, under various names.
     yield find_library("enchant")
+    yield find_library("enchant-2")
     yield find_library("libenchant")
     yield find_library("libenchant-1")
     # Special-case handling for enchant installed by macports.
