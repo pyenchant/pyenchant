@@ -1,0 +1,57 @@
+name: tests
+
+on: [push]
+
+jobs:
+  run_tests:
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python: [3.5, 3.6, 3.7, 3.8, pypy3]
+        include:
+         - python: 3.5
+           tox_env: py35
+         - python: 3.6
+           tox_env: py36
+         - python: 3.7
+           tox_env: py37
+         - python: 3.8
+           tox_env: py38
+         - python: pypy3
+           tox_env: pypy3
+         - os: ubuntu-latest
+           platform: linux
+         - os: macos-latest
+           platform: macos
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Set up Python ${{ matrix.python }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python }}
+
+    - name: Install libenchant-dev (linux)
+      if: matrix.platform == 'linux'
+      run: |
+        sudo apt install libenchant-dev
+
+    - name: Install enchant (macOS)
+      if: matrix.platform == 'macos'
+      run: |
+        brew update
+        brew install enchant
+
+    - name: Install tox
+      run: |
+        python -m pip install --upgrade pip
+        pip install tox
+
+    - name: Run tests
+      run: |
+        tox -e ${{ matrix.tox_env }}
+
