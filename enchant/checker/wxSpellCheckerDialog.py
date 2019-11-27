@@ -256,7 +256,7 @@ def _test():
     from enchant.checker import SpellChecker
     text = "This is sme text with a fw speling errors in it. Here are a fw more to tst it ut."
     printf(["BEFORE:", text])
-    app = wx.PySimpleApp()
+    app = wx.App(False)
     dlg = TestDialog()
     chkr = SpellChecker("en_US",text)
     dlg.SetSpellChecker(chkr)

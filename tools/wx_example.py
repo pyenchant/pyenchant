@@ -10,7 +10,7 @@ text = "this is some smple text with a few erors in it"
 print "[INITIAL TEXT:]", text
 
 # Need to have an App before any windows will be shown
-app = wx.PySimpleApp()
+app = wx.App(False)
 
 # Construct the dialog, and the SpellChecker it is to use
 dlg = wxSpellCheckerDialog(None)
