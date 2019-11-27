@@ -1,12 +1,9 @@
-Status: Unmaintained
-====================
+Status: maintainance transfer
+-----------------------------
 
-.. image:: http://unmaintained.tech/badge.svg
-     :target: http://unmaintained.tech/
-     :alt: No Maintenance Intended
-
-I am `no longer actively maintaining this project <https://rfk.id.au/blog/entry/archiving-open-source-projects/>`_.
-
+Maintenance of this project is getting transferred from
+Ryan Kelly to me, Dimitri Merejkowsky. Expect a few bumps
+down the road while issues are sorted out.
 
 pyenchant:  Python bindings for the Enchant spellchecker
 ========================================================
