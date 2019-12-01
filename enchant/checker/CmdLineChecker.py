@@ -43,27 +43,28 @@ from enchant.checker import SpellChecker
 from enchant.utils import printf
 
 try:
-  get_input = raw_input # Python 2.x
+    get_input = raw_input  # Python 2.x
 except NameError:
-  get_input = input # Python 3.x
+    get_input = input  # Python 3.x
 
 # Helpers
 
 colors = {
-    'normal'         : "\x1b[0m",
-    'black'          : "\x1b[30m",
-    'red'            : "\x1b[31m",
-    'green'          : "\x1b[32m",
-    'yellow'         : "\x1b[33m",
-    'blue'           : "\x1b[34m",
-    'purple'         : "\x1b[35m",
-    'cyan'           : "\x1b[36m",
-    'grey'           : "\x1b[90m",
-    'gray'           : "\x1b[90m",
-    'bold'           : "\x1b[1m"
+    "normal": "\x1b[0m",
+    "black": "\x1b[30m",
+    "red": "\x1b[31m",
+    "green": "\x1b[32m",
+    "yellow": "\x1b[33m",
+    "blue": "\x1b[34m",
+    "purple": "\x1b[35m",
+    "cyan": "\x1b[36m",
+    "grey": "\x1b[90m",
+    "gray": "\x1b[90m",
+    "bold": "\x1b[1m",
 }
 
-def color(string, color='normal', prefix=''):
+
+def color(string, color="normal", prefix=""):
     """
     Change text color for the Linux terminal.
 
@@ -74,21 +75,25 @@ def color(string, color='normal', prefix=''):
         prefix (str): Prefix to add to string (ex: Beginning of line graphics)
     """
     if sys.stdout.isatty():
-        return colors[color] + prefix + string + colors['normal']
+        return colors[color] + prefix + string + colors["normal"]
     else:
         return prefix + string
 
+
 def success(string):
-    return "[" + color("+", color='green') + "] " + string
+    return "[" + color("+", color="green") + "] " + string
+
 
 def error(string):
-    return "[" + color("!", color='red') + "] " + string
+    return "[" + color("!", color="red") + "] " + string
+
 
 def warning(string):
-    return "[" + color("*", color='yellow') + "] " + string
+    return "[" + color("*", color="yellow") + "] " + string
+
 
 def info(string):
-    return "[" + color(".", color='blue') + "] " + string
+    return "[" + color(".", color="blue") + "] " + string
 
 
 class CmdLineChecker:
@@ -99,16 +104,17 @@ class CmdLineChecker:
     the user by printing instructions on stdout and reading commands from
     stdin.
     """
-    _DOC_ERRORS = ["stdout","stdin"]
+
+    _DOC_ERRORS = ["stdout", "stdin"]
 
     def __init__(self):
         self._stop = False
         self._checker = None
 
-    def set_checker(self,chkr):
+    def set_checker(self, chkr):
         self._checker = chkr
 
-    def get_checker(self,chkr):
+    def get_checker(self, chkr):
         return self._checker
 
     def run(self):
@@ -132,8 +138,10 @@ class CmdLineChecker:
         and could be modified to be tunable or changed entirely.
         It seems to be enough context to be helpful though
         """
-        error_string = self._build_context(self.error.get_text(), self.error.word, self.error.wordpos)
-        printf([error("ERROR: %s" % color(self.error.word, color='red'))])
+        error_string = self._build_context(
+            self.error.get_text(), self.error.word, self.error.wordpos
+        )
+        printf([error("ERROR: %s" % color(self.error.word, color="red"))])
         printf([info("")])
         printf([info(error_string)])
         printf([info("")])
@@ -146,9 +154,11 @@ class CmdLineChecker:
         from the error word to find the nearest newlines.
         it will return this line with the error word
         colored red."""
-        start_newline = text.rfind('\n', 0, error_start)
-        end_newline = text.find('\n', error_start)
-        return text[start_newline+1:end_newline].replace(error_word, color(error_word, color="red"))
+        start_newline = text.rfind("\n", 0, error_start)
+        end_newline = text.find("\n", error_start)
+        return text[start_newline + 1 : end_newline].replace(
+            error_word, color(error_word, color="red")
+        )
 
     def print_suggestions(self):
         """Prints out the suggestions for a given error.
@@ -161,20 +171,109 @@ class CmdLineChecker:
         suggestions = self.error.suggest()
         for index, sugg in enumerate(suggestions):
             if index == 0:
-                result = result + color(str(index), color='yellow') + ": " + color(sugg, color='bold')
+                result = (
+                    result
+                    + color(str(index), color="yellow")
+                    + ": "
+                    + color(sugg, color="bold")
+                )
             else:
-                result = result + " | " + color(str(index), color='yellow') + ": " + color(sugg, color='bold')
+                result = (
+                    result
+                    + " | "
+                    + color(str(index), color="yellow")
+                    + ": "
+                    + color(sugg, color="bold")
+                )
         printf([info("HOW ABOUT:"), result])
 
     def print_help(self):
-        printf([info(color("0", color='yellow') + ".." + color("N", color='yellow') + ":\t" + color("replace", color='bold') + " with the numbered suggestion")])
-        printf([info(color("R", color='cyan') + color("0", color='yellow') + ".." + color("R", color='cyan') + color("N", color='yellow') + ":\t" + color("always replace", color='bold') + " with the numbered suggestion")])
-        printf([info(color("i", color='cyan') + ":\t\t" + color("ignore", color='bold') + " this word")])
-        printf([info(color("I", color='cyan') + ":\t\t" + color("always ignore", color='bold') + " this word")])
-        printf([info(color("a", color='cyan') + ":\t\t" + color("add", color='bold') + " word to personal dictionary")])
-        printf([info(color("e", color='cyan') + ":\t\t" + color("edit", color='bold') + " the word")])
-        printf([info(color("q", color='cyan') + ":\t\t" + color("quit", color='bold') + " checking")])
-        printf([info(color("h", color='cyan') + ":\t\tprint this " + color("help", color='bold') + " message")])
+        printf(
+            [
+                info(
+                    color("0", color="yellow")
+                    + ".."
+                    + color("N", color="yellow")
+                    + ":\t"
+                    + color("replace", color="bold")
+                    + " with the numbered suggestion"
+                )
+            ]
+        )
+        printf(
+            [
+                info(
+                    color("R", color="cyan")
+                    + color("0", color="yellow")
+                    + ".."
+                    + color("R", color="cyan")
+                    + color("N", color="yellow")
+                    + ":\t"
+                    + color("always replace", color="bold")
+                    + " with the numbered suggestion"
+                )
+            ]
+        )
+        printf(
+            [
+                info(
+                    color("i", color="cyan")
+                    + ":\t\t"
+                    + color("ignore", color="bold")
+                    + " this word"
+                )
+            ]
+        )
+        printf(
+            [
+                info(
+                    color("I", color="cyan")
+                    + ":\t\t"
+                    + color("always ignore", color="bold")
+                    + " this word"
+                )
+            ]
+        )
+        printf(
+            [
+                info(
+                    color("a", color="cyan")
+                    + ":\t\t"
+                    + color("add", color="bold")
+                    + " word to personal dictionary"
+                )
+            ]
+        )
+        printf(
+            [
+                info(
+                    color("e", color="cyan")
+                    + ":\t\t"
+                    + color("edit", color="bold")
+                    + " the word"
+                )
+            ]
+        )
+        printf(
+            [
+                info(
+                    color("q", color="cyan")
+                    + ":\t\t"
+                    + color("quit", color="bold")
+                    + " checking"
+                )
+            ]
+        )
+        printf(
+            [
+                info(
+                    color("h", color="cyan")
+                    + ":\t\tprint this "
+                    + color("help", color="bold")
+                    + " message"
+                )
+            ]
+        )
         printf([info("----------------------------------------------------")])
         self.print_suggestions()
 
@@ -188,7 +287,17 @@ class CmdLineChecker:
             if repl >= len(suggs):
                 printf([warning("No suggestion number"), repl])
                 return False
-            printf([success("Replacing '%s' with '%s'" % (color(self.error.word, color='red'),color(suggs[repl], color='green')))])
+            printf(
+                [
+                    success(
+                        "Replacing '%s' with '%s'"
+                        % (
+                            color(self.error.word, color="red"),
+                            color(suggs[repl], color="green"),
+                        )
+                    )
+                ]
+            )
             self.error.replace(suggs[repl])
             return True
 
@@ -231,7 +340,7 @@ class CmdLineChecker:
         printf([warning("Badly formatted command (try 'help')")])
         return False
 
-    def run_on_file(self,infile,outfile=None,enc=None):
+    def run_on_file(self, infile, outfile=None, enc=None):
         """Run spellchecking on the named file.
         This method can be used to run the spellchecker over the named file.
         If <outfile> is not given, the corrected contents replace the contents
@@ -241,7 +350,7 @@ class CmdLineChecker:
         file's contents into a unicode string.  The output will be written
         in the same encoding.
         """
-        inStr = "".join(open(infile,"r").readlines())
+        inStr = "".join(open(infile, "r").readlines())
         if enc is not None:
             inStr = inStr.decode(enc)
         self._checker.set_text(inStr)
@@ -254,14 +363,16 @@ class CmdLineChecker:
         if enc is not None:
             outStr = outStr.encode(enc)
         if outfile is None:
-            outF = open(infile,"w")
+            outF = open(infile, "w")
         elif outfile == "-":
             outF = sys.stdout
         else:
-            outF = open(outfile,"w")
+            outF = open(outfile, "w")
         outF.write(outStr)
         outF.close()
-    run_on_file._DOC_ERRORS = ["outfile","infile","outfile","stdout"]
+
+    run_on_file._DOC_ERRORS = ["outfile", "infile", "outfile", "stdout"]
+
 
 def _run_as_script():
     """Run the command-line spellchecker as a script.
@@ -270,14 +381,27 @@ def _run_as_script():
     """
     # Check necessary command-line options
     from optparse import OptionParser
+
     op = OptionParser()
-    op.add_option("-o","--output",dest="outfile",metavar="FILE",
-                      help="write changes into FILE")
-    op.add_option("-l","--lang",dest="lang",metavar="TAG",default="en_US",
-                      help="use language idenfified by TAG")
-    op.add_option("-e","--encoding",dest="enc",metavar="ENC",
-                      help="file is unicode with encoding ENC")
-    (opts,args) = op.parse_args()
+    op.add_option(
+        "-o", "--output", dest="outfile", metavar="FILE", help="write changes into FILE"
+    )
+    op.add_option(
+        "-l",
+        "--lang",
+        dest="lang",
+        metavar="TAG",
+        default="en_US",
+        help="use language idenfified by TAG",
+    )
+    op.add_option(
+        "-e",
+        "--encoding",
+        dest="enc",
+        metavar="ENC",
+        help="file is unicode with encoding ENC",
+    )
+    (opts, args) = op.parse_args()
     # Sanity check
     if len(args) < 1:
         raise ValueError("Must name a file to check")
@@ -287,7 +411,8 @@ def _run_as_script():
     chkr = SpellChecker(opts.lang)
     cmdln = CmdLineChecker()
     cmdln.set_checker(chkr)
-    cmdln.run_on_file(args[0],opts.outfile,opts.enc)
+    cmdln.run_on_file(args[0], opts.outfile, opts.enc)
+
 
 if __name__ == "__main__":
     _run_as_script()
