@@ -23,3 +23,10 @@ jobs:
     - name: Build website
       run: |
         tox -e website
+
+    - name: Deploy to GitHub pages
+      uses: maxheld83/ghpages@v0.1.1
+      if: github.ref == 'master'
+      env:
+        BUILD_DIR: website/html
+        GH_PAT: ${{ secrets.GH_PAT }}
