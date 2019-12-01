@@ -1,0 +1,573 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>PyEnchant Tutorial &#8212; PyEnchant 2.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="PyEnchant API Listing" href="api/index.html" />
+    <link rel="prev" title="PyEnchant" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api/index.html" title="PyEnchant API Listing"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="PyEnchant"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PyEnchant 2.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pyenchant-tutorial">
+<h1><a class="toc-backref" href="#id1">PyEnchant Tutorial</a><a class="headerlink" href="#pyenchant-tutorial" title="Permalink to this headline">¶</a></h1>
+<p>This page offers a quick tutorial to get up and running with the PyEnchant package. If you are already familiar with the basics of installing and using Python packages, you may prefer to simply browse the PyEnchant API listing.</p>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#pyenchant-tutorial" id="id1">PyEnchant Tutorial</a></p>
+<ul>
+<li><p><a class="reference internal" href="#installing-pyenchant" id="id2">Installing PyEnchant</a></p>
+<ul>
+<li><p><a class="reference internal" href="#installing-the-package" id="id3">Installing the Package</a></p></li>
+<li><p><a class="reference internal" href="#adding-language-dictionaries" id="id4">Adding Language Dictionaries</a></p>
+<ul>
+<li><p><a class="reference internal" href="#windows-users" id="id5">Windows Users</a></p></li>
+<li><p><a class="reference internal" href="#mac-os-x-users" id="id6">Mac OS X Users</a></p></li>
+<li><p><a class="reference internal" href="#other-platforms" id="id7">Other Platforms</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#basic-pyenchant-usage" id="id8">Basic PyEnchant Usage</a></p>
+<ul>
+<li><p><a class="reference internal" href="#creating-and-using-dictionary-objects" id="id9">Creating and Using Dictionary Objects</a></p></li>
+<li><p><a class="reference internal" href="#personal-word-lists" id="id10">Personal Word Lists</a></p></li>
+<li><p><a class="reference internal" href="#checking-entire-blocks-of-text" id="id11">Checking entire blocks of text</a></p></li>
+<li><p><a class="reference internal" href="#wxspellcheckerdialog" id="id12">wxSpellCheckerDialog</a></p></li>
+<li><p><a class="reference internal" href="#cmdlinechecker" id="id13">CmdLineChecker</a></p></li>
+<li><p><a class="reference internal" href="#tokenization-splitting-text-into-words" id="id14">Tokenization: splitting text into words</a></p>
+<ul>
+<li><p><a class="reference internal" href="#chunkers" id="id15">Chunkers</a></p></li>
+<li><p><a class="reference internal" href="#filters" id="id16">Filters</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#advanced-pyenchant-usage" id="id17">Advanced PyEnchant Usage</a></p>
+<ul>
+<li><p><a class="reference internal" href="#providers" id="id18">Providers</a></p></li>
+<li><p><a class="reference internal" href="#brokers" id="id19">Brokers</a></p>
+<ul>
+<li><p><a class="reference internal" href="#the-default-broker" id="id20">The Default Broker</a></p></li>
+<li><p><a class="reference internal" href="#provider-ordering" id="id21">Provider Ordering</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#extending-enchant-tokenize" id="id22">Extending enchant.tokenize</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#pyenchant-and-other-programs" id="id23">PyEnchant and other programs</a></p>
+<ul>
+<li><p><a class="reference internal" href="#packaging-pyenchant-with-py2exe" id="id24">Packaging PyEnchant with py2exe</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="installing-pyenchant">
+<h2><a class="toc-backref" href="#id2">Installing PyEnchant</a><a class="headerlink" href="#installing-pyenchant" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="installing-the-package">
+<h3><a class="toc-backref" href="#id3">Installing the Package</a><a class="headerlink" href="#installing-the-package" title="Permalink to this headline">¶</a></h3>
+<p>Your operating system distributor may provide PyEnchant via their own packaging system - please check there first.</p>
+<p>If a package is not provided by your operating system distributor, you will need to install one of the pre-build binary distributions or build the package from source.  The easiest way to install PyEnchant is via <a class="reference external" href="https://pip.readthedocs.io/en/latest/">pip</a> which will locate and install the appropriate pre-built distribution for your platform.  Simply:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pyenchant</span>
+</pre></div>
+</div>
+<p>Windows users may also download the pre-built Windows installer from the download page and run it to install PyEnchant. It will place the ‘enchant’ module in your Python site-packages directory.</p>
+</div>
+<div class="section" id="adding-language-dictionaries">
+<h3><a class="toc-backref" href="#id4">Adding Language Dictionaries</a><a class="headerlink" href="#adding-language-dictionaries" title="Permalink to this headline">¶</a></h3>
+<p>By default, PyEnchant on the Windows platform ships with a limited number of language dictionaries:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>en_GB: British English</p></li>
+<li><p>en_US: American English</p></li>
+<li><p>de_DE: German</p></li>
+<li><p>fr_FR: French</p></li>
+</ul>
+</div></blockquote>
+<p>For users of other platforms, the available dictionaries will depend on your installation of Enchant. If the language you wish to use is not available, you will need to install additional dictionaries.</p>
+<div class="section" id="windows-users">
+<h4><a class="toc-backref" href="#id5">Windows Users</a><a class="headerlink" href="#windows-users" title="Permalink to this headline">¶</a></h4>
+<p>PyEnchant can use dictionaries from the OpenOffice.org project. Locate the appropriate file on their dictionary download page at <a class="reference external" href="http://wiki.services.openoffice.org/wiki/Dictionaries">http://wiki.services.openoffice.org/wiki/Dictionaries</a>.</p>
+<p>The download will be a zip file containing the necessary dictionary files. The contents of this zip file must be extracted into the directory “Lib/site-packages/enchant/share/enchant/myspell” inside your Python installation directory. For example, if Python is installed into:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;C:/Python23&quot;</span>
+</pre></div>
+</div>
+<p>Then extract the dictionary files into:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;C:/Python23/Lib/site-packages/enchant/share/enchant/myspell&quot;</span>
+</pre></div>
+</div>
+<p>Note that despite the legacy name “myspell”, the latest version of PyEnchant actually uses Hunspell and should be compatible with the latest Hunspell-specific dictionaries.</p>
+</div>
+<div class="section" id="mac-os-x-users">
+<h4><a class="toc-backref" href="#id6">Mac OS X Users</a><a class="headerlink" href="#mac-os-x-users" title="Permalink to this headline">¶</a></h4>
+<p>PyEnchant can use dictionaries from the OpenOffice.org project. Locate the appropriate file on their dictionary download page at <a class="reference external" href="http://wiki.services.openoffice.org/wiki/Dictionaries">http://wiki.services.openoffice.org/wiki/Dictionaries</a>.</p>
+<p>The download will be a zip file containing the necessary dictionary files. The contents of this zip file must be extracted into the directory “site-packages/enchant/share/enchant/myspell” inside your Python installation directory. For example, if Python is installed into:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;/Library/Frameworks/Python.framework/Versions/2.6&quot;</span>
+</pre></div>
+</div>
+<p>Then extract the dictionary files into:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;/Library/Frameworks/Python.framework/Versions/2.6/lib/python2.6/site-packages/enchant/share/enchant/myspell&quot;</span>
+</pre></div>
+</div>
+<p>Note that despite the legacy name “myspell”, the latest version of PyEnchant actually uses Hunspell and should be compatible with the latest Hunspell-specific dictionaries.</p>
+</div>
+<div class="section" id="other-platforms">
+<h4><a class="toc-backref" href="#id7">Other Platforms</a><a class="headerlink" href="#other-platforms" title="Permalink to this headline">¶</a></h4>
+<p>The installation of additional dictionaries is the responsibility of the underlying Enchant library. Please consult your operating system vendor or the Enchant website for more details.</p>
+</div>
+</div>
+</div>
+<div class="section" id="basic-pyenchant-usage">
+<h2><a class="toc-backref" href="#id8">Basic PyEnchant Usage</a><a class="headerlink" href="#basic-pyenchant-usage" title="Permalink to this headline">¶</a></h2>
+<p>Once installed, PyEnchant’s functionality is available in the “enchant” module.</p>
+<div class="section" id="creating-and-using-dictionary-objects">
+<h3><a class="toc-backref" href="#id9">Creating and Using Dictionary Objects</a><a class="headerlink" href="#creating-and-using-dictionary-objects" title="Permalink to this headline">¶</a></h3>
+<p>The most important object in the PyEnchant module is the Dict object, which represents a dictionary. These objects are used to check the spelling of words and to get suggestions for misspelled words. The following shows how to construct a simple Dict and use it to check some words:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">enchant</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">enchant</span><span class="o">.</span><span class="n">Dict</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="s2">&quot;Helo&quot;</span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p>Dictionaries are created using a language tag which specifies the language to be checked - in this case, “en_US” signifies American English. If the language tag is not specified, an attempt is made to determine the language currently in use. This is not always possible, in which case an Error is raised.</p>
+<p>When the current language can be determined, it operates as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">enchant</span><span class="o">.</span><span class="n">Dict</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">tag</span>
+<span class="go">&#39;en_AU&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">d</span><span class="o">.</span><span class="n">tag</span>
+<span class="go">en_AU</span>
+</pre></div>
+</div>
+<p>Of course, this may still fail if the appropriate dictionary is not available. If it cannot be determined, the behavior is as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">enchant</span><span class="o">.</span><span class="n">Dict</span><span class="p">()</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n">?</span>
+  File <span class="nb">&quot;enchant/__init__.py&quot;</span>, line <span class="m">467</span>, in <span class="n">__init__</span>
+    <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+<span class="gr">enchant.Error</span>: <span class="n">No tag specified and default language could not be determined.</span>
+</pre></div>
+</div>
+<p>There are several top-level functions in the enchant module which can be used to deal with dictionaries:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>dict_exists: Check whether a Dict is available for a given language</p></li>
+<li><p>request_dict: Construct and return a new Dict object</p></li>
+<li><p>list_languages: List the languages for which Dicts are available</p></li>
+</ul>
+</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">enchant</span><span class="o">.</span><span class="n">dict_exists</span><span class="p">(</span><span class="s2">&quot;fake&quot;</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">enchant</span><span class="o">.</span><span class="n">dict_exists</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">enchant</span><span class="o">.</span><span class="n">request_dict</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span>
+<span class="go">&lt;enchant.Dict object at 0x2aaaabdffa50&gt;cl</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">enchant</span><span class="o">.</span><span class="n">list_languages</span><span class="p">()</span>
+<span class="go">[&#39;en&#39;, &#39;en_CA&#39;, &#39;en_GB&#39;, &#39;en_US&#39;, &#39;eo&#39;, &#39;fr&#39;, &#39;fr_CH&#39;, &#39;fr_FR&#39;]</span>
+</pre></div>
+</div>
+<p>As shown previously, the check method of a Dict object can be used to check whether a word is correctly spelled. To get suggestions for a misspelled word, use the suggest method as shown below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">suggest</span><span class="p">(</span><span class="s2">&quot;Helo&quot;</span><span class="p">)</span>
+<span class="go">[&#39;He lo&#39;, &#39;He-lo&#39;, &#39;Hello&#39;, &#39;Helot&#39;, &#39;Help&#39;, &#39;Halo&#39;, &#39;Hell&#39;, &#39;Held&#39;, &#39;Helm&#39;, &#39;Hero&#39;, &quot;He&#39;ll&quot;]</span>
+</pre></div>
+</div>
+<p>The suggestions are returned in a list, ordered from most likely replacement to least likely.</p>
+<p>Once a correction is made to a miss-spelled word, it is often useful to store this correction in some way for later use. The Dict object provides several methods to handle this:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>add: store an unrecognised word in the user’s personal dictionary so that it is recognised as correct in the future.</p></li>
+<li><p>remove: store a recognised word in the user’s personal exclude list, so that it is identified as an error in the future.</p></li>
+<li><p>add_to_session: store an unrecognised word so that it will be recognised as correct while the Dict object is still in use.</p></li>
+<li><p>store_replacement: note that one word was used to replace another, meaning that it will appear higher in the list of suggestions in the future.</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="personal-word-lists">
+<h3><a class="toc-backref" href="#id10">Personal Word Lists</a><a class="headerlink" href="#personal-word-lists" title="Permalink to this headline">¶</a></h3>
+<p>Dict objects can also be used to check words against a custom list of correctly-spelled words known as a Personal Word List. This is simply a file listing the words to be considered, one word per line. The following example creates a Dict object for the personal word list stored in “mywords.txt”:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pwl</span> <span class="o">=</span> <span class="n">enchant</span><span class="o">.</span><span class="n">request_pwl_dict</span><span class="p">(</span><span class="s2">&quot;mywords.txt&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The personal word list Dict object can be used in the same way as Dict objects which reference a language dictionary. When the object’s add method is called, new entries will be appended to the bottom of the file.</p>
+<p>PyEnchant also provides the class DictWithPWL which can be used to combine a language dictionary and a personal word list file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d2</span> <span class="o">=</span> <span class="n">enchant</span><span class="o">.</span><span class="n">DictWithPWL</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">,</span><span class="s2">&quot;mywords.txt&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d2</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="checking-entire-blocks-of-text">
+<h3><a class="toc-backref" href="#id11">Checking entire blocks of text</a><a class="headerlink" href="#checking-entire-blocks-of-text" title="Permalink to this headline">¶</a></h3>
+<p>While the enchant.Dict objects are useful for spellchecking individual words, they cannot be used directly to check, for example, an entire paragraph. The module enchant.checker provides a class SpellChecker which is designed to handle this task.</p>
+<p>SpellChecker objects are created in the same way as Dict objects - by passing a language tag to the constructor. The set_text method is used to set the text which is to be checked. Once this is done, the SpellChecker object can be used as an iterator over the spelling mistakes in the text. This is best illustrated by a simple example. The following code will print out the errors encountered in a string:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">enchant.checker</span> <span class="kn">import</span> <span class="n">SpellChecker</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chkr</span> <span class="o">=</span> <span class="n">SpellChecker</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chkr</span><span class="o">.</span><span class="n">set_text</span><span class="p">(</span><span class="s2">&quot;This is sme sample txt with erors.&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">err</span> <span class="ow">in</span> <span class="n">chkr</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="nb">print</span> <span class="s2">&quot;ERROR:&quot;</span><span class="p">,</span> <span class="n">err</span><span class="o">.</span><span class="n">word</span>
+<span class="gp">...</span>
+<span class="go">ERROR: sme</span>
+<span class="go">ERROR: txt</span>
+<span class="go">ERROR: erors</span>
+</pre></div>
+</div>
+<p>The SpellChecker can use filters to ignore certain word forms, by passing a list of filters in as a keyword argument:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">enchant.checker</span> <span class="kn">import</span> <span class="n">SpellChecker</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">enchant.tokenize</span> <span class="kn">import</span> <span class="n">EmailFilter</span><span class="p">,</span> <span class="n">URLFilter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chkr</span> <span class="o">=</span> <span class="n">SpellChecker</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">,</span><span class="n">filters</span><span class="o">=</span><span class="p">[</span><span class="n">EmailFilter</span><span class="p">,</span><span class="n">URLFilter</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>The iterator paradigm can be used to implement a wide variety of spellchecking functionality. As examples of how this can be done, PyEnchant provides a wxPython-based spellchecking dialog and a command-line spellchecking program. While intended mainly as functionality demos, they are also quite useful in their own right.</p>
+</div>
+<div class="section" id="wxspellcheckerdialog">
+<h3><a class="toc-backref" href="#id12">wxSpellCheckerDialog</a><a class="headerlink" href="#wxspellcheckerdialog" title="Permalink to this headline">¶</a></h3>
+<p>The module enchant.checker.wxSpellCheckerDialog provides the class wxSpellCheckerDialog which can be used to interactively check the spelling of some text. The code below shows how to create and use such a dialog from within a wxPython application.</p>
+<p>It will pop up a simple spellchecking dialog like the one shown here. Each spelling error is highlighted in turn, with the buttons offering a range of options for how to deal with the error:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Ignore: ignore the current occurrence of the word</p></li>
+<li><p>Ignore All: ignore the current and all future occurrences of the word</p></li>
+<li><p>Replace: replace the current occurrence with the corrected word</p></li>
+<li><p>Replace All: replace the current and all future occurrences with the corrected word</p></li>
+<li><p>Add: add the word to the user’s personal dictionary</p></li>
+</ul>
+</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">wx</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">enchant.checker</span> <span class="kn">import</span> <span class="n">SpellChecker</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">enchant.checker.wxSpellCheckerDialog</span> <span class="kn">import</span> <span class="n">wxSpellCheckerDialog</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">app</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">PySimpleApp</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;This is sme text with a fw speling errors in it. Here are a fw more to tst it ut.&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dlg</span> <span class="o">=</span> <span class="n">wxSpellCheckerDialog</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chkr</span> <span class="o">=</span> <span class="n">SpellChecker</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">,</span><span class="n">text</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dlg</span><span class="o">.</span><span class="n">SetSpellChecker</span><span class="p">(</span><span class="n">chkr</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dlg</span><span class="o">.</span><span class="n">Show</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">app</span><span class="o">.</span><span class="n">MainLoop</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="cmdlinechecker">
+<h3><a class="toc-backref" href="#id13">CmdLineChecker</a><a class="headerlink" href="#cmdlinechecker" title="Permalink to this headline">¶</a></h3>
+<p>The module enchant.checker.CmdLineChecker provides the class CmdLineChecker which can be used to interactively check the spelling of some text. It uses standard input and standard output to interact with the user through a command-line interface. The code below shows how to create and use this class from within a python application, along with a short sample checking session:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">enchant</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">enchant.checker</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">enchant.checker.CmdLineChecker</span> <span class="kn">import</span> <span class="n">CmdLineChecker</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chkr</span> <span class="o">=</span> <span class="n">enchant</span><span class="o">.</span><span class="n">checker</span><span class="o">.</span><span class="n">SpellChecker</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chkr</span><span class="o">.</span><span class="n">set_text</span><span class="p">(</span><span class="s2">&quot;this is sme example txt&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cmdln</span> <span class="o">=</span> <span class="n">CmdLineChecker</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cmdln</span><span class="o">.</span><span class="n">set_checker</span><span class="p">(</span><span class="n">chkr</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cmdln</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="go">ERROR: sme</span>
+<span class="go">HOW ABOUT: [&#39;some&#39;, &#39;same&#39;, &#39;Sm&#39;, &#39;Ame&#39;, &#39;ME&#39;, &#39;Me&#39;, &#39;SE&#39;, &#39;Se&#39;, &#39;me&#39;, &#39;Esme&#39;, &#39;Mme&#39;, &#39;SSE&#39;, &#39;See&#39;, &#39;Sue&#39;, &#39;see&#39;, &#39;sue&#39;, &#39;Ste&#39;, &quot;Sm&#39;s&quot;]</span>
+<span class="go">&gt;&gt; help</span>
+<span class="go">0..N: replace with the numbered suggestion</span>
+<span class="go">R0..rN: always replace with the numbered suggestion</span>
+<span class="go">i: ignore this word</span>
+<span class="go">I: always ignore this word</span>
+<span class="go">a: add word to personal dictionary</span>
+<span class="go">e: edit the word</span>
+<span class="go">q: quit checking</span>
+<span class="go">h: print this help message</span>
+<span class="go">----------------------------------------------------</span>
+<span class="go">HOW ABOUT: [&#39;some&#39;, &#39;same&#39;, &#39;Sm&#39;, &#39;Ame&#39;, &#39;ME&#39;, &#39;Me&#39;, &#39;SE&#39;, &#39;Se&#39;, &#39;me&#39;, &#39;Esme&#39;, &#39;Mme&#39;, &#39;SSE&#39;, &#39;See&#39;, &#39;Sue&#39;, &#39;see&#39;, &#39;sue&#39;, &#39;Ste&#39;, &quot;Sm&#39;s&quot;]</span>
+<span class="go">&gt;&gt; 0</span>
+<span class="go">Replacing &#39;sme&#39; with &#39;some&#39;</span>
+<span class="go">ERROR: txt</span>
+<span class="go">HOW ABOUT: [&#39;text&#39;, &#39;TX&#39;, &#39;ext&#39;]</span>
+<span class="go">&gt;&gt; i</span>
+<span class="go">DONE</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chkr</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span>
+<span class="go">&#39;this is some example txt&#39;</span>
+</pre></div>
+</div>
+<p>As shown by this simple example, the CmdLineChecker prints each error it encounters, along with a list of suggested replacements. The user enters the desired behavior using short alphanumeric commands, as explained by the output of the ‘help’ command.</p>
+</div>
+<div class="section" id="tokenization-splitting-text-into-words">
+<h3><a class="toc-backref" href="#id14">Tokenization: splitting text into words</a><a class="headerlink" href="#tokenization-splitting-text-into-words" title="Permalink to this headline">¶</a></h3>
+<p>An important task in spellchecking is splitting a body of text up into its constitutive words, each of which is then passed to a Dict object for checking. PyEnchant provides the enchant.tokenize module to assist with this task. The purpose of this module is to provide an appropriate tokenization function which can be used to split the text. Usually, all that is required is the get_tokenizer function:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">enchant.tokenize</span> <span class="kn">import</span> <span class="n">get_tokenizer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tknzr</span> <span class="o">=</span> <span class="n">get_tokenizer</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tknzr</span>
+<span class="go">&lt;class enchant.tokenize.en.tokenize at 0x2aaaaab531d0&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">tknzr</span><span class="p">(</span><span class="s2">&quot;this is some simple text&quot;</span><span class="p">)]</span>
+<span class="go">[(&#39;this&#39;, 0), (&#39;is&#39;, 5), (&#39;some&#39;, 8), (&#39;simple&#39;, 13), (&#39;text&#39;, 20)]</span>
+</pre></div>
+</div>
+<p>As shown in the example above, the function get_tokenizer takes a language tag as input, and returns a tokenization class that is appropriate for that language. Instantiating this class with some text returns an iterator which will yield the words contained in that text. This is exactly the mechanism that the SpellChecker class uses internally to split text into a series of words.</p>
+<p>The items produced by the tokenizer are tuples of the form (WORD,POS) where WORD is the word which was found and POS is the position within the string at which that word begins.</p>
+<div class="section" id="chunkers">
+<h4><a class="toc-backref" href="#id15">Chunkers</a><a class="headerlink" href="#chunkers" title="Permalink to this headline">¶</a></h4>
+<p>In many applications, checkable text may be intermingled with some sort of markup (e.g. HTML tags) which does not need to be checked. To have the tokenizer return only those words that should be checked, it can be augmented with one or more chunkers.</p>
+<p>A chunker is simply a special tokenizer function that breaks text up into large chunks rather than individual tokens. They are typically used by passing a list of chunkers to the get_tokenizer function:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">enchant.tokenize</span> <span class="kn">import</span> <span class="n">get_tokenizer</span><span class="p">,</span> <span class="n">HTMLChunker</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tknzr</span> <span class="o">=</span> <span class="n">get_tokenizer</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">tknzr</span><span class="p">(</span><span class="s2">&quot;this is &lt;span class=&#39;important&#39;&gt;really important&lt;/span&gt; text&quot;</span><span class="p">)]</span>
+<span class="go">[(&#39;this&#39;, 0), (&#39;is&#39;, 5), (&#39;span&#39;, 9), (&#39;class&#39;, 14), (&#39;important&#39;, 21), (&#39;really&#39;, 32), (&#39;important&#39;, 39), (&#39;span&#39;, 50), (&#39;text&#39;, 56)]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tknzr</span> <span class="o">=</span> <span class="n">get_tokenizer</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">,</span><span class="n">chunkers</span><span class="o">=</span><span class="p">(</span><span class="n">HTMLChunker</span><span class="p">,))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">tknzr</span><span class="p">(</span><span class="s2">&quot;this is &lt;span class=&#39;important&#39;&gt;really important&lt;/span&gt; text&quot;</span><span class="p">)]</span>
+<span class="go">[(&#39;this&#39;, 0), (&#39;is&#39;, 5), (&#39;really&#39;, 32), (&#39;important&#39;, 39), (&#39;text&#39;, 56)]</span>
+</pre></div>
+</div>
+<p>When the HTMLChunker is applied to the tokenizer, the &lt;span&gt; tag and its contents are removed from the list of words.</p>
+<p>Currently the only implemented chunker is HTMLChunker. A chunker for LaTeX documents is in the works.</p>
+</div>
+<div class="section" id="filters">
+<h4><a class="toc-backref" href="#id16">Filters</a><a class="headerlink" href="#filters" title="Permalink to this headline">¶</a></h4>
+<p>In many applications, it is common for spellchecking to ignore words that have a certain form. For example, when spellchecking an email it is customary to ignore email addresses and URLs. This can be achieved by augmenting the tokenization process with filters.</p>
+<p>A filter is simply a wrapper around a tokenizer that can (1) drop certain words from the stream, and (2) further split words into sub-tokens. They are typically used by passing a list of filters to the get_tokenizer function:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">enchant.tokenize</span> <span class="kn">import</span> <span class="n">get_tokenizer</span><span class="p">,</span> <span class="n">EmailFilter</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tknzr</span> <span class="o">=</span> <span class="n">get_tokenizer</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">tknzr</span><span class="p">(</span><span class="s2">&quot;send an email to fake@example.com please&quot;</span><span class="p">)]</span>
+<span class="go">[(&#39;send&#39;, 0), (&#39;an&#39;, 5), (&#39;email&#39;, 8), (&#39;to&#39;, 14), (&#39;fake@example.com&#39;, 17), (&#39;please&#39;, 34)]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tknzr</span> <span class="o">=</span> <span class="n">get_tokenizer</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">,[</span><span class="n">EmailFilter</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">tknzr</span><span class="p">(</span><span class="s2">&quot;send an email to fake@example.com please&quot;</span><span class="p">)]</span>
+<span class="go">[(&#39;send&#39;, 0), (&#39;an&#39;, 5), (&#39;email&#39;, 8), (&#39;to&#39;, 14), (&#39;please&#39;, 34)]</span>
+</pre></div>
+</div>
+<p>When the EmailFilter is applied to the tokenizer, the email address is removed from the list of words.</p>
+<p>Currently implemented filters are EmailFilter, URLFilter and WikiWordFilter.</p>
+</div>
+</div>
+</div>
+<div class="section" id="advanced-pyenchant-usage">
+<h2><a class="toc-backref" href="#id17">Advanced PyEnchant Usage</a><a class="headerlink" href="#advanced-pyenchant-usage" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="providers">
+<h3><a class="toc-backref" href="#id18">Providers</a><a class="headerlink" href="#providers" title="Permalink to this headline">¶</a></h3>
+<p>The underlying programming model provided by the Enchant library is based on the notion of Providers. A provider is a piece of code that provides spell-checking services which Enchant can use to perform its work. Different providers exist for performing spellchecking using different frameworks - for example there is an aspell provider and a MySpell provider.</p>
+<p>In this way, enchant forms a “wrapper” around existing spellchecking tools in order to provide a common programming interface.</p>
+<p>The provider which is managing a particular Dict object can be determined by accessing its provider attribute. This is a ProviderDesc object with the properties name, desc and file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">enchant</span><span class="o">.</span><span class="n">Dict</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">provider</span> <span class="o">&lt;</span><span class="n">Enchant</span><span class="p">:</span> <span class="n">Aspell</span> <span class="n">Provider</span><span class="o">&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">provider</span><span class="o">.</span><span class="n">name</span>
+<span class="go">u&#39;aspell&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">provider</span><span class="o">.</span><span class="n">desc</span>
+<span class="go">u&#39;Aspell Provider&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">provider</span><span class="o">.</span><span class="n">file</span>
+<span class="go">u&#39;/usr/lib64/enchant/libenchant_aspell.so&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="brokers">
+<h3><a class="toc-backref" href="#id19">Brokers</a><a class="headerlink" href="#brokers" title="Permalink to this headline">¶</a></h3>
+<p>The details of which provider is used to create a particular dictionary are managed by a Broker object. Such objects have methods for creating dictionaries and checking whether a particular dictionary exists, as shown in the example below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">enchant</span><span class="o">.</span><span class="n">Broker</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span>
+<span class="go">&lt;enchant.Broker object at 0x2aaaabdff810&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">.</span><span class="n">dict_exists</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">.</span><span class="n">dict_exists</span><span class="p">(</span><span class="s2">&quot;fake&quot;</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">.</span><span class="n">list_languages</span><span class="p">()</span>
+<span class="go">[&#39;en&#39;, &#39;en_CA&#39;, &#39;en_GB&#39;, &#39;en_US&#39;, &#39;eo&#39;, &#39;fr&#39;, &#39;fr_CH&#39;, &#39;fr_FR&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">request_dict</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span>
+<span class="go">&lt;enchant.Dict object at 0x2aaaabdff8d0&gt;</span>
+</pre></div>
+</div>
+<p>Brokers also have the method describe which determines which providers are available, and the method list_dicts which lists the dictionaries available through each provider:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">enchant</span><span class="o">.</span><span class="n">Broker</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+<span class="go">[&lt;Enchant: Aspell Provider&gt;, &lt;Enchant: Myspell Provider&gt;, &lt;Enchant: Ispell Provider&gt;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">.</span><span class="n">list_dicts</span><span class="p">()</span>
+<span class="go">[(&#39;en&#39;, &lt;Enchant: Aspell Provider&gt;), (&#39;en_CA&#39;, &lt;Enchant: Aspell Provider&gt;), (&#39;en_GB&#39;, &lt;Enchant: Aspell Provider&gt;), (&#39;en_US&#39;, &lt;Enchant: Aspell Provider&gt;), (&#39;eo&#39;, &lt;Enchant: Aspell Provider&gt;), (&#39;fr&#39;, &lt;Enchant: Aspell Provider&gt;), (&#39;fr_CH&#39;, &lt;Enchant: Aspell Provider&gt;), (&#39;fr_FR&#39;, &lt;Enchant: Aspell Provider&gt;)]</span>
+</pre></div>
+</div>
+<div class="section" id="the-default-broker">
+<h4><a class="toc-backref" href="#id20">The Default Broker</a><a class="headerlink" href="#the-default-broker" title="Permalink to this headline">¶</a></h4>
+<p>In normal use, the functionality provided by brokers is not useful to the programmer. To make the programmer’s job easier, PyEnchant creates a default Broker object and uses it whenever one is not explicitly given. For example, the default broker is used when creating dictionary objects directly. This object is available as enchant._broker:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">enchant</span><span class="o">.</span><span class="n">_broker</span>
+<span class="go">&lt;enchant.Broker object at 0x2aaaabdff590&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">enchant</span><span class="o">.</span><span class="n">Dict</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">_broker</span>
+<span class="go">&lt;enchant.Broker object at 0x2aaaabdff590&gt;</span>
+</pre></div>
+</div>
+<p>You may have noticed that the top-level functions provided by the enchant module (such as request_dict, dict_exists and list_languages) match the methods provided by the Broker class. These functions are in fact the instance methods of the default Broker object:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">enchant</span><span class="o">.</span><span class="n">_broker</span>
+<span class="go">&lt;enchant.Broker object at 0x2aaaabdff590&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">enchant</span><span class="o">.</span><span class="n">request_dict</span><span class="o">.</span><span class="n">im_self</span>
+<span class="go">&lt;enchant.Broker object at 0x2aaaabdff590&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">enchant</span><span class="o">.</span><span class="n">dict_exists</span><span class="o">.</span><span class="n">im_self</span>
+<span class="go">&lt;enchant.Broker object at 0x2aaaabdff590&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="provider-ordering">
+<h4><a class="toc-backref" href="#id21">Provider Ordering</a><a class="headerlink" href="#provider-ordering" title="Permalink to this headline">¶</a></h4>
+<p>Which provider is used for which language is determined by the provider ordering of the Broker. This can be altered using the set_ordering method. This method accepts a language tag and a comma-separated list of provider names in the order that they should be checked. A language tag of “*” means that the ordering should be the default for all languages where an explicit ordering has not been given.</p>
+<p>The following example states that for American English the MySpell provider should be tried first, followed by the aspell provider. For all other languages, the ordering is reversed:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">enchant</span><span class="o">.</span><span class="n">Broker</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">.</span><span class="n">set_ordering</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">,</span><span class="s2">&quot;myspell,aspell&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">.</span><span class="n">set_ordering</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">,</span><span class="s2">&quot;aspell,myspell&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">.</span><span class="n">request_dict</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">provider</span>
+<span class="go">&lt;Enchant: Myspell Provider&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">.</span><span class="n">request_dict</span><span class="p">(</span><span class="s2">&quot;en_GB&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">provider</span>
+<span class="go">&lt;Enchant: Aspell Provider&gt;</span>
+</pre></div>
+</div>
+<p>The user can also set their preferred ordering using enchant configuration files. For this reason, application programmers are discouraged from explicitly setting an ordering unless there is a compelling reason to do so.</p>
+</div>
+</div>
+<div class="section" id="extending-enchant-tokenize">
+<h3><a class="toc-backref" href="#id22">Extending enchant.tokenize</a><a class="headerlink" href="#extending-enchant-tokenize" title="Permalink to this headline">¶</a></h3>
+<p>As explained above, the module enchant.tokenize provides the ability to split text into its component words. The current implementation is based only on the rules for the English language, and so might not be completely suitable for your language of choice. Fortunately, it is straightforward to extend the functionality of this module.</p>
+<p>To implement a new tokenization routine for the language TAG, simply create a class/function “tokenize” within the module “enchant.tokenize.TAG”. This function will automatically be detected by the module’s get_tokenizer function and used when appropriate. The easiest way to accomplish this is to copy the module “enchant.tokenize.en” and modify it to suit your needs.</p>
+<p>The author would be very grateful for tokenization routines for languages other than English which can be incorporated back into the main PyEnchant distribution.</p>
+</div>
+</div>
+<div class="section" id="pyenchant-and-other-programs">
+<h2><a class="toc-backref" href="#id23">PyEnchant and other programs</a><a class="headerlink" href="#pyenchant-and-other-programs" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="packaging-pyenchant-with-py2exe">
+<h3><a class="toc-backref" href="#id24">Packaging PyEnchant with py2exe</a><a class="headerlink" href="#packaging-pyenchant-with-py2exe" title="Permalink to this headline">¶</a></h3>
+<p>PyEnchant depends on a large number of auxiliary files such as plugin libraries, dictionary files, etc. While py2exe does an excellent job of detecting static file dependencies, it cannot detect these files which are located at runtime.</p>
+<p>To successfully package an application that uses PyEnchant, these auxiliary files must be explicitly included in the “data_files” argument to the setup function. The function enchant.utils.win32_data_files returns a list of files which can be used for this purpose.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">PyEnchant Tutorial</a><ul>
+<li><a class="reference internal" href="#installing-pyenchant">Installing PyEnchant</a><ul>
+<li><a class="reference internal" href="#installing-the-package">Installing the Package</a></li>
+<li><a class="reference internal" href="#adding-language-dictionaries">Adding Language Dictionaries</a><ul>
+<li><a class="reference internal" href="#windows-users">Windows Users</a></li>
+<li><a class="reference internal" href="#mac-os-x-users">Mac OS X Users</a></li>
+<li><a class="reference internal" href="#other-platforms">Other Platforms</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#basic-pyenchant-usage">Basic PyEnchant Usage</a><ul>
+<li><a class="reference internal" href="#creating-and-using-dictionary-objects">Creating and Using Dictionary Objects</a></li>
+<li><a class="reference internal" href="#personal-word-lists">Personal Word Lists</a></li>
+<li><a class="reference internal" href="#checking-entire-blocks-of-text">Checking entire blocks of text</a></li>
+<li><a class="reference internal" href="#wxspellcheckerdialog">wxSpellCheckerDialog</a></li>
+<li><a class="reference internal" href="#cmdlinechecker">CmdLineChecker</a></li>
+<li><a class="reference internal" href="#tokenization-splitting-text-into-words">Tokenization: splitting text into words</a><ul>
+<li><a class="reference internal" href="#chunkers">Chunkers</a></li>
+<li><a class="reference internal" href="#filters">Filters</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#advanced-pyenchant-usage">Advanced PyEnchant Usage</a><ul>
+<li><a class="reference internal" href="#providers">Providers</a></li>
+<li><a class="reference internal" href="#brokers">Brokers</a><ul>
+<li><a class="reference internal" href="#the-default-broker">The Default Broker</a></li>
+<li><a class="reference internal" href="#provider-ordering">Provider Ordering</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#extending-enchant-tokenize">Extending enchant.tokenize</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pyenchant-and-other-programs">PyEnchant and other programs</a><ul>
+<li><a class="reference internal" href="#packaging-pyenchant-with-py2exe">Packaging PyEnchant with py2exe</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">PyEnchant</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="api/index.html"
+                        title="next chapter">PyEnchant API Listing</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/tutorial.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api/index.html" title="PyEnchant API Listing"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="PyEnchant"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PyEnchant 2.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2011, Ryan Kelly.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.
+    </div>
+  </body>
+</html>

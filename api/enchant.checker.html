@@ -1,0 +1,296 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>enchant.checker: High-level spellchecking functionality &#8212; PyEnchant 2.0.0 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="enchant.tokenize: String tokenization functions for PyEnchant" href="enchant.tokenize.html" />
+    <link rel="prev" title="enchant: Access to the enchant spellchecking library" href="enchant.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="enchant.tokenize.html" title="enchant.tokenize: String tokenization functions for PyEnchant"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="enchant.html" title="enchant: Access to the enchant spellchecking library"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyEnchant 2.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">PyEnchant API Listing</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-enchant.checker"></span><div class="section" id="enchant-checker-high-level-spellchecking-functionality">
+<h1>enchant.checker:  High-level spellchecking functionality<a class="headerlink" href="#enchant-checker-high-level-spellchecking-functionality" title="Permalink to this headline">¶</a></h1>
+<p>This package is designed to host higher-level spellchecking functionality
+than is available in the base enchant package.  It should make writing
+applications that follow common usage idioms significantly easier.</p>
+<p>The most useful class is SpellChecker, which implements a spellchecking
+loop over a block of text.  It is capable of modifying the text in-place
+if given an array of characters to work with.</p>
+<p>This package also contains several interfaces to the SpellChecker class,
+such as a wxPython GUI dialog and a command-line interface.</p>
+<dl class="class">
+<dt id="enchant.checker.SpellChecker">
+<em class="property">class </em><code class="sig-prename descclassname">enchant.checker.</code><code class="sig-name descname">SpellChecker</code><span class="sig-paren">(</span><em class="sig-param">lang=None</em>, <em class="sig-param">text=None</em>, <em class="sig-param">tokenize=None</em>, <em class="sig-param">chunkers=None</em>, <em class="sig-param">filters=None</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class implementing stateful spellchecking behaviour.</p>
+<p>This class is designed to implement a spell-checking loop over
+a block of text, correcting/ignoring/replacing words as required.
+This loop is implemented using an iterator paradigm so it can be
+embedded inside other loops of control.</p>
+<p>The SpellChecker object is stateful, and the appropriate methods
+must be called to alter its state and affect the progress of
+the spell checking session.  At any point during the checking
+session, the attribute ‘word’ will hold the current erroneously
+spelled word under consideration.  The action to take on this word
+is determined by calling methods such as ‘replace’, ‘replace_always’
+and ‘ignore_always’.  Once this is done, calling ‘next’ advances
+to the next misspelled word.</p>
+<p>As a quick (and rather silly) example, the following code replaces
+each misspelled word with the string “SPAM”:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;This is sme text with a fw speling errors in it.&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chkr</span> <span class="o">=</span> <span class="n">SpellChecker</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">,</span><span class="n">text</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">err</span> <span class="ow">in</span> <span class="n">chkr</span><span class="p">:</span>
+<span class="gp">... </span>  <span class="n">err</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;SPAM&quot;</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chkr</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span>
+<span class="go">&#39;This is SPAM text with a SPAM SPAM errors in it.&#39;</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+<p>Internally, the SpellChecker always works with arrays of (possibly
+unicode) character elements.  This allows the in-place modification
+of the string as it is checked, and is the closest thing Python has
+to a mutable string.  The text can be set as any of a normal string,
+unicode string, character array or unicode character array. The
+‘get_text’ method will return the modified array object if an
+array is used, or a new string object if a string it used.</p>
+<p>Words input to the SpellChecker may be either plain strings or
+unicode objects.  They will be converted to the same type as the
+text being checked, using python’s default encoding/decoding
+settings.</p>
+<p>If using an array of characters with this object and the
+array is modified outside of the spellchecking loop, use the
+‘set_offset’ method to reposition the internal loop pointer
+to make sure it doesn’t skip any words.</p>
+<dl class="method">
+<dt id="enchant.checker.SpellChecker.add">
+<code class="sig-name descname">add</code><span class="sig-paren">(</span><em class="sig-param">word=None</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add given word to the personal word list.</p>
+<p>If no word is given, the current erroneous word is added.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="enchant.checker.SpellChecker.add_to_personal">
+<code class="sig-name descname">add_to_personal</code><span class="sig-paren">(</span><em class="sig-param">word=None</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.add_to_personal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add given word to the personal word list.</p>
+<p>If no word is given, the current erroneous word is added.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="enchant.checker.SpellChecker.check">
+<code class="sig-name descname">check</code><span class="sig-paren">(</span><em class="sig-param">word</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check correctness of the given word.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="enchant.checker.SpellChecker.coerce_string">
+<code class="sig-name descname">coerce_string</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">enc=None</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.coerce_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coerce string into the required type.</p>
+<p>This method can be used to automatically ensure that strings
+are of the correct type required by this checker - either unicode
+or standard.  If there is a mismatch, conversion is done using
+python’s default encoding unless another encoding is specified.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="enchant.checker.SpellChecker.get_text">
+<code class="sig-name descname">get_text</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.get_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the spell-checked text.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="enchant.checker.SpellChecker.ignore_always">
+<code class="sig-name descname">ignore_always</code><span class="sig-paren">(</span><em class="sig-param">word=None</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.ignore_always" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add given word to list of words to ignore.</p>
+<p>If no word is given, the current erroneous word is added.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="enchant.checker.SpellChecker.leading_context">
+<code class="sig-name descname">leading_context</code><span class="sig-paren">(</span><em class="sig-param">chars</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.leading_context" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get &lt;chars&gt; characters of leading context.</p>
+<p>This method returns up to &lt;chars&gt; characters of leading
+context - the text that occurs in the string immediately
+before the current erroneous word.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="enchant.checker.SpellChecker.next">
+<code class="sig-name descname">next</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.next" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process text up to the next spelling error.</p>
+<p>This method is designed to support the iterator protocol.
+Each time it is called, it will advance the ‘word’ attribute
+to the next spelling error in the text.  When no more errors
+are found, it will raise StopIteration.</p>
+<p>The method will always return self, so that it can be used
+sensibly in common idioms such as:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>for err in checker:</dt><dd><p>err.do_something()</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="enchant.checker.SpellChecker.replace">
+<code class="sig-name descname">replace</code><span class="sig-paren">(</span><em class="sig-param">repl</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.replace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace the current erroneous word with the given string.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="enchant.checker.SpellChecker.replace_always">
+<code class="sig-name descname">replace_always</code><span class="sig-paren">(</span><em class="sig-param">word</em>, <em class="sig-param">repl=None</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.replace_always" title="Permalink to this definition">¶</a></dt>
+<dd><p>Always replace given word with given replacement.</p>
+<p>If a single argument is given, this is used to replace the
+current erroneous word.  If two arguments are given, that
+combination is added to the list for future use.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="enchant.checker.SpellChecker.set_offset">
+<code class="sig-name descname">set_offset</code><span class="sig-paren">(</span><em class="sig-param">off</em>, <em class="sig-param">whence=0</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.set_offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the offset of the tokenization routine.</p>
+<p>For more details on the purpose of the tokenization offset,
+see the documentation of the ‘enchant.tokenize’ module.
+The optional argument whence indicates the method by
+which to change the offset:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>0 (the default) treats &lt;off&gt; as an increment</p></li>
+<li><p>1 treats &lt;off&gt; as a distance from the start</p></li>
+<li><p>2 treats &lt;off&gt; as a distance from the end</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="enchant.checker.SpellChecker.set_text">
+<code class="sig-name descname">set_text</code><span class="sig-paren">(</span><em class="sig-param">text</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.set_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the text to be spell-checked.</p>
+<p>This method must be called, or the ‘text’ argument supplied
+to the constructor, before calling the ‘next()’ method.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="enchant.checker.SpellChecker.suggest">
+<code class="sig-name descname">suggest</code><span class="sig-paren">(</span><em class="sig-param">word=None</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.suggest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return suggested spellings for the given word.</p>
+<p>If no word is given, the current erroneous word is used.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="enchant.checker.SpellChecker.trailing_context">
+<code class="sig-name descname">trailing_context</code><span class="sig-paren">(</span><em class="sig-param">chars</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.trailing_context" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get &lt;chars&gt; characters of trailing context.</p>
+<p>This method returns up to &lt;chars&gt; characters of trailing
+context - the text that occurs in the string immediately
+after the current erroneous word.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="enchant.checker.SpellChecker.wants_unicode">
+<code class="sig-name descname">wants_unicode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.wants_unicode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the checker wants unicode strings.</p>
+<p>This method will return True if the checker wants unicode strings
+as input, False if it wants normal strings.  It’s important to
+provide the correct type of string to the checker.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="enchant.html"
+                        title="previous chapter">enchant:  Access to the enchant spellchecking library</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="enchant.tokenize.html"
+                        title="next chapter">enchant.tokenize:    String tokenization functions for PyEnchant</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/enchant.checker.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="enchant.tokenize.html" title="enchant.tokenize: String tokenization functions for PyEnchant"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="enchant.html" title="enchant: Access to the enchant spellchecking library"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyEnchant 2.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >PyEnchant API Listing</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2011, Ryan Kelly.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.
+    </div>
+  </body>
+</html>

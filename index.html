@@ -1,0 +1,139 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>PyEnchant &#8212; PyEnchant 2.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="PyEnchant Tutorial" href="tutorial.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tutorial.html" title="PyEnchant Tutorial"
+             accesskey="N">next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">PyEnchant 2.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pyenchant">
+<h1>PyEnchant<a class="headerlink" href="#pyenchant" title="Permalink to this headline">¶</a></h1>
+<p>PyEnchant is a spellchecking library for Python, based on the excellent <a class="reference external" href="http://www.abisource.com/enchant/">Enchant</a> library.</p>
+<p>To get started, check out the comprehensive <a class="reference internal" href="tutorial.html"><span class="doc">tutorial</span></a> or the auto-generated <a class="reference internal" href="api/enchant.html"><span class="doc">API listing</span></a>. If you just want to get up and running in a hurry, here’s a quick sample of PyEnchant in action:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">enchant</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">enchant</span><span class="o">.</span><span class="n">Dict</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="s2">&quot;Helo&quot;</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">suggest</span><span class="p">(</span><span class="s2">&quot;Helo&quot;</span><span class="p">)</span>
+<span class="go">[&#39;He lo&#39;, &#39;He-lo&#39;, &#39;Hello&#39;, &#39;Helot&#39;, &#39;Help&#39;, &#39;Halo&#39;, &#39;Hell&#39;, &#39;Held&#39;, &#39;Helm&#39;, &#39;Hero&#39;, &quot;He&#39;ll&quot;]</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+<div class="section" id="documentation-index">
+<h2>Documentation Index<a class="headerlink" href="#documentation-index" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">PyEnchant Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#installing-pyenchant">Installing PyEnchant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#basic-pyenchant-usage">Basic PyEnchant Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#advanced-pyenchant-usage">Advanced PyEnchant Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#pyenchant-and-other-programs">PyEnchant and other programs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">PyEnchant API Listing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/enchant.html">enchant:  Access to the enchant spellchecking library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/enchant.checker.html">enchant.checker:  High-level spellchecking functionality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/enchant.tokenize.html">enchant.tokenize:    String tokenization functions for PyEnchant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/enchant.utils.html">enchant.utils:    Misc utilities for the enchant package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/enchant.pypwl.html">pypwl:  pure-python personal word list in the style of Enchant</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">PyEnchant</a><ul>
+<li><a class="reference internal" href="#documentation-index">Documentation Index</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tutorial.html"
+                        title="next chapter">PyEnchant Tutorial</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tutorial.html" title="PyEnchant Tutorial"
+             >next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">PyEnchant 2.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2011, Ryan Kelly.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.
+    </div>
+  </body>
+</html>

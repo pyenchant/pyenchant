@@ -1,0 +1,261 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>enchant.utils: Misc utilities for the enchant package &#8212; PyEnchant 2.0.0 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pypwl: pure-python personal word list in the style of Enchant" href="enchant.pypwl.html" />
+    <link rel="prev" title="enchant.tokenize: String tokenization functions for PyEnchant" href="enchant.tokenize.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="enchant.pypwl.html" title="pypwl: pure-python personal word list in the style of Enchant"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="enchant.tokenize.html" title="enchant.tokenize: String tokenization functions for PyEnchant"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyEnchant 2.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">PyEnchant API Listing</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-enchant.utils"></span><div class="section" id="enchant-utils-misc-utilities-for-the-enchant-package">
+<h1>enchant.utils:    Misc utilities for the enchant package<a class="headerlink" href="#enchant-utils-misc-utilities-for-the-enchant-package" title="Permalink to this headline">¶</a></h1>
+<p>This module provides miscellaneous utilities for use with the
+enchant spellchecking package.  Currently available functionality
+includes:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>string/unicode compatibility wrappers</p></li>
+<li><p>functions for dealing with locale/language settings</p></li>
+<li><p>ability to list supporting data files (win32 only)</p></li>
+<li><p>functions for bundling supporting data files from a build</p></li>
+</ul>
+</div></blockquote>
+<dl class="class">
+<dt id="enchant.utils.EnchantStr">
+<em class="property">class </em><code class="sig-prename descclassname">enchant.utils.</code><code class="sig-name descname">EnchantStr</code><a class="headerlink" href="#enchant.utils.EnchantStr" title="Permalink to this definition">¶</a></dt>
+<dd><p>String subclass for interfacing with enchant C library.</p>
+<p>This class encapsulates the logic for interfacing between python native
+string/unicode objects and the underlying enchant library, which expects
+all strings to be UTF-8 character arrays.  It is a subclass of the
+default string class ‘str’ - on Python 2.x that makes it an ascii string,
+on Python 3.x it is a unicode object.</p>
+<p>Initialise it with a string or unicode object, and use the encode() method
+to obtain an object suitable for passing to the underlying C library.
+When strings are read back into python, use decode(s) to translate them
+back into the appropriate python-level string type.</p>
+<p>This allows us to following the common Python 2.x idiom of returning
+unicode when unicode is passed in, and byte strings otherwise.  It also
+lets the interface be upwards-compatible with Python 3, in which string
+objects are unicode by default.</p>
+<dl class="method">
+<dt id="enchant.utils.EnchantStr.decode">
+<code class="sig-name descname">decode</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.utils.EnchantStr.decode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decode a string returned by the enchant C library.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="enchant.utils.EnchantStr.encode">
+<code class="sig-name descname">encode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#enchant.utils.EnchantStr.encode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encode this string into a form usable by the enchant C library.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="enchant.utils.UTF16EnchantStr">
+<em class="property">class </em><code class="sig-prename descclassname">enchant.utils.</code><code class="sig-name descname">UTF16EnchantStr</code><a class="headerlink" href="#enchant.utils.UTF16EnchantStr" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="enchant.utils.UTF16EnchantStr.encode">
+<code class="sig-name descname">encode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#enchant.utils.UTF16EnchantStr.encode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encode this string into a form usable by the enchant C library.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="enchant.utils.get_default_language">
+<code class="sig-prename descclassname">enchant.utils.</code><code class="sig-name descname">get_default_language</code><span class="sig-paren">(</span><em class="sig-param">default=None</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.utils.get_default_language" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine the user’s default language, if possible.</p>
+<p>This function uses the ‘locale’ module to try to determine
+the user’s preferred language.  The return value is as
+follows:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>if a locale is available for the LC_MESSAGES category,
+that language is used</p></li>
+<li><p>if a default locale is available, that language is used</p></li>
+<li><p>if the keyword argument &lt;default&gt; is given, it is used</p></li>
+<li><p>if nothing else works, None is returned</p></li>
+</ul>
+</div></blockquote>
+<p>Note that determining the user’s language is in general only
+possible if they have set the necessary environment variables
+on their system.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="enchant.utils.get_resource_filename">
+<code class="sig-prename descclassname">enchant.utils.</code><code class="sig-name descname">get_resource_filename</code><span class="sig-paren">(</span><em class="sig-param">resname</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.utils.get_resource_filename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the absolute path to the named resource file.</p>
+<p>This serves widely the same purpose as pkg_resources.resource_filename(),
+but tries to avoid loading pkg_resources unless we’re actually in
+an egg.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="enchant.utils.levenshtein">
+<code class="sig-prename descclassname">enchant.utils.</code><code class="sig-name descname">levenshtein</code><span class="sig-paren">(</span><em class="sig-param">s1</em>, <em class="sig-param">s2</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.utils.levenshtein" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the Levenshtein distance between two strings.</p>
+<p>This is straight from Wikipedia.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="enchant.utils.printf">
+<code class="sig-prename descclassname">enchant.utils.</code><code class="sig-name descname">printf</code><span class="sig-paren">(</span><em class="sig-param">values</em>, <em class="sig-param">sep=' '</em>, <em class="sig-param">end='\n'</em>, <em class="sig-param">file=None</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.utils.printf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compatibility wrapper from print statement/function.</p>
+<p>This function is a simple Python2/Python3 compatibility wrapper
+for printing to stdout.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="enchant.utils.raw_bytes">
+<code class="sig-prename descclassname">enchant.utils.</code><code class="sig-name descname">raw_bytes</code><span class="sig-paren">(</span><em class="sig-param">raw</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.utils.raw_bytes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a bytes object out of a raw string.</p>
+<p>This is analogous to raw_unicode, but processes byte escape characters
+to produce a bytes object.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="enchant.utils.raw_unicode">
+<code class="sig-prename descclassname">enchant.utils.</code><code class="sig-name descname">raw_unicode</code><span class="sig-paren">(</span><em class="sig-param">raw</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.utils.raw_unicode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a unicode string from a raw string.</p>
+<p>This function takes a string containing unicode escape characters,
+and returns the corresponding unicode string.  Useful for writing
+unicode string literals in your python source while being upwards-
+compatible with Python 3.  For example, instead of doing this:</p>
+<blockquote>
+<div><p>s = u”helloⅉ”  # syntax error in Python 3</p>
+</div></blockquote>
+<p>Or this:</p>
+<blockquote>
+<div><p>s = “helloⅉ”   # not what you want in Python 2.x</p>
+</div></blockquote>
+<p>You can do this:</p>
+<blockquote>
+<div><p>s = raw_unicode(r”helloⅉ”)  # works everywhere!</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="enchant.utils.trim_suggestions">
+<code class="sig-prename descclassname">enchant.utils.</code><code class="sig-name descname">trim_suggestions</code><span class="sig-paren">(</span><em class="sig-param">word</em>, <em class="sig-param">suggs</em>, <em class="sig-param">maxlen</em>, <em class="sig-param">calcdist=None</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.utils.trim_suggestions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trim a list of suggestions to a maximum length.</p>
+<p>If the list of suggested words is too long, you can use this function
+to trim it down to a maximum length.  It tries to keep the “best”
+suggestions based on similarity to the original word.</p>
+<p>If the optional “calcdist” argument is provided, it must be a callable
+taking two words and returning the distance between them.  It will be
+used to determine which words to retain in the list.  The default is
+a simple Levenshtein distance.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="enchant.utils.win32_data_files">
+<code class="sig-prename descclassname">enchant.utils.</code><code class="sig-name descname">win32_data_files</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#enchant.utils.win32_data_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list of supporting data files, for use with setup.py</p>
+<p>This function returns a list of the supporting data files available
+to the running version of PyEnchant.  This is in the format expected
+by the data_files argument of the distutils setup function.  It’s
+very useful, for example, for including the data files in an executable
+produced by py2exe.</p>
+<p>Only really tested on the win32 platform (it’s the only platform for
+which we ship our own supporting data files)</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="enchant.tokenize.html"
+                        title="previous chapter">enchant.tokenize:    String tokenization functions for PyEnchant</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="enchant.pypwl.html"
+                        title="next chapter">pypwl:  pure-python personal word list in the style of Enchant</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/enchant.utils.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="enchant.pypwl.html" title="pypwl: pure-python personal word list in the style of Enchant"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="enchant.tokenize.html" title="enchant.tokenize: String tokenization functions for PyEnchant"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyEnchant 2.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >PyEnchant API Listing</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2011, Ryan Kelly.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.
+    </div>
+  </body>
+</html>
