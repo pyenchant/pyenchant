@@ -160,7 +160,7 @@ class CmdLineChecker:
         result = ""
         suggestions = self.error.suggest()
         for index, sugg in enumerate(suggestions):
-            if index is 0:
+            if index == 0:
                 result = result + color(str(index), color='yellow') + ": " + color(sugg, color='bold')
             else:
                 result = result + " | " + color(str(index), color='yellow') + ": " + color(sugg, color='bold')
