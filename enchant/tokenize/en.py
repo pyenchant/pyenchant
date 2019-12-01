@@ -60,9 +60,9 @@ class tokenize(enchant.tokenize.tokenize):
     these characters cannot appear at the start or end of a word.
     """
 
-    _DOC_ERRORS = ["pos","pos"]
-    
-    def __init__(self,text,valid_chars=None):
+    _DOC_ERRORS = ["pos", "pos"]
+
+    def __init__(self, text, valid_chars=None):
         self._valid_chars = valid_chars
         self._text = text
         self._offset = 0
@@ -71,13 +71,13 @@ class tokenize(enchant.tokenize.tokenize):
         # so we can't use isinstance(text,unicode) to detect unicode.
         # Instead we typetest the first character of the text.
         # If there's no characters then it doesn't matter what implementation
-        # we use since it won't be called anyway. 
+        # we use since it won't be called anyway.
         try:
             char1 = text[0]
         except IndexError:
             self._initialize_for_binary()
         else:
-            if isinstance(char1,unicode):
+            if isinstance(char1, unicode):
                 self._initialize_for_unicode()
             else:
                 self._initialize_for_binary()
@@ -93,10 +93,10 @@ class tokenize(enchant.tokenize.tokenize):
             # XXX TODO: this doesn't seem to work correctly with the
             # MySpell provider, disabling for now.
             # Allow unicode typographic apostrophe
-            #self._valid_chars = (u"'",u"\u2019")
+            # self._valid_chars = (u"'",u"\u2019")
             self._valid_chars = (u"'",)
-    
-    def _consume_alpha_b(self,text,offset):
+
+    def _consume_alpha_b(self, text, offset):
         """Consume an alphabetic character from the given bytestring.
 
         Given a bytestring and the current offset, this method returns
@@ -108,10 +108,10 @@ class tokenize(enchant.tokenize.tokenize):
         if text[offset].isalpha():
             return 1
         elif text[offset] >= "\x80":
-            return self._consume_alpha_utf8(text,offset)
+            return self._consume_alpha_utf8(text, offset)
         return 0
 
-    def _consume_alpha_utf8(self,text,offset):
+    def _consume_alpha_utf8(self, text, offset):
         """Consume a sequence of utf8 bytes forming an alphabetic character."""
         incr = 2
         u = ""
@@ -119,13 +119,13 @@ class tokenize(enchant.tokenize.tokenize):
             try:
                 try:
                     #  In the common case this will be a string
-                    u = text[offset:offset+incr].decode("utf8")
+                    u = text[offset : offset + incr].decode("utf8")
                 except AttributeError:
                     #  Looks like it was e.g. a mutable char array.
                     try:
-                        s = text[offset:offset+incr].tostring()
+                        s = text[offset : offset + incr].tostring()
                     except AttributeError:
-                        s = "".join([c for c in text[offset:offset+incr]])
+                        s = "".join([c for c in text[offset : offset + incr]])
                     u = s.decode("utf8")
             except UnicodeDecodeError:
                 incr += 1
@@ -137,7 +137,7 @@ class tokenize(enchant.tokenize.tokenize):
             return incr
         return 0
 
-    def _consume_alpha_u(self,text,offset):
+    def _consume_alpha_u(self, text, offset):
         """Consume an alphabetic character from the given unicode string.
 
         Given a unicode string and the current offset, this method returns
@@ -150,7 +150,7 @@ class tokenize(enchant.tokenize.tokenize):
         if text[offset].isalpha():
             incr = 1
             while offset + incr < len(text):
-                if unicodedata.category(text[offset+incr])[0] != "M":
+                if unicodedata.category(text[offset + incr])[0] != "M":
                     break
                 incr += 1
         return incr
@@ -161,14 +161,14 @@ class tokenize(enchant.tokenize.tokenize):
         while offset < len(text):
             # Find start of next word (must be alpha)
             while offset < len(text):
-                incr = self._consume_alpha(text,offset)
+                incr = self._consume_alpha(text, offset)
                 if incr:
                     break
                 offset += 1
             curPos = offset
             # Find end of word using, allowing valid_chars
             while offset < len(text):
-                incr = self._consume_alpha(text,offset)
+                incr = self._consume_alpha(text, offset)
                 if not incr:
                     if text[offset] in self._valid_chars:
                         incr = 1
@@ -176,12 +176,11 @@ class tokenize(enchant.tokenize.tokenize):
                         break
                 offset += incr
             # Return if word isn't empty
-            if(curPos != offset):
+            if curPos != offset:
                 # Make sure word doesn't end with a valid_char
-                while text[offset-1] in self._valid_chars:
+                while text[offset - 1] in self._valid_chars:
                     offset = offset - 1
                 self._offset = offset
-                return (text[curPos:offset],curPos)
+                return (text[curPos:offset], curPos)
         self._offset = offset
         raise StopIteration()
-

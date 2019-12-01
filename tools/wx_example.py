@@ -1,5 +1,3 @@
-
-
 import wx
 
 from enchant.checker import SpellChecker
@@ -14,7 +12,7 @@ app = wx.App(False)
 
 # Construct the dialog, and the SpellChecker it is to use
 dlg = wxSpellCheckerDialog(None)
-chkr = SpellChecker("en_US",text)
+chkr = SpellChecker("en_US", text)
 dlg.SetSpellChecker(chkr)
 
 # Display the dialog, allowing user interaction
@@ -25,6 +23,3 @@ if dlg.ShowModal() == wx.ID_OK:
 else:
     # Checking was cancelled
     print "[CHECKING CANCELLED]"
-    
-
-

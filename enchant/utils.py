@@ -76,7 +76,7 @@ except NameError:
     str = str
     unicode = str
     bytes = bytes
-    basestring = (str,bytes)
+    basestring = (str, bytes)
     chr = chr
 else:
     str = str
@@ -84,6 +84,7 @@ else:
     bytes = str
     basestring = basestring
     chr = unichr
+
 
 def raw_unicode(raw):
     """Make a unicode string from a raw string.
@@ -136,7 +137,7 @@ class EnchantStr(str):
     objects are unicode by default.
     """
 
-    def __new__(cls,value):
+    def __new__(cls, value):
         """EnchantStr data constructor.
 
         This method records whether the initial string was unicode, then
@@ -150,47 +151,47 @@ class EnchantStr(str):
             was_unicode = False
             if str is not bytes:
                 raise Error("Don't pass bytestrings to pyenchant")
-        self = str.__new__(cls,value)
+        self = str.__new__(cls, value)
         self._was_unicode = was_unicode
         return self
 
     def encode(self):
         """Encode this string into a form usable by the enchant C library."""
         if str is unicode:
-          return str.encode(self,"utf-8")
+            return str.encode(self, "utf-8")
         else:
-          return self
+            return self
 
-    def decode(self,value):
+    def decode(self, value):
         """Decode a string returned by the enchant C library."""
         if self._was_unicode:
-          if str is unicode:
-            # On some python3 versions, ctypes converts c_char_p
-            # to str() rather than bytes()
-            if isinstance(value,str):
-                value = value.encode()
-            return value.decode("utf-8")
-          else:
-            return value.decode("utf-8")
+            if str is unicode:
+                # On some python3 versions, ctypes converts c_char_p
+                # to str() rather than bytes()
+                if isinstance(value, str):
+                    value = value.encode()
+                return value.decode("utf-8")
+            else:
+                return value.decode("utf-8")
         else:
-          return value
+            return value
 
 
 class UTF16EnchantStr(EnchantStr):
 
     # Defines the UNICODE replacement character
-    REPLACEMENT_CHAR = chr(2**16 - 3)
+    REPLACEMENT_CHAR = chr(2 ** 16 - 3)
 
     def encode(self):
         """Encode this string into a form usable by the enchant C library."""
         if str is unicode:
             unicode_chars = self
         else:
-            unicode_chars = unicode(self, 'utf8', errors='replace')
+            unicode_chars = unicode(self, "utf8", errors="replace")
 
-        utf16_safe_string = "".join(c if ord(c) < 2**16
-                                      else self.REPLACEMENT_CHAR
-                                    for c in unicode_chars)
+        utf16_safe_string = "".join(
+            c if ord(c) < 2 ** 16 else self.REPLACEMENT_CHAR for c in unicode_chars
+        )
 
         if str is unicode:
             return bytes(utf16_safe_string, "utf8")
@@ -198,8 +199,7 @@ class UTF16EnchantStr(EnchantStr):
             return utf16_safe_string.encode("utf8")
 
 
-
-def printf(values,sep=" ",end="\n",file=None):
+def printf(values, sep=" ", end="\n", file=None):
     """Compatibility wrapper from print statement/function.
 
     This function is a simple Python2/Python3 compatibility wrapper
@@ -207,16 +207,18 @@ def printf(values,sep=" ",end="\n",file=None):
     """
     if file is None:
         file = sys.stdout
-    file.write(sep.join(map(str,values)))
+    file.write(sep.join(map(str, values)))
     file.write(end)
 
 
 try:
     next = next
 except NameError:
+
     def next(iter):
         """Compatibility wrapper for advancing an iterator."""
         return iter.next()
+
 
 try:
     xrange = xrange
@@ -252,8 +254,7 @@ def levenshtein(s1, s2):
     return previous_row[-1]
 
 
-
-def trim_suggestions(word,suggs,maxlen,calcdist=None):
+def trim_suggestions(word, suggs, maxlen, calcdist=None):
     """Trim a list of suggestions to a maximum length.
 
     If the list of suggested words is too long, you can use this function
@@ -267,10 +268,9 @@ def trim_suggestions(word,suggs,maxlen,calcdist=None):
     """
     if calcdist is None:
         calcdist = levenshtein
-    decorated = [(calcdist(word,s),s) for s in suggs]
+    decorated = [(calcdist(word, s), s) for s in suggs]
     decorated.sort()
-    return [s for (l,s) in decorated[:maxlen]]
-
+    return [s for (l, s) in decorated[:maxlen]]
 
 
 def get_default_language(default=None):
@@ -292,6 +292,7 @@ def get_default_language(default=None):
     """
     try:
         import locale
+
         tag = locale.getlocale()[0]
         if tag is None:
             tag = locale.getdefaultlocale()[0]
@@ -301,6 +302,8 @@ def get_default_language(default=None):
     except Exception:
         pass
     return default
+
+
 get_default_language._DOC_ERRORS = ["LC"]
 
 
@@ -312,21 +315,22 @@ def get_resource_filename(resname):
     an egg.
     """
     path = os.path.dirname(os.path.abspath(__file__))
-    path = os.path.join(path,resname)
+    path = os.path.join(path, resname)
     if os.path.exists(path):
         return path
     if hasattr(sys, "frozen"):
         exe_path = sys.executable
         if not isinstance(exe_path, unicode):
-            exe_path = unicode(exe_path,sys.getfilesystemencoding())
+            exe_path = unicode(exe_path, sys.getfilesystemencoding())
         exe_dir = os.path.dirname(exe_path)
         path = os.path.join(exe_dir, resname)
         if os.path.exists(path):
             return path
     else:
         import pkg_resources
+
         try:
-            path = pkg_resources.resource_filename("enchant",resname)
+            path = pkg_resources.resource_filename("enchant", resname)
         except KeyError:
             pass
         else:
@@ -354,22 +358,24 @@ def win32_data_files():
     except Error:
         libEnchant = get_resource_filename("libenchant-1.dll")
     mainDir = os.path.dirname(libEnchant)
-    dataFiles = [('',[libEnchant])]
+    dataFiles = [("", [libEnchant])]
     #  And some specific supporting DLLs
     for dll in os.listdir(mainDir):
         if dll.endswith(".dll"):
-            for prefix in ("iconv","intl","libglib","libgmodule"):
+            for prefix in ("iconv", "intl", "libglib", "libgmodule"):
                 if dll.startswith(prefix):
-                    dataFiles[0][1].append(os.path.join(mainDir,dll))
+                    dataFiles[0][1].append(os.path.join(mainDir, dll))
     #  And anything found in the supporting data directories
-    dataDirs = ("share/enchant/myspell","share/enchant/ispell","lib/enchant")
+    dataDirs = ("share/enchant/myspell", "share/enchant/ispell", "lib/enchant")
     for dataDir in dataDirs:
         files = []
-        fullDir = os.path.join(mainDir,os.path.normpath(dataDir))
+        fullDir = os.path.join(mainDir, os.path.normpath(dataDir))
         for fn in os.listdir(fullDir):
-            fullFn = os.path.join(fullDir,fn)
+            fullFn = os.path.join(fullDir, fn)
             if os.path.isfile(fullFn):
                 files.append(fullFn)
-        dataFiles.append((dataDir,files))
+        dataFiles.append((dataDir, files))
     return dataFiles
-win32_data_files._DOC_ERRORS = ["py","py","exe"]
+
+
+win32_data_files._DOC_ERRORS = ["py", "py", "exe"]

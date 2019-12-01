@@ -36,18 +36,26 @@ can safely be imported without causing circular dependencies.
 
 """
 
+
 class Error(Exception):
     """Base exception class for the enchant module."""
+
     pass
+
 
 class DictNotFoundError(Error):
     """Exception raised when a requested dictionary could not be found."""
+
     pass
+
 
 class TokenizerNotFoundError(Error):
     """Exception raised when a requested tokenizer could not be found."""
+
     pass
+
 
 class DefaultLanguageNotFoundError(Error):
     """Exception raised when a default language could not be found."""
+
     pass

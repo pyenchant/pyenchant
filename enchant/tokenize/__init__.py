@@ -97,8 +97,17 @@ such as URLs and WikiWords.  This would look something like the following::
         ...check each word and react accordingly...
 
 """
-_DOC_ERRORS = ["pos","pos","tknzr","URLFilter","WikiWordFilter",
-               "tkns","tknzr","pos","tkns"]
+_DOC_ERRORS = [
+    "pos",
+    "pos",
+    "tknzr",
+    "URLFilter",
+    "WikiWordFilter",
+    "tkns",
+    "tknzr",
+    "pos",
+    "tkns",
+]
 
 import re
 import warnings
@@ -123,9 +132,10 @@ class tokenize:
     like functions, and so are named using lower_case rather than
     the CamelCase more traditional of class names.
     """
+
     _DOC_ERRORS = ["CamelCase"]
 
-    def __init__(self,text):
+    def __init__(self, text):
         self._text = text
         self._offset = 0
 
@@ -138,19 +148,24 @@ class tokenize:
     def __iter__(self):
         return self
 
-    def set_offset(self,offset,replaced=False):
+    def set_offset(self, offset, replaced=False):
         self._offset = offset
 
     def _get_offset(self):
         return self._offset
-    def _set_offset(self,offset):
-        msg = "changing a tokenizers 'offset' attribute is deprecated;"\
-              " use the 'set_offset' method"
-        warnings.warn(msg,category=DeprecationWarning,stacklevel=2)
-        self.set_offset(offset)
-    offset = property(_get_offset,_set_offset)
 
-def get_tokenizer(tag=None,chunkers=None,filters=None):
+    def _set_offset(self, offset):
+        msg = (
+            "changing a tokenizers 'offset' attribute is deprecated;"
+            " use the 'set_offset' method"
+        )
+        warnings.warn(msg, category=DeprecationWarning, stacklevel=2)
+        self.set_offset(offset)
+
+    offset = property(_get_offset, _set_offset)
+
+
+def get_tokenizer(tag=None, chunkers=None, filters=None):
     """Locate an appropriate tokenizer by language tag.
 
     This requires importing the function 'tokenize' from an appropriate
@@ -178,18 +193,20 @@ def get_tokenizer(tag=None,chunkers=None,filters=None):
         chunkers = list(chunkers)
         if chunkers:
             try:
-                chunkers_are_filters = issubclass(chunkers[0],Filter)
+                chunkers_are_filters = issubclass(chunkers[0], Filter)
             except TypeError:
                 pass
             else:
                 if chunkers_are_filters:
-                    msg = "passing 'filters' as a non-keyword argument "\
-                          "to get_tokenizer() is deprecated"
-                    warnings.warn(msg,category=DeprecationWarning,stacklevel=2)
+                    msg = (
+                        "passing 'filters' as a non-keyword argument "
+                        "to get_tokenizer() is deprecated"
+                    )
+                    warnings.warn(msg, category=DeprecationWarning, stacklevel=2)
                     filters = chunkers
                     chunkers = None
     # Ensure only '_' used as separator
-    tag = tag.replace("-","_")
+    tag = tag.replace("-", "_")
     # First try the whole tag
     tkFunc = _try_tokenizer(tag)
     if tkFunc is None:
@@ -208,22 +225,25 @@ def get_tokenizer(tag=None,chunkers=None,filters=None):
     tokenizer = basic_tokenize
     if chunkers is not None:
         chunkers = list(chunkers)
-        for i in xrange(len(chunkers)-1,-1,-1):
-            tokenizer = wrap_tokenizer(chunkers[i],tokenizer)
+        for i in xrange(len(chunkers) - 1, -1, -1):
+            tokenizer = wrap_tokenizer(chunkers[i], tokenizer)
     if filters is not None:
         for f in filters:
             tokenizer = f(tokenizer)
-    tokenizer = wrap_tokenizer(tokenizer,tkFunc)
+    tokenizer = wrap_tokenizer(tokenizer, tkFunc)
     return tokenizer
-get_tokenizer._DOC_ERRORS = ["py","py"]
+
+
+get_tokenizer._DOC_ERRORS = ["py", "py"]
 
 
 class empty_tokenize(tokenize):
     """Tokenizer class that yields no elements."""
+
     _DOC_ERRORS = []
 
     def __init__(self):
-        tokenize.__init__(self,"")
+        tokenize.__init__(self, "")
 
     def next(self):
         raise StopIteration()
@@ -231,17 +251,18 @@ class empty_tokenize(tokenize):
 
 class unit_tokenize(tokenize):
     """Tokenizer class that yields the text as a single token."""
+
     _DOC_ERRORS = []
 
-    def __init__(self,text):
-        tokenize.__init__(self,text)
+    def __init__(self, text):
+        tokenize.__init__(self, text)
         self._done = False
 
     def next(self):
         if self._done:
             raise StopIteration()
         self._done = True
-        return (self._text,0)
+        return (self._text, 0)
 
 
 class basic_tokenize(tokenize):
@@ -251,6 +272,7 @@ class basic_tokenize(tokenize):
     text into words based on whitespace boundaries, and removes basic
     punctuation symbols from the start and end of each word.
     """
+
     _DOC_ERRORS = []
 
     # Chars to remove from start/end of words
@@ -275,13 +297,12 @@ class basic_tokenize(tokenize):
             # Strip chars from font/end of word
             while sPos < len(text) and text[sPos] in self.strip_from_start:
                 sPos += 1
-            while 0 < ePos and text[ePos-1] in self.strip_from_end:
-                    ePos -= 1
+            while 0 < ePos and text[ePos - 1] in self.strip_from_end:
+                ePos -= 1
             # Return if word isn't empty
-            if(sPos < ePos):
-                return (text[sPos:ePos],sPos)
+            if sPos < ePos:
+                return (text[sPos:ePos], sPos)
         raise StopIteration()
-
 
 
 def _try_tokenizer(modName):
@@ -293,13 +314,13 @@ def _try_tokenizer(modName):
     funcName = "tokenize"
     modName = modBase + modName
     try:
-        mod = __import__(modName,globals(),{},funcName)
-        return getattr(mod,funcName)
+        mod = __import__(modName, globals(), {}, funcName)
+        return getattr(mod, funcName)
     except ImportError:
-       return None
+        return None
 
 
-def wrap_tokenizer(tk1,tk2):
+def wrap_tokenizer(tk1, tk2):
     """Wrap one tokenizer inside another.
 
     This function takes two tokenizer functions 'tk1' and 'tk2',
@@ -312,7 +333,9 @@ def wrap_tokenizer(tk1,tk2):
     tkW = Filter(tk1)
     tkW._split = tk2
     return tkW
-wrap_tokenizer._DOC_ERRORS = ["tk","tk","tk","tk"]
+
+
+wrap_tokenizer._DOC_ERRORS = ["tk", "tk", "tk", "tk"]
 
 
 class Chunker(tokenize):
@@ -321,6 +344,7 @@ class Chunker(tokenize):
     A chunker is designed to chunk text into large blocks of tokens.  It
     has the same interface as a tokenizer but is for a different purpose.
     """
+
     pass
 
 
@@ -340,15 +364,15 @@ class Filter(object):
     tokenize any words that aren't skipped.
     """
 
-    def __init__(self,tokenizer):
+    def __init__(self, tokenizer):
         """Filter class constructor."""
         self._tokenizer = tokenizer
 
-    def __call__(self,*args,**kwds):
-        tkn = self._tokenizer(*args,**kwds)
-        return self._TokenFilter(tkn,self._skip,self._split)
+    def __call__(self, *args, **kwds):
+        tkn = self._tokenizer(*args, **kwds)
+        return self._TokenFilter(tkn, self._skip, self._split)
 
-    def _skip(self,word):
+    def _skip(self, word):
         """Filter method for identifying skippable tokens.
 
         If this method returns true, the given word will be skipped by
@@ -357,7 +381,7 @@ class Filter(object):
         """
         return False
 
-    def _split(self,word):
+    def _split(self, word):
         """Filter method for sub-tokenization of tokens.
 
         This method must be a tokenization function that will split the
@@ -365,7 +389,6 @@ class Filter(object):
         The default behaviour is not to split any words.
         """
         return unit_tokenize(word)
-
 
     class _TokenFilter(object):
         """Private inner class implementing the tokenizer-wrapping logic.
@@ -376,9 +399,10 @@ class Filter(object):
         perform the tokenization.  Since we need to manage a lot of state
         during tokenization, returning a class is the best option.
         """
+
         _DOC_ERRORS = ["tknzr"]
 
-        def __init__(self,tokenizer,skip,split):
+        def __init__(self, tokenizer, skip, split):
             self._skip = skip
             self._split = split
             self._tokenizer = tokenizer
@@ -398,37 +422,41 @@ class Filter(object):
             # If unavailable, move on to the next word and try again.
             while True:
                 try:
-                    (word,pos) = next(self._curtok)
-                    return (word,pos + self._curpos)
+                    (word, pos) = next(self._curtok)
+                    return (word, pos + self._curpos)
                 except StopIteration:
-                    (word,pos) = next(self._tokenizer)
+                    (word, pos) = next(self._tokenizer)
                     while self._skip(self._to_string(word)):
-                        (word,pos) = next(self._tokenizer)
+                        (word, pos) = next(self._tokenizer)
                     self._curword = word
                     self._curpos = pos
                     self._curtok = self._split(word)
 
         def _to_string(self, word):
             if type(word) is array.array:
-                if word.typecode == 'u':
+                if word.typecode == "u":
                     return word.tounicode()
-                elif word.typecode == 'c':
+                elif word.typecode == "c":
                     return word.tostring()
             return word
 
         # Pass on access to 'offset' to the underlying tokenizer.
         def _get_offset(self):
             return self._tokenizer.offset
-        def _set_offset(self,offset):
-            msg = "changing a tokenizers 'offset' attribute is deprecated;"\
-                  " use the 'set_offset' method"
-            warnings.warn(msg,category=DeprecationWarning,stacklevel=2)
-            self.set_offset(offset)
-        offset = property(_get_offset,_set_offset)
 
-        def set_offset(self,val,replaced=False):
+        def _set_offset(self, offset):
+            msg = (
+                "changing a tokenizers 'offset' attribute is deprecated;"
+                " use the 'set_offset' method"
+            )
+            warnings.warn(msg, category=DeprecationWarning, stacklevel=2)
+            self.set_offset(offset)
+
+        offset = property(_get_offset, _set_offset)
+
+        def set_offset(self, val, replaced=False):
             old_offset = self._tokenizer.offset
-            self._tokenizer.set_offset(val,replaced=replaced)
+            self._tokenizer.set_offset(val, replaced=replaced)
             # If we move forward within the current word, also set on _curtok.
             # Otherwise, throw away _curtok and set to empty iterator.
             keep_curtok = True
@@ -449,6 +477,7 @@ class Filter(object):
 
 #  Pre-defined chunkers and filters start here
 
+
 class URLFilter(Filter):
     r"""Filter skipping over URLs.
     This filter skips any words matching the following regular expression:
@@ -459,10 +488,12 @@ class URLFilter(Filter):
     """
     _DOC_ERRORS = ["zA"]
     _pattern = re.compile(r"^[a-zA-Z]+:\/\/[^\s].*")
-    def _skip(self,word):
+
+    def _skip(self, word):
         if self._pattern.match(word):
             return True
         return False
+
 
 class WikiWordFilter(Filter):
     r"""Filter skipping over WikiWords.
@@ -473,10 +504,12 @@ class WikiWordFilter(Filter):
     That is, any words that are WikiWords.
     """
     _pattern = re.compile(r"^([A-Z]\w+[A-Z]+\w+)")
-    def _skip(self,word):
+
+    def _skip(self, word):
         if self._pattern.match(word):
             return True
         return False
+
 
 class EmailFilter(Filter):
     r"""Filter skipping over email addresses.
@@ -487,10 +520,12 @@ class EmailFilter(Filter):
     That is, any words that resemble email addresses.
     """
     _pattern = re.compile(r"^.+@[^\.].*\.[a-z]{2,}$")
-    def _skip(self,word):
+
+    def _skip(self, word):
         if self._pattern.match(word):
             return True
         return False
+
 
 class MentionFilter(Filter):
     r"""Filter skipping over @mention.
@@ -502,10 +537,12 @@ class MentionFilter(Filter):
     """
     _DOC_ERRORS = ["zA"]
     _pattern = re.compile(r"(\A|\s)@(\w+)")
-    def _skip(self,word):
+
+    def _skip(self, word):
         if self._pattern.match(word):
             return True
         return False
+
 
 class HashtagFilter(Filter):
     r"""Filter skipping over #hashtag.
@@ -517,7 +554,8 @@ class HashtagFilter(Filter):
     """
     _DOC_ERRORS = ["zA"]
     _pattern = re.compile(r"(\A|\s)#(\w+)")
-    def _skip(self,word):
+
+    def _skip(self, word):
         if self._pattern.match(word):
             return True
         return False
@@ -540,16 +578,16 @@ class HTMLChunker(Chunker):
             #  Skip to the end of the current tag, if any.
             if text[offset] == "<":
                 maybeTag = offset
-                if self._is_tag(text,offset):
+                if self._is_tag(text, offset):
                     while text[offset] != ">":
                         offset += 1
                         if offset == len(text):
-                            offset = maybeTag+1
+                            offset = maybeTag + 1
                             break
                     else:
                         offset += 1
                 else:
-                    offset = maybeTag+1
+                    offset = maybeTag + 1
             sPos = offset
             #  Find the start of the next tag.
             while offset < len(text) and text[offset] != "<":
@@ -557,19 +595,17 @@ class HTMLChunker(Chunker):
             ePos = offset
             self._offset = offset
             # Return if chunk isn't empty
-            if(sPos < offset):
-                return (text[sPos:offset],sPos)
+            if sPos < offset:
+                return (text[sPos:offset], sPos)
         raise StopIteration()
 
-    def _is_tag(self,text,offset):
-        if offset+1 < len(text):
-            if text[offset+1].isalpha():
+    def _is_tag(self, text, offset):
+        if offset + 1 < len(text):
+            if text[offset + 1].isalpha():
                 return True
-            if text[offset+1] == "/":
+            if text[offset + 1] == "/":
                 return True
         return False
 
 
-#TODO: LaTeXChunker
-
-
+# TODO: LaTeXChunker

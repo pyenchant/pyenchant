@@ -1,0 +1,7 @@
+[run]
+source = enchant
+
+omit =
+  enchant/tests.py
+
+branch = True
