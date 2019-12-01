@@ -340,6 +340,7 @@ class SpellChecker:
         see the documentation of the 'enchant.tokenize' module.
         The optional argument whence indicates the method by
         which to change the offset:
+
             * 0 (the default) treats <off> as an increment
             * 1 treats <off> as a distance from the start
             * 2 treats <off> as a distance from the end

@@ -156,6 +156,7 @@ def get_tokenizer(tag=None,chunkers=None,filters=None):
     This requires importing the function 'tokenize' from an appropriate
     module.  Modules tried are named after the language tag, tried in the
     following order:
+
         * the entire tag (e.g. "en_AU.py")
         * the base country code of the tag (e.g. "en.py")
 
