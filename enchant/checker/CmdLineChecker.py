@@ -241,7 +241,7 @@ class CmdLineChecker:
         file's contents into a unicode string.  The output will be written
         in the same encoding.
         """
-        inStr = "".join(file(infile,"r").readlines())
+        inStr = "".join(open(infile,"r").readlines())
         if enc is not None:
             inStr = inStr.decode(enc)
         self._checker.set_text(inStr)
@@ -254,11 +254,11 @@ class CmdLineChecker:
         if enc is not None:
             outStr = outStr.encode(enc)
         if outfile is None:
-            outF = file(infile,"w")
+            outF = open(infile,"w")
         elif outfile == "-":
             outF = sys.stdout
         else:
-            outF = file(outfile,"w")
+            outF = open(outfile,"w")
         outF.write(outStr)
         outF.close()
     run_on_file._DOC_ERRORS = ["outfile","infile","outfile","stdout"]
