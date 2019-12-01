@@ -28,8 +28,7 @@ import enchant
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = ['sphinx.ext.autodoc',
-              'sphinx.ext.coverage',
-              'hyde.ext.plugins.sphinx']
+              'sphinx.ext.coverage']
 
 try:
     import sphinxcontrib.spelling
@@ -48,7 +47,7 @@ source_suffix = '.rst'
 #source_encoding = 'utf-8'
 
 # The master toctree document.
-master_doc = '_sphinx_index'
+master_doc = 'index'
 
 # General information about the project.
 project = u'PyEnchant'
@@ -134,7 +133,7 @@ html_theme = 'default'
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ['static']
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.

@@ -36,32 +36,32 @@ An important task in spellchecking is breaking up large bodies of
 text into their constituent words, each of which is then checked
 for correctness.  This package provides Python functions to split
 strings into words according to the rules of a particular language.
-    
+
 Each tokenization function accepts a string as its only positional
 argument, and returns an iterator that yields tuples of the following
 form, one for each word found::
-        
+
     (<word>,<pos>)
-        
+
 The meanings of these fields should be clear: <word> is the word
 that was found and <pos> is the position within the text at which
 the word began (zero indexed, of course).  The function will work
 on any string-like object that supports array-slicing; in particular
 character-array objects from the 'array' module may be used.
-    
+
 The iterator also provides the attribute 'offset' which gives the current
 position of the tokenizer inside the string being split, and the method
 'set_offset' for manually adjusting this position.  This can be used for
 example if the string's contents have changed during the tokenization
 process.
-    
+
 To obtain an appropriate tokenization function for the language
 identified by <tag>, use the function 'get_tokenizer(tag)'::
-        
+
     tknzr = get_tokenizer("en_US")
     for (word,pos) in tknzr("text to be tokenized goes here")
         do_something(word)
-    
+
 This library is designed to be easily extendible by third-party
 authors.  To register a tokenization function for the language
 <tag>, implement it as the function 'tokenize' within the
@@ -69,7 +69,7 @@ module enchant.tokenize.<tag>.  The 'get_tokenizer' function
 will automatically detect it.  Note that the underscore must be
 used as the tag component separator in this case, in order to
 form a valid python module name. (e.g. "en_US" rather than "en-US")
-    
+
 Currently, a tokenizer has only been implemented for the English
 language.  Based on the author's limited experience, this should
 be at least partially suitable for other languages.
@@ -80,7 +80,7 @@ text in a variety of common formats, by detecting and excluding parts
 of the text that don't need to be checked.
 
 A Chunker is a class designed to break a body of text into large chunks
-of checkable content; for example the HTMLChunker class extracts the 
+of checkable content; for example the HTMLChunker class extracts the
 text content from all HTML tags but excludes the tags themselves.
 A Filter is a class designed to skip individual words during the checking
 process; for example the URLFilter class skips over any words that
@@ -95,7 +95,7 @@ such as URLs and WikiWords.  This would look something like the following::
     text = "<html><body>the url is http://example.com</body></html>"
     for (word,pos) in tknzer(text):
         ...check each word and react accordingly...
-        
+
 """
 _DOC_ERRORS = ["pos","pos","tknzr","URLFilter","WikiWordFilter",
                "tkns","tknzr","pos","tkns"]
@@ -115,10 +115,10 @@ Error = TokenizerNotFoundError
 
 class tokenize:
     """Base class for all tokenizer objects.
-    
+
     Each tokenizer must be an iterator and provide the 'offset'
     attribute as described in the documentation for this module.
-    
+
     While tokenizers are in fact classes, they should be treated
     like functions, and so are named using lower_case rather than
     the CamelCase more traditional of class names.
@@ -156,6 +156,7 @@ def get_tokenizer(tag=None,chunkers=None,filters=None):
     This requires importing the function 'tokenize' from an appropriate
     module.  Modules tried are named after the language tag, tried in the
     following order:
+
         * the entire tag (e.g. "en_AU.py")
         * the base country code of the tag (e.g. "en.py")
 
@@ -164,7 +165,7 @@ def get_tokenizer(tag=None,chunkers=None,filters=None):
     latin-derived languages.
 
     If a suitable function cannot be found, raises TokenizerNotFoundError.
-    
+
     If given and not None, 'chunkers' and 'filters' must be lists of chunker
     classes and filter classes respectively.  These will be applied to the
     tokenizer during creation.
@@ -223,7 +224,7 @@ class empty_tokenize(tokenize):
 
     def __init__(self):
         tokenize.__init__(self,"")
-        
+
     def next(self):
         raise StopIteration()
 
@@ -241,21 +242,21 @@ class unit_tokenize(tokenize):
             raise StopIteration()
         self._done = True
         return (self._text,0)
-    
+
 
 class basic_tokenize(tokenize):
     """Tokenizer class that performs very basic word-finding.
-    
+
     This tokenizer does the most basic thing that could work - it splits
     text into words based on whitespace boundaries, and removes basic
     punctuation symbols from the start and end of each word.
     """
     _DOC_ERRORS = []
-    
+
     # Chars to remove from start/end of words
     strip_from_start = '"' + "'`(["
     strip_from_end = '"' + "'`]).!,?;:"
-    
+
     def next(self):
         text = self._text
         offset = self._offset
@@ -281,7 +282,7 @@ class basic_tokenize(tokenize):
                 return (text[sPos:ePos],sPos)
         raise StopIteration()
 
-    
+
 
 def _try_tokenizer(modName):
     """Look for a tokenizer in the named module.
@@ -300,7 +301,7 @@ def _try_tokenizer(modName):
 
 def wrap_tokenizer(tk1,tk2):
     """Wrap one tokenizer inside another.
- 
+
     This function takes two tokenizer functions 'tk1' and 'tk2',
     and returns a new tokenizer function that passes the output
     of tk1 through tk2 before yielding it to the calling code.
@@ -316,16 +317,16 @@ wrap_tokenizer._DOC_ERRORS = ["tk","tk","tk","tk"]
 
 class Chunker(tokenize):
     """Base class for text chunking functions.
-    
+
     A chunker is designed to chunk text into large blocks of tokens.  It
     has the same interface as a tokenizer but is for a different purpose.
     """
     pass
- 
+
 
 class Filter(object):
     """Base class for token filtering functions.
-    
+
     A filter is designed to wrap a tokenizer (or another filter) and do
     two things:
 
@@ -338,18 +339,18 @@ class Filter(object):
     be overridden as tokenization function that will be applied to further
     tokenize any words that aren't skipped.
     """
-    
+
     def __init__(self,tokenizer):
         """Filter class constructor."""
         self._tokenizer = tokenizer
-    
+
     def __call__(self,*args,**kwds):
         tkn = self._tokenizer(*args,**kwds)
         return self._TokenFilter(tkn,self._skip,self._split)
-    
+
     def _skip(self,word):
         """Filter method for identifying skippable tokens.
-        
+
         If this method returns true, the given word will be skipped by
         the filter.  This should be overridden in subclasses to produce the
         desired functionality.  The default behaviour is not to skip any words.
@@ -358,7 +359,7 @@ class Filter(object):
 
     def _split(self,word):
         """Filter method for sub-tokenization of tokens.
-        
+
         This method must be a tokenization function that will split the
         given word into sub-tokens according to the needs of the filter.
         The default behaviour is not to split any words.
@@ -368,7 +369,7 @@ class Filter(object):
 
     class _TokenFilter(object):
         """Private inner class implementing the tokenizer-wrapping logic.
-        
+
         This might seem convoluted, but we're trying to create something
         akin to a meta-class - when Filter(tknzr) is called it must return
         a *callable* that can then be applied to a particular string to
@@ -376,7 +377,7 @@ class Filter(object):
         during tokenization, returning a class is the best option.
         """
         _DOC_ERRORS = ["tknzr"]
- 
+
         def __init__(self,tokenizer,skip,split):
             self._skip = skip
             self._split = split
@@ -385,13 +386,13 @@ class Filter(object):
             self._curtok = empty_tokenize()
             self._curword = ""
             self._curpos = 0
-    
+
         def __iter__(self):
             return self
 
         def __next__(self):
             return self.next()
-    
+
         def next(self):
             # Try to get the next sub-token from word currently being split.
             # If unavailable, move on to the next word and try again.
@@ -451,9 +452,9 @@ class Filter(object):
 class URLFilter(Filter):
     r"""Filter skipping over URLs.
     This filter skips any words matching the following regular expression:
-       
+
            ^[a-zA-Z]+:\/\/[^\s].*
-        
+
     That is, any words that are URLs.
     """
     _DOC_ERRORS = ["zA"]
@@ -466,9 +467,9 @@ class URLFilter(Filter):
 class WikiWordFilter(Filter):
     r"""Filter skipping over WikiWords.
     This filter skips any words matching the following regular expression:
-       
+
            ^([A-Z]\w+[A-Z]+\w+)
-        
+
     That is, any words that are WikiWords.
     """
     _pattern = re.compile(r"^([A-Z]\w+[A-Z]+\w+)")
@@ -480,9 +481,9 @@ class WikiWordFilter(Filter):
 class EmailFilter(Filter):
     r"""Filter skipping over email addresses.
     This filter skips any words matching the following regular expression:
-       
+
            ^.+@[^\.].*\.[a-z]{2,}$
-        
+
     That is, any words that resemble email addresses.
     """
     _pattern = re.compile(r"^.+@[^\.].*\.[a-z]{2,}$")
@@ -494,9 +495,9 @@ class EmailFilter(Filter):
 class MentionFilter(Filter):
     r"""Filter skipping over @mention.
     This filter skips any words matching the following regular expression:
-       
+
            (\A|\s)@(\w+)
-        
+
     That is, any words that are @mention.
     """
     _DOC_ERRORS = ["zA"]
@@ -509,9 +510,9 @@ class MentionFilter(Filter):
 class HashtagFilter(Filter):
     r"""Filter skipping over #hashtag.
     This filter skips any words matching the following regular expression:
-       
+
            (\A|\s)#(\w+)
-        
+
     That is, any words that are #hashtag.
     """
     _DOC_ERRORS = ["zA"]
