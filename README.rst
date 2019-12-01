@@ -1,4 +1,4 @@
-Status: maintainance transfer
+Status: maintenance transfer
 -----------------------------
 
 Maintenance of this project is getting transferred from
