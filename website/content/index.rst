@@ -24,6 +24,7 @@ Documentation Index
 .. toctree::
    :maxdepth: 2
 
+   download.rst
    tutorial.rst
    api/index.rst
 
