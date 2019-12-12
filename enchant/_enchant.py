@@ -71,6 +71,7 @@ def _e_path_possibilities():
         yield "libenchant.so.1.6.0"
         yield "libenchant.so.1"
         yield "libenchant.so"
+        yield "libenchant-2.so"
     # See if ctypes can find the library for us, under various names.
     yield find_library("enchant")
     yield find_library("enchant-2")
