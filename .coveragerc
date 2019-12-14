@@ -1,7 +1,7 @@
 [run]
-source = enchant
+branch = true
 
 omit =
-  enchant/tests.py
-
-branch = True
+  .tox/*
+  tests/*
+  tools/*
