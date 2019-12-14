@@ -22,3 +22,5 @@ website/.hyde_deps
 .tox
 .coverage
 *.so
+
+htmlcov
