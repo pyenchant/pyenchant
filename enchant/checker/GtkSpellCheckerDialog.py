@@ -29,7 +29,6 @@
 #
 
 import gtk
-import gobject
 
 from enchant.utils import printf, unicode
 

@@ -57,7 +57,7 @@ def test_suggestions(pwl_path):
     assert "Sazz" in d.suggest("laz")
     d.add("Flagen")
     assert "Flagen" in d.suggest("Flags")
-    assert not "sazz" in d.suggest("Flags")
+    assert "sazz" not in d.suggest("Flags")
 
 
 def test_DWPWL(tmp_path, pwl_path):

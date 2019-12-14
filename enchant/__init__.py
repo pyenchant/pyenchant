@@ -94,7 +94,7 @@ except ImportError:
         raise
     _e = None
 
-from enchant.errors import *
+from enchant.errors import Error, DictNotFoundError
 from enchant.utils import EnchantStr, get_default_language, UTF16EnchantStr
 from enchant.pypwl import PyPWL
 

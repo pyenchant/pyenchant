@@ -5,7 +5,7 @@ with a dictionary for the "en_US" language.
 import pickle
 
 import enchant
-from enchant import dict_exists, Dict, DictNotFoundError
+from enchant import dict_exists, Dict, DictNotFoundError, Error
 from enchant.utils import unicode, raw_unicode, get_default_language
 
 import pytest

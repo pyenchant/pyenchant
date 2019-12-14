@@ -47,7 +47,7 @@ import codecs
 import os
 import sys
 
-from enchant.errors import *
+from enchant.errors import Error
 
 # Attempt to access local language information
 try:
@@ -58,6 +58,8 @@ except ImportError:
 
 #
 #  Unicode/Bytes compatibility wrappers.
+#
+# TODO: drop this
 #
 #  These allow us to support both Python 2.x and Python 3.x from
 #  the same codebase.
@@ -70,20 +72,11 @@ except ImportError:
 #  byte strings).
 #
 
-try:
-    unicode = unicode
-except NameError:
-    str = str
-    unicode = str
-    bytes = bytes
-    basestring = (str, bytes)
-    chr = chr
-else:
-    str = str
-    unicode = unicode
-    bytes = str
-    basestring = basestring
-    chr = unichr
+str = str
+unicode = str
+bytes = bytes
+basestring = (str, bytes)
+chr = chr
 
 
 def raw_unicode(raw):

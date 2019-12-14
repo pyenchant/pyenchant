@@ -113,9 +113,8 @@ import re
 import warnings
 import array
 
-import enchant
 from enchant.utils import next, xrange
-from enchant.errors import *
+from enchant.errors import TokenizerNotFoundError
 
 #  For backwards-compatibility.  This will eventually be removed, but how
 #  does one mark a module-level constant as deprecated?
@@ -592,7 +591,6 @@ class HTMLChunker(Chunker):
             #  Find the start of the next tag.
             while offset < len(text) and text[offset] != "<":
                 offset += 1
-            ePos = offset
             self._offset = offset
             # Return if chunk isn't empty
             if sPos < offset:

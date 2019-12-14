@@ -32,12 +32,12 @@
 """
 
     enchant.checker.wxSpellCheckerDialog: wxPython spellchecker interface
-    
+
     This module provides the class wxSpellCheckerDialog, which provides
     a wxPython dialog that can be used as an interface to a spell checking
     session.  Currently it is intended as a proof-of-concept and demonstration
     class, but it should be suitable for general-purpose use in a program.
-    
+
     The class must be given an enchant.checker.SpellChecker object with
     which to operate.  It can (in theory...) be used in modal and non-modal
     modes.  Use Show() when operating on an array of characters as it will
@@ -54,12 +54,12 @@ from enchant.utils import printf
 
 class wxSpellCheckerDialog(wx.Dialog):
     """Simple spellcheck dialog for wxPython
-    
+
     This class implements a simple spellcheck interface for wxPython,
     in the form of a dialog.  It's intended mainly of an example of
     how to do this, although it should be useful for applications that
     just need a simple graphical spellchecker.
-    
+
     To use, a SpellChecker instance must be created and passed to the
     dialog before it is shown:
 
@@ -67,18 +67,18 @@ class wxSpellCheckerDialog(wx.Dialog):
         >>> chkr = SpellChecker("en_AU",text)
         >>> dlg.SetSpellChecker(chkr)
         >>> dlg.Show()
-    
+
     This is most useful when the text to be checked is in the form of
     a character array, as it will be modified in place as the user
     interacts with the dialog.  For checking strings, the final result
     will need to be obtained from the SpellChecker object:
-        
+
         >>> dlg = wxSpellCheckerDialog(None,-1,"")
         >>> chkr = SpellChecker("en_AU",text)
         >>> dlg.SetSpellChecker(chkr)
         >>> dlg.ShowModal()
         >>> text = dlg.GetSpellChecker().get_text()
-    
+
     Currently the checker must deal with strings of the same type as
     returned by wxPython - unicode or normal string depending on the
     underlying system.  This needs to be fixed, somehow...

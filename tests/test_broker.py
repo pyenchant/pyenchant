@@ -58,7 +58,8 @@ def test_ProvOrdering(broker):
                 if d.provider != prov:
                     raise ValueError()
                 langs[tag].append(prov)
-            except:
+            # TODO: bare except
+            except:  # noqa
                 pass
     # Check availability using a single entry in ordering
     for tag in langs:

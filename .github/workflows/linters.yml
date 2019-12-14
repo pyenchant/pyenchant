@@ -3,7 +3,7 @@ name: linters
 on: [push]
 
 jobs:
-  run_black:
+  run_linters:
 
     runs-on: ubuntu-latest
     steps:
@@ -19,8 +19,8 @@ jobs:
         python -m pip install --upgrade pip
         pip install tox
 
-    - name: Run black --check
+    - name: Run linters
       run: |
-        tox -e black
+        tox -e linters
 
 
