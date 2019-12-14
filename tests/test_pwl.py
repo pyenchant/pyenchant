@@ -5,28 +5,21 @@ from enchant.utils import unicode, raw_unicode
 
 
 @pytest.fixture
-def pwl_path(tmpdir):
-    res = tmpdir.join("pwl.txt")
-    res.ensure(file=True)
+def pwl_path(tmp_path):
+    res = tmp_path / ("pwl.txt")
+    res.write_text("")
     return res
 
 
 def setPWLContents(path, contents):
     """Set the contents of the PWL file."""
-    pwlFile = open(path, "w")
-    for ln in contents:
-        pwlFile.write(ln)
-        pwlFile.write("\n")
-    pwlFile.flush()
-    pwlFile.close()
+    path.write_text("\n".join(contents))
 
 
 def getPWLContents(path):
     """Retrieve the contents of the PWL file."""
-    pwlFile = open(path, "r")
-    contents = pwlFile.readlines()
-    pwlFile.close()
-    return [c.strip() for c in contents]
+    contents = path.read_text()
+    return [c.strip() for c in contents.splitlines()]
 
 
 def test_check(pwl_path):
@@ -67,10 +60,10 @@ def test_suggestions(pwl_path):
     assert not "sazz" in d.suggest("Flags")
 
 
-def test_DWPWL(tmpdir, pwl_path):
+def test_DWPWL(tmp_path, pwl_path):
     """Test functionality of DictWithPWL."""
     setPWLContents(pwl_path, ["Sazz", "Lozz"])
-    other_path = tmpdir.join("pel.txt")
+    other_path = tmp_path / "pel.txt"
     d = DictWithPWL("en_US", str(pwl_path), str(other_path))
     assert d.check("Sazz")
     assert d.check("Lozz")
@@ -89,7 +82,7 @@ def test_DWPWL(tmpdir, pwl_path):
     assert not d.check("Lozz")
 
 
-def test_DWPWL_empty(tmpdir):
+def test_DWPWL_empty(tmp_path):
     """Test functionality of DictWithPWL using transient dicts."""
     d = DictWithPWL("en_US", None, None)
     assert d.check("hello")
@@ -123,9 +116,9 @@ def test_PyPWL(tmp_path):
     assert "there" in ws
 
 
-def test_UnicodeCharsInPath(tmpdir):
+def test_UnicodeCharsInPath(tmp_path):
     """Test that unicode chars in PWL paths are accepted."""
     _fileName = raw_unicode(r"test_\xe5\xe4\xf6_ing")
-    path = tmpdir.join(_fileName)
+    path = tmp_path / _fileName
     d = request_pwl_dict(str(path))
     assert d
