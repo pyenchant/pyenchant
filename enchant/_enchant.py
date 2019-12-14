@@ -32,7 +32,7 @@
     enchant._enchant:  ctypes-based wrapper for enchant C library
 
     This module implements the low-level interface to the underlying
-    C library for enchant.  The interface is based on ctypes and tries 
+    C library for enchant.  The interface is based on ctypes and tries
     to do as little as possible while making the higher-level components
     easier to write.
 
@@ -48,12 +48,25 @@
 
 """
 
-import sys, os, os.path
-from ctypes import *
+import sys
+import os
+import os.path
+import ctypes
+from ctypes import (
+    cdll,
+    c_char_p,
+    c_int,
+    c_size_t,
+    c_void_p,
+    pointer,
+    CDLL,
+    CFUNCTYPE,
+    POINTER,
+)
 from ctypes.util import find_library
 
 from enchant import utils
-from enchant.errors import *
+from enchant.errors import Error
 from enchant.utils import unicode
 
 # Locate and load the enchant dll.
@@ -97,11 +110,11 @@ if sys.platform == "win32":
         # that we don't accidentally suck in other versions of e.g. glib.
         if not isinstance(e_path, unicode):
             e_path = unicode(e_path, sys.getfilesystemencoding())
-        LoadLibraryEx = windll.kernel32.LoadLibraryExW
+        LoadLibraryEx = ctypes.windll.kernel32.LoadLibraryExW
         LOAD_WITH_ALTERED_SEARCH_PATH = 0x00000008
         e_handle = LoadLibraryEx(e_path, None, LOAD_WITH_ALTERED_SEARCH_PATH)
         if not e_handle:
-            raise WinError()
+            raise ctypes.WinError()
         e = CDLL(e_path, handle=e_handle)
 
 

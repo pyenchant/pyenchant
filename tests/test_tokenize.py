@@ -36,9 +36,18 @@
 import unittest
 import array
 
-from enchant.tokenize import *
+from enchant.tokenize import (
+    EmailFilter,
+    URLFilter,
+    HTMLChunker,
+    WikiWordFilter,
+    basic_tokenize,
+    empty_tokenize,
+    get_tokenizer,
+    wrap_tokenizer,
+)
 from enchant.tokenize.en import tokenize as tokenize_en
-from enchant.utils import raw_unicode, unicode, bytes
+from enchant.utils import raw_unicode, unicode
 
 
 class TestTokenization(unittest.TestCase):

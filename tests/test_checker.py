@@ -26,15 +26,20 @@
 # this file, you may extend this exception to your version of the
 # file, but you are not obligated to do so.  If you do not wish to
 # do so, delete this exception statement from your version.
-#
+
+import array
 
 import pytest
 
 import enchant
 import enchant.tokenize
-from enchant.utils import *
-from enchant.errors import *
-from enchant.checker import *
+from enchant.errors import DefaultLanguageNotFoundError
+from enchant.utils import (
+    get_default_language,
+    raw_unicode,
+    unicode,
+)
+from enchant.checker import SpellChecker
 
 
 def test_basic():

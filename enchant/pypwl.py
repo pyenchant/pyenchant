@@ -89,7 +89,7 @@ class Trie:
 
     def search(self, word, nerrs=0):
         """Search for the given word, possibly making errors.
-        
+
         This method searches the trie for the given <word>, making
         precisely <nerrs> errors.  It returns a list of words found.
         """
@@ -179,7 +179,7 @@ class PyPWL:
         if pwl is not None:
             self.pwl = os.path.abspath(pwl)
             self.tag = self.pwl
-            pwlF = file(pwl)
+            pwlF = open(pwl, "r")
             for ln in pwlF:
                 word = ln.strip()
                 self.add_to_session(word)
@@ -190,7 +190,7 @@ class PyPWL:
 
     def check(self, word):
         """Check spelling of a word.
-        
+
         This method takes a word in the dictionary language and returns
         True if it is correctly spelled, and false otherwise.
         """
@@ -199,7 +199,7 @@ class PyPWL:
 
     def suggest(self, word):
         """Suggest possible spellings for a word.
-        
+
         This method tries to guess the correct spelling for a given
         word, returning the possibilities in a list.
         """
@@ -221,7 +221,7 @@ class PyPWL:
         For a PWL, this means appending it to the file.
         """
         if self.pwl is not None:
-            pwlF = file(self.pwl, "a")
+            pwlF = open(self.pwl, "a")
             pwlF.write("%s\n" % (word.strip(),))
             pwlF.close()
         self.add_to_session(word)
@@ -243,7 +243,7 @@ class PyPWL:
         # Just remove it from the list.
         self._words.remove(word)
         if self.pwl is not None:
-            pwlF = file(self.pwl, "wt")
+            pwlF = open(self.pwl, "wt")
             for w in self._words:
                 pwlF.write("%s\n" % (w.strip(),))
             pwlF.close()
@@ -254,8 +254,8 @@ class PyPWL:
 
     def store_replacement(self, mis, cor):
         """Store a replacement spelling for a miss-spelled word.
-        
-        This method makes a suggestion to the spellchecking engine that the 
+
+        This method makes a suggestion to the spellchecking engine that the
         miss-spelled word <mis> is in fact correctly spelled as <cor>.  Such
         a suggestion will typically mean that <cor> appears early in the
         list of suggested spellings offered for later instances of <mis>.

@@ -95,7 +95,7 @@ for prov in providers:
     dists.append([])
 
 # Actually run the tests
-testcases = file(datafile, "r")
+testcases = open(datafile, "r")
 testnum = 0
 for testcase in testcases:
     # Skip lines starting with "#"

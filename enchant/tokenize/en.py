@@ -30,7 +30,7 @@
 """
 
     enchant.tokenize.en:    Tokenizer for the English language
-    
+
     This module implements a PyEnchant text tokenizer for the English
     language, based on very simple rules.
 
@@ -44,16 +44,16 @@ from enchant.utils import unicode
 
 class tokenize(enchant.tokenize.tokenize):
     """Iterator splitting text into words, reporting position.
-    
+
     This iterator takes a text string as input, and yields tuples
     representing each distinct word found in the text.  The tuples
     take the form:
-        
+
         (<word>,<pos>)
-        
+
     Where <word> is the word string found and <pos> is the position
     of the start of the word within the text.
-    
+
     The optional argument <valid_chars> may be used to specify a
     list of additional characters that can form part of a word.
     By default, this list contains only the apostrophe ('). Note that

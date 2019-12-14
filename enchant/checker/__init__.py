@@ -49,7 +49,7 @@ import array
 import warnings
 
 import enchant
-from enchant.errors import *
+from enchant.errors import DefaultLanguageNotFoundError, TokenizerNotFoundError
 from enchant.tokenize import get_tokenizer
 from enchant.utils import bytes, unicode, basestring, next
 from enchant.utils import get_default_language
