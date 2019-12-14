@@ -1,135 +1,131 @@
-class TestPWL(unittest.TestCase):
-    """Test cases for the proper functioning of PWLs and DictWithPWL objects.
-    These tests assume that there is at least one working provider
-    with a dictionary for the "en_US" language.
-    """
+import pytest
 
-    def setUp(self):
-        self._tempDir = self._mkdtemp()
-        self._fileName = "pwl.txt"
+from enchant import request_pwl_dict, DictWithPWL, PyPWL
+from enchant.utils import unicode, raw_unicode
 
-    def tearDown(self):
-        import shutil
 
-        shutil.rmtree(self._tempDir)
+@pytest.fixture
+def pwl_path(tmpdir):
+    res = tmpdir.join("pwl.txt")
+    res.ensure(file=True)
+    return res
 
-    def _mkdtemp(self):
-        import tempfile
 
-        return tempfile.mkdtemp()
+def setPWLContents(path, contents):
+    """Set the contents of the PWL file."""
+    pwlFile = open(path, "w")
+    for ln in contents:
+        pwlFile.write(ln)
+        pwlFile.write("\n")
+    pwlFile.flush()
+    pwlFile.close()
 
-    def _path(self, nm=None):
-        if nm is None:
-            nm = self._fileName
-        nm = os.path.join(self._tempDir, nm)
-        if not os.path.exists(nm):
-            open(nm, "w").close()
-        return nm
 
-    def setPWLContents(self, contents):
-        """Set the contents of the PWL file."""
-        pwlFile = open(self._path(), "w")
-        for ln in contents:
-            pwlFile.write(ln)
-            pwlFile.write("\n")
-        pwlFile.flush()
-        pwlFile.close()
+def getPWLContents(path):
+    """Retrieve the contents of the PWL file."""
+    pwlFile = open(path, "r")
+    contents = pwlFile.readlines()
+    pwlFile.close()
+    return [c.strip() for c in contents]
 
-    def getPWLContents(self):
-        """Retrieve the contents of the PWL file."""
-        pwlFile = open(self._path(), "r")
-        contents = pwlFile.readlines()
-        pwlFile.close()
-        return [c.strip() for c in contents]
 
-    def test_check(self):
-        """Test that basic checking works for PWLs."""
-        self.setPWLContents(["Sazz", "Lozz"])
-        d = request_pwl_dict(self._path())
-        self.assertTrue(d.check("Sazz"))
-        self.assertTrue(d.check("Lozz"))
-        self.assertFalse(d.check("hello"))
+def test_check(pwl_path):
+    """Test that basic checking works for PWLs."""
+    setPWLContents(pwl_path, ["Sazz", "Lozz"])
+    d = request_pwl_dict(str(pwl_path))
+    assert d.check("Sazz")
+    assert d.check("Lozz")
+    assert not d.check("hello")
 
-    def test_UnicodeFN(self):
-        """Test that unicode PWL filenames are accepted."""
-        d = request_pwl_dict(unicode(self._path()))
-        self.assertTrue(d)
 
-    def test_add(self):
-        """Test that adding words to a PWL works correctly."""
-        d = request_pwl_dict(self._path())
-        self.assertFalse(d.check("Flagen"))
-        d.add("Esquilax")
-        d.add("Esquilam")
-        self.assertTrue(d.check("Esquilax"))
-        self.assertTrue("Esquilax" in self.getPWLContents())
-        self.assertTrue(d.is_added("Esquilax"))
+def test_UnicodeFN(pwl_path):
+    """Test that unicode PWL filenames are accepted."""
+    d = request_pwl_dict(unicode(pwl_path))
+    assert d
 
-    def test_suggestions(self):
-        """Test getting suggestions from a PWL."""
-        self.setPWLContents(["Sazz", "Lozz"])
-        d = request_pwl_dict(self._path())
-        self.assertTrue("Sazz" in d.suggest("Saz"))
-        self.assertTrue("Lozz" in d.suggest("laz"))
-        self.assertTrue("Sazz" in d.suggest("laz"))
-        d.add("Flagen")
-        self.assertTrue("Flagen" in d.suggest("Flags"))
-        self.assertFalse("sazz" in d.suggest("Flags"))
 
-    def test_DWPWL(self):
-        """Test functionality of DictWithPWL."""
-        self.setPWLContents(["Sazz", "Lozz"])
-        d = DictWithPWL("en_US", self._path(), self._path("pel.txt"))
-        self.assertTrue(d.check("Sazz"))
-        self.assertTrue(d.check("Lozz"))
-        self.assertTrue(d.check("hello"))
-        self.assertFalse(d.check("helo"))
-        self.assertFalse(d.check("Flagen"))
-        d.add("Flagen")
-        self.assertTrue(d.check("Flagen"))
-        self.assertTrue("Flagen" in self.getPWLContents())
-        self.assertTrue("Flagen" in d.suggest("Flagn"))
-        self.assertTrue("hello" in d.suggest("helo"))
-        d.remove("hello")
-        self.assertFalse(d.check("hello"))
-        self.assertTrue("hello" not in d.suggest("helo"))
-        d.remove("Lozz")
-        self.assertFalse(d.check("Lozz"))
+def test_add(pwl_path):
+    """Test that adding words to a PWL works correctly."""
+    d = request_pwl_dict(str(pwl_path))
+    assert not d.check("Flagen")
+    d.add("Esquilax")
+    d.add("Esquilam")
+    assert d.check("Esquilax")
+    assert "Esquilax" in getPWLContents(pwl_path)
+    assert d.is_added("Esquilax")
 
-    def test_DWPWL_empty(self):
-        """Test functionality of DictWithPWL using transient dicts."""
-        d = DictWithPWL("en_US", None, None)
-        self.assertTrue(d.check("hello"))
-        self.assertFalse(d.check("helo"))
-        self.assertFalse(d.check("Flagen"))
-        d.add("Flagen")
-        self.assertTrue(d.check("Flagen"))
-        d.remove("hello")
-        self.assertFalse(d.check("hello"))
-        d.add("hello")
-        self.assertTrue(d.check("hello"))
 
-    def test_PyPWL(self):
-        """Test our pure-python PWL implementation."""
-        d = PyPWL()
-        self.assertTrue(list(d._words) == [])
-        d.add("hello")
-        d.add("there")
-        d.add("duck")
-        ws = list(d._words)
-        self.assertTrue(len(ws) == 3)
-        self.assertTrue("hello" in ws)
-        self.assertTrue("there" in ws)
-        self.assertTrue("duck" in ws)
-        d.remove("duck")
-        d.remove("notinthere")
-        ws = list(d._words)
-        self.assertTrue(len(ws) == 2)
-        self.assertTrue("hello" in ws)
-        self.assertTrue("there" in ws)
+def test_suggestions(pwl_path):
+    """Test getting suggestions from a PWL."""
+    setPWLContents(pwl_path, ["Sazz", "Lozz"])
+    d = request_pwl_dict(str(pwl_path))
+    assert "Sazz" in d.suggest("Saz")
+    assert "Lozz" in d.suggest("laz")
+    assert "Sazz" in d.suggest("laz")
+    d.add("Flagen")
+    assert "Flagen" in d.suggest("Flags")
+    assert not "sazz" in d.suggest("Flags")
 
-    def test_UnicodeCharsInPath(self):
-        """Test that unicode chars in PWL paths are accepted."""
-        self._fileName = raw_unicode(r"test_\xe5\xe4\xf6_ing")
-        d = request_pwl_dict(self._path())
-        self.assertTrue(d)
+
+def test_DWPWL(tmpdir, pwl_path):
+    """Test functionality of DictWithPWL."""
+    setPWLContents(pwl_path, ["Sazz", "Lozz"])
+    other_path = tmpdir.join("pel.txt")
+    d = DictWithPWL("en_US", str(pwl_path), str(other_path))
+    assert d.check("Sazz")
+    assert d.check("Lozz")
+    assert d.check("hello")
+    assert not d.check("helo")
+    assert not d.check("Flagen")
+    d.add("Flagen")
+    assert d.check("Flagen")
+    assert "Flagen" in getPWLContents(pwl_path)
+    assert "Flagen" in d.suggest("Flagn")
+    assert "hello" in d.suggest("helo")
+    d.remove("hello")
+    assert not d.check("hello")
+    assert "hello" not in d.suggest("helo")
+    d.remove("Lozz")
+    assert not d.check("Lozz")
+
+
+def test_DWPWL_empty(tmpdir):
+    """Test functionality of DictWithPWL using transient dicts."""
+    d = DictWithPWL("en_US", None, None)
+    assert d.check("hello")
+    assert not d.check("helo")
+    assert not d.check("Flagen")
+    d.add("Flagen")
+    assert d.check("Flagen")
+    d.remove("hello")
+    assert not d.check("hello")
+    d.add("hello")
+    assert d.check("hello")
+
+
+def test_PyPWL(tmp_path):
+    """Test our pure-python PWL implementation."""
+    d = PyPWL()
+    assert list(d._words) == []
+    d.add("hello")
+    d.add("there")
+    d.add("duck")
+    ws = list(d._words)
+    assert len(ws) == 3
+    assert "hello" in ws
+    assert "there" in ws
+    assert "duck" in ws
+    d.remove("duck")
+    d.remove("notinthere")
+    ws = list(d._words)
+    assert len(ws) == 2
+    assert "hello" in ws
+    assert "there" in ws
+
+
+def test_UnicodeCharsInPath(tmpdir):
+    """Test that unicode chars in PWL paths are accepted."""
+    _fileName = raw_unicode(r"test_\xe5\xe4\xf6_ing")
+    path = tmpdir.join(_fileName)
+    d = request_pwl_dict(str(path))
+    assert d
