@@ -1,109 +1,137 @@
-class TestDict(unittest.TestCase):
-    """Test cases for the proper functioning of Dict objects.
-    These tests assume that there is at least one working provider
-    with a dictionary for the "en_US" language.
-    """
+"""Test cases for the proper functioning of Dict objects.
+These tests assume that there is at least one working provider
+with a dictionary for the "en_US" language.
+"""
+import pickle
 
-    def setUp(self):
-        self.dict = Dict("en_US")
+import enchant
+from enchant import dict_exists, Dict, DictNotFoundError
+from enchant.utils import unicode, raw_unicode, get_default_language
 
-    def tearDown(self):
-        del self.dict
+import pytest
 
-    def test_HasENUS(self):
-        """Test that the en_US language is available through default broker."""
-        self.assertTrue(dict_exists("en_US"))
 
-    def test_check(self):
-        """Test that check() works on some common words."""
-        self.assertTrue(self.dict.check("hello"))
-        self.assertTrue(self.dict.check("test"))
-        self.assertFalse(self.dict.check("helo"))
-        self.assertFalse(self.dict.check("testt"))
-        self.assertRaises(ValueError, self.dict.check, "")
+@pytest.fixture
+def en_us_dict():
+    res = Dict("en_US")
+    yield res
+    del res
 
-    def test_broker(self):
-        """Test that the dict's broker is set correctly."""
-        self.assertTrue(self.dict._broker is enchant._broker)
 
-    def test_tag(self):
-        """Test that the dict's tag is set correctly."""
-        self.assertEqual(self.dict.tag, "en_US")
+def test_HasENUS():
+    """Test that the en_US language is available through default broker."""
+    assert dict_exists("en_US")
 
-    def test_suggest(self):
-        """Test that suggest() gets simple suggestions right."""
-        self.assertTrue(self.dict.check("hello"))
-        self.assertTrue("hello" in self.dict.suggest("helo"))
-        self.assertRaises(ValueError, self.dict.suggest, "")
 
-    def test_suggestHang1(self):
-        """Test whether suggest() hangs on some inputs (Bug #1404196)"""
-        self.assertTrue(len(self.dict.suggest("Thiis")) >= 0)
-        self.assertTrue(len(self.dict.suggest("Thiiis")) >= 0)
-        self.assertTrue(len(self.dict.suggest("Thiiiis")) >= 0)
+def test_check(en_us_dict):
+    """Test that check() works on some common words."""
+    assert en_us_dict.check("hello")
+    assert en_us_dict.check("test")
+    assert not en_us_dict.check("helo")
+    assert not en_us_dict.check("testt")
+    with pytest.raises(ValueError):
+        en_us_dict.check("")
 
-    def test_unicode1(self):
-        """Test checking/suggesting for unicode strings"""
-        # TODO: find something that actually returns suggestions
-        us1 = raw_unicode(r"he\u2149lo")
-        self.assertTrue(type(us1) is unicode)
-        self.assertFalse(self.dict.check(us1))
-        for s in self.dict.suggest(us1):
-            self.assertTrue(type(s) is unicode)
 
-    def test_session(self):
-        """Test that adding words to the session works as required."""
-        self.assertFalse(self.dict.check("Lozz"))
-        self.assertFalse(self.dict.is_added("Lozz"))
-        self.dict.add_to_session("Lozz")
-        self.assertTrue(self.dict.is_added("Lozz"))
-        self.assertTrue(self.dict.check("Lozz"))
-        self.dict.remove_from_session("Lozz")
-        self.assertFalse(self.dict.check("Lozz"))
-        self.assertFalse(self.dict.is_added("Lozz"))
-        self.dict.remove_from_session("hello")
-        self.assertFalse(self.dict.check("hello"))
-        self.assertTrue(self.dict.is_removed("hello"))
-        self.dict.add_to_session("hello")
+def test_broker(en_us_dict):
+    """Test that the dict's broker is set correctly."""
+    assert en_us_dict._broker is enchant._broker
 
-    def test_AddRemove(self):
-        """Test adding/removing from default user dictionary."""
-        nonsense = "kxhjsddsi"
-        self.assertFalse(self.dict.check(nonsense))
-        self.dict.add(nonsense)
-        self.assertTrue(self.dict.is_added(nonsense))
-        self.assertTrue(self.dict.check(nonsense))
-        self.dict.remove(nonsense)
-        self.assertFalse(self.dict.is_added(nonsense))
-        self.assertFalse(self.dict.check(nonsense))
-        self.dict.remove("pineapple")
-        self.assertFalse(self.dict.check("pineapple"))
-        self.assertTrue(self.dict.is_removed("pineapple"))
-        self.assertFalse(self.dict.is_added("pineapple"))
-        self.dict.add("pineapple")
-        self.assertTrue(self.dict.check("pineapple"))
 
-    def test_DefaultLang(self):
-        """Test behaviour of default language selection."""
-        defLang = utils.get_default_language()
-        if defLang is None:
-            # If no default language, shouldn't work
-            self.assertRaises(Error, Dict)
-        else:
-            # If there is a default language, should use it
-            # Of course, no need for the dict to actually exist
-            try:
-                d = Dict()
-                self.assertEqual(d.tag, defLang)
-            except DictNotFoundError:
-                pass
+def test_tag(en_us_dict):
+    """Test that the dict's tag is set correctly."""
+    assert en_us_dict.tag == "en_US"
 
-    def test_pickling(self):
-        """Test that pickling doesn't corrupt internal state."""
-        d1 = Dict("en")
-        self.assertTrue(d1.check("hello"))
-        d2 = pickle.loads(pickle.dumps(d1))
-        self.assertTrue(d1.check("hello"))
-        self.assertTrue(d2.check("hello"))
-        d1._free()
-        self.assertTrue(d2.check("hello"))
+
+def test_suggest(en_us_dict):
+    """Test that suggest() gets simple suggestions right."""
+    assert en_us_dict.check("hello")
+    assert "hello" in en_us_dict.suggest("helo")
+    with pytest.raises(ValueError):
+        en_us_dict.suggest("")
+
+
+def test_suggestHang1(en_us_dict):
+    """Test whether suggest() hangs on some inputs (Bug #1404196)"""
+    assert en_us_dict.suggest("Thiis")
+    assert len(en_us_dict.suggest("Thiiis")) >= 0
+    assert len(en_us_dict.suggest("Thiiiis")) >= 0
+
+
+def test_unicode1(en_us_dict):
+    """Test checking/suggesting for unicode strings"""
+    # TODO: find something that actually returns suggestions
+    us1 = raw_unicode(r"he\u2149lo")
+    assert type(us1) is unicode
+    assert not en_us_dict.check(us1)
+    for s in en_us_dict.suggest(us1):
+        assert type(s) is unicode
+
+
+def test_session(en_us_dict):
+    """Test that adding words to the session works as required."""
+    assert not en_us_dict.check("Lozz")
+    assert not en_us_dict.is_added("Lozz")
+
+    en_us_dict.add_to_session("Lozz")
+    assert en_us_dict.is_added("Lozz")
+    assert en_us_dict.check("Lozz")
+
+    en_us_dict.remove_from_session("Lozz")
+    assert not en_us_dict.check("Lozz")
+    assert not en_us_dict.is_added("Lozz")
+
+    en_us_dict.remove_from_session("hello")
+    assert not en_us_dict.check("hello")
+    assert en_us_dict.is_removed("hello")
+
+    # TODO: fixture please
+    en_us_dict.add_to_session("hello")
+
+
+def test_AddRemove(en_us_dict):
+    """Test adding/removing from default user dictionary."""
+    nonsense = "kxhjsddsi"
+    assert not en_us_dict.check(nonsense)
+    en_us_dict.add(nonsense)
+    assert en_us_dict.is_added(nonsense)
+    assert en_us_dict.check(nonsense)
+
+    en_us_dict.remove(nonsense)
+    assert not en_us_dict.is_added(nonsense)
+    assert not en_us_dict.check(nonsense)
+    en_us_dict.remove("pineapple")
+
+    assert not en_us_dict.check("pineapple")
+    assert en_us_dict.is_removed("pineapple")
+    assert not en_us_dict.is_added("pineapple")
+    en_us_dict.add("pineapple")
+    assert en_us_dict.check("pineapple")
+
+
+def test_DefaultLang(en_us_dict):
+    """Test behaviour of default language selection."""
+    defLang = get_default_language()
+    if defLang is None:
+        # If no default language, shouldn't work
+        with pytest.raises(Error):
+            Dict()
+    else:
+        # If there is a default language, should use it
+        # Of course, no need for the dict to actually exist
+        try:
+            d = Dict()
+            assert d.tag == defLang
+        except DictNotFoundError:
+            pass
+
+
+def test_pickling(en_us_dict):
+    """Test that pickling doesn't corrupt internal state."""
+    d1 = Dict("en")
+    assert d1.check("hello")
+    d2 = pickle.loads(pickle.dumps(d1))
+    assert d1.check("hello")
+    assert d2.check("hello")
+    d1._free()
+    assert d2.check("hello")
