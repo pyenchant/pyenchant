@@ -1,47 +1,194 @@
 
-<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta charset="utf-8" />
-    <title>PyEnchant Tutorial &#8212; PyEnchant 2.0.0 documentation</title>
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>PyEnchant Tutorial &mdash; PyEnchant 2.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
     
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
     
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="PyEnchant API Listing" href="api/index.html" />
     <link rel="prev" title="PyEnchant" href="index.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="api/index.html" title="PyEnchant API Listing"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="index.html" title="PyEnchant"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PyEnchant 2.0.0 documentation</a> &#187;</li> 
-      </ul>
-    </div>  
+</head>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> PyEnchant
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">PyEnchant Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installing-pyenchant">Installing PyEnchant</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#installing-the-package">Installing the Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#adding-language-dictionaries">Adding Language Dictionaries</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#windows-users">Windows Users</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mac-os-x-users">Mac OS X Users</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#other-platforms">Other Platforms</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#basic-pyenchant-usage">Basic PyEnchant Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#creating-and-using-dictionary-objects">Creating and Using Dictionary Objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#personal-word-lists">Personal Word Lists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#checking-entire-blocks-of-text">Checking entire blocks of text</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#wxspellcheckerdialog">wxSpellCheckerDialog</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cmdlinechecker">CmdLineChecker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tokenization-splitting-text-into-words">Tokenization: splitting text into words</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#chunkers">Chunkers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#filters">Filters</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#advanced-pyenchant-usage">Advanced PyEnchant Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#providers">Providers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#brokers">Brokers</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#the-default-broker">The Default Broker</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#provider-ordering">Provider Ordering</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#extending-enchant-tokenize">Extending enchant.tokenize</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pyenchant-and-other-programs">PyEnchant and other programs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#packaging-pyenchant-with-py2exe">Packaging PyEnchant with py2exe</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">PyEnchant API Listing</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PyEnchant</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>PyEnchant Tutorial</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/tutorial.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <div class="section" id="pyenchant-tutorial">
 <h1><a class="toc-backref" href="#id1">PyEnchant Tutorial</a><a class="headerlink" href="#pyenchant-tutorial" title="Permalink to this headline">¶</a></h1>
@@ -471,103 +618,52 @@
 </div>
 
 
+           </div>
+           
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">PyEnchant Tutorial</a><ul>
-<li><a class="reference internal" href="#installing-pyenchant">Installing PyEnchant</a><ul>
-<li><a class="reference internal" href="#installing-the-package">Installing the Package</a></li>
-<li><a class="reference internal" href="#adding-language-dictionaries">Adding Language Dictionaries</a><ul>
-<li><a class="reference internal" href="#windows-users">Windows Users</a></li>
-<li><a class="reference internal" href="#mac-os-x-users">Mac OS X Users</a></li>
-<li><a class="reference internal" href="#other-platforms">Other Platforms</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a class="reference internal" href="#basic-pyenchant-usage">Basic PyEnchant Usage</a><ul>
-<li><a class="reference internal" href="#creating-and-using-dictionary-objects">Creating and Using Dictionary Objects</a></li>
-<li><a class="reference internal" href="#personal-word-lists">Personal Word Lists</a></li>
-<li><a class="reference internal" href="#checking-entire-blocks-of-text">Checking entire blocks of text</a></li>
-<li><a class="reference internal" href="#wxspellcheckerdialog">wxSpellCheckerDialog</a></li>
-<li><a class="reference internal" href="#cmdlinechecker">CmdLineChecker</a></li>
-<li><a class="reference internal" href="#tokenization-splitting-text-into-words">Tokenization: splitting text into words</a><ul>
-<li><a class="reference internal" href="#chunkers">Chunkers</a></li>
-<li><a class="reference internal" href="#filters">Filters</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a class="reference internal" href="#advanced-pyenchant-usage">Advanced PyEnchant Usage</a><ul>
-<li><a class="reference internal" href="#providers">Providers</a></li>
-<li><a class="reference internal" href="#brokers">Brokers</a><ul>
-<li><a class="reference internal" href="#the-default-broker">The Default Broker</a></li>
-<li><a class="reference internal" href="#provider-ordering">Provider Ordering</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#extending-enchant-tokenize">Extending enchant.tokenize</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#pyenchant-and-other-programs">PyEnchant and other programs</a><ul>
-<li><a class="reference internal" href="#packaging-pyenchant-with-py2exe">Packaging PyEnchant with py2exe</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api/index.html" class="btn btn-neutral float-right" title="PyEnchant API Listing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="PyEnchant" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">PyEnchant</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="api/index.html"
-                        title="next chapter">PyEnchant API Listing</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/tutorial.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2011, Ryan Kelly
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="api/index.html" title="PyEnchant API Listing"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="index.html" title="PyEnchant"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">PyEnchant 2.0.0 documentation</a> &#187;</li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2011, Ryan Kelly.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.0.
-    </div>
-  </body>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
 </html>
