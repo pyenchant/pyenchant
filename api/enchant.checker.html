@@ -72,7 +72,7 @@ and ‘ignore_always’.  Once this is done, calling ‘next’ advances
 to the next misspelled word.</p>
 <p>As a quick (and rather silly) example, the following code replaces
 each misspelled word with the string “SPAM”:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;This is sme text with a fw speling errors in it.&quot;</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;This is sme text with a fw speling errors in it.&quot;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">chkr</span> <span class="o">=</span> <span class="n">SpellChecker</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">,</span><span class="n">text</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">err</span> <span class="ow">in</span> <span class="n">chkr</span><span class="p">:</span>
 <span class="gp">... </span>  <span class="n">err</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;SPAM&quot;</span><span class="p">)</span>
@@ -290,7 +290,7 @@ provide the correct type of string to the checker.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2011, Ryan Kelly.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.0.
     </div>
   </body>
 </html>
