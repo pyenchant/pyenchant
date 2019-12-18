@@ -1,4 +1,3 @@
-
 PyEnchant
 =========
 
@@ -29,7 +28,7 @@ Documentation Index
 .. toctree::
    :maxdepth: 2
 
-   download.rst
+   install.rst
    tutorial.rst
    api/index.rst
    faq.rst
