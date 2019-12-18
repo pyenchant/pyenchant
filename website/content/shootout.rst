@@ -1,10 +1,8 @@
---- title: PyEnchant \| Provider Shootout ---
-
-PyEnchant Provider Shootout
----------------------------
+Provider Shootout
+==================
 
 The PyEnchant source distribution contains the script
-"tools\shootout.py", which can be used to run a comparative test between
+"tools/shootout.py", which can be used to run a comparative test between
 the different providers available in an enchant installation. The idea
 is loosely based on the aspell comparison tests run by Kevin Atkinson
 (http://aspell.net/test/) and used the test data that he provides, but

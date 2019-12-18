@@ -1,7 +1,5 @@
---- title: PyEnchant \| FAQ ---
-
-PyEnchant FAQ
--------------
+FAQ
+===
 
 This page contains some frequently asked questions about PyEnchant,
 along with some questions which haven't technically been asked but which
