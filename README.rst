@@ -12,10 +12,9 @@ pyenchant:  Python bindings for the Enchant spellchecker
 ========================================================
 
 This package provides a set of Python language bindings for the Enchant
-spellchecking library.  For more information, visit the phttps://github.com/pyenchant/pyenchant/milestone/1roject website:
+spellchecking library.  For more information, visit the project website:
 
-    http://packages.python.org/pyenchant/
-
+    http://pyenchant.github.io/pyenchant/
 
 What is Enchant?
 ----------------
