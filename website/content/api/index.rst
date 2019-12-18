@@ -1,6 +1,5 @@
-
-PyEnchant API Listing
-=====================
+API Listing
+===========
 
 
 This is an auto-generated listing of the PyEnchant API.
