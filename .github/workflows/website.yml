@@ -23,3 +23,12 @@ jobs:
     - name: Build website
       run: |
         tox -e website
+
+    - name: Deploy ${{ github.ref }}
+      if: github.ref == "master"
+      uses: JamesIves/github-pages-deploy-action@releases/v3
+      with:
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        BASE_BRANCH: master
+        BRANCH: gh-pages
+        FOLDER: website/html/
