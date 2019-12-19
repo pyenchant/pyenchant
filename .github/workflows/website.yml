@@ -3,7 +3,7 @@ name: website
 on: [push]
 
 jobs:
-  build_website:
+  website:
 
     runs-on: ubuntu-latest
 
@@ -24,8 +24,8 @@ jobs:
       run: |
         tox -e website
 
-    - name: Deploy ${{ github.ref }}
-      if: github.ref == "master"
+    - name: Deploy (if master)
+      if: github.ref == 'refs/heads/master'
       uses: JamesIves/github-pages-deploy-action@releases/v3
       with:
         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
