@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="PyEnchant Tutorial" href="tutorial.html" /> 
+    <link rel="next" title="Installation" href="install.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -84,8 +84,11 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="tutorial.html">PyEnchant Tutorial</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/index.html">PyEnchant API Listing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API Listing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shootout.html">Provider Shootout</a></li>
 </ul>
 
             
@@ -153,6 +156,10 @@
   <div class="section" id="pyenchant">
 <h1>PyEnchant<a class="headerlink" href="#pyenchant" title="Permalink to this headline">¶</a></h1>
 <p>PyEnchant is a spellchecking library for Python, based on the excellent <a class="reference external" href="http://www.abisource.com/enchant/">Enchant</a> library.</p>
+<p>PyEnchant combines all the functionality of the underlying Enchant
+library with the flexibility of Python and a nice “Pythonic”
+object-oriented interface. It also aims to provide some higher-level
+functionality than is available in the C API.</p>
 <p>To get started, check out the comprehensive <a class="reference internal" href="tutorial.html"><span class="doc">tutorial</span></a> or the auto-generated <a class="reference internal" href="api/enchant.html"><span class="doc">API listing</span></a>. If you just want to get up and running in a hurry, here’s a quick sample of PyEnchant in action:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">enchant</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">enchant</span><span class="o">.</span><span class="n">Dict</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">)</span>
@@ -169,14 +176,19 @@
 <h2>Documentation Index<a class="headerlink" href="#documentation-index" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="tutorial.html">PyEnchant Tutorial</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorial.html#installing-pyenchant">Installing PyEnchant</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial.html#basic-pyenchant-usage">Basic PyEnchant Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="install.html#on-linux">On Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#on-macos">On macOS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#on-windows">On Windows</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#basic-pyenchant-usage">Basic PyEnchant usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorial.html#advanced-pyenchant-usage">Advanced PyEnchant Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorial.html#pyenchant-and-other-programs">PyEnchant and other programs</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="api/index.html">PyEnchant API Listing</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API Listing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="api/enchant.html">enchant:  Access to the enchant spellchecking library</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/enchant.checker.html">enchant.checker:  High-level spellchecking functionality</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/enchant.tokenize.html">enchant.tokenize:    String tokenization functions for PyEnchant</a></li>
@@ -184,6 +196,16 @@
 <li class="toctree-l2"><a class="reference internal" href="api/enchant.pypwl.html">pypwl:  pure-python personal word list in the style of Enchant</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#how-do-i-report-bugs-give-feedback-etc">How do I report bugs, give feedback etc?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#how-is-pyenchant-licensed">How is PyEnchant licensed?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#are-there-similar-projects-available">Are there similar projects available?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#what-are-the-advantages-disadvantages-of-pyenchant-over-other-solutions">What are the advantages/disadvantages of PyEnchant over other solutions?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#how-does-pyenchant-handle-unicode-non-ascii-text">How does PyEnchant handle Unicode/non-ASCII text?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#which-enchant-provider-should-i-use-aspell-ispell-myspell">Which Enchant provider should I use? (Aspell, Ispell, MySpell…?)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="shootout.html">Provider Shootout</a></li>
 </ul>
 </div>
 </div>
@@ -197,7 +219,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="tutorial.html" class="btn btn-neutral float-right" title="PyEnchant Tutorial" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="install.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
     </div>

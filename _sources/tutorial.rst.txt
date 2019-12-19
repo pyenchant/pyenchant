@@ -1,87 +1,13 @@
+Tutorial
+=========
 
-##################
-PyEnchant Tutorial
-##################
-
-
-This page offers a quick tutorial to get up and running with the PyEnchant package. If you are already familiar with the basics of installing and using Python packages, you may prefer to simply browse the PyEnchant API listing.
-
-.. contents::
-
-
-Installing PyEnchant
-====================
-
-Installing the Package
-----------------------
-
-Your operating system distributor may provide PyEnchant via their own packaging system - please check there first.
-
-If a package is not provided by your operating system distributor, you will need to install one of the pre-build binary distributions or build the package from source.  The easiest way to install PyEnchant is via `pip <https://pip.readthedocs.io/en/latest/>`_ which will locate and install the appropriate pre-built distribution for your platform.  Simply::
-
-    pip install pyenchant
-
-
-Windows users may also download the pre-built Windows installer from the download page and run it to install PyEnchant. It will place the 'enchant' module in your Python site-packages directory.
-
-
-Adding Language Dictionaries
-----------------------------
-
-By default, PyEnchant on the Windows platform ships with a limited number of language dictionaries:
-
-    * en_GB: British English
-    * en_US: American English
-    * de_DE: German
-    * fr_FR: French
-
-For users of other platforms, the available dictionaries will depend on your installation of Enchant. If the language you wish to use is not available, you will need to install additional dictionaries.
-
-Windows Users
-~~~~~~~~~~~~~
-
-PyEnchant can use dictionaries from the OpenOffice.org project. Locate the appropriate file on their dictionary download page at http://wiki.services.openoffice.org/wiki/Dictionaries.
-
-The download will be a zip file containing the necessary dictionary files. The contents of this zip file must be extracted into the directory "Lib/site-packages/enchant/share/enchant/myspell" inside your Python installation directory. For example, if Python is installed into::
-
-   "C:/Python23"
-
-Then extract the dictionary files into::
-
-   "C:/Python23/Lib/site-packages/enchant/share/enchant/myspell"
-
-Note that despite the legacy name "myspell", the latest version of PyEnchant actually uses Hunspell and should be compatible with the latest Hunspell-specific dictionaries.
-
-
-Mac OS X Users
-~~~~~~~~~~~~~~
-
-PyEnchant can use dictionaries from the OpenOffice.org project. Locate the appropriate file on their dictionary download page at http://wiki.services.openoffice.org/wiki/Dictionaries.
-
-The download will be a zip file containing the necessary dictionary files. The contents of this zip file must be extracted into the directory "site-packages/enchant/share/enchant/myspell" inside your Python installation directory. For example, if Python is installed into::
-
-   "/Library/Frameworks/Python.framework/Versions/2.6"
-
-Then extract the dictionary files into::
-
-    "/Library/Frameworks/Python.framework/Versions/2.6/lib/python2.6/site-packages/enchant/share/enchant/myspell"
-
-Note that despite the legacy name "myspell", the latest version of PyEnchant actually uses Hunspell and should be compatible with the latest Hunspell-specific dictionaries.
-
-
-Other Platforms
-~~~~~~~~~~~~~~~
-
-The installation of additional dictionaries is the responsibility of the underlying Enchant library. Please consult your operating system vendor or the Enchant website for more details.
-
-
-Basic PyEnchant Usage
-=====================
+Basic PyEnchant usage
+---------------------
 
 Once installed, PyEnchant's functionality is available in the "enchant" module.
 
 Creating and Using Dictionary Objects
--------------------------------------
+++++++++++++++++++++++++++++++++++++++
 
 The most important object in the PyEnchant module is the Dict object, which represents a dictionary. These objects are used to check the spelling of words and to get suggestions for misspelled words. The following shows how to construct a simple Dict and use it to check some words::
 
@@ -146,7 +72,7 @@ Once a correction is made to a miss-spelled word, it is often useful to store th
 
 
 Personal Word Lists
--------------------
+++++++++++++++++++++
 
 Dict objects can also be used to check words against a custom list of correctly-spelled words known as a Personal Word List. This is simply a file listing the words to be considered, one word per line. The following example creates a Dict object for the personal word list stored in "mywords.txt"::
 
@@ -162,7 +88,7 @@ PyEnchant also provides the class DictWithPWL which can be used to combine a lan
 
 
 Checking entire blocks of text
-------------------------------
+++++++++++++++++++++++++++++++
 
 While the enchant.Dict objects are useful for spellchecking individual words, they cannot be used directly to check, for example, an entire paragraph. The module enchant.checker provides a class SpellChecker which is designed to handle this task.
 
@@ -188,7 +114,7 @@ The iterator paradigm can be used to implement a wide variety of spellchecking f
 
 
 wxSpellCheckerDialog
---------------------
+++++++++++++++++++++
 
 The module enchant.checker.wxSpellCheckerDialog provides the class wxSpellCheckerDialog which can be used to interactively check the spelling of some text. The code below shows how to create and use such a dialog from within a wxPython application.
 
@@ -205,7 +131,7 @@ It will pop up a simple spellchecking dialog like the one shown here. Each spell
   >>> import wx
   >>> from enchant.checker import SpellChecker
   >>> from enchant.checker.wxSpellCheckerDialog import wxSpellCheckerDialog
-  >>> 
+  >>>
   >>> app = wx.PySimpleApp()
   >>> text = "This is sme text with a fw speling errors in it. Here are a fw more to tst it ut."
   >>> dlg = wxSpellCheckerDialog(None,-1,"")
@@ -216,7 +142,7 @@ It will pop up a simple spellchecking dialog like the one shown here. Each spell
 
 
 CmdLineChecker
---------------
+++++++++++++++
 
 The module enchant.checker.CmdLineChecker provides the class CmdLineChecker which can be used to interactively check the spelling of some text. It uses standard input and standard output to interact with the user through a command-line interface. The code below shows how to create and use this class from within a python application, along with a short sample checking session::
 
@@ -247,7 +173,7 @@ The module enchant.checker.CmdLineChecker provides the class CmdLineChecker whic
   HOW ABOUT: ['text', 'TX', 'ext']
   >> i
   DONE
-  >>> 
+  >>>
   >>> chkr.get_text()
   'this is some example txt'
 
@@ -255,7 +181,7 @@ As shown by this simple example, the CmdLineChecker prints each error it encount
 
 
 Tokenization: splitting text into words
----------------------------------------
++++++++++++++++++++++++++++++++++++++++
 
 An important task in spellchecking is splitting a body of text up into its constitutive words, each of which is then passed to a Dict object for checking. PyEnchant provides the enchant.tokenize module to assist with this task. The purpose of this module is to provide an appropriate tokenization function which can be used to split the text. Usually, all that is required is the get_tokenizer function::
 
@@ -279,12 +205,12 @@ In many applications, checkable text may be intermingled with some sort of marku
 A chunker is simply a special tokenizer function that breaks text up into large chunks rather than individual tokens. They are typically used by passing a list of chunkers to the get_tokenizer function::
 
   >>> from enchant.tokenize import get_tokenizer, HTMLChunker
-  >>> 
+  >>>
   >>> tknzr = get_tokenizer("en_US")
   >>> [w for w in tknzr("this is <span class='important'>really important</span> text")]
   [('this', 0), ('is', 5), ('span', 9), ('class', 14), ('important', 21), ('really', 32), ('important', 39), ('span', 50), ('text', 56)]
-  >>> 
-  >>> 
+  >>>
+  >>>
   >>> tknzr = get_tokenizer("en_US",chunkers=(HTMLChunker,))
   >>> [w for w in tknzr("this is <span class='important'>really important</span> text")]
   [('this', 0), ('is', 5), ('really', 32), ('important', 39), ('text', 56)]
@@ -303,11 +229,11 @@ In many applications, it is common for spellchecking to ignore words that have a
 A filter is simply a wrapper around a tokenizer that can (1) drop certain words from the stream, and (2) further split words into sub-tokens. They are typically used by passing a list of filters to the get_tokenizer function::
 
   >>> from enchant.tokenize import get_tokenizer, EmailFilter
-  >>> 
+  >>>
   >>> tknzr = get_tokenizer("en_US")
   >>> [w for w in tknzr("send an email to fake@example.com please")]
   [('send', 0), ('an', 5), ('email', 8), ('to', 14), ('fake@example.com', 17), ('please', 34)]
-  >>> 
+  >>>
   >>> tknzr = get_tokenizer("en_US",[EmailFilter])
   >>> [w for w in tknzr("send an email to fake@example.com please")]
   [('send', 0), ('an', 5), ('email', 8), ('to', 14), ('please', 34)]
@@ -318,10 +244,10 @@ Currently implemented filters are EmailFilter, URLFilter and WikiWordFilter.
 
 
 Advanced PyEnchant Usage
-========================
+------------------------
 
 Providers
----------
+++++++++++
 
 The underlying programming model provided by the Enchant library is based on the notion of Providers. A provider is a piece of code that provides spell-checking services which Enchant can use to perform its work. Different providers exist for performing spellchecking using different frameworks - for example there is an aspell provider and a MySpell provider.
 
@@ -340,7 +266,7 @@ The provider which is managing a particular Dict object can be determined by acc
 
 
 Brokers
--------
++++++++
 
 The details of which provider is used to create a particular dictionary are managed by a Broker object. Such objects have methods for creating dictionaries and checking whether a particular dictionary exists, as shown in the example below::
 
@@ -406,7 +332,7 @@ The user can also set their preferred ordering using enchant configuration files
 
 
 Extending enchant.tokenize
---------------------------
+++++++++++++++++++++++++++
 
 As explained above, the module enchant.tokenize provides the ability to split text into its component words. The current implementation is based only on the rules for the English language, and so might not be completely suitable for your language of choice. Fortunately, it is straightforward to extend the functionality of this module.
 
@@ -416,11 +342,10 @@ The author would be very grateful for tokenization routines for languages other 
 
 
 PyEnchant and other programs
-============================
-
+----------------------------
 
 Packaging PyEnchant with py2exe
--------------------------------
+++++++++++++++++++++++++++++++++
 
 
 PyEnchant depends on a large number of auxiliary files such as plugin libraries, dictionary files, etc. While py2exe does an excellent job of detecting static file dependencies, it cannot detect these files which are located at runtime.
