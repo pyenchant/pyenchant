@@ -40,7 +40,6 @@
 import sys
 
 from enchant.checker import SpellChecker
-from enchant.utils import printf
 
 try:
     get_input = raw_input  # Python 2.x
@@ -141,10 +140,10 @@ class CmdLineChecker:
         error_string = self._build_context(
             self.error.get_text(), self.error.word, self.error.wordpos
         )
-        printf([error("ERROR: %s" % color(self.error.word, color="red"))])
-        printf([info("")])
-        printf([info(error_string)])
-        printf([info("")])
+        print([error("ERROR: %s" % color(self.error.word, color="red"))])
+        print([info("")])
+        print([info(error_string)])
+        print([info("")])
 
     @staticmethod
     def _build_context(text, error_word, error_start):
@@ -185,10 +184,10 @@ class CmdLineChecker:
                     + ": "
                     + color(sugg, color="bold")
                 )
-        printf([info("HOW ABOUT:"), result])
+        print([info("HOW ABOUT:"), result])
 
     def print_help(self):
-        printf(
+        print(
             [
                 info(
                     color("0", color="yellow")
@@ -200,7 +199,7 @@ class CmdLineChecker:
                 )
             ]
         )
-        printf(
+        print(
             [
                 info(
                     color("R", color="cyan")
@@ -214,7 +213,7 @@ class CmdLineChecker:
                 )
             ]
         )
-        printf(
+        print(
             [
                 info(
                     color("i", color="cyan")
@@ -224,7 +223,7 @@ class CmdLineChecker:
                 )
             ]
         )
-        printf(
+        print(
             [
                 info(
                     color("I", color="cyan")
@@ -234,7 +233,7 @@ class CmdLineChecker:
                 )
             ]
         )
-        printf(
+        print(
             [
                 info(
                     color("a", color="cyan")
@@ -244,7 +243,7 @@ class CmdLineChecker:
                 )
             ]
         )
-        printf(
+        print(
             [
                 info(
                     color("e", color="cyan")
@@ -254,7 +253,7 @@ class CmdLineChecker:
                 )
             ]
         )
-        printf(
+        print(
             [
                 info(
                     color("q", color="cyan")
@@ -264,7 +263,7 @@ class CmdLineChecker:
                 )
             ]
         )
-        printf(
+        print(
             [
                 info(
                     color("h", color="cyan")
@@ -274,7 +273,7 @@ class CmdLineChecker:
                 )
             ]
         )
-        printf([info("----------------------------------------------------")])
+        print([info("----------------------------------------------------")])
         self.print_suggestions()
 
     def read_command(self):
@@ -285,9 +284,9 @@ class CmdLineChecker:
             repl = int(cmd)
             suggs = self.error.suggest()
             if repl >= len(suggs):
-                printf([warning("No suggestion number"), repl])
+                print([warning("No suggestion number"), repl])
                 return False
-            printf(
+            print(
                 [
                     success(
                         "Replacing '%s' with '%s'"
@@ -303,12 +302,12 @@ class CmdLineChecker:
 
         if cmd[0] == "R":
             if not cmd[1:].isdigit():
-                printf([warning("Badly formatted command (try 'help')")])
+                print([warning("Badly formatted command (try 'help')")])
                 return False
             repl = int(cmd[1:])
             suggs = self.error.suggest()
             if repl >= len(suggs):
-                printf([warning("No suggestion number"), repl])
+                print([warning("No suggestion number"), repl])
                 return False
             self.error.replace_always(suggs[repl])
             return True
@@ -337,7 +336,7 @@ class CmdLineChecker:
             self.print_help()
             return False
 
-        printf([warning("Badly formatted command (try 'help')")])
+        print([warning("Badly formatted command (try 'help')")])
         return False
 
     def run_on_file(self, infile, outfile=None, enc=None):
@@ -355,10 +354,10 @@ class CmdLineChecker:
             inStr = inStr.decode(enc)
         self._checker.set_text(inStr)
         begin_msg = "Beginning spell check of %s" % infile
-        printf([info(begin_msg)])
-        printf([info("-" * len(begin_msg))])
+        print([info(begin_msg)])
+        print([info("-" * len(begin_msg))])
         self.run()
-        printf([success("Completed spell check of %s" % infile)])
+        print([success("Completed spell check of %s" % infile)])
         outStr = self._checker.get_text()
         if enc is not None:
             outStr = outStr.encode(enc)

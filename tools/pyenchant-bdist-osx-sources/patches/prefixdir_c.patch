@@ -10,7 +10,7 @@
  enchant_get_registry_value_ex (int current_user, const char * const prefix, const char * const key);
  
 @@ -2295,6 +2297,10 @@
-         printf("USING BINRELOC\n");
+         print("USING BINRELOC\n");
  #endif
  
 +	if (!prefix && enchant_prefix_dir_p && *enchant_prefix_dir_p) {

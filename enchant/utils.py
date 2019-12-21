@@ -51,18 +51,6 @@ from enchant.errors import Error
 import locale
 
 
-def printf(values, sep=" ", end="\n", file=None):
-    """Compatibility wrapper from print statement/function.
-
-    This function is a simple Python2/Python3 compatibility wrapper
-    for printing to stdout.
-    """
-    if file is None:
-        file = sys.stdout
-    file.write(sep.join(map(str, values)))
-    file.write(end)
-
-
 try:
     next = next
 except NameError:
