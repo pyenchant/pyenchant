@@ -113,7 +113,6 @@ import re
 import warnings
 import array
 
-from enchant.utils import xrange
 from enchant.errors import TokenizerNotFoundError
 
 #  For backwards-compatibility.  This will eventually be removed, but how
@@ -224,7 +223,7 @@ def get_tokenizer(tag=None, chunkers=None, filters=None):
     tokenizer = basic_tokenize
     if chunkers is not None:
         chunkers = list(chunkers)
-        for i in xrange(len(chunkers) - 1, -1, -1):
+        for i in range(len(chunkers) - 1, -1, -1):
             tokenizer = wrap_tokenizer(chunkers[i], tokenizer)
     if filters is not None:
         for f in filters:
