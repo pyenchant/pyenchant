@@ -23,4 +23,5 @@ website/.hyde_deps
 .coverage
 *.so
 
+.aspell.*
 htmlcov
