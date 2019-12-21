@@ -12,9 +12,8 @@ import os
 import shutil
 import errno
 
-setup_kwds = {}
-if sys.version_info > (3,):
-    setup_kwds["use_2to3"] = True
+if sys.version_info < (3,):
+    sys.exit("Please use Python3 to buil pyenchant")
 
 
 # Location of the prebuilt binaries, if available
