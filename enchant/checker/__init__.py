@@ -51,7 +51,7 @@ import warnings
 import enchant
 from enchant.errors import DefaultLanguageNotFoundError, TokenizerNotFoundError
 from enchant.tokenize import get_tokenizer
-from enchant.utils import basestring, next
+from enchant.utils import next
 from enchant.utils import get_default_language
 
 
@@ -130,7 +130,7 @@ class SpellChecker:
         """
         if lang is None:
             lang = get_default_language()
-        if isinstance(lang, basestring):
+        if isinstance(lang, (str, bytes)):
             dict = enchant.Dict(lang)
         else:
             dict = lang
@@ -173,7 +173,7 @@ class SpellChecker:
         to the constructor, before calling the 'next()' method.
         """
         # Convert to an array object if necessary
-        if isinstance(text, basestring):
+        if isinstance(text, (str, bytes)):
             if type(text) is str:
                 self._text = array.array("u", text)
             else:
