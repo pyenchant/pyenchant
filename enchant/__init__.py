@@ -95,7 +95,7 @@ except ImportError:
     _e = None
 
 from enchant.errors import Error, DictNotFoundError
-from enchant.utils import EnchantStr, get_default_language, UTF16EnchantStr
+from enchant.utils import get_default_language
 from enchant.pypwl import PyPWL
 
 #  Due to the unfortunate name collision between the enchant "tokenize" module
@@ -256,7 +256,7 @@ class Broker(_EnchantObject):
         err = _e.broker_get_error(self._this)
         if err == "" or err is None:
             raise eclass(default)
-        raise eclass(EnchantStr("").decode(err))
+        raise eclass(err.decode())
 
     def _free(self):
         """Free system resource associated with a Broker object.
@@ -304,7 +304,6 @@ class Broker(_EnchantObject):
         some internal bookkeeping.
         """
         self._check_this()
-        tag = EnchantStr(tag)
         new_dict = _e.broker_request_dict(self._this, tag.encode())
         if new_dict is None:
             eStr = "Dictionary for language '%s' could not be found"
@@ -324,7 +323,6 @@ class Broker(_EnchantObject):
         of custom dictionary entries, one word per line.
         """
         self._check_this()
-        pwl = EnchantStr(pwl)
         new_dict = _e.broker_request_pwl_dict(self._this, pwl.encode())
         if new_dict is None:
             eStr = "Personal Word List file '%s' could not be loaded"
@@ -364,7 +362,6 @@ class Broker(_EnchantObject):
         is available, and False otherwise.
         """
         self._check_this()
-        tag = EnchantStr(tag)
         val = _e.broker_dict_exists(self._this, tag.encode())
         return bool(val)
 
@@ -381,8 +378,6 @@ class Broker(_EnchantObject):
         for all languages for which one has not been set explicitly.
         """
         self._check_this()
-        tag = EnchantStr(tag)
-        ordering = EnchantStr(ordering)
         _e.broker_set_ordering(self._this, tag.encode(), ordering.encode())
 
     def describe(self):
@@ -404,10 +399,9 @@ class Broker(_EnchantObject):
         'enchant_broker_describe'.  It collects the given arguments in
         a tuple and appends them to the list '__describe_result'.
         """
-        s = EnchantStr("")
-        name = s.decode(name)
-        desc = s.decode(desc)
-        file = s.decode(file)
+        name = name.decode()
+        desc = desc.decode()
+        file = file.decode()
         self.__describe_result.append((name, desc, file))
 
     def list_dicts(self):
@@ -434,11 +428,10 @@ class Broker(_EnchantObject):
         'enchant_broker_list_dicts'.  It collects the given arguments into
         an appropriate tuple and appends them to '__list_dicts_result'.
         """
-        s = EnchantStr("")
-        tag = s.decode(tag)
-        name = s.decode(name)
-        desc = s.decode(desc)
-        file = s.decode(file)
+        tag = tag.decode()
+        name = name.decode()
+        desc = desc.decode()
+        file = file.decode()
         self.__list_dicts_result.append((tag, (name, desc, file)))
 
     def list_languages(self):
@@ -463,11 +456,10 @@ class Broker(_EnchantObject):
         cb_result = []
 
         def cb_func(tag, name, desc, file):
-            s = EnchantStr("")
-            tag = s.decode(tag)
-            name = s.decode(name)
-            desc = s.decode(desc)
-            file = s.decode(file)
+            tag = tag.decode()
+            name = name.decode()
+            desc = desc.decode()
+            file = file.decode()
             cb_result.append((tag, name, desc, file))
 
         # Actually call the describer function
@@ -482,10 +474,9 @@ class Broker(_EnchantObject):
         Parameters are used to provide runtime information to individual
         provider backends.  See the method 'set_param' for more details.
         """
-        name = EnchantStr(name)
         param = _e.broker_get_param(self._this, name.encode())
         if param is not None:
-            param = name.decode(param)
+            param = param.decode()
         return param
 
     get_param._DOC_ERRORS = ["param"]
@@ -498,9 +489,9 @@ class Broker(_EnchantObject):
         any directories given in the "enchant.myspell.dictionary.path"
         parameter when looking for its dictionary files.
         """
-        name = EnchantStr(name).encode()
+        name = name.encode()
         if value is not None:
-            value = EnchantStr(value).encode()
+            value = value.encode()
         _e.broker_set_param(self._this, name, value)
 
 
@@ -603,10 +594,6 @@ class Dict(_EnchantObject):
         desc = self.__describe(check_this=False)
         self.tag = desc[0]
         self.provider = ProviderDesc(*desc[1:])
-        if self.provider.name == "myspell":
-            self._StringClass = UTF16EnchantStr
-        else:
-            self._StringClass = EnchantStr
 
     _switch_this._DOC_ERRORS = ["init"]
 
@@ -626,7 +613,7 @@ class Dict(_EnchantObject):
         err = _e.dict_get_error(self._this)
         if err == "" or err is None:
             raise eclass(default)
-        raise eclass(EnchantStr("").decode(err))
+        raise eclass(err.decode())
 
     def _free(self):
         """Free the system resources associated with a Dict object.
@@ -648,7 +635,6 @@ class Dict(_EnchantObject):
         True if it is correctly spelled, and false otherwise.
         """
         self._check_this()
-        word = self._StringClass(word)
         # Enchant asserts that the word is non-empty.
         # Check it up-front to avoid nasty warnings on stderr.
         if len(word) == 0:
@@ -667,24 +653,21 @@ class Dict(_EnchantObject):
         word, returning the possibilities in a list.
         """
         self._check_this()
-        word = self._StringClass(word)
         # Enchant asserts that the word is non-empty.
         # Check it up-front to avoid nasty warnings on stderr.
         if len(word) == 0:
             raise ValueError("can't suggest spellings for empty string")
         suggs = _e.dict_suggest(self._this, word.encode())
-        return [word.decode(w) for w in suggs]
+        return [w.decode() for w in suggs]
 
     def add(self, word):
         """Add a word to the user's personal word list."""
         self._check_this()
-        word = self._StringClass(word)
         _e.dict_add(self._this, word.encode())
 
     def remove(self, word):
         """Add a word to the user's personal exclude list."""
         self._check_this()
-        word = self._StringClass(word)
         _e.dict_remove(self._this, word.encode())
 
     def add_to_pwl(self, word):
@@ -695,31 +678,26 @@ class Dict(_EnchantObject):
             stacklevel=2,
         )
         self._check_this()
-        word = self._StringClass(word)
         _e.dict_add_to_pwl(self._this, word.encode())
 
     def add_to_session(self, word):
         """Add a word to the session personal list."""
         self._check_this()
-        word = self._StringClass(word)
         _e.dict_add_to_session(self._this, word.encode())
 
     def remove_from_session(self, word):
         """Add a word to the session exclude list."""
         self._check_this()
-        word = self._StringClass(word)
         _e.dict_remove_from_session(self._this, word.encode())
 
     def is_added(self, word):
         """Check whether a word is in the personal word list."""
         self._check_this()
-        word = self._StringClass(word)
         return _e.dict_is_added(self._this, word.encode())
 
     def is_removed(self, word):
         """Check whether a word is in the personal exclude list."""
         self._check_this()
-        word = self._StringClass(word)
         return _e.dict_is_removed(self._this, word.encode())
 
     def store_replacement(self, mis, cor):
@@ -735,8 +713,6 @@ class Dict(_EnchantObject):
         if not cor:
             raise ValueError("can't store empty string as a replacement")
         self._check_this()
-        mis = self._StringClass(mis)
-        cor = self._StringClass(cor)
         _e.dict_store_replacement(self._this, mis.encode(), cor.encode())
 
     store_replacement._DOC_ERRORS = ["mis", "mis"]
@@ -768,11 +744,10 @@ class Dict(_EnchantObject):
         'enchant_dict_describe'.  It collects the given arguments in
         a tuple and stores them in the attribute '__describe_result'.
         """
-        s = EnchantStr("")
-        tag = s.decode(tag)
-        name = s.decode(name)
-        desc = s.decode(desc)
-        file = s.decode(file)
+        tag = tag.decode()
+        name = name.decode()
+        desc = desc.decode()
+        file = file.decode()
         self.__describe_result = (tag, name, desc, file)
 
 
