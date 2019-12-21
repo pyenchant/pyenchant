@@ -8,8 +8,6 @@ of having spelling errors in a spellchecking package!
 import os
 import sys
 
-from enchant.utils import printf
-
 
 WORDS = [
     "spellchecking",
@@ -129,7 +127,7 @@ def _check_docstrings(obj, errors):
                 err.wordpos,
                 chkr.suggest(),
             )
-            printf([msg], file=sys.stderr)
+            print([msg], file=sys.stderr)
     #  Find and yield all child objects that should be checked
     for name in dir(obj):
         if name.startswith("__"):
