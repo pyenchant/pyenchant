@@ -67,7 +67,6 @@ from ctypes.util import find_library
 
 from enchant import utils
 from enchant.errors import Error
-from enchant.utils import unicode
 
 # Locate and load the enchant dll.
 # We've got several options based on the host platform.
@@ -106,10 +105,6 @@ if sys.platform == "win32":
         except (Error, ImportError):
             pass
     if e_path is not None:
-        # We need to use LoadLibraryEx with LOAD_WITH_ALTERED_SEARCH_PATH so
-        # that we don't accidentally suck in other versions of e.g. glib.
-        if not isinstance(e_path, unicode):
-            e_path = unicode(e_path, sys.getfilesystemencoding())
         LoadLibraryEx = ctypes.windll.kernel32.LoadLibraryExW
         LOAD_WITH_ALTERED_SEARCH_PATH = 0x00000008
         e_handle = LoadLibraryEx(e_path, None, LOAD_WITH_ALTERED_SEARCH_PATH)
@@ -132,7 +127,7 @@ if e is None and sys.platform == "darwin":
         e = CDLL(e_path)
         try:
             e_dir = os.path.dirname(os.path.dirname(e_path))
-            if isinstance(e_dir, unicode):
+            if isinstance(e_dir, str):
                 e_dir = e_dir.encode(sys.getfilesystemencoding())
             prefix_dir = POINTER(c_char_p).in_dll(e, "enchant_prefix_dir_p")
             prefix_dir.contents = c_char_p(e_dir)

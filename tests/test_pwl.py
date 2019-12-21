@@ -1,7 +1,7 @@
 import pytest
 
 from enchant import request_pwl_dict, DictWithPWL, PyPWL
-from enchant.utils import unicode, raw_unicode
+from enchant.utils import raw_unicode
 
 
 @pytest.fixture
@@ -31,9 +31,12 @@ def test_check(pwl_path):
     assert not d.check("hello")
 
 
-def test_UnicodeFN(pwl_path):
+def test_UnicodeFN(tmp_path):
     """Test that unicode PWL filenames are accepted."""
-    d = request_pwl_dict(unicode(pwl_path))
+    unicode_path = tmp_path / "테스트"
+    setPWLContents(unicode_path, ["Lozz"])
+    d = request_pwl_dict(str(unicode_path))
+    assert d.check("Lozz")
     assert d
 
 

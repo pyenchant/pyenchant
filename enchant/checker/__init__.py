@@ -51,7 +51,7 @@ import warnings
 import enchant
 from enchant.errors import DefaultLanguageNotFoundError, TokenizerNotFoundError
 from enchant.tokenize import get_tokenizer
-from enchant.utils import unicode, basestring, next
+from enchant.utils import basestring, next
 from enchant.utils import get_default_language
 
 
@@ -174,7 +174,7 @@ class SpellChecker:
         """
         # Convert to an array object if necessary
         if isinstance(text, basestring):
-            if type(text) is unicode:
+            if type(text) is str:
                 self._text = array.array("u", text)
             else:
                 self._text = array.array("c", text)
@@ -216,7 +216,7 @@ class SpellChecker:
         python's default encoding unless another encoding is specified.
         """
         if self.wants_unicode():
-            if not isinstance(text, unicode):
+            if not isinstance(text, str):
                 if enc is None:
                     return text.decode()
                 else:

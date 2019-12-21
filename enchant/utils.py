@@ -68,7 +68,6 @@ import locale
 #  byte strings).
 #
 
-unicode = str
 basestring = (str, bytes)
 chr = chr
 
@@ -130,10 +129,8 @@ class EnchantStr(str):
         This method records whether the initial string was unicode, then
         simply passes it along to the default string constructor.
         """
-        if type(value) is unicode:
+        if type(value) is str:
             was_unicode = True
-            if str is not unicode:
-                value = value.encode("utf-8")
         else:
             was_unicode = False
             if str is not bytes:
@@ -144,22 +141,16 @@ class EnchantStr(str):
 
     def encode(self):
         """Encode this string into a form usable by the enchant C library."""
-        if str is unicode:
-            return str.encode(self, "utf-8")
-        else:
-            return self
+        return str.encode(self, "utf-8")
 
     def decode(self, value):
         """Decode a string returned by the enchant C library."""
         if self._was_unicode:
-            if str is unicode:
-                # On some python3 versions, ctypes converts c_char_p
-                # to str() rather than bytes()
-                if isinstance(value, str):
-                    value = value.encode()
-                return value.decode("utf-8")
-            else:
-                return value.decode("utf-8")
+            # On some python3 versions, ctypes converts c_char_p
+            # to str() rather than bytes()
+            if isinstance(value, str):
+                value = value.encode()
+            return value.decode("utf-8")
         else:
             return value
 
@@ -171,19 +162,13 @@ class UTF16EnchantStr(EnchantStr):
 
     def encode(self):
         """Encode this string into a form usable by the enchant C library."""
-        if str is unicode:
-            unicode_chars = self
-        else:
-            unicode_chars = unicode(self, "utf8", errors="replace")
+        unicode_chars = self
 
         utf16_safe_string = "".join(
             c if ord(c) < 2 ** 16 else self.REPLACEMENT_CHAR for c in unicode_chars
         )
 
-        if str is unicode:
-            return bytes(utf16_safe_string, "utf8")
-        else:
-            return utf16_safe_string.encode("utf8")
+        return bytes(utf16_safe_string, "utf8")
 
 
 def printf(values, sep=" ", end="\n", file=None):
@@ -305,8 +290,6 @@ def get_resource_filename(resname):
         return path
     if hasattr(sys, "frozen"):
         exe_path = sys.executable
-        if not isinstance(exe_path, unicode):
-            exe_path = unicode(exe_path, sys.getfilesystemencoding())
         exe_dir = os.path.dirname(exe_path)
         path = os.path.join(exe_dir, resname)
         if os.path.exists(path):

@@ -37,7 +37,6 @@ from enchant.errors import DefaultLanguageNotFoundError
 from enchant.utils import (
     get_default_language,
     raw_unicode,
-    unicode,
 )
 from enchant.checker import SpellChecker
 
@@ -170,11 +169,7 @@ def test_unicode():
 
 def test_chararray():
     """Test SpellChecker with a character array as input."""
-    # Python 3 does not provide 'c' array type
-    if str is unicode:
-        atype = "u"
-    else:
-        atype = "c"
+    atype = "u"
     text = "I wll be stord in an aray"
     txtarr = array.array(atype, text)
     chkr = SpellChecker("en_US", txtarr)
@@ -192,10 +187,7 @@ def test_chararray():
             assert err.word == "aray"
             chkr.replace("array")
     assert n == 2
-    if str is unicode:
-        assert txtarr.tounicode() == "I wll be stored in an array"
-    else:
-        assert txtarr.tostring() == "I wll be stored in an array"
+    assert txtarr.tounicode() == "I wll be stored in an array"
 
 
 def test_pwl():
