@@ -43,19 +43,12 @@ includes:
 
 """
 
-import codecs
 import os
 import sys
 
 from enchant.errors import Error
 
 import locale
-
-
-def raw_bytes(raw):
-    """Make a bytes object out of a raw string.
-    """
-    return codecs.escape_decode(raw)[0]
 
 
 class EnchantStr(str):
