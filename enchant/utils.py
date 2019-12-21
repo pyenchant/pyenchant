@@ -68,7 +68,6 @@ import locale
 #  byte strings).
 #
 
-basestring = (str, bytes)
 chr = chr
 
 
