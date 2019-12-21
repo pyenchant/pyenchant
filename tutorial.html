@@ -89,6 +89,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorial</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#basic-pyenchant-usage">Basic PyEnchant usage</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#creating-and-using-dictionary-objects">Creating and Using Dictionary Objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#adding-support-for-more-languages">Adding support for more languages</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#personal-word-lists">Personal Word Lists</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#checking-entire-blocks-of-text">Checking entire blocks of text</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#wxspellcheckerdialog">wxSpellCheckerDialog</a></li>
@@ -251,6 +252,13 @@
 <li><p>store_replacement: note that one word was used to replace another, meaning that it will appear higher in the list of suggestions in the future.</p></li>
 </ul>
 </div></blockquote>
+</div>
+<div class="section" id="adding-support-for-more-languages">
+<h3>Adding support for more languages<a class="headerlink" href="#adding-support-for-more-languages" title="Permalink to this headline">¶</a></h3>
+<p>Let’s assume you want to use PyEnchant on a text written in German.</p>
+<p>Let’s also assume that <code class="docutils literal notranslate"><span class="pre">enchant.list_languages()</span></code> dose not show the language tag you are interested in <code class="docutils literal notranslate"><span class="pre">de_DE</span></code> is this case.</p>
+<p>First, you should use the <code class="docutils literal notranslate"><span class="pre">describe()</span></code> method of the <code class="docutils literal notranslate"><span class="pre">Broker</span></code> class to list available providers.</p>
+<p>Let’s say <code class="docutils literal notranslate"><span class="pre">aspell</span></code> is found in the list. Now you have to install the correct dictionary for the aspell provider. On Linux and macOS, this can be done by installing the <code class="docutils literal notranslate"><span class="pre">aspell-de</span></code> packgae using your favorite package manager. TODO: How about Windows?</p>
 </div>
 <div class="section" id="personal-word-lists">
 <h3>Personal Word Lists<a class="headerlink" href="#personal-word-lists" title="Permalink to this headline">¶</a></h3>
