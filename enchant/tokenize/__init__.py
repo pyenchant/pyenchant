@@ -113,7 +113,7 @@ import re
 import warnings
 import array
 
-from enchant.utils import next, xrange
+from enchant.utils import xrange
 from enchant.errors import TokenizerNotFoundError
 
 #  For backwards-compatibility.  This will eventually be removed, but how

@@ -51,7 +51,6 @@ import warnings
 import enchant
 from enchant.errors import DefaultLanguageNotFoundError, TokenizerNotFoundError
 from enchant.tokenize import get_tokenizer
-from enchant.utils import next
 from enchant.utils import get_default_language
 
 

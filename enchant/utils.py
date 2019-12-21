@@ -52,15 +52,6 @@ import locale
 
 
 try:
-    next = next
-except NameError:
-
-    def next(iter):
-        """Compatibility wrapper for advancing an iterator."""
-        return iter.next()
-
-
-try:
     xrange = xrange
 except NameError:
     xrange = range
