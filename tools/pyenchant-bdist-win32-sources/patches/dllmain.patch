@@ -1,5 +1,0 @@
-diff -r enchant-1.6.0/src/enchant-provider.h enchant-patched/src/enchant-provider.h
-52c52
-< #define ENCHANT_PLUGIN_DECLARE(name) static HANDLE s_hModule = (HANDLE)(NULL); BOOL APIENTRY DllMain( HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserved ) { s_hModule = hModule; return TRUE; } 
----
-> #define ENCHANT_PLUGIN_DECLARE(name) static HANDLE s_hModule = (HANDLE)(NULL); BOOL APIENTRY DllMain( HINSTANCE hModule, DWORD ul_reason_for_call, LPVOID lpReserved ) { s_hModule = hModule; return TRUE; } 
