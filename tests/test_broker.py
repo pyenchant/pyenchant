@@ -1,7 +1,6 @@
 import pytest
 
 from enchant import Broker, Dict, _e
-from enchant.utils import raw_unicode
 
 
 @pytest.fixture
@@ -87,10 +86,10 @@ def test_ProvOrdering(broker):
 
 def test_UnicodeTag(broker):
     """Test that unicode language tags are accepted"""
-    d1 = broker._request_dict_data(raw_unicode("en_US"))
+    d1 = broker._request_dict_data("en_US")
     assert d1
     broker._free_dict_data(d1)
-    d1 = Dict(raw_unicode("en_US"))
+    d1 = Dict("en_US")
     assert d1
 
 

@@ -34,10 +34,7 @@ import pytest
 import enchant
 import enchant.tokenize
 from enchant.errors import DefaultLanguageNotFoundError
-from enchant.utils import (
-    get_default_language,
-    raw_unicode,
-)
+from enchant.utils import get_default_language
 from enchant.checker import SpellChecker
 
 
@@ -62,7 +59,7 @@ def test_basic():
             assert err.word == "erors"
             assert err.leading_context(5) == "ling "
             assert err.trailing_context(5) == " in i"
-            err.replace(raw_unicode("errors"))
+            err.replace("errors")
         if n == 3:
             # Replace-all on gret as it appears twice
             assert err.word == "gret"
@@ -145,26 +142,26 @@ def test_chunkers_and_filters():
 
 def test_unicode():
     """Test SpellChecker with a unicode string."""
-    text = raw_unicode("""I am a unicode strng with unicode erors.""")
+    text = """I am a unicode strng with unicode erors."""
     chkr = SpellChecker("en_US", text)
     for n, err in enumerate(chkr):
         if n == 0:
-            assert err.word == raw_unicode("unicode")
+            assert err.word == "unicode"
             assert err.wordpos == 7
             chkr.ignore_always()
         if n == 1:
-            assert err.word == raw_unicode("strng")
+            assert err.word == "strng"
             chkr.replace_always("string")
-            assert chkr._replace_words[raw_unicode("strng")] == raw_unicode("string")
+            assert chkr._replace_words["strng"] == "string"
         if n == 2:
-            assert err.word == raw_unicode("erors")
+            assert err.word == "erors"
             chkr.replace("erros")
             chkr.set_offset(-6)
         if n == 3:
-            assert err.word == raw_unicode("erros")
+            assert err.word == "erros"
             chkr.replace("errors")
     assert n == 3
-    assert chkr.get_text() == raw_unicode("I am a unicode string with unicode errors.")
+    assert chkr.get_text() == "I am a unicode string with unicode errors."
 
 
 def test_chararray():
@@ -213,7 +210,7 @@ def test_bug2785373():
     for err in c:
         pass
     c = SpellChecker(enchant.Dict("en"), "")
-    c.set_text(raw_unicode("So, one dey when I wes 17, I left."))
+    c.set_text("So, one dey when I wes 17, I left.")
     for err in c:
         pass
 

@@ -27,12 +27,7 @@
 # file, but you are not obligated to do so.  If you do not wish to
 # do so, delete this exception statement from your version.
 #
-"""
-
-    enchant.tokenize.tests:  unittests for enchant tokenization functions.
-
-"""
-
+import textwrap
 import unittest
 
 from enchant.tokenize import (
@@ -45,8 +40,9 @@ from enchant.tokenize import (
     get_tokenizer,
     wrap_tokenizer,
 )
+
+
 from enchant.tokenize.en import tokenize as tokenize_en
-from enchant.utils import raw_unicode
 
 
 class TestTokenization(unittest.TestCase):
@@ -365,20 +361,7 @@ of words. Also need to "test" the handling of 'quoted' words."""
 
     def test_unicodeBasic(self):
         """Test tokenization of a basic unicode string."""
-        input = raw_unicode(
-            r"Ik ben ge\u00EFnteresseerd in de co\u00F6rdinatie van mijn knie\u00EBn, maar kan niet \u00E9\u00E9n \u00E0 twee enqu\u00EAtes vinden die recht doet aan mijn carri\u00E8re op Cura\u00E7ao"
-        )
-        output = input.split(" ")
-        output[8] = output[8][0:-1]
-        for (itmO, itmV) in zip(output, tokenize_en(input)):
-            self.assertEqual(itmO, itmV[0])
-            self.assertTrue(input[itmV[1] :].startswith(itmO))
-
-    def test_unicodeCombining(self):
-        """Test tokenization with unicode combining symbols."""
-        input = raw_unicode(
-            r"Ik ben gei\u0308nteresseerd in de co\u00F6rdinatie van mijn knie\u00EBn, maar kan niet e\u0301e\u0301n \u00E0 twee enqu\u00EAtes vinden die recht doet aan mijn carri\u00E8re op Cura\u00E7ao"
-        )
+        input = "Ik ben geïnteresseerd in de coördinatie van mijn knieën, maar kan niet één à twee enquêtes vinden die recht doet aan mijn carrière op Curaçao"
         output = input.split(" ")
         output[8] = output[8][0:-1]
         for (itmO, itmV) in zip(output, tokenize_en(input)):
@@ -420,7 +403,7 @@ of words. Also need to "test" the handling of 'quoted' words."""
         input = "So, one dey when I wes 17, I left."
         for _ in tokenize_en(input):
             pass
-        input = raw_unicode("So, one dey when I wes 17, I left.")
+        input = "So, one dey when I wes 17, I left."
         for _ in tokenize_en(input):
             pass
 
@@ -430,44 +413,48 @@ of words. Also need to "test" the handling of 'quoted' words."""
         This really should work since there are no special rules to apply,
         just lots of non-ascii characters.
         """
-        inputT = raw_unicode(
-            "T\\xe4m\\xe4 on kappale. Eip\\xe4 ole kovin 2 nen, mutta tarkoitus on n\\xe4ytt\\xe4\\xe4 miten sanastaja \\ntoimii useiden-erilaisten sanarypp\\xe4iden kimpussa.\\nPit\\xe4\\xe4p\\xe4 viel\\xe4 'tarkistaa' sanat jotka \"lainausmerkeiss\\xe4\". Heittomerkki ja vaa'an.\\nUlkomaisia sanoja s\\xfcss, spa\\xdf."
+        text = textwrap.dedent(
+            """\
+            Tämä on kappale. Eipä ole kovin 2 nen, mutta tarkoitus on näyttää miten sanastaja
+             toimii useiden-erilaisten sanaryppäiden kimpussa.
+            Pitääpä vielä 'tarkistaa' sanat jotka "lainausmerkeissä". Heittomerkki ja vaa'an.
+            Ulkomaisia sanoja süss, spaß.
+        """
         )
-        outputT = [
-            (raw_unicode("T\\xe4m\\xe4"), 0),
-            (raw_unicode("on"), 5),
-            (raw_unicode("kappale"), 8),
-            (raw_unicode("Eip\\xe4"), 17),
-            (raw_unicode("ole"), 22),
-            (raw_unicode("kovin"), 26),
-            (raw_unicode("nen"), 34),
-            (raw_unicode("mutta"), 39),
-            (raw_unicode("tarkoitus"), 45),
-            (raw_unicode("on"), 55),
-            (raw_unicode("n\\xe4ytt\\xe4\\xe4"), 58),
-            (raw_unicode("miten"), 66),
-            (raw_unicode("sanastaja"), 72),
-            (raw_unicode("toimii"), 83),
-            (raw_unicode("useiden"), 90),
-            (raw_unicode("erilaisten"), 98),
-            (raw_unicode("sanarypp\\xe4iden"), 109),
-            (raw_unicode("kimpussa"), 123),
-            (raw_unicode("Pit\\xe4\\xe4p\\xe4"), 133),
-            (raw_unicode("viel\\xe4"), 141),
-            (raw_unicode("tarkistaa"), 148),
-            (raw_unicode("sanat"), 159),
-            (raw_unicode("jotka"), 165),
-            (raw_unicode("lainausmerkeiss\\xe4"), 172),
-            (raw_unicode("Heittomerkki"), 191),
-            (raw_unicode("ja"), 204),
-            (raw_unicode("vaa'an"), 207),
-            (raw_unicode("Ulkomaisia"), 215),
-            (raw_unicode("sanoja"), 226),
-            (raw_unicode("s\\xfcss"), 233),
-            (raw_unicode("spa\\xdf"), 239),
+        expected_tokens = [
+            ("Tämä", 0),
+            ("on", 5),
+            ("kappale", 8),
+            ("Eipä", 17),
+            ("ole", 22),
+            ("kovin", 26),
+            ("nen", 34),
+            ("mutta", 39),
+            ("tarkoitus", 45),
+            ("on", 55),
+            ("näyttää", 58),
+            ("miten", 66),
+            ("sanastaja", 72),
+            ("toimii", 83),
+            ("useiden", 90),
+            ("erilaisten", 98),
+            ("sanaryppäiden", 109),
+            ("kimpussa", 123),
+            ("Pitääpä", 133),
+            ("vielä", 141),
+            ("tarkistaa", 148),
+            ("sanat", 159),
+            ("jotka", 165),
+            ("lainausmerkeissä", 172),
+            ("Heittomerkki", 191),
+            ("ja", 204),
+            ("vaa'an", 207),
+            ("Ulkomaisia", 215),
+            ("sanoja", 226),
+            ("süss", 233),
+            ("spaß", 239),
         ]
-        for (itmO, itmV) in zip(outputT, tokenize_en(inputT)):
-            self.assertEqual(itmO, itmV)
+        assert list(tokenize_en(text)) == expected_tokens
 
     # XXX TODO: the myspell provider doesn't correctly interpret
     # typographic apostrophe on OSX, disabling for now.

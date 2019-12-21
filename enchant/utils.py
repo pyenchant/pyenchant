@@ -52,52 +52,8 @@ from enchant.errors import Error
 import locale
 
 
-#
-#  Unicode/Bytes compatibility wrappers.
-#
-# TODO: drop this
-#
-#  These allow us to support both Python 2.x and Python 3.x from
-#  the same codebase.
-#
-#  We provide explicit type objects "bytes" and "unicode" that can be
-#  used to construct instances of the appropriate type.  The class
-#  "EnchantStr" derives from the default "str" type and implements the
-#  necessary logic for encoding/decoding as strings are passed into
-#  the underlying C library (where they must always be utf-8 encoded
-#  byte strings).
-#
-
-chr = chr
-
-
-def raw_unicode(raw):
-    """Make a unicode string from a raw string.
-
-    This function takes a string containing unicode escape characters,
-    and returns the corresponding unicode string.  Useful for writing
-    unicode string literals in your python source while being upwards-
-    compatible with Python 3.  For example, instead of doing this:
-
-      s = u"hello\u2149"  # syntax error in Python 3
-
-    Or this:
-
-      s = "hello\u2149"   # not what you want in Python 2.x
-
-    You can do this:
-
-      s = raw_unicode(r"hello\u2149")  # works everywhere!
-
-    """
-    return raw.encode("utf8").decode("unicode-escape")
-
-
 def raw_bytes(raw):
     """Make a bytes object out of a raw string.
-
-    This is analogous to raw_unicode, but processes byte escape characters
-    to produce a bytes object.
     """
     return codecs.escape_decode(raw)[0]
 
