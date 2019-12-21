@@ -36,7 +36,6 @@ This module provides miscellaneous utilities for use with the
 enchant spellchecking package.  Currently available functionality
 includes:
 
-    * string/unicode compatibility wrappers
     * functions for dealing with locale/language settings
     * ability to list supporting data files (win32 only)
     * functions for bundling supporting data files from a build
@@ -47,19 +46,7 @@ import os
 import sys
 
 from enchant.errors import Error
-
 import locale
-
-
-try:
-    xrange = xrange
-except NameError:
-    xrange = range
-
-
-#
-#  Other useful functions.
-#
 
 
 def levenshtein(s1, s2):
@@ -72,7 +59,7 @@ def levenshtein(s1, s2):
     if not s1:
         return len(s2)
 
-    previous_row = xrange(len(s2) + 1)
+    previous_row = range(len(s2) + 1)
     for i, c1 in enumerate(s1):
         current_row = [i + 1]
         for j, c2 in enumerate(s2):
