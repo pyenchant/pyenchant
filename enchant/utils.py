@@ -49,11 +49,7 @@ import sys
 
 from enchant.errors import Error
 
-# Attempt to access local language information
-try:
-    import locale
-except ImportError:
-    locale = None
+import locale
 
 
 #
@@ -284,8 +280,6 @@ def get_default_language(default=None):
     on their system.
     """
     try:
-        import locale
-
         tag = locale.getlocale()[0]
         if tag is None:
             tag = locale.getdefaultlocale()[0]
