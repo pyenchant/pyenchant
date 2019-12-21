@@ -39,7 +39,6 @@
 import unicodedata
 
 import enchant.tokenize
-from enchant.utils import unicode
 
 
 class tokenize(enchant.tokenize.tokenize):
@@ -68,7 +67,7 @@ class tokenize(enchant.tokenize.tokenize):
         self._offset = 0
         # Select proper implementation of self._consume_alpha.
         # 'text' isn't necessarily a string (it could be e.g. a mutable array)
-        # so we can't use isinstance(text,unicode) to detect unicode.
+        # so we can't use isinstance(text, str) to detect unicode.
         # Instead we typetest the first character of the text.
         # If there's no characters then it doesn't matter what implementation
         # we use since it won't be called anyway.
@@ -77,7 +76,7 @@ class tokenize(enchant.tokenize.tokenize):
         except IndexError:
             self._initialize_for_binary()
         else:
-            if isinstance(char1, unicode):
+            if isinstance(char1, str):
                 self._initialize_for_unicode()
             else:
                 self._initialize_for_binary()
