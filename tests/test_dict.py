@@ -6,7 +6,7 @@ import pickle
 
 import enchant
 from enchant import dict_exists, Dict, DictNotFoundError, Error
-from enchant.utils import raw_unicode, get_default_language
+from enchant.utils import get_default_language
 
 import pytest
 
@@ -61,7 +61,7 @@ def test_suggestHang1(en_us_dict):
 def test_unicode1(en_us_dict):
     """Test checking/suggesting for unicode strings"""
     # TODO: find something that actually returns suggestions
-    us1 = raw_unicode(r"he\u2149lo")
+    us1 = r"he\u2149lo"
     assert type(us1) is str
     assert not en_us_dict.check(us1)
     for s in en_us_dict.suggest(us1):

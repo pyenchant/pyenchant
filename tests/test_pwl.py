@@ -1,7 +1,6 @@
 import pytest
 
 from enchant import request_pwl_dict, DictWithPWL, PyPWL
-from enchant.utils import raw_unicode
 
 
 @pytest.fixture
@@ -121,7 +120,7 @@ def test_PyPWL(tmp_path):
 
 def test_UnicodeCharsInPath(tmp_path):
     """Test that unicode chars in PWL paths are accepted."""
-    _fileName = raw_unicode(r"test_\xe5\xe4\xf6_ing")
+    _fileName = r"test_\xe5\xe4\xf6_ing"
     path = tmp_path / _fileName
     d = request_pwl_dict(str(path))
     assert d
