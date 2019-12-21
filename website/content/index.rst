@@ -21,12 +21,13 @@ To get started, check out the comprehensive :doc:`tutorial<tutorial>` or the aut
     >>>
 
 
+Otherwise, take a look at the documentation index:
 
 Documentation Index
 -------------------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    install.rst
    tutorial.rst
