@@ -86,6 +86,7 @@ __ver_sub__ = ""
 __version__ = "%d.%d.%d%s" % (__ver_major__, __ver_minor__, __ver_patch__, __ver_sub__)
 
 import os
+import warnings
 
 try:
     from enchant import _enchant as _e
@@ -97,20 +98,6 @@ except ImportError:
 from enchant.errors import Error, DictNotFoundError
 from enchant.utils import get_default_language
 from enchant.pypwl import PyPWL
-
-#  Due to the unfortunate name collision between the enchant "tokenize" module
-#  and the stdlib "tokenize" module, certain values of sys.path can cause
-#  the former to override the latter and break the "warnings" module.
-#  This hacks around it by making a dummy "warnings" module.
-try:
-    import warnings
-except ImportError:
-
-    class warnings(object):
-        def warn(self, *args, **kwds):
-            pass
-
-    warnings = warnings()
 
 
 class ProviderDesc(object):
