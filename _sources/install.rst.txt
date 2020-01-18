@@ -58,8 +58,11 @@ Cons:
  * This does not work if your Python installation uses 32 bits
  * This uses a bit of custom build scripts that may not be correct.
    (More details in the `pyenchant/build-enchant <https://github.com/pyenchant/build-enchant repository>`_)
+ * Only old versions of PyEnchant / Python are available.
 
-TODO: how to install more dictionaries?
+TODO:
+* how to install more dictionaries
+* provide an alternative implementation using the Win32 API directly
 
 Using MinGW
 +++++++++++
