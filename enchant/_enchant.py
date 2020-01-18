@@ -27,6 +27,7 @@
 # file, but you are not obligated to do so.  If you do not wish to
 # do so, delete this exception statement from your version.
 #
+
 """
 
     enchant._enchant:  ctypes-based wrapper for enchant C library
@@ -64,6 +65,7 @@ from ctypes import (
     POINTER,
 )
 from ctypes.util import find_library
+import textwrap
 
 from enchant import utils
 from enchant.errors import Error
@@ -149,10 +151,12 @@ if e is None:
 
 # No usable enchant install was found :-(
 if e is None:
-    msg = (
-        "The 'enchant' C library was not found. "
-        "Please install it via your OS package manager, "
-        "or use a pre-built binary wheel from PyPI."
+    msg = textwrap.dedent(
+        """\
+        The 'enchant' C library was not found and needs to be installed.
+        See  https://pyenchant.github.io/pyenchant/install.html
+        for details
+        """
     )
     raise ImportError(msg)
 
