@@ -20,7 +20,7 @@ tools/pyenchant-bdist-osx-sources/enchant-1.*
 website/deploy
 website/.hyde_deps
 .tox
-.coverage
+.coverage*
 *.so
 
 .aspell.*
