@@ -1,6 +1,16 @@
 PyEnchant
 =========
 
+🚧 Status: maintenance transfer 🚧
+-----------------------------------
+
+Maintenance of this project is getting transferred from Ryan Kelly to me, Dimitri Merejkowsky. Expect a few bumps down the road while issues are sorted out.
+
+A new release is being worked on, see the `"next release" <https://github.com/pyenchant/pyenchant/milestone/1>`_ milestone for more details.
+
+Introduction
+------------
+
 PyEnchant is a spellchecking library for Python, based on the excellent `Enchant <http://www.abisource.com/enchant/>`_ library.
 
 PyEnchant combines all the functionality of the underlying Enchant
