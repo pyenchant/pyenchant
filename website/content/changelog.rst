@@ -185,15 +185,16 @@ Clean ups
   This introduces some minor backward-incompatibilities to the
   API, hence the full minor version bump.
 
-  	* 'fallback' argument to get_tokenizer() was removed, just
-  	  catch the Error and re-try with whatever is appropriate for
-  	  your application.
-  	* filters should be passed into get_tokenizer() as the second
-  	  argument, rather than applied as separate functions.
-     * Basic whitespace-and-punctuation tokenization separated from
-       the language-specific parts.
-     * Internal details of Filter classes expanded and generalized
-     * English tokenization rules reverted to 1.1.5 version
+    * 'fallback' argument to get_tokenizer() was removed, just
+      catch the Error and re-try with whatever is appropriate for
+      your application.
+    * filters should be passed into get_tokenizer() as the second
+      argument, rather than applied as separate functions.
+    * Basic whitespace-and-punctuation tokenization separated from
+      the language-specific parts.
+    * Internal details of Filter classes expanded and generalized
+    * English tokenization rules reverted to 1.1.5 version
+
 
 1.2.0 (2006-11-05)
 ------------------
@@ -201,15 +202,19 @@ Clean ups
 * Implemented "filters" that allow tokenization to skip common word
   forms such as URLs, WikiWords, email addresses etc.
 * Now ships with enchant-1.3.0, meaning:
-     * PWLs can return a useful list of suggestions rather than
-       the empty list
-     * Hunspell replaces MySpell as the default Windows backend
+
+  * PWLs can return a useful list of suggestions rather than
+    the empty list
+  * Hunspell replaces MySpell as the default Windows backend
+
 * Tokenization doesn't split words at non-alpha characters by default
 * GtkSpellCheckerDialog contributed by Fredrik Corneliusson
 * Removed deprecated functionality:
-		* Dict.add_to_personal
-		* All registry handling functionality from enchant.utils
-		* enchant.utils.SpellChecker (use enchant.checker.SpellChecker)
+
+  * Dict.add_to_personal
+  * All registry handling functionality from enchant.utils
+  * enchant.utils.SpellChecker (use enchant.checker.SpellChecker)
+
 * Removed PyPWL, as native enchant PWLs can now suggest corrections
 
 1.1.5 (2006-01-19)
@@ -248,5 +253,6 @@ Clean ups
 * Remove de_AT from languages in the Windows version, it was
   causing errors
 * bug fixes:
+
      * memory leak in DictWithPWL._free()
      * incorrect cache handling for PWLs
