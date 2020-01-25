@@ -26,6 +26,7 @@ elif sys.platform == "darwin":
 
 # Package MetaData
 NAME = "pyenchant"
+VERSION = "2.0.0"
 DESCRIPTION = "Python bindings for the Enchant spellchecking system"
 AUTHOR = "Ryan Kelly"
 AUTHOR_EMAIL = "ryan@rfk.id.au"
@@ -215,11 +216,6 @@ if sys.platform in ("win32", "darwin",):
         traceback.print_exc()
         sys.stderr.write("COULD NOT COPY PRE-BUILT DEPENDENCIES\n")
 
-##  Now we can import enchant to get at version info
-
-import enchant
-
-VERSION = enchant.__version__
 
 ##
 ##  Main call to setup() function
