@@ -1,0 +1,541 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Changelog &mdash; PyEnchant 2.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Provider Shootout" href="shootout.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> PyEnchant
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API Listing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shootout.html">Provider Shootout</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">2.0.0 (2017-12-10)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">1.6.6 (2014-06-16)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">1.6.5 (2010-12-14)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">1.6.4 (2010-12-13)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">1.6.3 (2010-08-17)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">1.6.2 (2010-05-29)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">1.6.1 (2010-03-06)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id8">1.6.0 (2010-02-23)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id9">1.5.3 (2009-05-02)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id10">1.5.2 (2009-04-27)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id11">1.5.1 (2009-01-08)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id12">1.5.0 (2008-11-25)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id13">1.4.2 (2008-06-18)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id14">1.4.0 (2008-04-18)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id15">1.3.1 (2007-12-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id16">1.3.0 (2006-12-29)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id17">1.2.0 (2006-11-05)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id18">1.1.5 (2006-01-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id19">1.1.4 (2006-01-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id20">1.1.3 (2005-06-15)</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PyEnchant</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Changelog</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/changelog.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="changelog">
+<h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2>2.0.0 (2017-12-10)<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><p>Removed deprecated <cite>is_in_session</cite> method, for compatibility
+with enchant 2.</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="id2">
+<h2>1.6.6 (2014-06-16)<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><p>New website and documentation, generated with Hyde and Sphinx.</p></li>
+<li><p>Fix SpellChecker.replace() when the replacement is shorter than
+the erroneous word; previously this would corrupt the internal
+state of the tokenizer.  Thanks Steckelfisch.</p></li>
+<li><p>Make Dict class pickle-safe.  Among other things, this should help
+with strange deadlocks when used with the multiprocessing module.</p></li>
+<li><p>Ability to import the module even when the enchant C library isn’t
+installed, by setting PYENCHANT_IGNORE_MISSING_LIB env var.</p></li>
+<li><p>New utility function “trim_suggestions”, useful for trimming the
+list of suggestions to a fixed maximum length.</p></li>
+<li><p>Change the way DeprecationWarnings are issued, to point to the line
+line in user code rather than inside pyenchant.  Thanks eriolv.</p></li>
+<li><p>Add GetSpellChecker() method to wxSpellCheckerDialog.  Thanks bjosey.</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="id3">
+<h2>1.6.5 (2010-12-14)<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><p>restore compatibility with Python 3 (including 3.2 beta1).</p></li>
+<li><p>fix unittest DeprecationWarnings on Python 3.</p></li>
+<li><p>statically compile libstdc++ into pre-built windows binaries.</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="id4">
+<h2>1.6.4 (2010-12-13)<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><p>DictWithPWL:  use pwl and pel to adjust the words returned by suggest().</p></li>
+<li><p>Fix tokenization of utf8 bytes in a mutable character array.</p></li>
+<li><p>get_tokenizer():  pass None as language tag to get default tokenizer.</p></li>
+<li><p>prevent build-related files from being included in the source tarball.</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="id5">
+<h2>1.6.3 (2010-08-17)<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><p>Bundle pre-compiled libraries for Mac OSX 10.4 and later.</p></li>
+<li><p>Improved handling of unicode paths on win32.</p></li>
+<li><p>Changed DLL loading logic for win32, to ensure that we don’t accidentally
+load older versions of e.g. glib that may be on the DLL search path.</p></li>
+<li><p>Added function get_enchant_version() to retrieve the version string for
+the underlying enchant library.</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="id6">
+<h2>1.6.2 (2010-05-29)<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><p>Upgraded bundled enchant to v1.6.0.</p></li>
+<li><p>Fixed bug in printf() utility function; all input args are now converted
+to strings before printing.</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="id7">
+<h2>1.6.1 (2010-03-06)<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><p>Fixed loading of enchant DLL on win32 without pkg_resources installed.</p></li>
+<li><p>Fixed HTMLChunker to handle unescaped &lt; and &gt; characters that are
+clearly not part of a tag.</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="id8">
+<h2>1.6.0 (2010-02-23)<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul>
+<li><p>Upgraded to enchant v1.5.0:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>new Broker methods get_param() and set_param() allow
+runtime customisation of provider data</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Added the concept of ‘chunkers’ to enchant.tokenize.get_tokenizer().
+These serve split split the text into large chunks of checkable tokens.</p></li>
+<li><p>implemented a simple HTMLChunker class</p></li>
+<li><p>Moved error classes into ‘enchant.errors’ for easier importing</p></li>
+<li><p>Moved testcases into separate files so they’re not loaded by default</p></li>
+<li><p>Allowed SpellChecker to use default language if none is specified</p></li>
+<li><p>Improved compatibility with Python 3</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="id9">
+<h2>1.5.3 (2009-05-02)<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><p>Fixed termination conditions in English tokenization loop.</p></li>
+<li><p>Improved unicode detection in English tokenizer.</p></li>
+<li><p>Made enchant spellcheck all of its docstrings as part of the
+unittest suite.</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="id10">
+<h2>1.5.2 (2009-04-27)<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><p>Modify utils.get_resource_filename and utils.win32_data_files for
+compatibility with py2exe (which was broken in the move to ctypes).
+Thanks to Stephen George for the fix.</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="id11">
+<h2>1.5.1 (2009-01-08)<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><p>SpellChecker.add_to_personal renamed to SpellChecker.add and fixed
+to use the corresponding Dict method.</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="id12">
+<h2>1.5.0 (2008-11-25)<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul>
+<li><p>Migrated from SWIG to ctypes</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>now runs under PyPy!</p></li>
+<li><p>also opens possibilities for Jython, IronPython, …</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Compatibility updates for Python 3.0, mostly around unicode strings</p></li>
+<li><p>Dropped compatibility with Python 2.2</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="id13">
+<h2>1.4.2 (2008-06-18)<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><p>upgrade to enchant v1.4.2</p></li>
+<li><p>windows version can now be installed at a path containing
+unicode characters</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="id14">
+<h2>1.4.0 (2008-04-18)<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul>
+<li><p>upgrade to enchant v1.4.0, with new functionality and APIs:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>All dictionary providers now use a shared default personal word file
+(largely obsoleting the DictWithPWL class)</p></li>
+<li><p>Ability to exclude words using Dict.remove, remove_from_session</p></li>
+<li><p>Dict.add_to_personal renamed to Dict.add</p></li>
+<li><p>Dict.is_added/Dict.is_removed for checking membership of word lists</p></li>
+<li><p>unicode PWL filenames now handled correctly on Windows</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>upgrade bundled glib DLLs in Windows version</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="id15">
+<h2>1.3.1 (2007-12-19)<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul>
+<li><p>treat combining unicode marks as letters during tokenization</p></li>
+<li><p>cleanup of wxSpellCheckerDialog, thanks to Phil Mayes</p></li>
+<li><p>upgrades of bundled components in Windows version</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>upgraded glib DLLs</p></li>
+<li><p>latest dictionaries from OpenOffice.org</p></li>
+<li><p>latest version of Hunspell</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="id16">
+<h2>1.3.0 (2006-12-29)<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul>
+<li><p>Re-worked the tokenization API to allow filters but still
+remove non-alpha-numeric characters from words by default.
+This introduces some minor backward-incompatibilities to the
+API, hence the full minor version bump.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>‘fallback’ argument to get_tokenizer() was removed, just
+catch the Error and re-try with whatever is appropriate for
+your application.</p></li>
+<li><p>filters should be passed into get_tokenizer() as the second
+argument, rather than applied as separate functions.</p></li>
+<li><p>Basic whitespace-and-punctuation tokenization separated from
+the language-specific parts.</p></li>
+<li><p>Internal details of Filter classes expanded and generalized</p></li>
+<li><p>English tokenization rules reverted to 1.1.5 version</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="id17">
+<h2>1.2.0 (2006-11-05)<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul>
+<li><p>Implemented “filters” that allow tokenization to skip common word
+forms such as URLs, WikiWords, email addresses etc.</p></li>
+<li><p>Now ships with enchant-1.3.0, meaning:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>PWLs can return a useful list of suggestions rather than
+the empty list</p></li>
+<li><p>Hunspell replaces MySpell as the default Windows backend</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Tokenization doesn’t split words at non-alpha characters by default</p></li>
+<li><p>GtkSpellCheckerDialog contributed by Fredrik Corneliusson</p></li>
+<li><p>Removed deprecated functionality:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Dict.add_to_personal</p></li>
+<li><p>All registry handling functionality from enchant.utils</p></li>
+<li><p>enchant.utils.SpellChecker (use enchant.checker.SpellChecker)</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Removed PyPWL, as native enchant PWLs can now suggest corrections</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="id18">
+<h2>1.1.5 (2006-01-19)<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><p>Fix hang in included MySpell (Windows distribution)</p></li>
+<li><p>Workaround for some MySpell/unicode problems</p></li>
+<li><p>Update to latest setuptools ez_setup.py</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="id19">
+<h2>1.1.4 (2006-01-09)<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul>
+<li><p>No longer need to use the registry under Windows</p></li>
+<li><p>Moved to setuptools for managing distribution</p></li>
+<li><p>Implemented unittest TestCases, works with <cite>python setup.py test</cite></p></li>
+<li><p>Plugins on Windows moved to “enchant” subdirectory</p></li>
+<li><p>SpellChecker now coerces to/from unicode automatically</p></li>
+<li><p>Use python default encoding rather than UTF-8 where appropriate</p></li>
+<li><p>Various documentation cleanups</p></li>
+<li><p>bug fixes:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>(1230151): count of live instances done by normalized key</p></li>
+<li><p>Accept unicode strings as broker orderings</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="id20">
+<h2>1.1.3 (2005-06-15)<a class="headerlink" href="#id20" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul>
+<li><p>support for Python 2.2</p></li>
+<li><p>use ‘locale’ module to look up default language if none specified</p></li>
+<li><p>more and better regression tests</p></li>
+<li><p>mark deprecated interfaces with warnings</p></li>
+<li><p>removed &lt;data&gt; parameter to Dict constructor, with lots of
+reshuffling behind the scenes</p></li>
+<li><p>add DictNotFoundError as a subclass of Error</p></li>
+<li><p>Remove de_AT from languages in the Windows version, it was
+causing errors</p></li>
+<li><p>bug fixes:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>memory leak in DictWithPWL._free()</p></li>
+<li><p>incorrect cache handling for PWLs</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="shootout.html" class="btn btn-neutral float-left" title="Provider Shootout" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2011, Ryan Kelly
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
