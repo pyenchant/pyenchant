@@ -236,5 +236,4 @@ setup(
     package_data=PKG_DATA,
     eager_resources=EAGER_RES,
     include_package_data=True,
-    test_suite="enchant.tests.buildtestsuite",
 )
