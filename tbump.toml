@@ -18,23 +18,9 @@ message_template = "Bump to {new_version}"
 tag_template = "v{new_version}"
 
 [[file]]
-src = "setup.py"
-search = "VERSION = "
+src = "setup.cfg"
+search = "version = {current_version}"
 
 [[file]]
 src = "enchant/__init__.py"
-search = "__version__ = "
-
-# You can specify a list of commands to
-# run after the files have been patched
-# and before the git commit is made
-
-#  [[before_commit]]
-#  name = "check changelog"
-#  cmd = "grep -q {current_version} Changelog.md"
-
-# Or run some commands after the git tag and the branch
-# have been pushed:
-#  [[after_push]]
-#  name = "check changelog"
-#  cmd = "grep -q {current_version} Changelog.md"
+search = '__version__ = "{current_version}"'
