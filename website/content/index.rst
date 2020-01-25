@@ -44,3 +44,4 @@ Documentation Index
    api/index.rst
    faq.rst
    shootout.rst
+   changelog.rst
