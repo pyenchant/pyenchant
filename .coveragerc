@@ -5,3 +5,6 @@ omit =
   .tox/*
   tests/*
   tools/*
+  enchant/checker/wxSpellCheckerDialog.py
+  enchant/checker/CmdLineChecker.py
+  enchant/checker/GtkSpellCheckerDialog.py
