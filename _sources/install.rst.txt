@@ -57,7 +57,7 @@ Cons:
  * A copy of the `glib2.dll` and other dependencies are included
  * This does not work if your Python installation uses 32 bits
  * This uses a bit of custom build scripts that may not be correct.
-   (More details in the `pyenchant/build-enchant <https://github.com/pyenchant/build-enchant repository>`_)
+   (More details in the `pyenchant/build-enchant repository <https://github.com/pyenchant/build-enchant>`_)
  * Only old versions of PyEnchant / Python are available. See [the list on pypi](https://pypi.org/project/pyenchant/#files
 
 Note that we are still working on
