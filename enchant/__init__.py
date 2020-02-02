@@ -892,18 +892,3 @@ set_param = _broker.set_param
 def get_enchant_version():
     """Get the version string for the underlying enchant library."""
     return _e.get_version()
-
-
-# Run unit tests when called from command-line
-def _runtestsuite():
-    import sys
-    import enchant.tests
-
-    res = enchant.tests.runtestsuite()
-    if len(res.errors) > 0 or len(res.failures) > 0:
-        sys.exit(1)
-    sys.exit(0)
-
-
-if __name__ == "__main__":
-    _runtestsuite()
