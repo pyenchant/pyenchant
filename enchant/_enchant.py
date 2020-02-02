@@ -184,6 +184,9 @@ t_dict = c_void_p
 
 
 # Now we can define the types of each function we are going to use
+set_prefix_dir = e.enchant_set_prefix_dir
+set_prefix_dir.argtypes = [c_char_p]
+
 
 broker_init = e.enchant_broker_init
 broker_init.argtypes = []
