@@ -53,107 +53,77 @@ import sys
 import os
 import os.path
 import ctypes
-from ctypes import (
-    cdll,
-    c_char_p,
-    c_int,
-    c_size_t,
-    c_void_p,
-    pointer,
-    CDLL,
-    CFUNCTYPE,
-    POINTER,
-)
-from ctypes.util import find_library
+from ctypes import c_char_p, c_int, c_size_t, c_void_p, pointer, CFUNCTYPE, POINTER
+import ctypes.util
 import textwrap
 
-from enchant import utils
-from enchant.errors import Error
 
-# Locate and load the enchant dll.
-# We've got several options based on the host platform.
-
-e = None
-
-
-def _e_path_possibilities():
-    """Generator yielding possible locations of the enchant library."""
-    # Allow it to be overridden using an environment variable.
-    yield os.environ.get("PYENCHANT_LIBRARY_PATH")
-    # For linuxish systems, allow default soname lookup a chance to succeed.
-    if sys.platform not in ("win32", "darwin"):
-        yield "libenchant.so.1.6.0"
-        yield "libenchant.so.1"
-        yield "libenchant.so"
-    # See if ctypes can find the library for us, under various names.
-    yield find_library("enchant")
-    yield find_library("enchant-2")
-    yield find_library("libenchant")
-    yield find_library("libenchant-1")
-    # Special-case handling for enchant installed by macports.
-    if sys.platform == "darwin":
-        yield "/opt/local/lib/libenchant.dylib"
+def from_prefix(prefix):
+    assert os.path.exists(prefix)
+    bin_path = os.path.join(prefix, "bin")
+    enchant_dll_path = os.path.join(bin_path, "libenchant-2.dll")
+    assert os.path.exists(enchant_dll_path)
+    # Make sure all the dlls found next to libenchant-2.dll
+    # (libglib-2.0-0.dll, libgmodule-2.0-0.dll, ...) can be
+    # used without having to modify %PATH%
+    ctypes.windll.kernel32.SetDllDirectoryW(bin_path)
+    return enchant_dll_path
 
 
-# On win32 we ship a bundled version of the enchant DLLs.
-# Use them if they're present.
-if sys.platform == "win32":
-    e_path = None
-    try:
-        e_path = utils.get_resource_filename("libenchant.dll")
-    except (Error, ImportError):
-        try:
-            e_path = utils.get_resource_filename("libenchant-1.dll")
-        except (Error, ImportError):
-            pass
-    if e_path is not None:
-        LoadLibraryEx = ctypes.windll.kernel32.LoadLibraryExW
-        LOAD_WITH_ALTERED_SEARCH_PATH = 0x00000008
-        e_handle = LoadLibraryEx(e_path, None, LOAD_WITH_ALTERED_SEARCH_PATH)
-        if not e_handle:
-            raise ctypes.WinError()
-        e = CDLL(e_path, handle=e_handle)
+def from_env_var(library_path):
+    assert os.path.exists(library_path)
+    return library_path
 
 
-# On darwin we ship a bundled version of the enchant DLLs.
-# Use them if they're present.
-if e is None and sys.platform == "darwin":
-    try:
-        e_path = utils.get_resource_filename("lib/libenchant.1.dylib")
-    except (Error, ImportError):
-        pass
-    else:
-        # Enchant doesn't natively support relocatable binaries on OSX.
-        # We fake it by patching the enchant source to expose a char**, which
-        # we can write the runtime path into ourselves.
-        e = CDLL(e_path)
-        try:
-            e_dir = os.path.dirname(os.path.dirname(e_path))
-            if isinstance(e_dir, str):
-                e_dir = e_dir.encode(sys.getfilesystemencoding())
-            prefix_dir = POINTER(c_char_p).in_dll(e, "enchant_prefix_dir_p")
-            prefix_dir.contents = c_char_p(e_dir)
-        except AttributeError:
-            e = None
+def from_package_resources():
+    if sys.platform != "win32":
+        return None
+    path = os.path.dirname(os.path.abspath(__file__))
+    data_path = os.path.join(path, "data")
+    if os.path.exists(data_path):
+        return from_prefix(data_path)
 
 
-# Not found yet, search various standard system locations.
-if e is None:
-    for e_path in _e_path_possibilities():
-        if e_path is not None:
-            try:
-                e = cdll.LoadLibrary(e_path)
-            except OSError:
-                pass
-            else:
-                break
+def from_system():
+    # Note: keep enchant-2 first
+    candidates = [
+        "enchant-2",
+        "libenchant-2",
+        "enchant",
+        "libenchant",
+        "enchant-1",
+        "libenchant-1",
+    ]
+
+    for name in candidates:
+        res = ctypes.util.find_library(name)
+        if res:
+            return res
 
 
-# No usable enchant install was found :-(
-if e is None:
+def find_c_enchant_lib():
+    prefix = os.environ.get("PYENCHANT_ENCHANT_PREFIX")
+    if prefix:
+        return from_prefix(prefix)
+
+    library_path = os.environ.get("PYENCHANT_LIBRARY_PATH")
+    if library_path:
+        return from_env_var(library_path)
+
+    from_package = from_package_resources()
+    if from_package:
+        return from_package
+
+    # Last chance
+    return from_system()
+
+
+enchant_lib_path = find_c_enchant_lib()
+
+if enchant_lib_path is None:
     msg = textwrap.dedent(
         """\
-        The 'enchant' C library was not found and needs to be installed.
+        The 'enchant' C library was not found and maybe needs to be installed.
         See  https://pyenchant.github.io/pyenchant/install.html
         for details
         """
@@ -161,7 +131,13 @@ if e is None:
     raise ImportError(msg)
 
 
-# Define various callback function types
+e = ctypes.cdll.LoadLibrary(enchant_lib_path)
+
+# Always assume the found enchant C dll is inside
+# the correct directory layout
+prefix_dir = os.path.dirname(os.path.dirname(enchant_lib_path))
+if hasattr(e, "enchant_set_prefix_dir"):
+    e.enchant_set_prefix_dir(prefix_dir.encode())
 
 
 def callback(restype, *argtypes):
