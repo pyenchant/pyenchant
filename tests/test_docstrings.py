@@ -88,7 +88,7 @@ def test_docstrings():
     except ImportError:
         pass
     try:
-        import enchant.checker.wxSpellCheckerDialog
+        import enchant.checker.WxSpellCheckerDialog
     except ImportError:
         pass
     errors = []

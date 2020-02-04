@@ -288,8 +288,8 @@ class Broker(_EnchantObject):
         self._check_this()
         new_dict = _e.broker_request_dict(self._this, tag.encode())
         if new_dict is None:
-            eStr = "Dictionary for language '%s' could not be found"
-            self._raise_error(eStr % (tag,), DictNotFoundError)
+            e_str = "Dictionary for language '%s' could not be found"
+            self._raise_error(e_str % (tag,), DictNotFoundError)
         if new_dict not in self._live_dicts:
             self._live_dicts[new_dict] = 1
         else:
@@ -307,8 +307,8 @@ class Broker(_EnchantObject):
         self._check_this()
         new_dict = _e.broker_request_pwl_dict(self._this, pwl.encode())
         if new_dict is None:
-            eStr = "Personal Word List file '%s' could not be loaded"
-            self._raise_error(eStr % (pwl,))
+            e_str = "Personal Word List file '%s' could not be loaded"
+            self._raise_error(e_str % (pwl,))
         if new_dict not in self._live_dicts:
             self._live_dicts[new_dict] = 1
         else:

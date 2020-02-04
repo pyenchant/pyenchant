@@ -10,12 +10,12 @@ def pwl_path(tmp_path):
     return res
 
 
-def setPWLContents(path, contents):
+def set_pwl_contents(path, contents):
     """Set the contents of the PWL file."""
     path.write_text("\n".join(contents))
 
 
-def getPWLContents(path):
+def get_pwl_contents(path):
     """Retrieve the contents of the PWL file."""
     contents = path.read_text()
     return [c.strip() for c in contents.splitlines()]
@@ -23,17 +23,17 @@ def getPWLContents(path):
 
 def test_check(pwl_path):
     """Test that basic checking works for PWLs."""
-    setPWLContents(pwl_path, ["Sazz", "Lozz"])
+    set_pwl_contents(pwl_path, ["Sazz", "Lozz"])
     d = request_pwl_dict(str(pwl_path))
     assert d.check("Sazz")
     assert d.check("Lozz")
     assert not d.check("hello")
 
 
-def test_UnicodeFN(tmp_path):
+def test_unicodefn(tmp_path):
     """Test that unicode PWL filenames are accepted."""
     unicode_path = tmp_path / "테스트"
-    setPWLContents(unicode_path, ["Lozz"])
+    set_pwl_contents(unicode_path, ["Lozz"])
     d = request_pwl_dict(str(unicode_path))
     assert d.check("Lozz")
     assert d
@@ -46,13 +46,13 @@ def test_add(pwl_path):
     d.add("Esquilax")
     d.add("Esquilam")
     assert d.check("Esquilax")
-    assert "Esquilax" in getPWLContents(pwl_path)
+    assert "Esquilax" in get_pwl_contents(pwl_path)
     assert d.is_added("Esquilax")
 
 
 def test_suggestions(pwl_path):
     """Test getting suggestions from a PWL."""
-    setPWLContents(pwl_path, ["Sazz", "Lozz"])
+    set_pwl_contents(pwl_path, ["Sazz", "Lozz"])
     d = request_pwl_dict(str(pwl_path))
     assert "Sazz" in d.suggest("Saz")
     assert "Lozz" in d.suggest("laz")
@@ -62,9 +62,9 @@ def test_suggestions(pwl_path):
     assert "sazz" not in d.suggest("Flags")
 
 
-def test_DWPWL(tmp_path, pwl_path):
+def test_dwpwl(tmp_path, pwl_path):
     """Test functionality of DictWithPWL."""
-    setPWLContents(pwl_path, ["Sazz", "Lozz"])
+    set_pwl_contents(pwl_path, ["Sazz", "Lozz"])
     other_path = tmp_path / "pel.txt"
     d = DictWithPWL("en_US", str(pwl_path), str(other_path))
     assert d.check("Sazz")
@@ -74,7 +74,7 @@ def test_DWPWL(tmp_path, pwl_path):
     assert not d.check("Flagen")
     d.add("Flagen")
     assert d.check("Flagen")
-    assert "Flagen" in getPWLContents(pwl_path)
+    assert "Flagen" in get_pwl_contents(pwl_path)
     assert "Flagen" in d.suggest("Flagn")
     assert "hello" in d.suggest("helo")
     d.remove("hello")
@@ -84,7 +84,7 @@ def test_DWPWL(tmp_path, pwl_path):
     assert not d.check("Lozz")
 
 
-def test_DWPWL_empty(tmp_path):
+def test_dwpwl_empty(tmp_path):
     """Test functionality of DictWithPWL using transient dicts."""
     d = DictWithPWL("en_US", None, None)
     assert d.check("hello")
@@ -98,7 +98,7 @@ def test_DWPWL_empty(tmp_path):
     assert d.check("hello")
 
 
-def test_PyPWL(tmp_path):
+def test_pypwl(tmp_path):
     """Test our pure-python PWL implementation."""
     d = PyPWL()
     assert list(d._words) == []
@@ -118,9 +118,9 @@ def test_PyPWL(tmp_path):
     assert "there" in ws
 
 
-def test_UnicodeCharsInPath(tmp_path):
+def test_unicode_chars_in_path(tmp_path):
     """Test that unicode chars in PWL paths are accepted."""
-    _fileName = r"test_\xe5\xe4\xf6_ing"
-    path = tmp_path / _fileName
+    filename = r"test_\xe5\xe4\xf6_ing"
+    path = tmp_path / filename
     d = request_pwl_dict(str(path))
     assert d

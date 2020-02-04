@@ -268,10 +268,10 @@ class SpellChecker:
     def replace(self, repl):
         """Replace the current erroneous word with the given string."""
         repl = self.coerce_string(repl)
-        aRepl = array.array(self._text.typecode, repl)
+        a_repl = array.array(self._text.typecode, repl)
         if repl:
             self.dict.store_replacement(self.word, repl)
-        self._text[self.wordpos : self.wordpos + len(self.word)] = aRepl
+        self._text[self.wordpos : self.wordpos + len(self.word)] = a_repl
         incr = len(repl) - len(self.word)
         self._tokens.set_offset(self._tokens.offset + incr, replaced=True)
 

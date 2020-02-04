@@ -168,28 +168,28 @@ def win32_data_files():
     """
     #  Include the main enchant DLL
     try:
-        libEnchant = get_resource_filename("libenchant.dll")
+        lib_enchant = get_resource_filename("libenchant.dll")
     except Error:
-        libEnchant = get_resource_filename("libenchant-1.dll")
-    mainDir = os.path.dirname(libEnchant)
-    dataFiles = [("", [libEnchant])]
+        lib_enchant = get_resource_filename("libenchant-1.dll")
+    main_dir = os.path.dirname(lib_enchant)
+    data_files = [("", [lib_enchant])]
     #  And some specific supporting DLLs
-    for dll in os.listdir(mainDir):
+    for dll in os.listdir(main_dir):
         if dll.endswith(".dll"):
             for prefix in ("iconv", "intl", "libglib", "libgmodule"):
                 if dll.startswith(prefix):
-                    dataFiles[0][1].append(os.path.join(mainDir, dll))
+                    data_files[0][1].append(os.path.join(main_dir, dll))
     #  And anything found in the supporting data directories
-    dataDirs = ("share/enchant/myspell", "share/enchant/ispell", "lib/enchant")
-    for dataDir in dataDirs:
+    data_dirs = ("share/enchant/myspell", "share/enchant/ispell", "lib/enchant")
+    for data_dir in data_dirs:
         files = []
-        fullDir = os.path.join(mainDir, os.path.normpath(dataDir))
-        for fn in os.listdir(fullDir):
-            fullFn = os.path.join(fullDir, fn)
-            if os.path.isfile(fullFn):
-                files.append(fullFn)
-        dataFiles.append((dataDir, files))
-    return dataFiles
+        full_dir = os.path.join(main_dir, os.path.normpath(data_dir))
+        for fn in os.listdir(full_dir):
+            full_fn = os.path.join(full_dir, fn)
+            if os.path.isfile(full_fn):
+                files.append(full_fn)
+        data_files.append((data_dir, files))
+    return data_files
 
 
 win32_data_files._DOC_ERRORS = ["py", "py", "exe"]

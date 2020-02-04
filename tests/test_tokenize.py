@@ -85,8 +85,8 @@ of words. Also need to "test" the (handling) of 'quoted' words."""
         ("words", 177),
     ]
     assert output == [i for i in basic_tokenize(input)]
-    for (itmO, itmV) in zip(output, basic_tokenize(input)):
-        assert itmO == itmV
+    for (itm_o, itm_v) in zip(output, basic_tokenize(input)):
+        assert itm_o == itm_v
 
 
 def test_tokenize_strip():
@@ -103,8 +103,8 @@ def test_tokenize_strip():
         (">>", 51),
     ]
     assert output == [i for i in basic_tokenize(input)]
-    for (itmO, itmV) in zip(output, basic_tokenize(input)):
-        assert itmO, itmV
+    for (itm_o, itm_v) in zip(output, basic_tokenize(input)):
+        assert itm_o, itm_v
 
 
 def test_wrap_tokenizer():
@@ -170,7 +170,7 @@ def test_text():
     return text
 
 
-def test_URLFilter(test_text):
+def test_url_filter(test_text):
     """Test filtering of URLs"""
     tkns = get_tokenizer("en_US", filters=(URLFilter,))(test_text)
     out = [t for t in tkns]
@@ -195,7 +195,7 @@ def test_URLFilter(test_text):
     assert out == exp
 
 
-def test_WikiWordFilter(test_text):
+def test_wiki_word_filter(test_text):
     """Test filtering of WikiWords"""
     tkns = get_tokenizer("en_US", filters=(WikiWordFilter,))(test_text)
     out = [t for t in tkns]
@@ -228,7 +228,7 @@ def test_WikiWordFilter(test_text):
     assert out == exp
 
 
-def test_EmailFilter(test_text):
+def test_email_filter(test_text):
     """Test filtering of email addresses"""
     tkns = get_tokenizer("en_US", filters=(EmailFilter,))(test_text)
     out = [t for t in tkns]
@@ -259,7 +259,7 @@ def test_EmailFilter(test_text):
     assert out == exp
 
 
-def test_CombinedFilter(test_text):
+def test_combined_filter(test_text):
     """Test several filters combined"""
     tkns = get_tokenizer("en_US", filters=(URLFilter, WikiWordFilter, EmailFilter))(
         test_text
@@ -280,7 +280,7 @@ def test_CombinedFilter(test_text):
     assert out == exp
 
 
-def test_HTMLChunker():
+def test_html_chunker():
     """Test filtering of URLs"""
     text = """hello<html><head><title>my title</title></head><body>this is a
               <b>simple</b> HTML document for <p> test<i>ing</i> purposes</p>.
@@ -351,18 +351,18 @@ of words. Also need to "test" the handling of 'quoted' words."""
         ("quoted", 167),
         ("words", 175),
     ]
-    for (itmO, itmV) in zip(output, tokenize_en(input)):
-        assert itmO == itmV
+    for (itm_o, itm_v) in zip(output, tokenize_en(input)):
+        assert itm_o == itm_v
 
 
-def test_unicodeBasic():
+def test_unicode_basic():
     """Test tokenization of a basic unicode string."""
     input = "Ik ben geïnteresseerd in de coördinatie van mijn knieën, maar kan niet één à twee enquêtes vinden die recht doet aan mijn carrière op Curaçao"
     output = input.split(" ")
     output[8] = output[8][0:-1]
-    for (itmO, itmV) in zip(output, tokenize_en(input)):
-        assert itmO == itmV[0]
-        assert input[itmV[1] :].startswith(itmO)
+    for (itm_o, itm_v) in zip(output, tokenize_en(input)):
+        assert itm_o == itm_v[0]
+        assert input[itm_v[1] :].startswith(itm_o)
 
 
 def test_bug1591450():
@@ -392,8 +392,8 @@ def test_bug1591450():
         ("numbers", 104),
         ("Done", 134),
     ]
-    for (itmO, itmV) in zip(output, tokenize_en(input)):
-        assert itmO == itmV
+    for (itm_o, itm_v) in zip(output, tokenize_en(input)):
+        assert itm_o == itm_v
 
 
 def test_bug2785373():

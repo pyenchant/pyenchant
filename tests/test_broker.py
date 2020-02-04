@@ -10,19 +10,19 @@ def broker():
     del res
 
 
-def test_HasENUS(broker):
+def test_has_enus(broker):
     """Test that the en_US language is available."""
     assert broker.dict_exists("en_US")
 
 
-def test_LangsAreAvail(broker):
+def test_all_langs_are_available(broker):
     """Test whether all advertised languages are in fact available."""
     for lang in broker.list_languages():
         if not broker.dict_exists(lang):
             assert False, "language '" + lang + "' advertised but non-existent"
 
 
-def test_ProvsAreAvail(broker):
+def test_provs_are_available(broker):
     """Test whether all advertised providers are in fact available."""
     for (lang, prov) in broker.list_dicts():
         assert broker.dict_exists(lang)
@@ -32,7 +32,7 @@ def test_ProvsAreAvail(broker):
             assert False, "provier '" + str(prov) + "' advertised but non-existent"
 
 
-def test_ProvOrdering(broker):
+def test_prov_ordering(broker):
     """Test that provider ordering works correctly."""
     langs = {}
     provs = []
@@ -84,7 +84,7 @@ def test_ProvOrdering(broker):
             del b2
 
 
-def test_UnicodeTag(broker):
+def test_unicode_tag(broker):
     """Test that unicode language tags are accepted"""
     d1 = broker._request_dict_data("en_US")
     assert d1
@@ -93,7 +93,7 @@ def test_UnicodeTag(broker):
     assert d1
 
 
-def test_GetSetParam(broker):
+def test_get_set_param(broker):
     # Older enchnt versions do not have these functions.
     if not hasattr(_e.broker_get_param, "argtypes"):
         return
