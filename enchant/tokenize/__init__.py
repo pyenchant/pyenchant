@@ -120,7 +120,7 @@ from enchant.errors import TokenizerNotFoundError
 Error = TokenizerNotFoundError
 
 
-class tokenize:
+class tokenize:  # noqa: N801
     """Base class for all tokenizer objects.
 
     Each tokenizer must be an iterator and provide the 'offset'
@@ -206,12 +206,12 @@ def get_tokenizer(tag=None, chunkers=None, filters=None):
     # Ensure only '_' used as separator
     tag = tag.replace("-", "_")
     # First try the whole tag
-    tkFunc = _try_tokenizer(tag)
-    if tkFunc is None:
+    tk_func = _try_tokenizer(tag)
+    if tk_func is None:
         # Try just the base
         base = tag.split("_")[0]
-        tkFunc = _try_tokenizer(base)
-        if tkFunc is None:
+        tk_func = _try_tokenizer(base)
+        if tk_func is None:
             msg = "No tokenizer found for language '%s'" % (tag,)
             raise TokenizerNotFoundError(msg)
     # Given the language-specific tokenizer, we now build up the
@@ -228,14 +228,14 @@ def get_tokenizer(tag=None, chunkers=None, filters=None):
     if filters is not None:
         for f in filters:
             tokenizer = f(tokenizer)
-    tokenizer = wrap_tokenizer(tokenizer, tkFunc)
+    tokenizer = wrap_tokenizer(tokenizer, tk_func)
     return tokenizer
 
 
 get_tokenizer._DOC_ERRORS = ["py", "py"]
 
 
-class empty_tokenize(tokenize):
+class empty_tokenize(tokenize):  # noqa: N801
     """Tokenizer class that yields no elements."""
 
     _DOC_ERRORS = []
@@ -247,7 +247,7 @@ class empty_tokenize(tokenize):
         raise StopIteration()
 
 
-class unit_tokenize(tokenize):
+class unit_tokenize(tokenize):  # noqa: N801
     """Tokenizer class that yields the text as a single token."""
 
     _DOC_ERRORS = []
@@ -263,7 +263,7 @@ class unit_tokenize(tokenize):
         return (self._text, 0)
 
 
-class basic_tokenize(tokenize):
+class basic_tokenize(tokenize):  # noqa: N801
     """Tokenizer class that performs very basic word-finding.
 
     This tokenizer does the most basic thing that could work - it splits
@@ -286,34 +286,34 @@ class basic_tokenize(tokenize):
             # Find start of next word
             while offset < len(text) and text[offset].isspace():
                 offset += 1
-            sPos = offset
+            s_pos = offset
             # Find end of word
             while offset < len(text) and not text[offset].isspace():
                 offset += 1
-            ePos = offset
+            e_pos = offset
             self._offset = offset
             # Strip chars from font/end of word
-            while sPos < len(text) and text[sPos] in self.strip_from_start:
-                sPos += 1
-            while 0 < ePos and text[ePos - 1] in self.strip_from_end:
-                ePos -= 1
+            while s_pos < len(text) and text[s_pos] in self.strip_from_start:
+                s_pos += 1
+            while 0 < e_pos and text[e_pos - 1] in self.strip_from_end:
+                e_pos -= 1
             # Return if word isn't empty
-            if sPos < ePos:
-                return (text[sPos:ePos], sPos)
+            if s_pos < e_pos:
+                return (text[s_pos:e_pos], s_pos)
         raise StopIteration()
 
 
-def _try_tokenizer(modName):
+def _try_tokenizer(mod_name):
     """Look for a tokenizer in the named module.
 
     Returns the function if found, None otherwise.
     """
-    modBase = "enchant.tokenize."
-    funcName = "tokenize"
-    modName = modBase + modName
+    mod_base = "enchant.tokenize."
+    func_name = "tokenize"
+    mod_name = mod_base + mod_name
     try:
-        mod = __import__(modName, globals(), {}, funcName)
-        return getattr(mod, funcName)
+        mod = __import__(mod_name, globals(), {}, func_name)
+        return getattr(mod, func_name)
     except ImportError:
         return None
 
@@ -328,9 +328,9 @@ def wrap_tokenizer(tk1, tk2):
     # This logic is already implemented in the Filter class.
     # We simply use tk2 as the _split() method for a filter
     # around tk1.
-    tkW = Filter(tk1)
-    tkW._split = tk2
-    return tkW
+    tkw = Filter(tk1)
+    tkw._split = tk2
+    return tkw
 
 
 wrap_tokenizer._DOC_ERRORS = ["tk", "tk", "tk", "tk"]
@@ -575,25 +575,25 @@ class HTMLChunker(Chunker):
                 break
             #  Skip to the end of the current tag, if any.
             if text[offset] == "<":
-                maybeTag = offset
+                maybe_tag = offset
                 if self._is_tag(text, offset):
                     while text[offset] != ">":
                         offset += 1
                         if offset == len(text):
-                            offset = maybeTag + 1
+                            offset = maybe_tag + 1
                             break
                     else:
                         offset += 1
                 else:
-                    offset = maybeTag + 1
-            sPos = offset
+                    offset = maybe_tag + 1
+            s_pos = offset
             #  Find the start of the next tag.
             while offset < len(text) and text[offset] != "<":
                 offset += 1
             self._offset = offset
             # Return if chunk isn't empty
-            if sPos < offset:
-                return (text[sPos:offset], sPos)
+            if s_pos < offset:
+                return (text[s_pos:offset], s_pos)
         raise StopIteration()
 
     def _is_tag(self, text, offset):

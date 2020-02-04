@@ -18,7 +18,7 @@ def en_us_dict():
     del res
 
 
-def test_HasENUS():
+def test_has_en_us():
     """Test that the en_US language is available through default broker."""
     assert dict_exists("en_US")
 
@@ -51,7 +51,7 @@ def test_suggest(en_us_dict):
         en_us_dict.suggest("")
 
 
-def test_suggestHang1(en_us_dict):
+def test_suggest_hang_1(en_us_dict):
     """Test whether suggest() hangs on some inputs (Bug #1404196)"""
     assert en_us_dict.suggest("Thiis")
     assert len(en_us_dict.suggest("Thiiis")) >= 0
@@ -89,7 +89,7 @@ def test_session(en_us_dict):
     en_us_dict.add_to_session("hello")
 
 
-def test_AddRemove(en_us_dict):
+def test_add_remove(en_us_dict):
     """Test adding/removing from default user dictionary."""
     nonsense = "kxhjsddsi"
     assert not en_us_dict.check(nonsense)
@@ -109,10 +109,10 @@ def test_AddRemove(en_us_dict):
     assert en_us_dict.check("pineapple")
 
 
-def test_DefaultLang(en_us_dict):
+def test_default_lang(en_us_dict):
     """Test behaviour of default language selection."""
-    defLang = get_default_language()
-    if defLang is None:
+    def_lang = get_default_language()
+    if def_lang is None:
         # If no default language, shouldn't work
         with pytest.raises(Error):
             Dict()
@@ -121,7 +121,7 @@ def test_DefaultLang(en_us_dict):
         # Of course, no need for the dict to actually exist
         try:
             d = Dict()
-            assert d.tag == defLang
+            assert d.tag == def_lang
         except DictNotFoundError:
             pass
 

@@ -41,7 +41,7 @@ import unicodedata
 import enchant.tokenize
 
 
-class tokenize(enchant.tokenize.tokenize):
+class tokenize(enchant.tokenize.tokenize):  # noqa: N801
     """Iterator splitting text into words, reporting position.
 
     This iterator takes a text string as input, and yields tuples
@@ -164,7 +164,7 @@ class tokenize(enchant.tokenize.tokenize):
                 if incr:
                     break
                 offset += 1
-            curPos = offset
+            cur_pos = offset
             # Find end of word using, allowing valid_chars
             while offset < len(text):
                 incr = self._consume_alpha(text, offset)
@@ -175,11 +175,11 @@ class tokenize(enchant.tokenize.tokenize):
                         break
                 offset += incr
             # Return if word isn't empty
-            if curPos != offset:
+            if cur_pos != offset:
                 # Make sure word doesn't end with a valid_char
                 while text[offset - 1] in self._valid_chars:
                     offset = offset - 1
                 self._offset = offset
-                return (text[curPos:offset], curPos)
+                return (text[cur_pos:offset], cur_pos)
         self._offset = offset
         raise StopIteration()

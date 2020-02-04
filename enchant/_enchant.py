@@ -164,7 +164,7 @@ if e is None:
 # Define various callback function types
 
 
-def CALLBACK(restype, *argtypes):
+def callback(restype, *argtypes):
     """Factory for generating callback function prototypes.
 
     This is factored into a factory so I can easily change the definition
@@ -173,8 +173,8 @@ def CALLBACK(restype, *argtypes):
     return CFUNCTYPE(restype, *argtypes)
 
 
-t_broker_desc_func = CALLBACK(None, c_char_p, c_char_p, c_char_p, c_void_p)
-t_dict_desc_func = CALLBACK(None, c_char_p, c_char_p, c_char_p, c_char_p, c_void_p)
+t_broker_desc_func = callback(None, c_char_p, c_char_p, c_char_p, c_void_p)
+t_dict_desc_func = callback(None, c_char_p, c_char_p, c_char_p, c_char_p, c_void_p)
 
 
 # Simple typedefs for readability
@@ -293,14 +293,14 @@ dict_suggest1.restype = POINTER(c_char_p)
 
 
 def dict_suggest(dict, word):
-    numSuggsP = pointer(c_size_t(0))
-    suggs_c = dict_suggest1(dict, word, len(word), numSuggsP)
+    num_suggs_p = pointer(c_size_t(0))
+    suggs_c = dict_suggest1(dict, word, len(word), num_suggs_p)
     suggs = []
     n = 0
-    while n < numSuggsP.contents.value:
+    while n < num_suggs_p.contents.value:
         suggs.append(suggs_c[n])
         n = n + 1
-    if numSuggsP.contents.value > 0:
+    if num_suggs_p.contents.value > 0:
         dict_free_string_list(dict, suggs_c)
     return suggs
 
