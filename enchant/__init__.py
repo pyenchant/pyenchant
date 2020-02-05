@@ -892,8 +892,3 @@ set_param = _broker.set_param
 def get_enchant_version():
     """Get the version string for the underlying enchant library."""
     return _e.get_version()
-
-
-def set_prefix_dir(path):
-    """Set prefix used by C enchant to find its modules """
-    return _e.set_prefix_dir(path)
