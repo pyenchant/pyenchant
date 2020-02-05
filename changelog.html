@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Changelog &mdash; PyEnchant 3.0.0a1 documentation</title>
+  <title>Changelog &mdash; PyEnchant 3.0.0a2 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                3.0.0a1
+                3.0.0a2
               </div>
             
           
@@ -214,6 +214,8 @@ PyEnchant now uses the win32 API instead.</p></li>
 <li><p>Format code with <code class="docutils literal notranslate"><span class="pre">black</span></code>.</p></li>
 <li><p>Remove compatibility layers with Python2 from <code class="docutils literal notranslate"><span class="pre">enchant.utils</span></code></p></li>
 <li><p>Port tools to Python3</p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">flake8</span></code> to catch some errors during CI</p></li>
+<li><p>Fix some PEP8 naming violations</p></li>
 </ul>
 </div>
 </div>
@@ -228,7 +230,7 @@ with enchant 2.</p></li>
 <h2>1.6.6 (2014-06-16)<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>New website and documentation, generated with Hyde and Sphinx.</p></li>
-<li><p>Fix SpellChecker.replace() when the replacement is shorter than
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">SpellChecker.replace()</span></code> when the replacement is shorter than
 the erroneous word; previously this would corrupt the internal
 state of the tokenizer.  Thanks Steckelfisch.</p></li>
 <li><p>Make Dict class pickle-safe.  Among other things, this should help

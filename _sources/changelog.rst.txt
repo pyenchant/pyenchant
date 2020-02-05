@@ -33,6 +33,8 @@ Clean ups
 * Format code with ``black``.
 * Remove compatibility layers with Python2 from ``enchant.utils``
 * Port tools to Python3
+* Use ``flake8`` to catch some errors during CI
+* Fix some PEP8 naming violations
 
 
 2.0.0 (2017-12-10)
@@ -45,7 +47,7 @@ Clean ups
 ------------------
 
 * New website and documentation, generated with Hyde and Sphinx.
-* Fix SpellChecker.replace() when the replacement is shorter than
+* Fix ``SpellChecker.replace()`` when the replacement is shorter than
   the erroneous word; previously this would corrupt the internal
   state of the tokenizer.  Thanks Steckelfisch.
 * Make Dict class pickle-safe.  Among other things, this should help
