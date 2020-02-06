@@ -10,7 +10,7 @@ def broker():
     del res
 
 
-def test_has_enus(broker):
+def test_has_en_us(broker):
     """Test that the en_US language is available."""
     assert broker.dict_exists("en_US")
 
