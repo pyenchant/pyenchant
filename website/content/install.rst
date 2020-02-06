@@ -81,3 +81,17 @@ Cons:
 
  * It only works with the ``python3`` binary of the ``MinGW`` distribution,
    so typically *not* the one you've installed from `python.org`.
+
+
+Troubleshooting
+---------------
+
+Despite our best efforts, it is possible that the procedures documented above
+do not work.
+
+To have a clue about what is wrong, you can set the `PYENCHANT_VERBOSE_FIND` environment
+variable to any non-empty value and run ``python -c 'import enchant'``.
+
+If you can't figure out what is wrong, it's probably a bug in PyEnchant,
+so feel free to open an issue on GitHub,  preferably containing the output
+of the above command.
