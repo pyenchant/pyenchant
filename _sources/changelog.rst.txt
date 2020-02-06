@@ -12,6 +12,7 @@ Highlights
 * Fix using PyEnchant with Enchant >= 2.0
 * Add support for pypy3, Python 3.7 and Python 3.8
 * New website, hosted on https://pyenchant.github.io/pyenchant/
+* Add `enchant.set_prefix_dir()`
 
 Breaking changes
 ++++++++++++++++
