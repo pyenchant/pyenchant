@@ -59,19 +59,22 @@ import textwrap
 
 
 def from_prefix(prefix):
-    assert os.path.exists(prefix)
+    find_message("finding from prefix ", prefix)
+    assert os.path.exists(prefix), prefix + "  does not exist"
     bin_path = os.path.join(prefix, "bin")
     enchant_dll_path = os.path.join(bin_path, "libenchant-2.dll")
-    assert os.path.exists(enchant_dll_path)
+    assert os.path.exists(enchant_dll_path), enchant_dll_path + " does not exist"
     # Make sure all the dlls found next to libenchant-2.dll
     # (libglib-2.0-0.dll, libgmodule-2.0-0.dll, ...) can be
     # used without having to modify %PATH%
+    find_message("calling SetDllDirectoryW ", bin_path)
     ctypes.windll.kernel32.SetDllDirectoryW(bin_path)
     return enchant_dll_path
 
 
 def from_env_var(library_path):
-    assert os.path.exists(library_path)
+    find_message("using PYENCHANT_LIBRARY_PATH env var")
+    assert os.path.exists(library_path), library_path + " does not exist"
     return library_path
 
 
@@ -80,12 +83,14 @@ def from_package_resources():
         return None
     path = os.path.dirname(os.path.abspath(__file__))
     data_path = os.path.join(path, "data")
+    find_message("looking in ", data_path)
     if os.path.exists(data_path):
         return from_prefix(data_path)
 
 
 def from_system():
     # Note: keep enchant-2 first
+    find_message("looking in system")
     candidates = [
         "enchant-2",
         "libenchant-2",
@@ -96,12 +101,26 @@ def from_system():
     ]
 
     for name in candidates:
+        find_message("with name ", name)
         res = ctypes.util.find_library(name)
         if res:
             return res
 
 
+VERBOSE_FIND = False
+
+
+def find_message(*args):
+    if not VERBOSE_FIND:
+        return
+    print("pyenchant:: ", *args, sep="")
+
+
 def find_c_enchant_lib():
+    verbose = os.environ.get("PYENCHANT_VERBOSE_FIND")
+    if verbose:
+        global VERBOSE_FIND
+        VERBOSE_FIND = True
     prefix = os.environ.get("PYENCHANT_ENCHANT_PREFIX")
     if prefix:
         return from_prefix(prefix)
@@ -131,12 +150,14 @@ if enchant_lib_path is None:
     raise ImportError(msg)
 
 
+find_message("loading library ", enchant_lib_path)
 e = ctypes.cdll.LoadLibrary(enchant_lib_path)
 
 # Always assume the found enchant C dll is inside
 # the correct directory layout
 prefix_dir = os.path.dirname(os.path.dirname(enchant_lib_path))
-if hasattr(e, "enchant_set_prefix_dir"):
+if hasattr(e, "enchant_set_prefix_dir") and prefix_dir:
+    find_message("setting prefix ", prefix_dir)
     e.enchant_set_prefix_dir(prefix_dir.encode())
 
 
