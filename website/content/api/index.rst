@@ -4,6 +4,14 @@ API Listing
 
 This is an auto-generated listing of the PyEnchant API.
 
+Full list
+---------
+
+* :ref:`API index <genindex>`
+
+By module
+---------
+
 .. toctree::
 
    enchant.rst
