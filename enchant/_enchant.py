@@ -277,6 +277,17 @@ else:
     get_version.argtypes = []
     get_version.restype = c_char_p
 
+try:
+    set_prefix_dir = e.enchant_set_prefix_dir
+except AttributeError:
+    #  Make the lookup error occur at runtime
+    def set_prefix_dir(path):
+        return e.enchant_set_prefix_dir(path)
+
+
+else:
+    set_prefix_dir.argtypes = [c_char_p]
+    set_prefix_dir.restype = None
 
 dict_check1 = e.enchant_dict_check
 dict_check1.argtypes = [t_dict, c_char_p, c_size_t]
