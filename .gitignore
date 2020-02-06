@@ -25,3 +25,6 @@ website/.hyde_deps
 
 .aspell.*
 htmlcov
+
+enchant-prefix.zip
+enchant/data/
