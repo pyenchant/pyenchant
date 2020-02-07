@@ -55,6 +55,7 @@ import os.path
 import ctypes
 from ctypes import c_char_p, c_int, c_size_t, c_void_p, pointer, CFUNCTYPE, POINTER
 import ctypes.util
+import platform
 import textwrap
 
 
@@ -81,9 +82,14 @@ def from_env_var(library_path):
 def from_package_resources():
     if sys.platform != "win32":
         return None
-    path = os.path.dirname(os.path.abspath(__file__))
-    data_path = os.path.join(path, "data")
-    find_message("looking in ", data_path)
+    bits, _ = platform.architecture()
+    if bits == "64bit":
+        subdir = "mingw64"  # hopefully this is compatible
+    else:
+        subdir = "mingw32"  # ditto
+    this_path = os.path.dirname(os.path.abspath(__file__))
+    data_path = os.path.join(this_path, "data", subdir)
+    print("looking in ", data_path)
     if os.path.exists(data_path):
         return from_prefix(data_path)
 
