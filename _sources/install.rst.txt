@@ -56,16 +56,6 @@ Cons:
  * The only installed dictionary is for the English language
  * A copy of the `glib2.dll` and other dependencies are included
  * This does not work if your Python installation uses 32 bits
- * This uses a bit of custom build scripts that may not be correct.
-   (More details in the `pyenchant/build-enchant repository <https://github.com/pyenchant/build-enchant>`_)
- * Only old versions of PyEnchant / Python are available. See `the list on pypi <https://pypi.org/project/pyenchant/#files>`_.
-
-Note that we are still working on
-
-* how to install more dictionaries
-* provide an alternative implementation using the Win32 API directly
-
-See `PyEnchant issues <https://github.com/pyenchant/pyenchant/issues>`_ for details.
 
 Using MinGW
 +++++++++++
@@ -78,7 +68,7 @@ In that case, you can ask pip to **not** use the wheel by running it like this:
 
 .. code-block:: console
 
-   pip install --no-binary pyenchant`
+   pip install --no-binary pyenchant
 
 Pros:
 
@@ -91,3 +81,17 @@ Cons:
 
  * It only works with the ``python3`` binary of the ``MinGW`` distribution,
    so typically *not* the one you've installed from `python.org`.
+
+
+Troubleshooting
+---------------
+
+Despite our best efforts, it is possible that the procedures documented above
+do not work.
+
+To have a clue about what is wrong, you can set the `PYENCHANT_VERBOSE_FIND` environment
+variable to any non-empty value and run ``python -c 'import enchant'``.
+
+If you can't figure out what is wrong, it's probably a bug in PyEnchant,
+so feel free to open an issue on GitHub,  preferably containing the output
+of the above command.

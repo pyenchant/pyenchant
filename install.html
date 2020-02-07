@@ -93,6 +93,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#using-mingw">Using MinGW</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
@@ -210,17 +211,8 @@ if your Python version is compatible, it will get used by <cite>pip</cite> autom
 <li><p>The only installed dictionary is for the English language</p></li>
 <li><p>A copy of the <cite>glib2.dll</cite> and other dependencies are included</p></li>
 <li><p>This does not work if your Python installation uses 32 bits</p></li>
-<li><p>This uses a bit of custom build scripts that may not be correct.
-(More details in the <a class="reference external" href="https://github.com/pyenchant/build-enchant">pyenchant/build-enchant repository</a>)</p></li>
-<li><p>Only old versions of PyEnchant / Python are available. See <a class="reference external" href="https://pypi.org/project/pyenchant/#files">the list on pypi</a>.</p></li>
 </ul>
 </div></blockquote>
-<p>Note that we are still working on</p>
-<ul class="simple">
-<li><p>how to install more dictionaries</p></li>
-<li><p>provide an alternative implementation using the Win32 API directly</p></li>
-</ul>
-<p>See <a class="reference external" href="https://github.com/pyenchant/pyenchant/issues">PyEnchant issues</a> for details.</p>
 </div>
 <div class="section" id="using-mingw">
 <h3>Using MinGW<a class="headerlink" href="#using-mingw" title="Permalink to this headline">¶</a></h3>
@@ -228,7 +220,7 @@ if your Python version is compatible, it will get used by <cite>pip</cite> autom
 with <a class="reference external" href="https://chocolatey.org/">Chocolatey</a>), then use  <cite>pacman</cite> to install
 the <cite>libenchant</cite> and all its dependencies.</p>
 <p>In that case, you can ask pip to <strong>not</strong> use the wheel by running it like this:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install --no-binary pyenchant`</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install --no-binary pyenchant</span>
 </pre></div>
 </div>
 <p>Pros:</p>
@@ -248,6 +240,16 @@ so typically <em>not</em> the one you’ve installed from <cite>python.org</cite
 </ul>
 </div></blockquote>
 </div>
+</div>
+<div class="section" id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h2>
+<p>Despite our best efforts, it is possible that the procedures documented above
+do not work.</p>
+<p>To have a clue about what is wrong, you can set the <cite>PYENCHANT_VERBOSE_FIND</cite> environment
+variable to any non-empty value and run <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-c</span> <span class="pre">'import</span> <span class="pre">enchant'</span></code>.</p>
+<p>If you can’t figure out what is wrong, it’s probably a bug in PyEnchant,
+so feel free to open an issue on GitHub,  preferably containing the output
+of the above command.</p>
 </div>
 </div>
 

@@ -80,8 +80,13 @@ Let's also assume that ``enchant.list_languages()`` dose not show the language t
 
 First, you should use the ``describe()`` method of the ``Broker`` class to list available providers.
 
-Let's say ``aspell`` is found in the list. Now you have to install the correct dictionary for the aspell provider. On Linux and macOS, this can be done by installing the ``aspell-de`` packgae using your favorite package manager. TODO: How about Windows?
+Let's say ``aspell`` is found in the list. Now you have to install the correct dictionary for the aspell provider.
+On **Linux** and **macOS**, this can be done by installing the ``aspell-de`` packgae using your favorite package manager.
 
+On **Windows**, if you have installed PyEnchant from a wheel, you can download the hunspell dictionary files you
+need and put them inside `/path/to/site-packages/enchant/data/enchant/share/hunspell`.
+
+TODO: document where hunspell dictionaries can be found
 
 Personal Word Lists
 ++++++++++++++++++++
