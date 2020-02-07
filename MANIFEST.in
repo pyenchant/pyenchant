@@ -1,3 +1,2 @@
 include Changelog
 include README.rst
-prune tests
