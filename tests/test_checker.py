@@ -216,13 +216,21 @@ def test_bug2785373():
 
 
 def test_default_language():
-    lang = get_default_language()
-    if lang is None:
-        with pytest.raises(DefaultLanguageNotFoundError):
-            SpellChecker()
-    else:
+    # Two cases: either SpellChecker() without argument works
+    # and its lang is the default language, or
+    # it does not and we get a DefaultLanguageNotFoundError
+    caught_err = None
+    try:
         checker = SpellChecker()
-        assert checker.lang == lang
+    except DefaultLanguageNotFoundError as e:
+        caught_err = e
+
+    if caught_err:
+        # At this point, caught_err must be DefaultLanguageNotFoundError, so
+        # we're done testing
+        return
+
+    assert checker.lang == get_default_language()
 
 
 def test_replace_with_shorter_string():
