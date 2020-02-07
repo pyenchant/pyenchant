@@ -49,7 +49,11 @@ import array
 import warnings
 
 import enchant
-from enchant.errors import DefaultLanguageNotFoundError, TokenizerNotFoundError
+from enchant.errors import (
+    DefaultLanguageNotFoundError,
+    DictNotFoundError,
+    TokenizerNotFoundError,
+)
 from enchant.tokenize import get_tokenizer
 from enchant.utils import get_default_language
 
@@ -130,7 +134,10 @@ class SpellChecker:
         if lang is None:
             lang = get_default_language()
         if isinstance(lang, (str, bytes)):
-            dict = enchant.Dict(lang)
+            try:
+                dict = enchant.Dict(lang)
+            except DictNotFoundError:
+                raise DefaultLanguageNotFoundError(lang) from None
         else:
             dict = lang
             try:
@@ -138,7 +145,7 @@ class SpellChecker:
             except AttributeError:
                 lang = get_default_language()
         if lang is None:
-            raise DefaultLanguageNotFoundError
+            raise DefaultLanguageNotFoundError from None
         self.lang = lang
         self.dict = dict
         if tokenize is None:
