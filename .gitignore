@@ -1,30 +1,11 @@
-# git-ls-files --others --exclude-from=.git/info/exclude
-# Lines that start with '#' are comments.
-# For a project mostly in C, the following would be a good set of
-# exclude patterns (uncomment them if you want to use them):
-# *.[oa]
-*~
 *.pyc
 __pycache__/
 build/
 dist/
-tools/pyenchant-bdist-osx-sources/enchant-1.*
-*.egg
 *.egg-info
-*.swp
-*.dll
-*.dic
-*.aff
-*.dylib
-*.tar.gz
-website/deploy
-website/.hyde_deps
 .tox
 .coverage*
-*.so
-
-.aspell.*
 htmlcov
 
-enchant-prefix.zip
+enchant-prefix-*.zip
 enchant/data/
