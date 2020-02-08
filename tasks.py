@@ -28,6 +28,24 @@ def bootstrap(c):
             sys.exit("Unsupported number of bits: ", bits)
 
 
+@task
+def website(c, dev=False):
+    """ Build website """
+    if dev:
+        program = "sphinx-autobuild"
+    else:
+        program = "sphinx-build"
+    with c.cd("website"):
+        c.run(f"{program} -W -c . -d build/ -b html content/ html/")
+
+
+@task
+def lint(c):
+    """ Run all linters """
+    c.run("black --check .")
+    c.run("flake8 enchant tests")
+
+
 def bootstrap_windows(platform):
     print(":: Bootstraping for", platform)
     bits = {"win32": "32", "win_amd64": "64"}[platform]
