@@ -30,9 +30,9 @@ Clean ups
 * Add ``tbump`` configuration to simplify the release process
 * Format code with ``black``.
 * Remove compatibility layers with Python2 from ``enchant.utils``
-* Port tools to Python3
 * Use ``flake8`` to catch some errors during CI
 * Fix some PEP8 naming violations
+* Switch to GitHub Actions for CI
 
 
 2.0.0 (2017-12-10)
