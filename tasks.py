@@ -31,6 +31,8 @@ def bootstrap(c):
 @task
 def build_artifacts(c):
     """ Build artifacts that we need to upload to  pypi """
+    ensure_empty("build/")
+    ensure_empty("dist/")
 
     # Note: poetry honors .gitignore, but we want those files in enchant/data!
     gitignore = "enchant/data/.gitignore"
@@ -44,6 +46,12 @@ def build_artifacts(c):
     make_sdist(c)
 
     print("Done!. Artifacts are in dist/, Please restore enchant/data/.gitignore")
+
+
+@task(pre=[build_artifacts])
+def release(c, testpypi=False):
+    """ Release artifacts to pypi.org """
+    c.run("twine upload dist/*")
 
 
 @task
