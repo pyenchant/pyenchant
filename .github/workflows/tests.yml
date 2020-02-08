@@ -12,20 +12,14 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
         python: [3.5, 3.6, 3.7, 3.8, pypy3]
         include:
-         - python: 3.5
-           tox_env: py35
-         - python: 3.6
-           tox_env: py36
-         - python: 3.7
-           tox_env: py37
-         - python: 3.8
-           tox_env: py38
-         - python: pypy3
-           tox_env: pypy3
          - os: ubuntu-latest
            platform: linux
          - os: macos-latest
            platform: macos
+         - os: ubuntu-latest
+           platform: linux
+         - os: windows-latest
+           platform: windows
 
     steps:
     - uses: actions/checkout@v1
@@ -46,12 +40,14 @@ jobs:
         brew update
         brew install enchant
 
-    - name: Install tox
+    - name: Prepare project for development
       run: |
-        python -m pip install --upgrade pip
-        pip install tox
+        python -m pip install poetry
+        python -m poetry config virtualenvs.create false
+        python -m poetry install
 
     - name: Run tests
       run: |
-        tox -e ${{ matrix.tox_env }}
+        python -m poetry run invoke bootstrap
+        python -m poetry run pytest --cov . --cov-report term
 
