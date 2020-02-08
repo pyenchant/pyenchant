@@ -8,23 +8,10 @@
 __pycache__/
 build/
 dist/
-tools/pyenchant-bdist-osx-sources/enchant-1.*
-*.egg
 *.egg-info
-*.swp
-*.dll
-*.dic
-*.aff
-*.dylib
-*.tar.gz
-website/deploy
-website/.hyde_deps
 .tox
 .coverage*
-*.so
 
-.aspell.*
 htmlcov
 
-enchant-prefix.zip
-enchant/data/
+enchant-prefix-*.zip
