@@ -24,3 +24,7 @@ search = 'version = "{current_version}"'
 [[file]]
 src = "enchant/__init__.py"
 search = '__version__ = "{current_version}"'
+
+[[after_push]
+name = "Publish a new release"
+cmd = "poetry run invoke release"
