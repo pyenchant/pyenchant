@@ -22,9 +22,6 @@ Breaking changes
 * **macOS**: The C enchant library is no longer embedded inside the wheel -
   you should install the C enchant library with ``brew`` or ``ports``.
 
-* **Windows**: The C enchant library is no longer embedded inside the wheel.
-  PyEnchant now uses the win32 API instead.
-
 
 Clean ups
 +++++++++
