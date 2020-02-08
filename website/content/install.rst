@@ -55,7 +55,6 @@ Cons:
  * The only provider is ``hunspell``
  * The only installed dictionary is for the English language
  * A copy of the `glib2.dll` and other dependencies are included
- * This does not work if your Python installation uses 32 bits
 
 Using MinGW
 +++++++++++
