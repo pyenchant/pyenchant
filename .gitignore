@@ -7,5 +7,7 @@ dist/
 .coverage*
 htmlcov
 
+.aspell*
+
 enchant-prefix-*.zip
 enchant/data/
