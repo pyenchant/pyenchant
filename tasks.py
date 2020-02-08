@@ -29,6 +29,24 @@ def bootstrap(c):
 
 
 @task
+def build_artifacts(c):
+    """ Build artifacts that we need to upload to  pypi """
+
+    # Note: poetry honors .gitignore, but we want those files in enchant/data!
+    gitignore = "enchant/data/.gitignore"
+    if os.path.exists(gitignore):
+        os.remove(gitignore)
+    print("Building artifacts for new release ...")
+    make_windows_wheel(c, platform="win_amd64")
+    make_windows_wheel(c, platform="win32")
+
+    make_wheel_any(c)
+    make_sdist(c)
+
+    print("Done!. Artifacts are in dist/, Please restore enchant/data/.gitignore")
+
+
+@task
 def website(c, dev=False):
     """ Build website """
     if dev:
@@ -59,3 +77,40 @@ def bootstrap_windows(platform):
     data_path = "enchant/data/"
     print("-> Unpacking artifact to", data_path, "...")
     shutil.unpack_archive(archive_name, data_path)
+
+
+def rename_wheel(platform):
+    with open("pyproject.toml") as f:
+        cfg = tomlkit.loads(f.read())
+    version = cfg["tool"]["poetry"]["version"]
+    src = f"dist/pyenchant-{version}-py3-none-any.whl"
+    dest = src.replace("any", platform)
+    print(src, "->", dest)
+    os.rename(src, dest)
+
+
+def ensure_empty(data_path):
+    print(":: Ensuring that", data_path, "is empty")
+    if os.path.exists(data_path):
+        shutil.rmtree(data_path)
+    os.mkdir(data_path)
+
+
+def make_windows_wheel(c, platform):
+    ensure_empty("build/")
+    ensure_empty("enchant/data/")
+    bootstrap_windows(platform)
+    c.run("poetry build -f wheel")
+    rename_wheel(platform)
+
+
+def make_wheel_any(c):
+    ensure_empty("build/")
+    ensure_empty("enchant/data/")
+    c.run("poetry build -f wheel")
+
+
+def make_sdist(c):
+    ensure_empty("build/")
+    ensure_empty("enchant/data/")
+    c.run("poetry build -f sdist")
