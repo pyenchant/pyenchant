@@ -1,5 +1,5 @@
 [version]
-current = "3.0.0a2"
+current = "3.0.0rc2"
 
 regex = '''
   (?P<major>\d+)
@@ -18,8 +18,8 @@ message_template = "Bump to {new_version}"
 tag_template = "v{new_version}"
 
 [[file]]
-src = "setup.cfg"
-search = "version = {current_version}"
+src = "pyproject.toml"
+search = 'version = "{current_version}"'
 
 [[file]]
 src = "enchant/__init__.py"
