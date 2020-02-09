@@ -1,6 +1,8 @@
 # Prepare PyEnchant for development
 #
 # On Windows, we need to populate data/ with the result of an Enchant build
+import os
+import glob
 import sys
 import shutil
 import platform
@@ -15,13 +17,94 @@ def bootstrap_windows(platform):
     bits = {"win32": "32", "win_amd64": "64"}[platform]
     archive_name = "enchant-prefix" + "-" + bits + ".zip"
     artifact_url = DOWNLOAD_URL + ENCHANT_TAG + "/" + archive_name
-    print("Retrieving artifact from", artifact_url, "...")
+    print(":: Retrieving artifact from", artifact_url, "...")
     response = requests.get(artifact_url, stream=True)
     with open(archive_name, "wb") as f:
         shutil.copyfileobj(response.raw, f)
     data_path = "enchant/data/"
-    print("Unpacking artifact to", data_path, "...")
+    print(":: Unpacking artifact to", data_path, "...")
     shutil.unpack_archive(archive_name, data_path)
+    cleanup_data(data_path, bits)
+
+
+def rm(path):
+    if os.path.exists(path):
+        print("-> rm", path)
+        if os.path.isdir(path):
+            shutil.rmtree(path)
+        else:
+            os.remove(path)
+
+
+def clean_libs(path):
+    for static_lib in glob.glob(path + "/*.a"):
+        rm(static_lib)
+    for la_file in glob.glob(path + "/*.la"):
+        rm(la_file)
+
+
+def clean_bin(path):
+    for exe in glob.glob(path + "/*.exe"):
+        rm(exe)
+    blacklist = [
+        "edit.dll",
+        "asprintf",
+        "libatomic",
+        "libbz2",
+        "libcharset",
+        "libcrypto",
+        "libexpat",
+        "libffi",
+        "libgettextlib",
+        "libgettextpo",
+        "libgettextsrc",
+        "libgfortran",
+        "libgio",
+        "libgthread",
+        "libgmp",
+        "libgmpxx",
+        "libgnarl",
+        "libgnat",
+        "libgomp",
+        "libhistory",
+        "liblzma",
+        "libmpdec",
+        "libobjc",
+        "libp11kit",
+        "libprcepp",
+        "libssp",
+        "libpython",
+        "libreadline",
+        "libsqlite3",
+        "libssl",
+        "libsystre",
+        "libtasn",
+        "libquadmat",
+        "libtre",
+        "libtermcap",
+        "tcl86",
+        "tk86",
+        "zlib",
+    ]
+    for dll in glob.glob(path + "/*.dll"):
+        for pattern in blacklist:
+            if pattern in dll:
+                rm(dll)
+
+
+def cleanup_data(data_path, bits):
+    """ Remove extraneous files from the enchant artifact """
+    print(":: Cleaning up ...")
+    mingw_path = os.path.join(data_path, "mingw" + bits)
+    # Better filter extra files there that on the appveyor script
+    for sub_dir in ["share/man", "include", "lib/pkgconfig"]:
+        to_rm = os.path.join(mingw_path, sub_dir)
+        rm(to_rm)
+
+    clean_libs(os.path.join(mingw_path, "lib"))
+    clean_libs(os.path.join(mingw_path, "/lib/enchant-2"))
+
+    clean_bin(os.path.join(mingw_path, "bin"))
 
 
 def main():
