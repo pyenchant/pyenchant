@@ -25,17 +25,17 @@ def bootstrap_windows(platform):
 
 
 def main():
-    linkage, bits = platform.architecture()
+    bits, linkage = platform.architecture()
     if sys.platform == "win32":
         if linkage != "WindowsPE":
             sys.exit("Unsupported platform: " + linkage)
         if bits == "32bit":
-            pltaform = "win32"
+            platform_name = "win32"
         elif bits == "64bit":
-            bits = "wim_amd64"
+            platform_name = "win_amd64"
         else:
             sys.exit("Unsupported number of bits: ", bits)
-        bootstrap_windows(platform)
+        bootstrap_windows(platform_name)
 
 
 if __name__ == "__main__":
