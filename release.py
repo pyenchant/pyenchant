@@ -14,7 +14,6 @@ def run(*cmd):
 
 
 def ensure_empty(data_path):
-    print("Ensuring that", data_path, "is empty")
     if os.path.exists(data_path):
         shutil.rmtree(data_path)
     os.mkdir(data_path)
