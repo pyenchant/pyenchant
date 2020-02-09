@@ -25,6 +25,7 @@ def bootstrap_windows(platform):
 
 
 def main():
+    linkage, bits = platform.architecture()
     if sys.platform == "win32":
         if linkage != "WindowsPE":
             sys.exit("Unsupported platform: " + linkage)
