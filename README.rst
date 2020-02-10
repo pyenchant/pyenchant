@@ -1,13 +1,3 @@
-Status: maintenance transfer
------------------------------
-
-Maintenance of this project is getting transferred from
-Ryan Kelly to me, Dimitri Merejkowsky. Expect a few bumps
-down the road while issues are sorted out.
-
-A new release is being worked on, see the `"next release" milestone <https://github.com/pyenchant/pyenchant/milestone/1>`_
-for more details.
-
 pyenchant:  Python bindings for the Enchant spellchecker
 ========================================================
 
