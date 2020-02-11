@@ -84,9 +84,10 @@ Let's say ``aspell`` is found in the list. Now you have to install the correct d
 On **Linux** and **macOS**, this can be done by installing the ``aspell-de`` packgae using your favorite package manager.
 
 On **Windows**, if you have installed PyEnchant from a wheel, you can download the hunspell dictionary files you
-need and put them inside `/path/to/site-packages/enchant/data/enchant/share/hunspell`.
+need (both the `.dic` and `.aff` extensions) and put them inside ``/path/to/site-packages/enchant/data/mingw<bits>/enchant/share/hunspell``.
 
-TODO: document where hunspell dictionaries can be found
+You can find many dictionaries in `libreoffice sources <https://cgit.freedesktop.org/libreoffice/dictionaries/tree/>`_.
+
 
 Personal Word Lists
 ++++++++++++++++++++
