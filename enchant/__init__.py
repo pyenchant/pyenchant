@@ -63,14 +63,8 @@ A finer degree of control over the dictionaries and how they are created
 can be obtained using one or more 'Broker' objects.  These objects are
 responsible for locating dictionaries for a specific language.
 
-In Python 2.x, unicode strings are supported transparently in the
-standard manner - if a unicode string is given as an argument, the
-result will be a unicode string. Note that Enchant works in UTF-8
-internally, so passing an ASCII string to a dictionary for a language
-requiring Unicode may result in UTF-8 strings being returned.
-
-In Python 3.x unicode strings are expected throughout.  Bytestrings
-should not be passed into any functions.
+Note that unicode strings are expected throughout the entire API.
+Bytestrings should not be passed into any function.
 
 Errors that occur in this module are reported by raising subclasses
 of 'Error'.
@@ -199,10 +193,9 @@ class Broker(_EnchantObject):
 
     The most important methods of this class include:
 
-        * dict_exists:   check existence of a specific language dictionary
-        * request_dict:  obtain a dictionary for specific language
-        * set_ordering:  specify which dictionaries to try for a
-                         given language.
+        * :py:meth:`dict_exists`:   check existence of a specific language dictionary
+        * :py:meth:`request_dict`:  obtain a dictionary for specific language
+        * :py:meth:`set_ordering`:  specify which dictionaries to try for a given language.
 
     """
 
@@ -271,8 +264,9 @@ class Broker(_EnchantObject):
         the current language in use.  If this cannot be determined, Error
         is raised.
 
-        NOTE:  this method is functionally equivalent to calling the Dict()
-               constructor and passing in the <broker> argument.
+        .. note::
+            this method is functionally equivalent to calling the Dict()
+            constructor and passing in the <broker> argument.
 
         """
         return Dict(tag, self)
@@ -744,10 +738,11 @@ class Dict(_EnchantObject):
 class DictWithPWL(Dict):
     """Dictionary with separately-managed personal word list.
 
-    NOTE:  As of version 1.4.0, enchant manages a per-user pwl and
-           exclude list.  This class is now only needed if you want
-           to explicitly maintain a separate word list in addition to
-           the default one.
+    .. note::
+        As of version 1.4.0, enchant manages a per-user pwl and
+        exclude list.  This class is now only needed if you want
+        to explicitly maintain a separate word list in addition to
+        the default one.
 
     This class behaves as the standard Dict class, but also manages a
     personal word list stored in a separate file.  The file must be
@@ -904,5 +899,9 @@ def get_enchant_version():
 
 #  Expose the "set_prefix_dir" function.
 def set_prefix_dir(path):
-    """Set the prefix used by the Enchant library to find its plugins """
+    """Set the prefix used by the Enchant library to find its plugins
+
+    Called automatically when the Python library is imported when
+    required.
+    """
     return _e.set_prefix_dir(path)
