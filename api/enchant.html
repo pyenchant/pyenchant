@@ -199,13 +199,8 @@ function ‘request_dict’.</p>
 <p>A finer degree of control over the dictionaries and how they are created
 can be obtained using one or more ‘Broker’ objects.  These objects are
 responsible for locating dictionaries for a specific language.</p>
-<p>In Python 2.x, unicode strings are supported transparently in the
-standard manner - if a unicode string is given as an argument, the
-result will be a unicode string. Note that Enchant works in UTF-8
-internally, so passing an ASCII string to a dictionary for a language
-requiring Unicode may result in UTF-8 strings being returned.</p>
-<p>In Python 3.x unicode strings are expected throughout.  Bytestrings
-should not be passed into any functions.</p>
+<p>Note that unicode strings are expected throughout the entire API.
+Bytestrings should not be passed into any function.</p>
 <p>Errors that occur in this module are reported by raising subclasses
 of ‘Error’.</p>
 <dl class="class">
@@ -219,13 +214,9 @@ so that ‘Dict’ objects can be created directly.</p>
 <p>The most important methods of this class include:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>dict_exists:   check existence of a specific language dictionary</p></li>
-<li><p>request_dict:  obtain a dictionary for specific language</p></li>
-<li><dl class="simple">
-<dt>set_ordering:  specify which dictionaries to try for a</dt><dd><p>given language.</p>
-</dd>
-</dl>
-</li>
+<li><p><a class="reference internal" href="#enchant.dict_exists" title="enchant.dict_exists"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dict_exists()</span></code></a>:   check existence of a specific language dictionary</p></li>
+<li><p><a class="reference internal" href="#enchant.request_dict" title="enchant.request_dict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">request_dict()</span></code></a>:  obtain a dictionary for specific language</p></li>
+<li><p><a class="reference internal" href="#enchant.Broker.set_ordering" title="enchant.Broker.set_ordering"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_ordering()</span></code></a>:  specify which dictionaries to try for a given language.</p></li>
 </ul>
 </div></blockquote>
 <dl class="method">
@@ -251,7 +242,12 @@ is available, and False otherwise.</p>
 <code class="sig-name descname">get_param</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Broker.get_param" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the value of a named parameter on this broker.</p>
 <p>Parameters are used to provide runtime information to individual
-provider backends.  See the method ‘set_param’ for more details.</p>
+provider backends.  See the method <a class="reference internal" href="#enchant.set_param" title="enchant.set_param"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_param()</span></code></a> for more details.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This method does <strong>not</strong> work when using the Enchant C
+library version 2.0 and above</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -288,10 +284,11 @@ be tested using the ‘dict_exists’ method.</p>
 <p>If &lt;tag&gt; is not given or is None, an attempt is made to determine
 the current language in use.  If this cannot be determined, Error
 is raised.</p>
-<dl class="simple">
-<dt>NOTE:  this method is functionally equivalent to calling the Dict()</dt><dd><p>constructor and passing in the &lt;broker&gt; argument.</p>
-</dd>
-</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>this method is functionally equivalent to calling the Dict()
+constructor and passing in the &lt;broker&gt; argument.</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -323,9 +320,12 @@ for all languages for which one has not been set explicitly.</p>
 <code class="sig-name descname">set_param</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Broker.set_param" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the value of a named parameter on this broker.</p>
 <p>Parameters are used to provide runtime information to individual
-provider backends.  For example, the myspell provider will search
-any directories given in the “enchant.myspell.dictionary.path”
-parameter when looking for its dictionary files.</p>
+provider backends.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This method does <strong>not</strong> work when using the Enchant C
+library version 2.0 and above</p>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -432,12 +432,13 @@ word, returning the possibilities in a list.</p>
 <dt id="enchant.DictWithPWL">
 <em class="property">class </em><code class="sig-prename descclassname">enchant.</code><code class="sig-name descname">DictWithPWL</code><span class="sig-paren">(</span><em class="sig-param">tag</em>, <em class="sig-param">pwl=None</em>, <em class="sig-param">pel=None</em>, <em class="sig-param">broker=None</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.DictWithPWL" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dictionary with separately-managed personal word list.</p>
-<dl class="simple">
-<dt>NOTE:  As of version 1.4.0, enchant manages a per-user pwl and</dt><dd><p>exclude list.  This class is now only needed if you want
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As of version 1.4.0, enchant manages a per-user pwl and
+exclude list.  This class is now only needed if you want
 to explicitly maintain a separate word list in addition to
 the default one.</p>
-</dd>
-</dl>
+</div>
 <p>This class behaves as the standard Dict class, but also manages a
 personal word list stored in a separate file.  The file must be
 specified at creation time by the ‘pwl’ argument to the constructor.
@@ -539,7 +540,12 @@ is available, and False otherwise.</p>
 <code class="sig-prename descclassname">enchant.</code><code class="sig-name descname">get_param</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.get_param" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the value of a named parameter on this broker.</p>
 <p>Parameters are used to provide runtime information to individual
-provider backends.  See the method ‘set_param’ for more details.</p>
+provider backends.  See the method <a class="reference internal" href="#enchant.set_param" title="enchant.set_param"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_param()</span></code></a> for more details.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This method does <strong>not</strong> work when using the Enchant C
+library version 2.0 and above</p>
+</div>
 </dd></dl>
 
 <dl class="function">
@@ -576,10 +582,11 @@ be tested using the ‘dict_exists’ method.</p>
 <p>If &lt;tag&gt; is not given or is None, an attempt is made to determine
 the current language in use.  If this cannot be determined, Error
 is raised.</p>
-<dl class="simple">
-<dt>NOTE:  this method is functionally equivalent to calling the Dict()</dt><dd><p>constructor and passing in the &lt;broker&gt; argument.</p>
-</dd>
-</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>this method is functionally equivalent to calling the Dict()
+constructor and passing in the &lt;broker&gt; argument.</p>
+</div>
 </dd></dl>
 
 <dl class="function">
@@ -597,15 +604,20 @@ of custom dictionary entries, one word per line.</p>
 <code class="sig-prename descclassname">enchant.</code><code class="sig-name descname">set_param</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.set_param" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the value of a named parameter on this broker.</p>
 <p>Parameters are used to provide runtime information to individual
-provider backends.  For example, the myspell provider will search
-any directories given in the “enchant.myspell.dictionary.path”
-parameter when looking for its dictionary files.</p>
+provider backends.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This method does <strong>not</strong> work when using the Enchant C
+library version 2.0 and above</p>
+</div>
 </dd></dl>
 
 <dl class="function">
 <dt id="enchant.set_prefix_dir">
 <code class="sig-prename descclassname">enchant.</code><code class="sig-name descname">set_prefix_dir</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.set_prefix_dir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the prefix used by the Enchant library to find its plugins</p>
+<p>Called automatically when the Python library is imported when
+required.</p>
 </dd></dl>
 
 </div>
