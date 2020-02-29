@@ -454,7 +454,12 @@ class Broker(_EnchantObject):
         """Get the value of a named parameter on this broker.
 
         Parameters are used to provide runtime information to individual
-        provider backends.  See the method 'set_param' for more details.
+        provider backends.  See the method :py:meth:`set_param` for more details.
+
+        .. warning::
+
+            This method does **not** work when using the Enchant C
+            library version 2.0 and above
         """
         param = _e.broker_get_param(self._this, name.encode())
         if param is not None:
@@ -467,9 +472,12 @@ class Broker(_EnchantObject):
         """Set the value of a named parameter on this broker.
 
         Parameters are used to provide runtime information to individual
-        provider backends.  For example, the myspell provider will search
-        any directories given in the "enchant.myspell.dictionary.path"
-        parameter when looking for its dictionary files.
+        provider backends.
+
+        .. warning::
+
+            This method does **not** work when using the Enchant C
+            library version 2.0 and above
         """
         name = name.encode()
         if value is not None:
