@@ -1,6 +1,6 @@
 import pytest
 
-from enchant import Broker, Dict, _e
+from enchant import Broker, Dict
 
 
 @pytest.fixture
@@ -94,11 +94,25 @@ def test_unicode_tag(broker):
 
 
 def test_get_set_param(broker):
-    # Older enchnt versions do not have these functions.
-    if not hasattr(_e.broker_get_param, "argtypes"):
+    """
+    Scenario:
+      Either broker.set_param(key, value) works
+      Or broker.set_param(key, value) throw
+      AttributeError
+
+    """
+    key = "pyenchant.unittest"
+    value = "testing"
+
+    error = None
+    try:
+        broker.set_param(key, value)
+    except AttributeError as e:
+        error = e
+
+    if error:
         return
-    assert broker.get_param("pyenchant.unittest") is None
-    broker.set_param("pyenchant.unittest", "testing")
-    assert broker.get_param("pyenchant.unittest") == "testing"
-    other_broker = Broker()
-    assert other_broker.get_param("pyenchant.unittest") is None
+    else:
+        assert broker.get_param("pyenchant.unittest") == "testing"
+        other_broker = Broker()
+        assert other_broker.get_param("pyenchant.unittest") is None
