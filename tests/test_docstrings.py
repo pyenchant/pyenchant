@@ -6,7 +6,6 @@ of having spelling errors in a spellchecking package!
 """
 
 import os
-import sys
 
 
 WORDS = [
@@ -123,13 +122,6 @@ def _check_docstrings(obj, errors):
                 skip_errors.pop(0)
                 continue
             errors.append((obj, err.word, err.wordpos))
-            msg = "\nDOCSTRING SPELLING ERROR: %s %s %d %s\n" % (
-                obj,
-                err.word,
-                err.wordpos,
-                chkr.suggest(),
-            )
-            print([msg], file=sys.stderr)
     #  Find and yield all child objects that should be checked
     for name in dir(obj):
         if name.startswith("__"):
