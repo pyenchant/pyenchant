@@ -248,8 +248,8 @@ try:
     broker_get_param = e.enchant_broker_get_param
 except AttributeError:
     #  Make the lookup error occur at runtime
-    def broker_get_param(broker, param_name):
-        return e.enchant_broker_get_param(param_name)
+    def broker_get_param(broker, name):
+        return e.enchant_broker_get_param(broker, name)
 
 
 else:
