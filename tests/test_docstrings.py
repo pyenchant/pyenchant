@@ -70,6 +70,8 @@ WORDS = [
     "subclasses",
     "initialise",
     "runtime",
+    "py",
+    "meth",
 ]
 
 
