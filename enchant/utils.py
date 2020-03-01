@@ -42,9 +42,6 @@ includes:
 
 """
 
-import os
-import sys
-
 from enchant.errors import Error
 import locale
 
@@ -121,75 +118,3 @@ def get_default_language(default=None):
 
 
 get_default_language._DOC_ERRORS = ["LC"]
-
-
-def get_resource_filename(resname):
-    """Get the absolute path to the named resource file.
-
-    This serves widely the same purpose as pkg_resources.resource_filename(),
-    but tries to avoid loading pkg_resources unless we're actually in
-    an egg.
-    """
-    path = os.path.dirname(os.path.abspath(__file__))
-    path = os.path.join(path, resname)
-    if os.path.exists(path):
-        return path
-    if hasattr(sys, "frozen"):
-        exe_path = sys.executable
-        exe_dir = os.path.dirname(exe_path)
-        path = os.path.join(exe_dir, resname)
-        if os.path.exists(path):
-            return path
-    else:
-        import pkg_resources
-
-        try:
-            path = pkg_resources.resource_filename("enchant", resname)
-        except KeyError:
-            pass
-        else:
-            path = os.path.abspath(path)
-            if os.path.exists(path):
-                return path
-    raise Error("Could not locate resource '%s'" % (resname,))
-
-
-def win32_data_files():
-    """Get list of supporting data files, for use with setup.py
-
-    This function returns a list of the supporting data files available
-    to the running version of PyEnchant.  This is in the format expected
-    by the data_files argument of the distutils setup function.  It's
-    very useful, for example, for including the data files in an executable
-    produced by py2exe.
-
-    Only really tested on the win32 platform (it's the only platform for
-    which we ship our own supporting data files)
-    """
-    #  Include the main enchant DLL
-    try:
-        lib_enchant = get_resource_filename("libenchant.dll")
-    except Error:
-        lib_enchant = get_resource_filename("libenchant-1.dll")
-    main_dir = os.path.dirname(lib_enchant)
-    data_files = [("", [lib_enchant])]
-    #  And some specific supporting DLLs
-    for dll in os.listdir(main_dir):
-        if dll.endswith(".dll"):
-            for prefix in ("iconv", "intl", "libglib", "libgmodule"):
-                if dll.startswith(prefix):
-                    data_files[0][1].append(os.path.join(main_dir, dll))
-    #  And anything found in the supporting data directories
-    data_dirs = ("share/enchant/myspell", "share/enchant/ispell", "lib/enchant")
-    for data_dir in data_dirs:
-        files = []
-        full_dir = os.path.join(main_dir, os.path.normpath(data_dir))
-        for fn in os.listdir(full_dir):
-            full_fn = os.path.join(full_dir, fn)
-            if os.path.isfile(full_fn):
-                files.append(full_fn)
-        data_files.append((data_dir, files))
-    return data_files
-
-
-win32_data_files._DOC_ERRORS = ["py", "py", "exe"]

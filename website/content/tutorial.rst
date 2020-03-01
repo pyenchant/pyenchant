@@ -357,17 +357,3 @@ As explained above, the module enchant.tokenize provides the ability to split te
 To implement a new tokenization routine for the language TAG, simply create a class/function "tokenize" within the module "enchant.tokenize.TAG". This function will automatically be detected by the module's get_tokenizer function and used when appropriate. The easiest way to accomplish this is to copy the module "enchant.tokenize.en" and modify it to suit your needs.
 
 The author would be very grateful for tokenization routines for languages other than English which can be incorporated back into the main PyEnchant distribution.
-
-
-PyEnchant and other programs
-----------------------------
-
-Packaging PyEnchant with py2exe
-++++++++++++++++++++++++++++++++
-
-
-PyEnchant depends on a large number of auxiliary files such as plugin libraries, dictionary files, etc. While py2exe does an excellent job of detecting static file dependencies, it cannot detect these files which are located at runtime.
-
-To successfully package an application that uses PyEnchant, these auxiliary files must be explicitly included in the "data_files" argument to the setup function. The function enchant.utils.win32_data_files returns a list of files which can be used for this purpose.
-
-
