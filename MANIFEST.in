@@ -1,3 +1,4 @@
 include Changelog
 include README.rst
 graft enchant/data/
+include LICENSE.txt
