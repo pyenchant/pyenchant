@@ -8,7 +8,7 @@ import shutil
 import platform
 import requests
 
-ENCHANT_TAG = "v2.2.7-appveyor-35"
+ENCHANT_TAG = "v2.2.7-appveyor-41"
 
 DOWNLOAD_URL = "https://github.com/pyenchant/enchant/releases/download/"
 
