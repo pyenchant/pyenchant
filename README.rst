@@ -23,7 +23,7 @@ More information is available on the Enchant website:
 How do I use it?
 ----------------
 
-For Windows and OSX users, install the pre-built binary packages using
+For Windows users, install the pre-built binary packages using
 pip::
 
     pip install pyenchant
@@ -31,7 +31,7 @@ pip::
 
 These packages bundle a pre-built copy of the underlying enchant library.
 Users on other platforms will need to install "enchant" using their system
-package manager.
+package manager (brew on macOS).
 
 Once the software is installed, python's on-line help facilities can
 get you started.  Launch python and issue the following commands:
