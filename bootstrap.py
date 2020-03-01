@@ -46,50 +46,6 @@ def clean_libs(path):
 def clean_bin(path):
     for exe in glob.glob(path + "/*.exe"):
         rm(exe)
-    blacklist = [
-        "edit.dll",
-        "asprintf",
-        "libatomic",
-        "libbz2",
-        "libcharset",
-        "libcrypto",
-        "libexpat",
-        "libffi",
-        "libgettextlib",
-        "libgettextpo",
-        "libgettextsrc",
-        "libgfortran",
-        "libgio",
-        "libgthread",
-        "libgmp",
-        "libgmpxx",
-        "libgnarl",
-        "libgnat",
-        "libgomp",
-        "libhistory",
-        "liblzma",
-        "libmpdec",
-        "libobjc",
-        "libp11kit",
-        "libprcepp",
-        "libssp",
-        "libpython",
-        "libreadline",
-        "libsqlite3",
-        "libssl",
-        "libsystre",
-        "libtasn",
-        "libquadmat",
-        "libtre",
-        "libtermcap",
-        "tcl86",
-        "tk86",
-        "zlib",
-    ]
-    for dll in glob.glob(path + "/*.dll"):
-        for pattern in blacklist:
-            if pattern in dll:
-                rm(dll)
 
 
 def cleanup_data(data_path, bits):
