@@ -456,16 +456,8 @@ def test_finnish_text():
     assert list(tokenize_en(text)) == expected_tokens
 
 
-# XXX TODO: the myspell provider doesn't correctly interpret
-# typographic apostrophe on OSX, disabling for now.
-# def test_typographic_apostrophe_en():
-#    """"Typographic apostrophes shouldn't be word separators in English."""
-#    from enchant.tokenize import en
-#    tknzr = wrap_tokenizer(basic_tokenize, en.tokenize)
-#    input = u"They\u2019re here"
-#    output = [(u"They\u2019re", 0), (u"here", 8)]
-#    assert output ==  [i for i in tknzr(input)]
-#    # Typographic apostrophe is only support for unicode inputs.
-#    if str is not unicode:
-#        output = [("They", 0), ("re", 7), ("here", 10)]
-#        assert output == [i for i in tknzr(input.encode('utf8'))]
+def test_typographic_apostrophe():
+    """"Typographic apostrophes should be word separators in English."""
+    text = "They\u2019re here"
+    expected_tokens = [("They", 0), ("re", 5), ("here", 8)]
+    assert list(tokenize_en(text)) == expected_tokens
