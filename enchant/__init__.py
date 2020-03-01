@@ -72,7 +72,7 @@ of 'Error'.
 """
 _DOC_ERRORS = ["enchnt", "enchnt", "incant", "fr"]
 
-__version__ = "3.0.0rc3"
+__version__ = "3.0.0rc4"
 
 import os
 import warnings
