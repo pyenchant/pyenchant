@@ -1,8 +1,14 @@
 Changelog
 =========
 
-3.0.0 - in progress
--------------------
+3.0.1 (2020-03-01)
+------------------
+
+* Add missing LICENSE.txt in source distribution
+
+
+3.0.0 (2020-03-01)
+------------------
 
 Highlights
 ++++++++++
