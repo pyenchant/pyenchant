@@ -111,10 +111,6 @@
 <li class="toctree-l3"><a class="reference internal" href="#extending-enchant-tokenize">Extending enchant.tokenize</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#pyenchant-and-other-programs">PyEnchant and other programs</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#packaging-pyenchant-with-py2exe">Packaging PyEnchant with py2exe</a></li>
-</ul>
-</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api/index.html">API Listing</a></li>
@@ -502,14 +498,6 @@ need (both the <cite>.dic</cite> and <cite>.aff</cite> extensions) and put them 
 <p>As explained above, the module enchant.tokenize provides the ability to split text into its component words. The current implementation is based only on the rules for the English language, and so might not be completely suitable for your language of choice. Fortunately, it is straightforward to extend the functionality of this module.</p>
 <p>To implement a new tokenization routine for the language TAG, simply create a class/function “tokenize” within the module “enchant.tokenize.TAG”. This function will automatically be detected by the module’s get_tokenizer function and used when appropriate. The easiest way to accomplish this is to copy the module “enchant.tokenize.en” and modify it to suit your needs.</p>
 <p>The author would be very grateful for tokenization routines for languages other than English which can be incorporated back into the main PyEnchant distribution.</p>
-</div>
-</div>
-<div class="section" id="pyenchant-and-other-programs">
-<h2>PyEnchant and other programs<a class="headerlink" href="#pyenchant-and-other-programs" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="packaging-pyenchant-with-py2exe">
-<h3>Packaging PyEnchant with py2exe<a class="headerlink" href="#packaging-pyenchant-with-py2exe" title="Permalink to this headline">¶</a></h3>
-<p>PyEnchant depends on a large number of auxiliary files such as plugin libraries, dictionary files, etc. While py2exe does an excellent job of detecting static file dependencies, it cannot detect these files which are located at runtime.</p>
-<p>To successfully package an application that uses PyEnchant, these auxiliary files must be explicitly included in the “data_files” argument to the setup function. The function enchant.utils.win32_data_files returns a list of files which can be used for this purpose.</p>
 </div>
 </div>
 </div>

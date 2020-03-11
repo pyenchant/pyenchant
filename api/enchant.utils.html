@@ -202,15 +202,6 @@ on their system.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="enchant.utils.get_resource_filename">
-<code class="sig-prename descclassname">enchant.utils.</code><code class="sig-name descname">get_resource_filename</code><span class="sig-paren">(</span><em class="sig-param">resname</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.utils.get_resource_filename" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the absolute path to the named resource file.</p>
-<p>This serves widely the same purpose as pkg_resources.resource_filename(),
-but tries to avoid loading pkg_resources unless we’re actually in
-an egg.</p>
-</dd></dl>
-
-<dl class="function">
 <dt id="enchant.utils.levenshtein">
 <code class="sig-prename descclassname">enchant.utils.</code><code class="sig-name descname">levenshtein</code><span class="sig-paren">(</span><em class="sig-param">s1</em>, <em class="sig-param">s2</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.utils.levenshtein" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the Levenshtein distance between two strings.</p>
@@ -228,19 +219,6 @@ suggestions based on similarity to the original word.</p>
 taking two words and returning the distance between them.  It will be
 used to determine which words to retain in the list.  The default is
 a simple Levenshtein distance.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="enchant.utils.win32_data_files">
-<code class="sig-prename descclassname">enchant.utils.</code><code class="sig-name descname">win32_data_files</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#enchant.utils.win32_data_files" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get list of supporting data files, for use with setup.py</p>
-<p>This function returns a list of the supporting data files available
-to the running version of PyEnchant.  This is in the format expected
-by the data_files argument of the distutils setup function.  It’s
-very useful, for example, for including the data files in an executable
-produced by py2exe.</p>
-<p>Only really tested on the win32 platform (it’s the only platform for
-which we ship our own supporting data files)</p>
 </dd></dl>
 
 </div>
