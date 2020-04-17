@@ -18,6 +18,9 @@ tox -e website -e linters -e pyXY
 
 (Replace `pyXY` by your current Python installation)
 
+Note: you will need an `en_US` dictionary installed for the tests to run. See website
+for more details.
+
 ## Updating the website
 
 The PyEnchant website is hosted on GitHub pages and there's a GitHub workflow
