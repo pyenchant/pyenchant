@@ -10,11 +10,6 @@ def broker():
     del res
 
 
-def test_has_en_us(broker):
-    """Test that the en_US language is available."""
-    assert broker.dict_exists("en_US")
-
-
 def test_all_langs_are_available(broker):
     """Test whether all advertised languages are in fact available."""
     for lang in broker.list_languages():
