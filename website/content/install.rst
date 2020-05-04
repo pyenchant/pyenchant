@@ -21,6 +21,12 @@ number of `libenchant` versions. If you find an incompatibility with
 your `libenchant` installation, feel free to `open a bug report
 <https://github.com/pyenchant/pyenchant/issues>`_.
 
+To detect the `libenchant` binaries, PyEnchant uses
+```find_library()`` <https://docs.python.org/3/library/ctypes.html#finding-shared-libraries>`_,
+which requires `ldconfig`, `gcc`, `objdump` or `ld` to be installed.
+This is the case on most major distributions,
+however statically linked distributions (like alpine linux)
+might not bring along `binutils` by default.
 
 On macOS
 --------
