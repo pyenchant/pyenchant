@@ -177,61 +177,61 @@ bindings for Enchant, it requires a C extension.</p>
 <p>This pure-python implementation uses the same algorithm but without any
 external dependencies or C code (in fact, it was the author’s original
 prototype for the C version found in Enchant).</p>
-<dl class="class">
+<dl class="py class">
 <dt id="enchant.pypwl.PyPWL">
-<em class="property">class </em><code class="sig-prename descclassname">enchant.pypwl.</code><code class="sig-name descname">PyPWL</code><span class="sig-paren">(</span><em class="sig-param">pwl=None</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.pypwl.PyPWL" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">enchant.pypwl.</code><code class="sig-name descname">PyPWL</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pwl</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.pypwl.PyPWL" title="Permalink to this definition">¶</a></dt>
 <dd><p>Pure-python implementation of Personal Word List dictionary.
 This class emulates the PWL objects provided by PyEnchant, but
 implemented purely in python.</p>
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.pypwl.PyPWL.add">
-<code class="sig-name descname">add</code><span class="sig-paren">(</span><em class="sig-param">word</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.pypwl.PyPWL.add" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.pypwl.PyPWL.add" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a word to the user’s personal dictionary.
 For a PWL, this means appending it to the file.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.pypwl.PyPWL.add_to_pwl">
-<code class="sig-name descname">add_to_pwl</code><span class="sig-paren">(</span><em class="sig-param">word</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.pypwl.PyPWL.add_to_pwl" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_to_pwl</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.pypwl.PyPWL.add_to_pwl" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a word to the user’s personal dictionary.
 For a PWL, this means appending it to the file.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.pypwl.PyPWL.add_to_session">
-<code class="sig-name descname">add_to_session</code><span class="sig-paren">(</span><em class="sig-param">word</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.pypwl.PyPWL.add_to_session" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_to_session</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.pypwl.PyPWL.add_to_session" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a word to the session list.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.pypwl.PyPWL.check">
-<code class="sig-name descname">check</code><span class="sig-paren">(</span><em class="sig-param">word</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.pypwl.PyPWL.check" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">check</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.pypwl.PyPWL.check" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check spelling of a word.</p>
 <p>This method takes a word in the dictionary language and returns
 True if it is correctly spelled, and false otherwise.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.pypwl.PyPWL.is_added">
-<code class="sig-name descname">is_added</code><span class="sig-paren">(</span><em class="sig-param">word</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.pypwl.PyPWL.is_added" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_added</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.pypwl.PyPWL.is_added" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check whether a word is in the personal word list.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.pypwl.PyPWL.is_removed">
-<code class="sig-name descname">is_removed</code><span class="sig-paren">(</span><em class="sig-param">word</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.pypwl.PyPWL.is_removed" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_removed</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.pypwl.PyPWL.is_removed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check whether a word is in the personal exclude list.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.pypwl.PyPWL.remove">
-<code class="sig-name descname">remove</code><span class="sig-paren">(</span><em class="sig-param">word</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.pypwl.PyPWL.remove" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">remove</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.pypwl.PyPWL.remove" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a word to the user’s personal exclude list.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.pypwl.PyPWL.store_replacement">
-<code class="sig-name descname">store_replacement</code><span class="sig-paren">(</span><em class="sig-param">mis</em>, <em class="sig-param">cor</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.pypwl.PyPWL.store_replacement" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">store_replacement</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mis</span></em>, <em class="sig-param"><span class="n">cor</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.pypwl.PyPWL.store_replacement" title="Permalink to this definition">¶</a></dt>
 <dd><p>Store a replacement spelling for a miss-spelled word.</p>
 <p>This method makes a suggestion to the spellchecking engine that the
 miss-spelled word &lt;mis&gt; is in fact correctly spelled as &lt;cor&gt;.  Such
@@ -239,9 +239,9 @@ a suggestion will typically mean that &lt;cor&gt; appears early in the
 list of suggested spellings offered for later instances of &lt;mis&gt;.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.pypwl.PyPWL.suggest">
-<code class="sig-name descname">suggest</code><span class="sig-paren">(</span><em class="sig-param">word</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.pypwl.PyPWL.suggest" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">suggest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.pypwl.PyPWL.suggest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Suggest possible spellings for a word.</p>
 <p>This method tries to guess the correct spelling for a given
 word, returning the possibilities in a list.</p>
@@ -249,16 +249,16 @@ word, returning the possibilities in a list.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="enchant.pypwl.Trie">
-<em class="property">class </em><code class="sig-prename descclassname">enchant.pypwl.</code><code class="sig-name descname">Trie</code><span class="sig-paren">(</span><em class="sig-param">words=()</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.pypwl.Trie" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">enchant.pypwl.</code><code class="sig-name descname">Trie</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">words</span><span class="o">=</span><span class="default_value">()</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.pypwl.Trie" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class implementing a trie-based dictionary of words.</p>
 <p>A Trie is a recursive data structure storing words by their prefix.
 “Fuzzy matching” can be done by allowing a certain number of missteps
 when traversing the Trie.</p>
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.pypwl.Trie.search">
-<code class="sig-name descname">search</code><span class="sig-paren">(</span><em class="sig-param">word</em>, <em class="sig-param">nerrs=0</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.pypwl.Trie.search" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">search</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span></em>, <em class="sig-param"><span class="n">nerrs</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.pypwl.Trie.search" title="Permalink to this definition">¶</a></dt>
 <dd><p>Search for the given word, possibly making errors.</p>
 <p>This method searches the trie for the given &lt;word&gt;, making
 precisely &lt;nerrs&gt; errors.  It returns a list of words found.</p>

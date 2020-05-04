@@ -180,9 +180,9 @@ includes:</p>
 <li><p>functions for bundling supporting data files from a build</p></li>
 </ul>
 </div></blockquote>
-<dl class="function">
+<dl class="py function">
 <dt id="enchant.utils.get_default_language">
-<code class="sig-prename descclassname">enchant.utils.</code><code class="sig-name descname">get_default_language</code><span class="sig-paren">(</span><em class="sig-param">default=None</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.utils.get_default_language" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">enchant.utils.</code><code class="sig-name descname">get_default_language</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">default</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.utils.get_default_language" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determine the user’s default language, if possible.</p>
 <p>This function uses the ‘locale’ module to try to determine
 the user’s preferred language.  The return value is as
@@ -201,16 +201,16 @@ possible if they have set the necessary environment variables
 on their system.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="enchant.utils.levenshtein">
-<code class="sig-prename descclassname">enchant.utils.</code><code class="sig-name descname">levenshtein</code><span class="sig-paren">(</span><em class="sig-param">s1</em>, <em class="sig-param">s2</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.utils.levenshtein" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">enchant.utils.</code><code class="sig-name descname">levenshtein</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s1</span></em>, <em class="sig-param"><span class="n">s2</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.utils.levenshtein" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the Levenshtein distance between two strings.</p>
 <p>This is straight from Wikipedia.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="enchant.utils.trim_suggestions">
-<code class="sig-prename descclassname">enchant.utils.</code><code class="sig-name descname">trim_suggestions</code><span class="sig-paren">(</span><em class="sig-param">word</em>, <em class="sig-param">suggs</em>, <em class="sig-param">maxlen</em>, <em class="sig-param">calcdist=None</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.utils.trim_suggestions" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">enchant.utils.</code><code class="sig-name descname">trim_suggestions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span></em>, <em class="sig-param"><span class="n">suggs</span></em>, <em class="sig-param"><span class="n">maxlen</span></em>, <em class="sig-param"><span class="n">calcdist</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.utils.trim_suggestions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Trim a list of suggestions to a maximum length.</p>
 <p>If the list of suggested words is too long, you can use this function
 to trim it down to a maximum length.  It tries to keep the “best”

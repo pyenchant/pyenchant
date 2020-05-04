@@ -180,6 +180,12 @@ achieve this depends on the platform you are using:</p>
 your current distribution. PyEnchant tries to be compatible with a large
 number of <cite>libenchant</cite> versions. If you find an incompatibility with
 your <cite>libenchant</cite> installation, feel free to <a class="reference external" href="https://github.com/pyenchant/pyenchant/issues">open a bug report</a>.</p>
+<p>To detect the <cite>libenchant</cite> binaries, PyEnchant uses
+<code class="docutils literal notranslate"><span class="pre">`find_library()</span></code> &lt;<a class="reference external" href="https://docs.python.org/3/library/ctypes.html#finding-shared-libraries">https://docs.python.org/3/library/ctypes.html#finding-shared-libraries</a>&gt;`_,
+which requires <cite>ldconfig</cite>, <cite>gcc</cite>, <cite>objdump</cite> or <cite>ld</cite> to be installed.
+This is the case on most major distributions,
+however statically linked distributions (like alpine linux)
+might not bring along <cite>binutils</cite> by default.</p>
 </div>
 <div class="section" id="on-macos">
 <h2>On macOS<a class="headerlink" href="#on-macos" title="Permalink to this headline">¶</a></h2>

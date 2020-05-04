@@ -203,7 +203,7 @@ responsible for locating dictionaries for a specific language.</p>
 Bytestrings should not be passed into any function.</p>
 <p>Errors that occur in this module are reported by raising subclasses
 of ‘Error’.</p>
-<dl class="class">
+<dl class="py class">
 <dt id="enchant.Broker">
 <em class="property">class </em><code class="sig-prename descclassname">enchant.</code><code class="sig-name descname">Broker</code><a class="headerlink" href="#enchant.Broker" title="Permalink to this definition">¶</a></dt>
 <dd><p>Broker object for the Enchant spellchecker.</p>
@@ -219,7 +219,7 @@ so that ‘Dict’ objects can be created directly.</p>
 <li><p><a class="reference internal" href="#enchant.Broker.set_ordering" title="enchant.Broker.set_ordering"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_ordering()</span></code></a>:  specify which dictionaries to try for a given language.</p></li>
 </ul>
 </div></blockquote>
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.Broker.describe">
 <code class="sig-name descname">describe</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Broker.describe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return list of provider descriptions.</p>
@@ -228,18 +228,18 @@ dictionary providers available.  Each entry in the list is a
 ProviderDesc object.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.Broker.dict_exists">
-<code class="sig-name descname">dict_exists</code><span class="sig-paren">(</span><em class="sig-param">tag</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Broker.dict_exists" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">dict_exists</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tag</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Broker.dict_exists" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check availability of a dictionary.</p>
 <p>This method checks whether there is a dictionary available for
 the language specified by ‘tag’.  It returns True if a dictionary
 is available, and False otherwise.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.Broker.get_param">
-<code class="sig-name descname">get_param</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Broker.get_param" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_param</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Broker.get_param" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the value of a named parameter on this broker.</p>
 <p>Parameters are used to provide runtime information to individual
 provider backends.  See the method <a class="reference internal" href="#enchant.set_param" title="enchant.set_param"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_param()</span></code></a> for more details.</p>
@@ -250,7 +250,7 @@ library version 2.0 and above</p>
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.Broker.list_dicts">
 <code class="sig-name descname">list_dicts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Broker.list_dicts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return list of available dictionaries.</p>
@@ -264,7 +264,7 @@ broker.  Each entry in the list is a two-tuple of the form:</p>
 through which that dictionary can be obtained.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.Broker.list_languages">
 <code class="sig-name descname">list_languages</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Broker.list_languages" title="Permalink to this definition">¶</a></dt>
 <dd><p>List languages for which dictionaries are available.</p>
@@ -272,9 +272,9 @@ through which that dictionary can be obtained.</p>
 dictionary is available.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.Broker.request_dict">
-<code class="sig-name descname">request_dict</code><span class="sig-paren">(</span><em class="sig-param">tag=None</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Broker.request_dict" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">request_dict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tag</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Broker.request_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Request a Dict object for the language specified by &lt;tag&gt;.</p>
 <p>This method constructs and returns a Dict object for the
 requested language.  ‘tag’ should be a string of the appropriate
@@ -291,9 +291,9 @@ constructor and passing in the &lt;broker&gt; argument.</p>
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.Broker.request_pwl_dict">
-<code class="sig-name descname">request_pwl_dict</code><span class="sig-paren">(</span><em class="sig-param">pwl</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Broker.request_pwl_dict" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">request_pwl_dict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pwl</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Broker.request_pwl_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Request a Dict object for a personal word list.</p>
 <p>This method behaves as ‘request_dict’ but rather than returning
 a dictionary for a specific language, it returns a dictionary
@@ -301,9 +301,9 @@ referencing a personal word list.  A personal word list is a file
 of custom dictionary entries, one word per line.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.Broker.set_ordering">
-<code class="sig-name descname">set_ordering</code><span class="sig-paren">(</span><em class="sig-param">tag</em>, <em class="sig-param">ordering</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Broker.set_ordering" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_ordering</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tag</span></em>, <em class="sig-param"><span class="n">ordering</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Broker.set_ordering" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set dictionary preferences for a language.</p>
 <p>The Enchant library supports the use of multiple dictionary programs
 and multiple languages.  This method specifies which dictionaries
@@ -315,9 +315,9 @@ The value of ‘tag’ can also be set to “*” to set a default ordering
 for all languages for which one has not been set explicitly.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.Broker.set_param">
-<code class="sig-name descname">set_param</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Broker.set_param" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_param</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Broker.set_param" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the value of a named parameter on this broker.</p>
 <p>Parameters are used to provide runtime information to individual
 provider backends.</p>
@@ -330,9 +330,9 @@ library version 2.0 and above</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="enchant.Dict">
-<em class="property">class </em><code class="sig-prename descclassname">enchant.</code><code class="sig-name descname">Dict</code><span class="sig-paren">(</span><em class="sig-param">tag=None</em>, <em class="sig-param">broker=None</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Dict" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">enchant.</code><code class="sig-name descname">Dict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tag</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">broker</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dictionary object for the Enchant spellchecker.</p>
 <p>Dictionary objects are responsible for checking the spelling of words
 and suggesting possible corrections.  Each dictionary is owned by a
@@ -358,59 +358,59 @@ attributes:</p>
 <li><p>provider:   a ProviderDesc object for the dictionary provider</p></li>
 </ul>
 </div></blockquote>
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.Dict.add">
-<code class="sig-name descname">add</code><span class="sig-paren">(</span><em class="sig-param">word</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Dict.add" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Dict.add" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a word to the user’s personal word list.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.Dict.add_to_pwl">
-<code class="sig-name descname">add_to_pwl</code><span class="sig-paren">(</span><em class="sig-param">word</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Dict.add_to_pwl" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_to_pwl</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Dict.add_to_pwl" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a word to the user’s personal word list.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.Dict.add_to_session">
-<code class="sig-name descname">add_to_session</code><span class="sig-paren">(</span><em class="sig-param">word</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Dict.add_to_session" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_to_session</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Dict.add_to_session" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a word to the session personal list.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.Dict.check">
-<code class="sig-name descname">check</code><span class="sig-paren">(</span><em class="sig-param">word</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Dict.check" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">check</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Dict.check" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check spelling of a word.</p>
 <p>This method takes a word in the dictionary language and returns
 True if it is correctly spelled, and false otherwise.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.Dict.is_added">
-<code class="sig-name descname">is_added</code><span class="sig-paren">(</span><em class="sig-param">word</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Dict.is_added" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_added</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Dict.is_added" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check whether a word is in the personal word list.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.Dict.is_removed">
-<code class="sig-name descname">is_removed</code><span class="sig-paren">(</span><em class="sig-param">word</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Dict.is_removed" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_removed</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Dict.is_removed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check whether a word is in the personal exclude list.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.Dict.remove">
-<code class="sig-name descname">remove</code><span class="sig-paren">(</span><em class="sig-param">word</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Dict.remove" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">remove</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Dict.remove" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a word to the user’s personal exclude list.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.Dict.remove_from_session">
-<code class="sig-name descname">remove_from_session</code><span class="sig-paren">(</span><em class="sig-param">word</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Dict.remove_from_session" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">remove_from_session</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Dict.remove_from_session" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a word to the session exclude list.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.Dict.store_replacement">
-<code class="sig-name descname">store_replacement</code><span class="sig-paren">(</span><em class="sig-param">mis</em>, <em class="sig-param">cor</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Dict.store_replacement" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">store_replacement</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mis</span></em>, <em class="sig-param"><span class="n">cor</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Dict.store_replacement" title="Permalink to this definition">¶</a></dt>
 <dd><p>Store a replacement spelling for a miss-spelled word.</p>
 <p>This method makes a suggestion to the spellchecking engine that the
 miss-spelled word &lt;mis&gt; is in fact correctly spelled as &lt;cor&gt;.  Such
@@ -418,9 +418,9 @@ a suggestion will typically mean that &lt;cor&gt; appears early in the
 list of suggested spellings offered for later instances of &lt;mis&gt;.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.Dict.suggest">
-<code class="sig-name descname">suggest</code><span class="sig-paren">(</span><em class="sig-param">word</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Dict.suggest" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">suggest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Dict.suggest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Suggest possible spellings for a word.</p>
 <p>This method tries to guess the correct spelling for a given
 word, returning the possibilities in a list.</p>
@@ -428,9 +428,9 @@ word, returning the possibilities in a list.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="enchant.DictWithPWL">
-<em class="property">class </em><code class="sig-prename descclassname">enchant.</code><code class="sig-name descname">DictWithPWL</code><span class="sig-paren">(</span><em class="sig-param">tag</em>, <em class="sig-param">pwl=None</em>, <em class="sig-param">pel=None</em>, <em class="sig-param">broker=None</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.DictWithPWL" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">enchant.</code><code class="sig-name descname">DictWithPWL</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tag</span></em>, <em class="sig-param"><span class="n">pwl</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">pel</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">broker</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.DictWithPWL" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dictionary with separately-managed personal word list.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -453,52 +453,52 @@ default word lists.</p>
 The Dict object managing the PEL is available as the ‘pel’ attribute.</p>
 <p>To create a DictWithPWL from the user’s default language, use None
 as the ‘tag’ argument.</p>
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.DictWithPWL.add">
-<code class="sig-name descname">add</code><span class="sig-paren">(</span><em class="sig-param">word</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.DictWithPWL.add" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.DictWithPWL.add" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a word to the associated personal word list.</p>
 <p>This method adds the given word to the personal word list, and
 automatically saves the list to disk.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.DictWithPWL.add_to_pwl">
-<code class="sig-name descname">add_to_pwl</code><span class="sig-paren">(</span><em class="sig-param">word</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.DictWithPWL.add_to_pwl" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_to_pwl</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.DictWithPWL.add_to_pwl" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a word to the associated personal word list.</p>
 <p>This method adds the given word to the personal word list, and
 automatically saves the list to disk.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.DictWithPWL.check">
-<code class="sig-name descname">check</code><span class="sig-paren">(</span><em class="sig-param">word</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.DictWithPWL.check" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">check</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.DictWithPWL.check" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check spelling of a word.</p>
 <p>This method takes a word in the dictionary language and returns
 True if it is correctly spelled, and false otherwise.  It checks
 both the dictionary and the personal word list.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.DictWithPWL.is_added">
-<code class="sig-name descname">is_added</code><span class="sig-paren">(</span><em class="sig-param">word</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.DictWithPWL.is_added" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_added</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.DictWithPWL.is_added" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check whether a word is in the personal word list.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.DictWithPWL.is_removed">
-<code class="sig-name descname">is_removed</code><span class="sig-paren">(</span><em class="sig-param">word</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.DictWithPWL.is_removed" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">is_removed</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.DictWithPWL.is_removed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check whether a word is in the personal exclude list.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.DictWithPWL.remove">
-<code class="sig-name descname">remove</code><span class="sig-paren">(</span><em class="sig-param">word</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.DictWithPWL.remove" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">remove</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.DictWithPWL.remove" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a word to the associated exclude list.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="enchant.DictWithPWL.suggest">
-<code class="sig-name descname">suggest</code><span class="sig-paren">(</span><em class="sig-param">word</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.DictWithPWL.suggest" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">suggest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.DictWithPWL.suggest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Suggest possible spellings for a word.</p>
 <p>This method tries to guess the correct spelling for a given
 word, returning the possibilities in a list.</p>
@@ -506,9 +506,9 @@ word, returning the possibilities in a list.</p>
 
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="enchant.ProviderDesc">
-<em class="property">class </em><code class="sig-prename descclassname">enchant.</code><code class="sig-name descname">ProviderDesc</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">desc</em>, <em class="sig-param">file</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.ProviderDesc" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">enchant.</code><code class="sig-name descname">ProviderDesc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">desc</span></em>, <em class="sig-param"><span class="n">file</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.ProviderDesc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Simple class describing an Enchant provider.</p>
 <p>Each provider has the following information associated with it:</p>
 <blockquote>
@@ -520,24 +520,24 @@ word, returning the possibilities in a list.</p>
 </div></blockquote>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="enchant.dict_exists">
-<code class="sig-prename descclassname">enchant.</code><code class="sig-name descname">dict_exists</code><span class="sig-paren">(</span><em class="sig-param">tag</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.dict_exists" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">enchant.</code><code class="sig-name descname">dict_exists</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tag</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.dict_exists" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check availability of a dictionary.</p>
 <p>This method checks whether there is a dictionary available for
 the language specified by ‘tag’.  It returns True if a dictionary
 is available, and False otherwise.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="enchant.get_enchant_version">
 <code class="sig-prename descclassname">enchant.</code><code class="sig-name descname">get_enchant_version</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#enchant.get_enchant_version" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the version string for the underlying enchant library.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="enchant.get_param">
-<code class="sig-prename descclassname">enchant.</code><code class="sig-name descname">get_param</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.get_param" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">enchant.</code><code class="sig-name descname">get_param</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.get_param" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the value of a named parameter on this broker.</p>
 <p>Parameters are used to provide runtime information to individual
 provider backends.  See the method <a class="reference internal" href="#enchant.set_param" title="enchant.set_param"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_param()</span></code></a> for more details.</p>
@@ -548,7 +548,7 @@ library version 2.0 and above</p>
 </div>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="enchant.list_dicts">
 <code class="sig-prename descclassname">enchant.</code><code class="sig-name descname">list_dicts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#enchant.list_dicts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return list of available dictionaries.</p>
@@ -562,7 +562,7 @@ broker.  Each entry in the list is a two-tuple of the form:</p>
 through which that dictionary can be obtained.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="enchant.list_languages">
 <code class="sig-prename descclassname">enchant.</code><code class="sig-name descname">list_languages</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#enchant.list_languages" title="Permalink to this definition">¶</a></dt>
 <dd><p>List languages for which dictionaries are available.</p>
@@ -570,9 +570,9 @@ through which that dictionary can be obtained.</p>
 dictionary is available.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="enchant.request_dict">
-<code class="sig-prename descclassname">enchant.</code><code class="sig-name descname">request_dict</code><span class="sig-paren">(</span><em class="sig-param">tag=None</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.request_dict" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">enchant.</code><code class="sig-name descname">request_dict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tag</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.request_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Request a Dict object for the language specified by &lt;tag&gt;.</p>
 <p>This method constructs and returns a Dict object for the
 requested language.  ‘tag’ should be a string of the appropriate
@@ -589,9 +589,9 @@ constructor and passing in the &lt;broker&gt; argument.</p>
 </div>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="enchant.request_pwl_dict">
-<code class="sig-prename descclassname">enchant.</code><code class="sig-name descname">request_pwl_dict</code><span class="sig-paren">(</span><em class="sig-param">pwl</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.request_pwl_dict" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">enchant.</code><code class="sig-name descname">request_pwl_dict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pwl</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.request_pwl_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Request a Dict object for a personal word list.</p>
 <p>This method behaves as ‘request_dict’ but rather than returning
 a dictionary for a specific language, it returns a dictionary
@@ -599,9 +599,9 @@ referencing a personal word list.  A personal word list is a file
 of custom dictionary entries, one word per line.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="enchant.set_param">
-<code class="sig-prename descclassname">enchant.</code><code class="sig-name descname">set_param</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.set_param" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">enchant.</code><code class="sig-name descname">set_param</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.set_param" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the value of a named parameter on this broker.</p>
 <p>Parameters are used to provide runtime information to individual
 provider backends.</p>
@@ -612,9 +612,9 @@ library version 2.0 and above</p>
 </div>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="enchant.set_prefix_dir">
-<code class="sig-prename descclassname">enchant.</code><code class="sig-name descname">set_prefix_dir</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.set_prefix_dir" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">enchant.</code><code class="sig-name descname">set_prefix_dir</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.set_prefix_dir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the prefix used by the Enchant library to find its plugins</p>
 <p>Called automatically when the Python library is imported when
 required.</p>
