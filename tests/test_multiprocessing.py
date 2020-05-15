@@ -15,5 +15,5 @@ def test_can_use_multiprocessing():
     print("Starting")
     pool = Pool(10)
     for i, result in enumerate(pool.imap_unordered(check_words, input)):
-        print("Done {0}: {1}".format(i, result))
+        assert result
     print("Finished")
