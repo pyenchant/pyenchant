@@ -95,6 +95,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#what-are-the-advantages-disadvantages-of-pyenchant-over-other-solutions">What are the advantages/disadvantages of PyEnchant over other solutions?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#how-does-pyenchant-handle-unicode-non-ascii-text">How does PyEnchant handle Unicode/non-ASCII text?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#which-enchant-provider-should-i-use-aspell-ispell-myspell">Which Enchant provider should I use? (Aspell, Ispell, MySpell…?)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#i-don-t-like-the-provider-chosen-by-pyenchant-for-my-language-what-can-i-do">I don’t like the provider chosen by PyEnchant for my language - what can I do?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-can-i-use-a-custom-location-for-storing-enchant-dictionaries">How can I use a custom location for storing Enchant dictionaries ?</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="shootout.html">Provider Shootout</a></li>
@@ -168,33 +170,33 @@
 <p>This page contains some frequently asked questions about PyEnchant,
 along with some questions which haven’t technically been asked but which
 are probably of interest to many readers.</p>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title">Table of contents:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="#faq_feedback">How do I report bugs, give feedback etc?</a></p></li>
-<li><p><a class="reference external" href="#faq_license">How is PyEnchant licensed?</a></p></li>
-<li><p><a class="reference external" href="#faq_similar_projects">Are there similar projects available?</a></p></li>
-<li><p><a class="reference external" href="#faq_advantages">What are the advantages/disadvantages of PyEnchant over other
-solutions?</a></p></li>
-<li><p><a class="reference external" href="#faq_unicode">How does PyEnchant handle Unicode/non-ASCII text?</a></p></li>
-<li><p><a class="reference external" href="#faq_shootout">Which Enchant provider should I use? (Aspell, Ispell,
-MySpell…?)</a></p></li>
+<li><p><a class="reference internal" href="#how-do-i-report-bugs-give-feedback-etc" id="id1">How do I report bugs, give feedback etc?</a></p></li>
+<li><p><a class="reference internal" href="#how-is-pyenchant-licensed" id="id2">How is PyEnchant licensed?</a></p></li>
+<li><p><a class="reference internal" href="#are-there-similar-projects-available" id="id3">Are there similar projects available?</a></p></li>
+<li><p><a class="reference internal" href="#what-are-the-advantages-disadvantages-of-pyenchant-over-other-solutions" id="id4">What are the advantages/disadvantages of PyEnchant over other solutions?</a></p></li>
+<li><p><a class="reference internal" href="#how-does-pyenchant-handle-unicode-non-ascii-text" id="id5">How does PyEnchant handle Unicode/non-ASCII text?</a></p></li>
+<li><p><a class="reference internal" href="#which-enchant-provider-should-i-use-aspell-ispell-myspell" id="id6">Which Enchant provider should I use? (Aspell, Ispell, MySpell…?)</a></p></li>
+<li><p><a class="reference internal" href="#i-don-t-like-the-provider-chosen-by-pyenchant-for-my-language-what-can-i-do" id="id7">I don’t like the provider chosen by PyEnchant for my language - what can I do?</a></p></li>
+<li><p><a class="reference internal" href="#how-can-i-use-a-custom-location-for-storing-enchant-dictionaries" id="id8">How can I use a custom location for storing Enchant dictionaries ?</a></p></li>
 </ul>
+</div>
 <div class="section" id="how-do-i-report-bugs-give-feedback-etc">
-<span id="faq-feedback"></span><h2>How do I report bugs, give feedback etc?<a class="headerlink" href="#how-do-i-report-bugs-give-feedback-etc" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id1">How do I report bugs, give feedback etc?</a><a class="headerlink" href="#how-do-i-report-bugs-give-feedback-etc" title="Permalink to this headline">¶</a></h2>
 <p>You can use the issue reporting tools on the <a class="reference external" href="https://github.com/rfk/pyenchant/issues">github project
-page</a> or send the author an
-email at <a class="reference external" href="mailto:ryan&#37;&#52;&#48;rfk&#46;com&#46;au">ryan<span>&#64;</span>rfk<span>&#46;</span>com<span>&#46;</span>au</a>. For general questions, please use the
-<a class="reference external" href="http://groups.google.com/group/pyenchant-users">PyEnchant mailing
-list</a>.</p>
+page</a> .</p>
 </div>
 <div class="section" id="how-is-pyenchant-licensed">
-<span id="faq-license"></span><h2>How is PyEnchant licensed?<a class="headerlink" href="#how-is-pyenchant-licensed" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id2">How is PyEnchant licensed?</a><a class="headerlink" href="#how-is-pyenchant-licensed" title="Permalink to this headline">¶</a></h2>
 <p>Like the underlying Enchant library, PyEnchant is made available under
 the <a class="reference external" href="http://www.gnu.org/copyleft/lesser.html">GNU LGPL</a> with a
 special exemption allowing linking with proprietary spellchecking
 plugins.</p>
 </div>
 <div class="section" id="are-there-similar-projects-available">
-<span id="faq-similar-projects"></span><h2>Are there similar projects available?<a class="headerlink" href="#are-there-similar-projects-available" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id3">Are there similar projects available?</a><a class="headerlink" href="#are-there-similar-projects-available" title="Permalink to this headline">¶</a></h2>
 <p>There are several projects to produce Python bindings for the
 <a class="reference external" href="http://aspell.sourceforge.net/">aspell</a> spellchecking library,
 including
@@ -207,7 +209,7 @@ this <a class="reference external" href="http://aspn.activestate.com/ASPN/Cookbo
 Recipie</a>.</p>
 </div>
 <div class="section" id="what-are-the-advantages-disadvantages-of-pyenchant-over-other-solutions">
-<span id="faq-advantages"></span><h2>What are the advantages/disadvantages of PyEnchant over other solutions?<a class="headerlink" href="#what-are-the-advantages-disadvantages-of-pyenchant-over-other-solutions" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id4">What are the advantages/disadvantages of PyEnchant over other solutions?</a><a class="headerlink" href="#what-are-the-advantages-disadvantages-of-pyenchant-over-other-solutions" title="Permalink to this headline">¶</a></h2>
 <p>Most of the solutions listed above are tied to a single spellchecking
 platform, such as aspell or MySpell. By contrast, Enchant supports
 multiple spellchecking platforms. A good discussion of why this is an
@@ -229,7 +231,7 @@ spellchecking solutions. This can be an advantage or disadvantage
 depending on the needs of your program.</p>
 </div>
 <div class="section" id="how-does-pyenchant-handle-unicode-non-ascii-text">
-<span id="faq-unicode"></span><h2>How does PyEnchant handle Unicode/non-ASCII text?<a class="headerlink" href="#how-does-pyenchant-handle-unicode-non-ascii-text" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id5">How does PyEnchant handle Unicode/non-ASCII text?</a><a class="headerlink" href="#how-does-pyenchant-handle-unicode-non-ascii-text" title="Permalink to this headline">¶</a></h2>
 <p>As of version 1.1, PyEnchant supports input of both standard Python
 strings and unicode strings. It follows the standard Python practice of
 returning unicode strings when unicode strings are given, and standard
@@ -242,7 +244,7 @@ great deal of experience with the use of unicode. Any help with testing
 the support for unicode input/output would be greatly appreciated.</p>
 </div>
 <div class="section" id="which-enchant-provider-should-i-use-aspell-ispell-myspell">
-<span id="faq-shootout"></span><h2>Which Enchant provider should I use? (Aspell, Ispell, MySpell…?)<a class="headerlink" href="#which-enchant-provider-should-i-use-aspell-ispell-myspell" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id6">Which Enchant provider should I use? (Aspell, Ispell, MySpell…?)</a><a class="headerlink" href="#which-enchant-provider-should-i-use-aspell-ispell-myspell" title="Permalink to this headline">¶</a></h2>
 <p>The simple answer is: whichever works best for your language of choice.
 The source distribution contains a tool to conduct a <a class="reference external" href="shootout.html">Provider
 Shootout</a> given an appropriate set of test data, which
@@ -251,6 +253,22 @@ language.</p>
 <p>Ideally, this choice should be made by the system administrator when
 enchant is installed. One of the premises of the Enchant library is to
 relieve the user from making such low-level choices.</p>
+</div>
+<div class="section" id="i-don-t-like-the-provider-chosen-by-pyenchant-for-my-language-what-can-i-do">
+<h2><a class="toc-backref" href="#id7">I don’t like the provider chosen by PyEnchant for my language - what can I do?</a><a class="headerlink" href="#i-don-t-like-the-provider-chosen-by-pyenchant-for-my-language-what-can-i-do" title="Permalink to this headline">¶</a></h2>
+<p>See the <a class="reference internal" href="tutorial.html#provider-ordering"><span class="std std-ref">Provider Ordering</span></a> section of the tutorial.</p>
+</div>
+<div class="section" id="how-can-i-use-a-custom-location-for-storing-enchant-dictionaries">
+<h2><a class="toc-backref" href="#id8">How can I use a custom location for storing Enchant dictionaries ?</a><a class="headerlink" href="#how-can-i-use-a-custom-location-for-storing-enchant-dictionaries" title="Permalink to this headline">¶</a></h2>
+<p>If you are using <code class="docutils literal notranslate"><span class="pre">hunspell</span></code> or <code class="docutils literal notranslate"><span class="pre">nuspel</span></code> providers, then Enchant will
+look in <code class="docutils literal notranslate"><span class="pre">&lt;user_config_dir&gt;/&lt;provider&gt;</span></code> for additional dictionaries.</p>
+<p><code class="docutils literal notranslate"><span class="pre">user_config_dir</span></code> is set by a call to <code class="docutils literal notranslate"><span class="pre">enchant_get_user_config_dir()</span></code>.</p>
+<ul class="simple">
+<li><p>If the <code class="docutils literal notranslate"><span class="pre">ENCHANT_CONFIG_DIR</span></code> environment variable is set, it will return its value</p></li>
+<li><p>Otherwise, it will call
+<a class="reference external" href="https://developer.gnome.org/glib/stable/glib-Miscellaneous-Utility-Functions.html#g-get-user-config-dir">g_get_user_config_dir()</a>
+which will return something like <cite>~/.config/enchant</cite>.</p></li>
+</ul>
 </div>
 </div>
 

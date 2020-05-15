@@ -478,7 +478,7 @@ need (both the <cite>.dic</cite> and <cite>.aff</cite> extensions) and put them 
 </div>
 </div>
 <div class="section" id="provider-ordering">
-<h4>Provider Ordering<a class="headerlink" href="#provider-ordering" title="Permalink to this headline">¶</a></h4>
+<span id="id1"></span><h4>Provider Ordering<a class="headerlink" href="#provider-ordering" title="Permalink to this headline">¶</a></h4>
 <p>Which provider is used for which language is determined by the provider ordering of the Broker. This can be altered using the set_ordering method. This method accepts a language tag and a comma-separated list of provider names in the order that they should be checked. A language tag of “*” means that the ordering should be the default for all languages where an explicit ordering has not been given.</p>
 <p>The following example states that for American English the MySpell provider should be tried first, followed by the aspell provider. For all other languages, the ordering is reversed:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">enchant</span><span class="o">.</span><span class="n">Broker</span><span class="p">()</span>
