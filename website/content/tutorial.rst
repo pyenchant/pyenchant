@@ -331,6 +331,8 @@ You may have noticed that the top-level functions provided by the enchant module
   <enchant.Broker object at 0x2aaaabdff590>
 
 
+.. _provider-ordering:
+
 Provider Ordering
 ~~~~~~~~~~~~~~~~~
 

@@ -88,3 +88,22 @@ language.
 Ideally, this choice should be made by the system administrator when
 enchant is installed. One of the premises of the Enchant library is to
 relieve the user from making such low-level choices.
+
+I don't like the provider chosen by PyEnchant for my language - what can I do?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+See the :ref:`provider-ordering` section of the tutorial.
+
+How can I use a custom location for storing Enchant dictionaries ?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you are using ``hunspell`` or ``nuspel`` providers, then Enchant will
+look in ``<user_config_dir>/<provider>`` for additional dictionaries.
+
+``user_config_dir`` is set by a call to ``enchant_get_user_config_dir()``.
+
+* If the ``ENCHANT_CONFIG_DIR`` environment variable is set, it will return its value
+* Otherwise, it will call
+  `g_get_user_config_dir()
+  <https://developer.gnome.org/glib/stable/glib-Miscellaneous-Utility-Functions.html#g-get-user-config-dir>`_
+  which will return something like `~/.config/enchant`.
