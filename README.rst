@@ -5,11 +5,13 @@ pyenchant:  Python bindings for the Enchant spellchecker
     :target: https://pypi.org/project/pyenchant
 
 .. image:: https://img.shields.io/pypi/pyversions/pyenchant.svg
+    :target: https://pypi.org/project/pyenchant
     
 .. image:: https://github.com/pyenchant/pyenchant/workflows/tests/badge.svg
     :target: https://github.com/pyenchant/pyenchant/actions
 
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+    :target: https://github.com/psf/black
 
 This package provides a set of Python language bindings for the Enchant
 spellchecking library.  For more information, visit the project website:
