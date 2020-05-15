@@ -20,12 +20,7 @@ How do I report bugs, give feedback etc?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can use the issue reporting tools on the `github project
-page <https://github.com/rfk/pyenchant/issues>`__ or send the author an
-email at ryan@rfk.com.au. For general questions, please use the
-`PyEnchant mailing
-list <http://groups.google.com/group/pyenchant-users>`__.
-
-.. _faq_license:
+page <https://github.com/rfk/pyenchant/issues>`__ .
 
 How is PyEnchant licensed?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
