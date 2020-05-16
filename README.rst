@@ -6,9 +6,12 @@ pyenchant:  Python bindings for the Enchant spellchecker
 
 .. image:: https://img.shields.io/pypi/pyversions/pyenchant.svg
     :target: https://pypi.org/project/pyenchant
-    
+
 .. image:: https://github.com/pyenchant/pyenchant/workflows/tests/badge.svg
     :target: https://github.com/pyenchant/pyenchant/actions
+
+.. image:: https://builds.sr.ht/~dmerej/pyenchant.svg
+    :target: https://builds.sr.ht/~dmerej/pyenchant
 
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/psf/black
