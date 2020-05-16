@@ -1,0 +1,18 @@
+image: archlinux
+
+packages:
+  - enchant
+  - aspell
+  - aspell-en
+  - python
+  - python-pip
+
+sources:
+  - https://git.sr.ht/~dmerej/pyenchant
+
+
+tasks:
+  - setup: |
+     python -m pip install tox
+  - run tests: |
+     tox -e tests
