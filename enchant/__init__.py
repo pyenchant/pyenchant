@@ -894,7 +894,7 @@ set_param = _broker.set_param
 #  Expose the "get_version" function.
 def get_enchant_version():
     """Get the version string for the underlying enchant library."""
-    return _e.get_version()
+    return _e.get_version().decode()
 
 
 #  Expose the "set_prefix_dir" function.
