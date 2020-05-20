@@ -905,3 +905,10 @@ def set_prefix_dir(path):
     required.
     """
     return _e.set_prefix_dir(path)
+
+
+def get_user_config_dir():
+    """Return the path that will be used by some
+    Enchant providers to look for custom dictionaries.
+    """
+    return _e.get_user_config_dir().decode()
