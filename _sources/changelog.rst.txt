@@ -1,6 +1,11 @@
 Changelog
 =========
 
+3.0.2
+------
+
+* Fix: ``enchant.get_enchant_version()`` now returns a ``str``, not some ``bytes``
+
 3.0.1 (2020-03-01)
 ------------------
 
