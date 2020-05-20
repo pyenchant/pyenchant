@@ -1,9 +1,10 @@
 Changelog
 =========
 
-3.0.2
-------
+3.1.0 (2020-05-020)
+--------------------
 
+* Add ``enchant.get_user_config_dir()``
 * Fix: ``enchant.get_enchant_version()`` now returns a ``str``, not some ``bytes``
 
 3.0.1 (2020-03-01)
