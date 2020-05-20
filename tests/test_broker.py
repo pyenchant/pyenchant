@@ -92,7 +92,7 @@ def test_get_set_param(broker):
     """
     Scenario:
       Either broker.set_param(key, value) works
-      Or broker.set_param(key, value) throw
+      Or broker.set_param(key, value) throws
       AttributeError
 
     """
