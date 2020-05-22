@@ -111,7 +111,7 @@ def _check_docstrings(obj, errors):
     if hasattr(obj, "__doc__"):
         skip_errors = [w for w in getattr(obj, "_DOC_ERRORS", [])]
         chkr = enchant.checker.SpellChecker(
-            "en", obj.__doc__, filters=[enchant.tokenize.URLFilter]
+            "en_US", obj.__doc__, filters=[enchant.tokenize.URLFilter]
         )
         for err in chkr:
             if len(err.word) == 1:
