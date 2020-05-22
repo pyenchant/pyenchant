@@ -86,13 +86,17 @@
             
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#on-linux">On Linux</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#on-macos">On macOS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#on-windows">On Windows</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#using-the-binary-wheel">Using the binary wheel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#using-mingw">Using MinGW</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-the-enchant-c-library">Installing the Enchant C library</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#on-linux">On Linux</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#on-macos">On macOS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#on-windows">On Windows</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#using-the-binary-wheel">Using the binary wheel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#using-mingw">Using MinGW</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-a-dictionary">Installing a dictionary</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
 </ul>
 </li>
@@ -172,10 +176,16 @@ the time of writing - <a class="reference external" href="https://github.com/pye
 being the authoritative source.</p>
 <p>The PyEnchant package is available <a class="reference external" href="https://pypi.org/project/pyenchant">on pypi</a>.</p>
 <p>You can install it with <code class="docutils literal notranslate"><span class="pre">pip</span></code> as usual.</p>
-<p>However, PyEnchant needs to find the Enchant C library in order to work properly. The way to
-achieve this depends on the platform you are using:</p>
+<p>However, to work properly,  PyEnchant needs to:</p>
+<ul class="simple">
+<li><p>find the Enchant C library</p></li>
+<li><p>find the dictionaries for your particular language</p></li>
+</ul>
+<p>The way to achieve this depends on the platform you are using:</p>
+<div class="section" id="installing-the-enchant-c-library">
+<h2>Installing the Enchant C library<a class="headerlink" href="#installing-the-enchant-c-library" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="on-linux">
-<h2>On Linux<a class="headerlink" href="#on-linux" title="Permalink to this headline">¶</a></h2>
+<h3>On Linux<a class="headerlink" href="#on-linux" title="Permalink to this headline">¶</a></h3>
 <p>The quickest way is to install <cite>libenchant</cite> using the package manager of
 your current distribution. PyEnchant tries to be compatible with a large
 number of <cite>libenchant</cite> versions. If you find an incompatibility with
@@ -188,7 +198,7 @@ however statically linked distributions (like Alpine Linux)
 might not bring along <cite>binutils</cite> by default.</p>
 </div>
 <div class="section" id="on-macos">
-<h2>On macOS<a class="headerlink" href="#on-macos" title="Permalink to this headline">¶</a></h2>
+<h3>On macOS<a class="headerlink" href="#on-macos" title="Permalink to this headline">¶</a></h3>
 <p>The quickest way is to install <cite>libenchant</cite> using <a class="reference external" href="https://brew.sh/">Homebrew</a>:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">brew update</span>
 <span class="go">brew install enchant</span>
@@ -196,12 +206,12 @@ might not bring along <cite>binutils</cite> by default.</p>
 </div>
 </div>
 <div class="section" id="on-windows">
-<h2>On Windows<a class="headerlink" href="#on-windows" title="Permalink to this headline">¶</a></h2>
+<h3>On Windows<a class="headerlink" href="#on-windows" title="Permalink to this headline">¶</a></h3>
 <p>The <cite>enchant</cite> C library depends on <cite>glib2</cite>, which poses some interesting challenges.</p>
 <p>There are two ways to use install the PyEnchant library on Windows,
 both with their pros and cons.</p>
 <div class="section" id="using-the-binary-wheel">
-<h3>Using the binary wheel<a class="headerlink" href="#using-the-binary-wheel" title="Permalink to this headline">¶</a></h3>
+<h4>Using the binary wheel<a class="headerlink" href="#using-the-binary-wheel" title="Permalink to this headline">¶</a></h4>
 <p>The Windows binary wheels on <em>pypi.org</em> contain a pre-compiled <cite>enchant</cite> library,
 if your Python version is compatible, it will get used by <cite>pip</cite> automatically.</p>
 <p>Pros:</p>
@@ -220,7 +230,7 @@ if your Python version is compatible, it will get used by <cite>pip</cite> autom
 </div></blockquote>
 </div>
 <div class="section" id="using-mingw">
-<h3>Using MinGW<a class="headerlink" href="#using-mingw" title="Permalink to this headline">¶</a></h3>
+<h4>Using MinGW<a class="headerlink" href="#using-mingw" title="Permalink to this headline">¶</a></h4>
 <p>An other way to use <cite>pyenchant</cite> is to install MinGW (for instance
 with <a class="reference external" href="https://chocolatey.org/">Chocolatey</a>), then use  <cite>pacman</cite> to install
 the <cite>libenchant</cite> and all its dependencies.</p>
@@ -245,6 +255,30 @@ so typically <em>not</em> the one you’ve installed from <cite>python.org</cite
 </ul>
 </div></blockquote>
 </div>
+</div>
+</div>
+<div class="section" id="installing-a-dictionary">
+<h2>Installing a dictionary<a class="headerlink" href="#installing-a-dictionary" title="Permalink to this headline">¶</a></h2>
+<p>Let’s assume you want to use PyEnchant on a text written in German.</p>
+<p>First, use the Enchant Python API to list known languages and providers:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">enchant</span>
+<span class="n">broker</span> <span class="o">=</span> <span class="n">enchant</span><span class="o">.</span><span class="n">Broker</span><span class="p">()</span>
+<span class="n">broker</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+<span class="n">broker</span><span class="o">.</span><span class="n">list_languages</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>If <code class="docutils literal notranslate"><span class="pre">enchant.list_languages()</span></code> shows <code class="docutils literal notranslate"><span class="pre">de_DE</span></code>, you’re done and can move on to the
+tutorial section.</p>
+<p>If not, you should install the dictionary for one of the listed providers.</p>
+<p>So for instance, if the <code class="docutils literal notranslate"><span class="pre">hunspell</span></code> is listed as a Enchant provider, you
+should install the German dictionary for the <code class="docutils literal notranslate"><span class="pre">hunspell</span></code> provider.</p>
+<p>On <strong>Linux</strong> and <strong>macOS</strong>, this can be done by installing the <code class="docutils literal notranslate"><span class="pre">hunspell-de</span></code>
+package.</p>
+<p>On <strong>Windows</strong>, if you have installed PyEnchant from a
+wheel, you can download the hunspell dictionary files you need
+(both the <cite>.dic</cite> and <cite>.aff</cite> extensions) and put them inside
+<code class="docutils literal notranslate"><span class="pre">/path/to/enchant/data/mingw&lt;bits&gt;/enchant/share/hunspell</span></code>. You
+can find many dictionaries in <a class="reference external" href="https://cgit.freedesktop.org/libreoffice/dictionaries/tree/">LibreOffice sources</a>.</p>
 </div>
 <div class="section" id="troubleshooting">
 <h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h2>
