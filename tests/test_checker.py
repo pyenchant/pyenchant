@@ -205,11 +205,11 @@ def test_pwl():
 
 def test_bug2785373():
     """Testcases for bug #2785373."""
-    c = SpellChecker(enchant.Dict("en"), "")
+    c = SpellChecker(enchant.Dict("en_US"), "")
     c.set_text("So, one dey when I wes 17, I left.")
     for err in c:
         pass
-    c = SpellChecker(enchant.Dict("en"), "")
+    c = SpellChecker(enchant.Dict("en_US"), "")
     c.set_text("So, one dey when I wes 17, I left.")
     for err in c:
         pass

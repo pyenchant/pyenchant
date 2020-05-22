@@ -128,7 +128,7 @@ def test_default_lang(en_us_dict):
 
 def test_pickling(en_us_dict):
     """Test that pickling doesn't corrupt internal state."""
-    d1 = Dict("en")
+    d1 = Dict("en_US")
     assert d1.check("hello")
     d2 = pickle.loads(pickle.dumps(d1))
     assert d1.check("hello")
