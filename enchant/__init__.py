@@ -906,6 +906,8 @@ def set_prefix_dir(path):
     """
     return _e.set_prefix_dir(path)
 
+    set_prefix_dir._DOC_ERRORS = ["plugins"]
+
 
 def get_user_config_dir():
     """Return the path that will be used by some
