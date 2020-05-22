@@ -71,24 +71,6 @@ Once a correction is made to a miss-spelled word, it is often useful to store th
     * store_replacement: note that one word was used to replace another, meaning that it will appear higher in the list of suggestions in the future.
 
 
-Adding support for more languages
-+++++++++++++++++++++++++++++++++
-
-Let's assume you want to use PyEnchant on a text written in German.
-
-Let's also assume that ``enchant.list_languages()`` dose not show the language tag you are interested in ``de_DE`` is this case.
-
-First, you should use the ``describe()`` method of the ``Broker`` class to list available providers.
-
-Let's say ``aspell`` is found in the list. Now you have to install the correct dictionary for the aspell provider.
-On **Linux** and **macOS**, this can be done by installing the ``aspell-de`` packgae using your favorite package manager.
-
-On **Windows**, if you have installed PyEnchant from a wheel, you can download the hunspell dictionary files you
-need (both the `.dic` and `.aff` extensions) and put them inside ``/path/to/site-packages/enchant/data/mingw<bits>/enchant/share/hunspell``.
-
-You can find many dictionaries in `libreoffice sources <https://cgit.freedesktop.org/libreoffice/dictionaries/tree/>`_.
-
-
 Personal Word Lists
 ++++++++++++++++++++
 

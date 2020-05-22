@@ -9,11 +9,18 @@ The PyEnchant package is available `on pypi <https://pypi.org/project/pyenchant>
 
 You can install it with ``pip`` as usual.
 
-However, PyEnchant needs to find the Enchant C library in order to work properly. The way to
-achieve this depends on the platform you are using:
+However, to work properly,  PyEnchant needs to:
+
+* find the Enchant C library
+* find the dictionaries for your particular language
+
+The way to achieve this depends on the platform you are using:
+
+Installing the Enchant C library
+--------------------------------
 
 On Linux
---------
+++++++++
 
 The quickest way is to install `libenchant` using the package manager of
 your current distribution. PyEnchant tries to be compatible with a large
@@ -29,7 +36,7 @@ however statically linked distributions (like Alpine Linux)
 might not bring along `binutils` by default.
 
 On macOS
---------
+++++++++
 
 The quickest way is to install `libenchant` using `Homebrew <https://brew.sh/>`_:
 
@@ -39,7 +46,7 @@ The quickest way is to install `libenchant` using `Homebrew <https://brew.sh/>`_
     brew install enchant
 
 On Windows
-----------
++++++++++++
 
 The `enchant` C library depends on `glib2`, which poses some interesting challenges.
 
@@ -47,7 +54,7 @@ There are two ways to use install the PyEnchant library on Windows,
 both with their pros and cons.
 
 Using the binary wheel
-+++++++++++++++++++++++
+~~~~~~~~~~~~~~~~~~~~~~~
 
 The Windows binary wheels on *pypi.org* contain a pre-compiled `enchant` library,
 if your Python version is compatible, it will get used by `pip` automatically.
@@ -63,7 +70,7 @@ Cons:
  * A copy of the `glib2.dll` and other dependencies are included
 
 Using MinGW
-+++++++++++
+~~~~~~~~~~~
 
 An other way to use `pyenchant` is to install MinGW (for instance
 with `Chocolatey <https://chocolatey.org/>`_), then use  `pacman` to install
@@ -86,6 +93,38 @@ Cons:
 
  * It only works with the ``python3`` binary of the ``MinGW`` distribution,
    so typically *not* the one you've installed from `python.org`.
+
+
+Installing a dictionary
+------------------------
+
+Let's assume you want to use PyEnchant on a text written in German.
+
+First, use the Enchant Python API to list known languages and providers::
+
+    import enchant
+    broker = enchant.Broker()
+    broker.describe()
+    broker.list_languages()
+
+
+If ``enchant.list_languages()`` shows ``de_DE``, you're done and can move on to the
+tutorial section.
+
+If not, you should install the dictionary for one of the listed providers.
+
+So for instance, if the ``hunspell`` is listed as a Enchant provider, you
+should install the German dictionary for the ``hunspell`` provider.
+
+On **Linux** and **macOS**, this can be done by installing the ``hunspell-de``
+package.
+
+On **Windows**, if you have installed PyEnchant from a
+wheel, you can download the hunspell dictionary files you need
+(both the `.dic` and `.aff` extensions) and put them inside
+``/path/to/enchant/data/mingw<bits>/enchant/share/hunspell``. You
+can find many dictionaries in `LibreOffice sources
+<https://cgit.freedesktop.org/libreoffice/dictionaries/tree/>`_.
 
 
 Troubleshooting
