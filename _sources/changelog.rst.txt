@@ -1,15 +1,15 @@
 Changelog
 =========
 
-3.1.1 (2020-05-020)
---------------------
+3.1.1 (2020-05-31)
+------------------
 
 * On Windows, set PATH instead of calling ``SetDllDirectory`` before loading the
   Enchant C library. This allows PyEnchant to co-exist with other libraries
   in the same program. Fix #207.
 
-3.1.0 (2020-05-020)
---------------------
+3.1.0 (2020-05-20)
+-------------------
 
 * Add ``enchant.get_user_config_dir()``
 * Fix: ``enchant.get_enchant_version()`` now returns a ``str``, not some ``bytes``
