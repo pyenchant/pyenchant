@@ -1,6 +1,13 @@
 Changelog
 =========
 
+3.1.1 (2020-05-020)
+--------------------
+
+* On Windows, set PATH instead of calling ``SetDllDirectory`` before loading the
+  Enchant C library. This allows PyEnchant to co-exist with other libraries
+  in the same program. Fix #207.
+
 3.1.0 (2020-05-020)
 --------------------
 
