@@ -68,8 +68,9 @@ def from_prefix(prefix):
     # Make sure all the dlls found next to libenchant-2.dll
     # (libglib-2.0-0.dll, libgmodule-2.0-0.dll, ...) can be
     # used without having to modify %PATH%
-    find_message("calling SetDllDirectoryW ", bin_path)
-    ctypes.windll.kernel32.SetDllDirectoryW(bin_path)
+    new_path = bin_path + os.pathsep + os.environ["PATH"]
+    find_message("Prepending ", bin_path, " to %PATH%")
+    os.environ["PATH"] = new_path
     return enchant_dll_path
 
 
