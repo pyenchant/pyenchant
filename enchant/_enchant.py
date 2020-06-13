@@ -211,7 +211,7 @@ broker_free_dict.restype = None
 
 broker_dict_exists = e.enchant_broker_dict_exists
 broker_dict_exists.argtypes = [t_broker, c_char_p]
-broker_free_dict.restype = c_int
+broker_dict_exists.restype = c_int
 
 broker_set_ordering = e.enchant_broker_set_ordering
 broker_set_ordering.argtypes = [t_broker, c_char_p, c_char_p]
