@@ -56,7 +56,7 @@ from enchant.errors import (
 )
 from enchant.tokenize import get_tokenizer
 from enchant.utils import get_default_language
-from enchant.errors import *
+from enchant.errors import *  # noqa F401,F403
 from enchant.tokenize import tokenize, Chunker, Filter
 from enchant import Dict
 from typing import List, Optional, Type, Union

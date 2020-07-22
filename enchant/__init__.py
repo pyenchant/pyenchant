@@ -87,7 +87,7 @@ except ImportError:
 from enchant.errors import Error, DictNotFoundError
 from enchant.utils import get_default_language
 from enchant.pypwl import PyPWL
-from enchant.errors import *
+from enchant.errors import *  # noqa F401,F403
 from typing import Any, List, NoReturn, Tuple, Optional, Type, Union  # noqa F401
 
 

@@ -44,7 +44,7 @@ includes:
 
 from enchant.errors import Error
 import locale
-from enchant.errors import *
+from enchant.errors import *  # noqa F401,F403
 from typing import Callable, Iterable, List, Optional, Sequence  # noqa F401
 
 
