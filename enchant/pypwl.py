@@ -46,6 +46,7 @@ prototype for the C version found in Enchant).
 
 import os
 import warnings
+from typing import Dict, Iterable, Iterator, List, Optional  # noqa F401
 
 
 class Trie:
@@ -56,13 +57,13 @@ class Trie:
     when traversing the Trie.
     """
 
-    def __init__(self, words=()):
+    def __init__(self, words: Iterable[str] = ()) -> None:
         self._eos = False  # whether I am the end of a word
-        self._keys = {}  # letters at this level of the trie
+        self._keys = {}  # type: Dict[str, Trie] # letters at this level of the trie
         for w in words:
             self.insert(w)
 
-    def insert(self, word):
+    def insert(self, word: str) -> None:
         if word == "":
             self._eos = True
         else:
@@ -74,7 +75,7 @@ class Trie:
                 self[key] = subtrie
             subtrie.insert(word[1:])
 
-    def remove(self, word):
+    def remove(self, word: str) -> None:
         if word == "":
             self._eos = False
         else:
@@ -86,13 +87,13 @@ class Trie:
             else:
                 subtrie.remove(word[1:])
 
-    def search(self, word, nerrs=0):
+    def search(self, word: str, nerrs: int = 0) -> List[str]:
         """Search for the given word, possibly making errors.
 
         This method searches the trie for the given <word>, making
         precisely <nerrs> errors.  It returns a list of words found.
         """
-        res = []
+        res = []  # type: List[str]
         # Terminate if we've run out of errors
         if nerrs < 0:
             return res
@@ -141,15 +142,15 @@ class Trie:
         # All done!
         return res
 
-    search._DOC_ERRORS = ["nerrs"]
+    search._DOC_ERRORS = ["nerrs"]  # type: ignore
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: str) -> "Trie":
         return self._keys[key]
 
-    def __setitem__(self, key, val):
+    def __setitem__(self, key: str, val: "Trie") -> None:
         self._keys[key] = val
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[str]:
         if self._eos:
             yield ""
         for k in self._keys:
@@ -163,7 +164,7 @@ class PyPWL:
     implemented purely in python.
     """
 
-    def __init__(self, pwl=None):
+    def __init__(self, pwl: Optional[str] = None) -> None:
         """PyPWL constructor.
         This method takes as its only argument the name of a file
         containing the personal word list, one word per line.  Entries
@@ -176,7 +177,7 @@ class PyPWL:
         self.provider = None
         self._words = Trie()
         if pwl is not None:
-            self.pwl = os.path.abspath(pwl)
+            self.pwl = os.path.abspath(pwl)  # type: Optional[str]
             self.tag = self.pwl
             pwl_f = open(pwl)
             for ln in pwl_f:
@@ -187,7 +188,7 @@ class PyPWL:
             self.pwl = None
             self.tag = "PyPWL"
 
-    def check(self, word):
+    def check(self, word: str) -> bool:
         """Check spelling of a word.
 
         This method takes a word in the dictionary language and returns
@@ -196,7 +197,7 @@ class PyPWL:
         res = self._words.search(word)
         return bool(res)
 
-    def suggest(self, word):
+    def suggest(self, word: str) -> List[str]:
         """Suggest possible spellings for a word.
 
         This method tries to guess the correct spelling for a given
@@ -215,7 +216,7 @@ class PyPWL:
         # Limit number of suggs
         return res[:limit]
 
-    def add(self, word):
+    def add(self, word: str) -> None:
         """Add a word to the user's personal dictionary.
         For a PWL, this means appending it to the file.
         """
@@ -225,7 +226,7 @@ class PyPWL:
             pwl_f.close()
         self.add_to_session(word)
 
-    def add_to_pwl(self, word):
+    def add_to_pwl(self, word: str) -> None:
         """Add a word to the user's personal dictionary.
         For a PWL, this means appending it to the file.
         """
@@ -236,7 +237,7 @@ class PyPWL:
         )
         self.add(word)
 
-    def remove(self, word):
+    def remove(self, word: str) -> None:
         """Add a word to the user's personal exclude list."""
         # There's no exclude list for a stand-alone PWL.
         # Just remove it from the list.
@@ -247,11 +248,11 @@ class PyPWL:
                 pwl_f.write("%s\n" % (w.strip(),))
             pwl_f.close()
 
-    def add_to_session(self, word):
+    def add_to_session(self, word: str) -> None:
         """Add a word to the session list."""
         self._words.insert(word)
 
-    def store_replacement(self, mis, cor):
+    def store_replacement(self, mis: str, cor: str) -> None:
         """Store a replacement spelling for a miss-spelled word.
 
         This method makes a suggestion to the spellchecking engine that the
@@ -262,20 +263,20 @@ class PyPWL:
         # Too much work for this simple spellchecker
         pass
 
-    store_replacement._DOC_ERRORS = ["mis", "mis"]
+    store_replacement._DOC_ERRORS = ["mis", "mis"]  # type: ignore
 
-    def is_added(self, word):
+    def is_added(self, word: str) -> bool:
         """Check whether a word is in the personal word list."""
         return self.check(word)
 
-    def is_removed(self, word):
+    def is_removed(self, word: str) -> bool:
         """Check whether a word is in the personal exclude list."""
         return False
 
     #  No-op methods to support internal use as a Dict() replacement
 
-    def _check_this(self, msg):
+    def _check_this(self, msg: str) -> None:
         pass
 
-    def _free(self):
+    def _free(self) -> None:
         pass

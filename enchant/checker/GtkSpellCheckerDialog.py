@@ -29,15 +29,15 @@
 #
 
 import gtk
+from enchant.checker import SpellChecker
+from typing import Any, Iterable, List, Optional
 
 
 #   columns
 COLUMN_SUGGESTION = 0
 
 
-def create_list_view(
-    col_label,
-):
+def create_list_view(col_label: str) -> gtk.TreeView:
     # create list widget
     list_ = gtk.ListStore(str)
     list_view = gtk.TreeView(model=list_)
@@ -53,12 +53,12 @@ def create_list_view(
 
 
 class GtkSpellCheckerDialog(gtk.Window):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self.set_title("Spell check")
         self.set_default_size(350, 200)
 
-        self._checker = None
+        self._checker = None  # type: Optional[SpellChecker]
         self._numContext = 40
 
         self.errors = None
@@ -68,7 +68,7 @@ class GtkSpellCheckerDialog(gtk.Window):
         self.add_accel_group(accel_group)
 
         # list of widgets to disable if there's no spell error left
-        self._conditional_widgets = []
+        self._conditional_widgets = []  # type: List[gtk.Widget]
         conditional = self._conditional_widgets.append
 
         # layout
@@ -170,55 +170,55 @@ class GtkSpellCheckerDialog(gtk.Window):
 
         mainbox.show_all()
 
-    def _onIgnore(self, w, *args):
+    def _onIgnore(self, w: gtk.Widget, *args: Any) -> None:
         print(["ignore"])
         self._advance()
 
-    def _onIgnoreAll(self, w, *args):
+    def _onIgnoreAll(self, w: gtk.Widget, *args: Any) -> None:
         print(["ignore all"])
         self._checker.ignore_always()
         self._advance()
 
-    def _onReplace(self, *args):
+    def _onReplace(self, *args: Any) -> None:
         print(["Replace"])
         repl = self._getRepl()
         self._checker.replace(repl)
         self._advance()
 
-    def _onReplaceAll(self, *args):
+    def _onReplaceAll(self, *args: Any) -> None:
         print(["Replace all"])
         repl = self._getRepl()
         self._checker.replace_always(repl)
         self._advance()
 
-    def _onAdd(self, *args):
+    def _onAdd(self, *args: Any) -> None:
         """Callback for the "add" button."""
         self._checker.add()
         self._advance()
 
-    def _onClose(self, w, *args):
+    def _onClose(self, w: gtk.Widget, *args: Any) -> None:
         self.emit("delete_event", gtk.gdk.Event(gtk.gdk.BUTTON_PRESS))
         return True
 
-    def _onButtonPress(self, widget, event):
+    def _onButtonPress(self, widget: gtk.Widget, event) -> None:
         if event.type == gtk.gdk._2BUTTON_PRESS:
             print(["Double click!"])
             self._onReplace()
 
-    def _onSuggestionChanged(self, widget, *args):
+    def _onSuggestionChanged(self, widget: gtk.Widget, *args: Any) -> None:
         selection = self.suggestion_list_view.get_selection()
         model, iter = selection.get_selected()
         if iter:
             suggestion = model.get_value(iter, COLUMN_SUGGESTION)
             self.replace_text.set_text(suggestion)
 
-    def _getRepl(self):
+    def _getRepl(self) -> str:
         """Get the chosen replacement string."""
         repl = self.replace_text.get_text()
         repl = self._checker.coerce_string(repl)
         return repl
 
-    def _fillSuggestionList(self, suggestions):
+    def _fillSuggestionList(self, suggestions: Iterable[str]) -> None:
         model = self.suggestion_list_view.get_model()
         model.clear()
         for suggestion in suggestions:
@@ -229,26 +229,26 @@ class GtkSpellCheckerDialog(gtk.Window):
                 ]
             )
 
-    def setSpellChecker(self, checker):
+    def setSpellChecker(self, checker: SpellChecker) -> None:
         assert checker, "checker can't be None"
         self._checker = checker
         self._dict_lable.set_text("Dictionary:%s" % (checker.dict.tag,))
 
-    def getSpellChecker(self, checker):
+    def getSpellChecker(self, checker: SpellChecker) -> Optional[SpellChecker]:
         return self._checker
 
-    def updateUI(self):
+    def updateUI(self) -> None:
         self._advance()
 
-    def _disableButtons(self):
+    def _disableButtons(self) -> None:
         for w in self._conditional_widgets:
             w.set_sensitive(False)
 
-    def _enableButtons(self):
+    def _enableButtons(self) -> None:
         for w in self._conditional_widgets:
             w.set_sensitive(True)
 
-    def _advance(self):
+    def _advance(self) -> None:
         """Advance to the next error.
         This method advances the SpellChecker to the next error, if
         any.  It then displays the error and some surrounding context,
@@ -291,7 +291,7 @@ class GtkSpellCheckerDialog(gtk.Window):
             self.replace_text.set_text("")
 
 
-def _test():
+def _test() -> None:
     from enchant.checker import SpellChecker
 
     text = "This is sme text with a fw speling errors in it. Here are a fw more to tst it ut."

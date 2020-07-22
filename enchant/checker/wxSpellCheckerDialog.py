@@ -48,6 +48,8 @@
 _DOC_ERRORS = ["ShowModal"]
 
 import wx
+from enchant.checker import SpellChecker
+from typing import Any, Optional
 
 
 class wxSpellCheckerDialog(wx.Dialog):
@@ -103,16 +105,16 @@ class wxSpellCheckerDialog(wx.Dialog):
     # Remember dialog size across invocations by storing it on the class
     sz = (300, 70)
 
-    def __init__(self, parent=None, id=-1, title="Checking Spelling..."):
-        super().__init__(
-            parent,
-            id,
-            title,
-            size=wxSpellCheckerDialog.sz,
-            style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
-        )
+    def __init__(
+        self,
+        parent: Optional[Any] = None,
+        id: int = -1,
+        title: str = "Checking Spelling...",
+        size=wxSpellCheckerDialog.sz,
+        style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
+    ) -> None:
         self._numContext = 40
-        self._checker = None
+        self._checker = None  # type: Optional[SpellChecker]
         self._buttonsEnabled = True
         self.error_text = wx.TextCtrl(
             self, -1, "", style=wx.TE_MULTILINE | wx.TE_READONLY | wx.TE_RICH
@@ -123,7 +125,7 @@ class wxSpellCheckerDialog(wx.Dialog):
         wx.EVT_LISTBOX(self, self.replace_list.GetId(), self.OnReplSelect)
         wx.EVT_LISTBOX_DCLICK(self, self.replace_list.GetId(), self.OnReplace)
 
-    def InitLayout(self):
+    def InitLayout(self) -> None:
         """Lay out controls and add buttons."""
         sizer = wx.BoxSizer(wx.HORIZONTAL)
         txtSizer = wx.BoxSizer(wx.VERTICAL)
@@ -166,7 +168,7 @@ class wxSpellCheckerDialog(wx.Dialog):
         self.SetSizer(sizer)
         sizer.Fit(self)
 
-    def Advance(self):
+    def Advance(self) -> bool:
         """Advance to the next error.
 
         This method advances the SpellChecker to the next error, if
@@ -208,24 +210,24 @@ class wxSpellCheckerDialog(wx.Dialog):
         self.replace_text.SetValue(suggs and suggs[0] or "")
         return True
 
-    def EnableButtons(self, state=True):
+    def EnableButtons(self, state: bool = True) -> None:
         """Enable the checking-related buttons"""
         if state != self._buttonsEnabled:
             for btn in self.buttons[:-1]:
                 btn.Enable(state)
             self._buttonsEnabled = state
 
-    def GetRepl(self):
+    def GetRepl(self) -> str:
         """Get the chosen replacement string."""
         repl = self.replace_text.GetValue()
         return repl
 
-    def OnAdd(self, evt):
+    def OnAdd(self, evt: Any) -> None:
         """Callback for the "add" button."""
         self._checker.add()
         self.Advance()
 
-    def OnDone(self, evt):
+    def OnDone(self, evt: Any) -> None:
         """Callback for the "close" button."""
         wxSpellCheckerDialog.sz = self.error_text.GetSizeTuple()
         if self.IsModal():
@@ -233,31 +235,31 @@ class wxSpellCheckerDialog(wx.Dialog):
         else:
             self.Close()
 
-    def OnIgnore(self, evt):
+    def OnIgnore(self, evt: Any) -> None:
         """Callback for the "ignore" button.
         This simply advances to the next error.
         """
         self.Advance()
 
-    def OnIgnoreAll(self, evt):
+    def OnIgnoreAll(self, evt: Any) -> None:
         """Callback for the "ignore all" button."""
         self._checker.ignore_always()
         self.Advance()
 
-    def OnReplace(self, evt):
+    def OnReplace(self, evt: Any) -> None:
         """Callback for the "replace" button."""
         repl = self.GetRepl()
         if repl:
             self._checker.replace(repl)
         self.Advance()
 
-    def OnReplaceAll(self, evt):
+    def OnReplaceAll(self, evt: Any) -> None:
         """Callback for the "replace all" button."""
         repl = self.GetRepl()
         self._checker.replace_always(repl)
         self.Advance()
 
-    def OnReplSelect(self, evt):
+    def OnReplSelect(self, evt: Any) -> None:
         """Callback when a new replacement option is selected."""
         sel = self.replace_list.GetSelection()
         if sel == -1:
@@ -265,11 +267,11 @@ class wxSpellCheckerDialog(wx.Dialog):
         opt = self.replace_list.GetString(sel)
         self.replace_text.SetValue(opt)
 
-    def GetSpellChecker(self):
+    def GetSpellChecker(self) -> Optional[SpellChecker]:
         """Get the spell checker object."""
         return self._checker
 
-    def SetSpellChecker(self, chkr):
+    def SetSpellChecker(self, chkr: SpellChecker) -> bool:
         """Set the spell checker, advancing to the first error.
         Return True if error(s) to correct, else False."""
         self._checker = chkr

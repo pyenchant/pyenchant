@@ -57,9 +57,10 @@ from ctypes import c_char_p, c_int, c_size_t, c_void_p, pointer, CFUNCTYPE, POIN
 import ctypes.util
 import platform
 import textwrap
+from typing import Callable, List, Optional, TypeVar  # noqa F401
 
 
-def from_prefix(prefix):
+def from_prefix(prefix: str) -> str:
     find_message("finding from prefix ", prefix)
     assert os.path.exists(prefix), prefix + "  does not exist"
     bin_path = os.path.join(prefix, "bin")
@@ -74,13 +75,13 @@ def from_prefix(prefix):
     return enchant_dll_path
 
 
-def from_env_var(library_path):
+def from_env_var(library_path: str) -> str:
     find_message("using PYENCHANT_LIBRARY_PATH env var")
     assert os.path.exists(library_path), library_path + " does not exist"
     return library_path
 
 
-def from_package_resources():
+def from_package_resources() -> Optional[str]:
     if sys.platform != "win32":
         return None
     bits, _ = platform.architecture()
@@ -93,9 +94,10 @@ def from_package_resources():
     find_message("looking in ", data_path)
     if os.path.exists(data_path):
         return from_prefix(data_path)
+    return None
 
 
-def from_system():
+def from_system() -> Optional[str]:
     # Note: keep enchant-2 first
     find_message("looking in system")
     candidates = [
@@ -112,18 +114,19 @@ def from_system():
         res = ctypes.util.find_library(name)
         if res:
             return res
+    return None
 
 
 VERBOSE_FIND = False
 
 
-def find_message(*args):
+def find_message(*args: str) -> None:
     if not VERBOSE_FIND:
         return
     print("pyenchant:: ", *args, sep="")
 
 
-def find_c_enchant_lib():
+def find_c_enchant_lib() -> Optional[str]:
     verbose = os.environ.get("PYENCHANT_VERBOSE_FIND")
     if verbose:
         global VERBOSE_FIND
@@ -185,6 +188,8 @@ t_dict_desc_func = callback(None, c_char_p, c_char_p, c_char_p, c_char_p, c_void
 
 t_broker = c_void_p
 t_dict = c_void_p
+_B = TypeVar("_B", bound=t_broker)
+_D = TypeVar("_D", bound=t_dict)
 
 
 # Now we can define the types of each function we are going to use
@@ -226,7 +231,7 @@ broker_describe1.argtypes = [t_broker, t_broker_desc_func, c_void_p]
 broker_describe1.restype = None
 
 
-def broker_describe(broker, cbfunc):
+def broker_describe(broker: _B, cbfunc) -> None:
     def cbfunc1(*args):
         cbfunc(*args[:-1])
 
@@ -238,7 +243,7 @@ broker_list_dicts1.argtypes = [t_broker, t_dict_desc_func, c_void_p]
 broker_list_dicts1.restype = None
 
 
-def broker_list_dicts(broker, cbfunc):
+def broker_list_dicts(broker: _B, cbfunc) -> None:
     def cbfunc1(*args):
         cbfunc(*args[:-1])
 
@@ -246,71 +251,73 @@ def broker_list_dicts(broker, cbfunc):
 
 
 try:
-    broker_get_param = e.enchant_broker_get_param
+    broker_get_param = e.enchant_broker_get_param  # type: Callable[[_B, bytes], bytes]
 except AttributeError:
     #  Make the lookup error occur at runtime
-    def broker_get_param(broker, name):
+    def broker_get_param(broker: _B, name: bytes) -> bytes:
         return e.enchant_broker_get_param(broker, name)
 
 
 else:
-    broker_get_param.argtypes = [t_broker, c_char_p]
-    broker_get_param.restype = c_char_p
+    broker_get_param.argtypes = [t_broker, c_char_p]  # type: ignore
+    broker_get_param.restype = c_char_p  # type: ignore
 
 try:
-    broker_set_param = e.enchant_broker_set_param
+    broker_set_param = (
+        e.enchant_broker_set_param
+    )  # type: Callable[[_B, bytes, bytes], None]
 except AttributeError:
     #  Make the lookup error occur at runtime
-    def broker_set_param(broker, name, value):
+    def broker_set_param(broker: _B, name: bytes, value: bytes) -> None:
         return e.enchant_broker_set_param(broker, name, value)
 
 
 else:
-    broker_set_param.argtypes = [t_broker, c_char_p, c_char_p]
-    broker_set_param.restype = None
+    broker_set_param.argtypes = [t_broker, c_char_p, c_char_p]  # type: ignore
+    broker_set_param.restype = None  # type: ignore
 
 try:
-    get_version = e.enchant_get_version
+    get_version = e.enchant_get_version  # type: Callable[[], bytes]
 except AttributeError:
     #  Make the lookup error occur at runtime
-    def get_version():
+    def get_version() -> bytes:
         return e.enchant_get_version()
 
 
 else:
-    get_version.argtypes = []
-    get_version.restype = c_char_p
+    get_version.argtypes = []  # type: ignore
+    get_version.restype = c_char_p  # type: ignore
 
 try:
-    set_prefix_dir = e.enchant_set_prefix_dir
+    set_prefix_dir = e.enchant_set_prefix_dir  # type: Callable[[bytes], None]
 except AttributeError:
     #  Make the lookup error occur at runtime
-    def set_prefix_dir(path):
+    def set_prefix_dir(path: bytes):
         return e.enchant_set_prefix_dir(path)
 
 
 else:
-    set_prefix_dir.argtypes = [c_char_p]
-    set_prefix_dir.restype = None
+    set_prefix_dir.argtypes = [c_char_p]  # type: ignore
+    set_prefix_dir.restype = None  # type: ignore
 
 try:
-    get_user_config_dir = e.enchant_get_user_config_dir
+    get_user_config_dir = e.enchant_get_user_config_dir  # type: Callable[[], bytes]
 except AttributeError:
     #  Make the lookup error occur at runtime
-    def get_user_config_dir():
+    def get_user_config_dir() -> bytes:
         return e.enchant_get_user_config_dir()
 
 
 else:
-    get_user_config_dir.argtypes = []
-    get_user_config_dir.restype = c_char_p
+    get_user_config_dir.argtypes = []  # type: ignore
+    get_user_config_dir.restype = c_char_p  # type: ignore
 
 dict_check1 = e.enchant_dict_check
 dict_check1.argtypes = [t_dict, c_char_p, c_size_t]
 dict_check1.restype = c_int
 
 
-def dict_check(dict, word):
+def dict_check(dict: _D, word: bytes) -> int:
     return dict_check1(dict, word, len(word))
 
 
@@ -319,7 +326,7 @@ dict_suggest1.argtypes = [t_dict, c_char_p, c_size_t, POINTER(c_size_t)]
 dict_suggest1.restype = POINTER(c_char_p)
 
 
-def dict_suggest(dict, word):
+def dict_suggest(dict: _D, word: bytes) -> List[bytes]:
     num_suggs_p = pointer(c_size_t(0))
     suggs_c = dict_suggest1(dict, word, len(word), num_suggs_p)
     suggs = []
@@ -337,7 +344,7 @@ dict_add1.argtypes = [t_dict, c_char_p, c_size_t]
 dict_add1.restype = None
 
 
-def dict_add(dict, word):
+def dict_add(dict: _D, word: bytes) -> None:
     return dict_add1(dict, word, len(word))
 
 
@@ -346,7 +353,7 @@ dict_add_to_pwl1.argtypes = [t_dict, c_char_p, c_size_t]
 dict_add_to_pwl1.restype = None
 
 
-def dict_add_to_pwl(dict, word):
+def dict_add_to_pwl(dict: _D, word: bytes) -> None:
     return dict_add_to_pwl1(dict, word, len(word))
 
 
@@ -355,7 +362,7 @@ dict_add_to_session1.argtypes = [t_dict, c_char_p, c_size_t]
 dict_add_to_session1.restype = None
 
 
-def dict_add_to_session(dict, word):
+def dict_add_to_session(dict: _D, word: bytes) -> None:
     return dict_add_to_session1(dict, word, len(word))
 
 
@@ -364,7 +371,7 @@ dict_remove1.argtypes = [t_dict, c_char_p, c_size_t]
 dict_remove1.restype = None
 
 
-def dict_remove(dict, word):
+def dict_remove(dict: _D, word: bytes) -> None:
     return dict_remove1(dict, word, len(word))
 
 
@@ -373,7 +380,7 @@ dict_remove_from_session1.argtypes = [t_dict, c_char_p, c_size_t]
 dict_remove_from_session1.restype = c_int
 
 
-def dict_remove_from_session(dict, word):
+def dict_remove_from_session(dict: _D, word: bytes) -> int:
     return dict_remove_from_session1(dict, word, len(word))
 
 
@@ -382,7 +389,7 @@ dict_is_added1.argtypes = [t_dict, c_char_p, c_size_t]
 dict_is_added1.restype = c_int
 
 
-def dict_is_added(dict, word):
+def dict_is_added(dict: _D, word: bytes) -> int:
     return dict_is_added1(dict, word, len(word))
 
 
@@ -391,7 +398,7 @@ dict_is_removed1.argtypes = [t_dict, c_char_p, c_size_t]
 dict_is_removed1.restype = c_int
 
 
-def dict_is_removed(dict, word):
+def dict_is_removed(dict: _D, word: bytes) -> int:
     return dict_is_removed1(dict, word, len(word))
 
 
@@ -400,7 +407,7 @@ dict_store_replacement1.argtypes = [t_dict, c_char_p, c_size_t, c_char_p, c_size
 dict_store_replacement1.restype = None
 
 
-def dict_store_replacement(dict, mis, cor):
+def dict_store_replacement(dict: _D, mis: bytes, cor: bytes) -> None:
     return dict_store_replacement1(dict, mis, len(mis), cor, len(cor))
 
 
@@ -417,7 +424,7 @@ dict_describe1.argtypes = [t_dict, t_dict_desc_func, c_void_p]
 dict_describe1.restype = None
 
 
-def dict_describe(dict, cbfunc):
+def dict_describe(dict: _D, cbfunc) -> None:
     def cbfunc1(tag, name, desc, file, data):
         cbfunc(tag, name, desc, file)
 

@@ -13,7 +13,7 @@ ENCHANT_TAG = "v2.2.7-appveyor-41"
 DOWNLOAD_URL = "https://github.com/pyenchant/enchant/releases/download/"
 
 
-def bootstrap_windows(platform):
+def bootstrap_windows(platform: str) -> None:
     bits = {"win32": "32", "win_amd64": "64"}[platform]
     archive_name = "enchant-prefix" + "-" + bits + ".zip"
     artifact_url = DOWNLOAD_URL + ENCHANT_TAG + "/" + archive_name
@@ -27,7 +27,7 @@ def bootstrap_windows(platform):
     cleanup_data(data_path, bits)
 
 
-def rm(path):
+def rm(path: str) -> None:
     if os.path.exists(path):
         print("-> rm", path)
         if os.path.isdir(path):
@@ -36,19 +36,19 @@ def rm(path):
             os.remove(path)
 
 
-def clean_libs(path):
+def clean_libs(path: str) -> None:
     for static_lib in glob.glob(path + "/*.a"):
         rm(static_lib)
     for la_file in glob.glob(path + "/*.la"):
         rm(la_file)
 
 
-def clean_bin(path):
+def clean_bin(path: str) -> None:
     for exe in glob.glob(path + "/*.exe"):
         rm(exe)
 
 
-def cleanup_data(data_path, bits):
+def cleanup_data(data_path: str, bits: str) -> None:
     """Remove extraneous files from the enchant artifact"""
     print(":: Cleaning up ...")
     mingw_path = os.path.join(data_path, "mingw" + bits)
@@ -63,7 +63,7 @@ def cleanup_data(data_path, bits):
     clean_bin(os.path.join(mingw_path, "bin"))
 
 
-def main():
+def main() -> None:
     bits, linkage = platform.architecture()
     if sys.platform == "win32":
         if linkage != "WindowsPE":

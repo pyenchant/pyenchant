@@ -44,9 +44,11 @@ includes:
 
 from enchant.errors import Error
 import locale
+from enchant.errors import *
+from typing import Callable, Iterable, List, Optional, Sequence  # noqa F401
 
 
-def levenshtein(s1, s2):
+def levenshtein(s1: str, s2: str) -> int:
     """Calculate the Levenshtein distance between two strings.
 
     This is straight from Wikipedia.
@@ -56,7 +58,7 @@ def levenshtein(s1, s2):
     if not s1:
         return len(s2)
 
-    previous_row = range(len(s2) + 1)
+    previous_row = range(len(s2) + 1)  # type: Sequence[int]
     for i, c1 in enumerate(s1):
         current_row = [i + 1]
         for j, c2 in enumerate(s2):
@@ -69,7 +71,12 @@ def levenshtein(s1, s2):
     return previous_row[-1]
 
 
-def trim_suggestions(word, suggs, maxlen, calcdist=None):
+def trim_suggestions(
+    word: str,
+    suggs: Iterable[str],
+    maxlen: int,
+    calcdist: Callable[[str, str], int] = None,
+) -> List[str]:
     """Trim a list of suggestions to a maximum length.
 
     If the list of suggested words is too long, you can use this function
@@ -88,7 +95,7 @@ def trim_suggestions(word, suggs, maxlen, calcdist=None):
     return [s for (l, s) in decorated[:maxlen]]
 
 
-def get_default_language(default=None):
+def get_default_language(default: Optional[str] = None) -> Optional[str]:
     """Determine the user's default language, if possible.
 
     This function uses the 'locale' module to try to determine
@@ -117,4 +124,4 @@ def get_default_language(default=None):
     return default
 
 
-get_default_language._DOC_ERRORS = ["LC"]
+get_default_language._DOC_ERRORS = ["LC"]  # type: ignore

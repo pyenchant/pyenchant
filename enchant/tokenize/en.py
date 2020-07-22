@@ -39,6 +39,10 @@
 import unicodedata
 
 import enchant.tokenize
+from typing import Any, Callable, Container, Union  # noqa F401
+
+_TextLike = Union[bytes, str, bytearray]
+_BinaryLike = Union[bytes, bytearray]
 
 
 class tokenize(enchant.tokenize.tokenize):  # noqa: N801
@@ -61,9 +65,9 @@ class tokenize(enchant.tokenize.tokenize):  # noqa: N801
 
     _DOC_ERRORS = ["pos", "pos"]
 
-    def __init__(self, text, valid_chars=None):
-        self._valid_chars = valid_chars
-        self._text = text
+    def __init__(self, text: _TextLike, valid_chars: Container[str] = None) -> None:
+        self._valid_chars = valid_chars  # type: Container[str] # type: ignore
+        self._text = text  # type: ignore
         self._offset = 0
         # Select proper implementation of self._consume_alpha.
         # 'text' isn't necessarily a string (it could be e.g. a mutable array)
@@ -81,12 +85,12 @@ class tokenize(enchant.tokenize.tokenize):  # noqa: N801
             else:
                 self._initialize_for_binary()
 
-    def _initialize_for_binary(self):
-        self._consume_alpha = self._consume_alpha_b
+    def _initialize_for_binary(self) -> None:
+        self._consume_alpha = self._consume_alpha_b  # type: Callable[[Any, int], int]
         if self._valid_chars is None:
             self._valid_chars = ("'",)
 
-    def _initialize_for_unicode(self):
+    def _initialize_for_unicode(self) -> None:
         self._consume_alpha = self._consume_alpha_u
         if self._valid_chars is None:
             # XXX TODO: this doesn't seem to work correctly with the
@@ -95,7 +99,7 @@ class tokenize(enchant.tokenize.tokenize):  # noqa: N801
             # self._valid_chars = (u"'",u"\u2019")
             self._valid_chars = ("'",)
 
-    def _consume_alpha_b(self, text, offset):
+    def _consume_alpha_b(self, text: _BinaryLike, offset: int) -> int:
         """Consume an alphabetic character from the given bytestring.
 
         Given a bytestring and the current offset, this method returns
@@ -110,7 +114,7 @@ class tokenize(enchant.tokenize.tokenize):  # noqa: N801
             return self._consume_alpha_utf8(text, offset)
         return 0
 
-    def _consume_alpha_utf8(self, text, offset):
+    def _consume_alpha_utf8(self, text: _BinaryLike, offset: int) -> int:
         """Consume a sequence of utf8 bytes forming an alphabetic character."""
         incr = 2
         u = ""
@@ -122,7 +126,7 @@ class tokenize(enchant.tokenize.tokenize):  # noqa: N801
                 except AttributeError:
                     #  Looks like it was e.g. a mutable char array.
                     try:
-                        s = text[offset : offset + incr].tostring()
+                        s = text[offset : offset + incr].tostring()  # type: ignore
                     except AttributeError:
                         s = "".join([c for c in text[offset : offset + incr]])
                     u = s.decode("utf8")
@@ -136,7 +140,7 @@ class tokenize(enchant.tokenize.tokenize):  # noqa: N801
             return incr
         return 0
 
-    def _consume_alpha_u(self, text, offset):
+    def _consume_alpha_u(self, text: str, offset: int) -> int:
         """Consume an alphabetic character from the given unicode string.
 
         Given a unicode string and the current offset, this method returns
@@ -154,7 +158,7 @@ class tokenize(enchant.tokenize.tokenize):  # noqa: N801
                 incr += 1
         return incr
 
-    def next(self):
+    def next(self) -> enchant.tokenize.Token:
         text = self._text
         offset = self._offset
         while offset < len(text):
