@@ -321,8 +321,8 @@ class CmdLineChecker:
             return True
 
         if cmd == "e":
-            repl = input(info("New Word: "))
-            self.error.replace(repl.strip())
+            replacement = get_input(info("New Word: "))
+            self.error.replace(replacement.strip())
             return True
 
         if cmd == "q":
