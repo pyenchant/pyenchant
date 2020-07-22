@@ -108,10 +108,10 @@ class tokenize(enchant.tokenize.tokenize):  # noqa: N801
         result in multiple characters being consumed.
         """
         assert offset < len(text)
-        if text[offset].isalpha():
-            return 1
-        elif text[offset] >= "\x80":
+        if text[offset] >= 0x80:
             return self._consume_alpha_utf8(text, offset)
+        if chr(text[offset]).isalpha():
+            return 1
         return 0
 
     def _consume_alpha_utf8(self, text: _BinaryLike, offset: int) -> int:
@@ -128,7 +128,7 @@ class tokenize(enchant.tokenize.tokenize):  # noqa: N801
                     try:
                         s = text[offset : offset + incr].tostring()  # type: ignore
                     except AttributeError:
-                        s = "".join([c for c in text[offset : offset + incr]])
+                        s = bytes(c for c in text[offset : offset + incr])
                     u = s.decode("utf8")
             except UnicodeDecodeError:
                 incr += 1

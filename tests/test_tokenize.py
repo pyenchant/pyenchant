@@ -461,3 +461,24 @@ def test_typographic_apostrophe():
     text = "They\u2019re here"
     expected_tokens = [("They", 0), ("re", 5), ("here", 8)]
     assert list(tokenize_en(text)) == expected_tokens
+
+
+@pytest.mark.parametrize(
+    "text,expected",
+    [
+        ("", []),
+        (b"", []),
+        (bytearray(), []),
+        ("a", [("a", 0)]),
+        (b"a", [(b"a", 0)]),
+        (bytearray((97,)), [(bytearray((97,)), 0)]),
+        ("ä", [("ä", 0)]),
+        (b"\xc3", []),
+        (b"\xc3\xa4", [(b"\xc3\xa4", 0)]),
+        (bytearray((0xC3,)), []),
+        (bytearray((0xC3, 0xA4)), [(bytearray((0xC3, 0xA4)), 0)]),
+    ],
+)
+def test_tokenize_en_byte(text, expected):
+    """Test tokeniting bytes."""
+    assert list(tokenize_en(text)) == expected
