@@ -228,11 +228,7 @@ class GtkSpellCheckerDialog(gtk.Window):
         model.clear()
         for suggestion in suggestions:
             value = "%s" % (suggestion,)
-            model.append(
-                [
-                    value,
-                ]
-            )
+            model.append([value])
 
     def setSpellChecker(self, checker: SpellChecker) -> None:
         assert checker, "checker can't be None"
