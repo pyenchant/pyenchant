@@ -1,8 +1,6 @@
 import os
-import platform
 import shutil
 import subprocess
-import sys
 
 
 from bootstrap import bootstrap_windows
