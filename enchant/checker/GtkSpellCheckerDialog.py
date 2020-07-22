@@ -175,17 +175,20 @@ class GtkSpellCheckerDialog(gtk.Window):
         self._advance()
 
     def _onIgnoreAll(self, w: gtk.Widget, *args: Any) -> None:
+        assert self._checker
         print(["ignore all"])
         self._checker.ignore_always()
         self._advance()
 
     def _onReplace(self, *args: Any) -> None:
+        assert self._checker
         print(["Replace"])
         repl = self._getRepl()
         self._checker.replace(repl)
         self._advance()
 
     def _onReplaceAll(self, *args: Any) -> None:
+        assert self._checker
         print(["Replace all"])
         repl = self._getRepl()
         self._checker.replace_always(repl)
@@ -193,10 +196,11 @@ class GtkSpellCheckerDialog(gtk.Window):
 
     def _onAdd(self, *args: Any) -> None:
         """Callback for the "add" button."""
+        assert self._checker
         self._checker.add()
         self._advance()
 
-    def _onClose(self, w: gtk.Widget, *args: Any) -> None:
+    def _onClose(self, w: gtk.Widget, *args: Any) -> bool:
         self.emit("delete_event", gtk.gdk.Event(gtk.gdk.BUTTON_PRESS))
         return True
 
@@ -214,6 +218,7 @@ class GtkSpellCheckerDialog(gtk.Window):
 
     def _getRepl(self) -> str:
         """Get the chosen replacement string."""
+        assert self._checker
         repl = self.replace_text.get_text()
         repl = self._checker.coerce_string(repl)
         return repl
