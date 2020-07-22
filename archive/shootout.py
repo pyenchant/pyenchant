@@ -44,10 +44,7 @@ import enchant.utils
 # Providers can also be named "pypwl:<encode>" where <encode> is
 # the encoding function to use for PyPWL.  All PyPWL instances
 # will use <wordsfile> as their word list
-providers = (
-    "aspell",
-    "pypwl",
-)
+providers = ("aspell", "pypwl")
 
 # File containing test cases, and the language they are in
 # A suitable file can be found at http://aspell.net/test/batch0.tab
@@ -115,7 +112,7 @@ for testcase in testcases:
             break
     # Actually do the test
     testnum += 1
-    print "TEST", testnum, ":", mis, "->", cor
+    print("TEST", testnum, ":", mis, "->", cor)
     for dictnum, dict in enumerate(dicts):
         # Check whether it contains the correct word
         if not dict.check(cor):
@@ -131,16 +128,16 @@ numtests = testnum
 
 # Print a report for each provider
 for pnum, prov in enumerate(providers):
-    print "======================================="
+    print("=======================================")
     exdists = [d for d in dists[pnum] if d >= 0]
-    print "PROVIDER:", prov
-    print "  EXISTED: %.1f" % (((numtests - len(missed[pnum])) * 100.0) / numtests,)
-    print "  SUGGESTED: %.1f" % ((len(exdists) * 100.0) / numtests,)
-    print "  SUGGP: %.1f" % ((len(exdists) * 100.0) / (numtests - len(missed[pnum])),)
-    print "  FIRST: %.1f" % ((len([d for d in exdists if d == 0]) * 100.0) / numtests,)
-    print "  FIRST5: %.1f" % ((len([d for d in exdists if d < 5]) * 100.0) / numtests,)
-    print "  FIRST10: %.1f" % (
-        (len([d for d in exdists if d < 10]) * 100.0) / numtests,
+    print("PROVIDER:", prov)
+    print("  EXISTED: %.1f" % (((numtests - len(missed[pnum])) * 100.0) / numtests,))
+    print("  SUGGESTED: %.1f" % ((len(exdists) * 100.0) / numtests,))
+    print("  SUGGP: %.1f" % ((len(exdists) * 100.0) / (numtests - len(missed[pnum])),))
+    print("  FIRST: %.1f" % ((len([d for d in exdists if d == 0]) * 100.0) / numtests,))
+    print("  FIRST5: %.1f" % ((len([d for d in exdists if d < 5]) * 100.0) / numtests,))
+    print(
+        "  FIRST10: %.1f" % ((len([d for d in exdists if d < 10]) * 100.0) / numtests,)
     )
-    print "  AVERAGE DIST TO CORRECTION: %.2f" % (float(sum(exdists)) / len(exdists),)
-print "======================================="
+    print("  AVERAGE DIST TO CORRECTION: %.2f" % (float(sum(exdists)) / len(exdists),))
+print("=======================================")
