@@ -35,7 +35,7 @@ This module provides several classes for performing spell checking
 via the Enchant spellchecking library.  For more details on Enchant,
 visit the project website:
 
-    http://www.abisource.com/enchant/
+    https://abiword.github.io/enchant/
 
 Spellchecking is performed using 'Dict' objects, which represent
 a language dictionary.  Their use is best demonstrated by a quick

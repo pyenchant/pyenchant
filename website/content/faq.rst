@@ -43,7 +43,7 @@ Most of the solutions listed above are tied to a single spellchecking
 platform, such as aspell or MySpell. By contrast, Enchant supports
 multiple spellchecking platforms. A good discussion of why this is an
 advantage can be found on the `Enchant
-website <http://www.abisource.com/enchant/>`__ under the heading
+website <https://abiword.github.io/enchant/>`__ under the heading
 "Enchant and Multiple Backends".
 
 -  Different backends can be used for different languages, depending on
