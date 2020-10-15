@@ -4,7 +4,7 @@ PyEnchant
 Introduction
 ------------
 
-PyEnchant is a spellchecking library for Python, based on the excellent `Enchant <http://www.abisource.com/enchant/>`_ library.
+PyEnchant is a spellchecking library for Python, based on the excellent `Enchant <https://abiword.github.io/enchant/>`_ library.
 
 PyEnchant combines all the functionality of the underlying Enchant
 library with the flexibility of Python and a nice "Pythonic"
