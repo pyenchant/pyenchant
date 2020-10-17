@@ -395,7 +395,7 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">tknzr</span><span class="p">(</span><span class="s2">&quot;send an email to fake@example.com please&quot;</span><span class="p">)]</span>
 <span class="go">[(&#39;send&#39;, 0), (&#39;an&#39;, 5), (&#39;email&#39;, 8), (&#39;to&#39;, 14), (&#39;fake@example.com&#39;, 17), (&#39;please&#39;, 34)]</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tknzr</span> <span class="o">=</span> <span class="n">get_tokenizer</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">,[</span><span class="n">EmailFilter</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tknzr</span> <span class="o">=</span> <span class="n">get_tokenizer</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">,</span> <span class="n">filters</span><span class="o">=</span><span class="p">[</span><span class="n">EmailFilter</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">tknzr</span><span class="p">(</span><span class="s2">&quot;send an email to fake@example.com please&quot;</span><span class="p">)]</span>
 <span class="go">[(&#39;send&#39;, 0), (&#39;an&#39;, 5), (&#39;email&#39;, 8), (&#39;to&#39;, 14), (&#39;please&#39;, 34)]</span>
 </pre></div>
