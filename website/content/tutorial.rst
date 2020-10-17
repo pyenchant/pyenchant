@@ -234,7 +234,7 @@ A filter is simply a wrapper around a tokenizer that can (1) drop certain words 
   >>> [w for w in tknzr("send an email to fake@example.com please")]
   [('send', 0), ('an', 5), ('email', 8), ('to', 14), ('fake@example.com', 17), ('please', 34)]
   >>>
-  >>> tknzr = get_tokenizer("en_US",[EmailFilter])
+  >>> tknzr = get_tokenizer("en_US", filters=[EmailFilter])
   >>> [w for w in tknzr("send an email to fake@example.com please")]
   [('send', 0), ('an', 5), ('email', 8), ('to', 14), ('please', 34)]
 
