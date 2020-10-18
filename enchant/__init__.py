@@ -89,7 +89,7 @@ from enchant.utils import get_default_language
 from enchant.pypwl import PyPWL
 
 
-class ProviderDesc(object):
+class ProviderDesc:
     """Simple class describing an Enchant provider.
 
     Each provider has the following information associated with it:
@@ -122,7 +122,7 @@ class ProviderDesc(object):
         return hash(self.name + self.desc + self.file)
 
 
-class _EnchantObject(object):
+class _EnchantObject:
     """Base class for enchant objects.
 
     This class implements some general functionality for interfacing with
@@ -205,7 +205,7 @@ class Broker(_EnchantObject):
         This method is the constructor for the 'Broker' object.  No
         arguments are required.
         """
-        _EnchantObject.__init__(self)
+        super().__init__()
 
     def _init_this(self):
         self._this = _e.broker_init()
@@ -222,7 +222,7 @@ class Broker(_EnchantObject):
             pass
 
     def __getstate__(self):
-        state = super(Broker, self).__getstate__()
+        state = super().__getstate__()
         state.pop("_live_dicts")
         return state
 
@@ -539,7 +539,7 @@ class Dict(_EnchantObject):
             broker = _broker
         self._broker = broker
         # Now let the superclass initialise the C-library object
-        _EnchantObject.__init__(self)
+        super().__init__()
 
     def _init_this(self):
         # Create dead object if False was given as the tag.
@@ -591,7 +591,7 @@ class Dict(_EnchantObject):
         """
         if self._broker is None or self._broker._this is None:
             self._this = None
-        _EnchantObject._check_this(self, msg)
+        super()._check_this(msg)
 
     def _raise_error(self, default="Unspecified Error", eclass=Error):
         """Overrides _EnchantObject._raise_error to check dict errors."""
@@ -778,7 +778,7 @@ class DictWithPWL(Dict):
         exclude list.  If this file does not exist, it is created with
         default permissions.
         """
-        Dict.__init__(self, tag, broker)
+        super().__init__(tag, broker)
         if pwl is not None:
             if not os.path.exists(pwl):
                 f = open(pwl, "wt")
@@ -802,7 +802,7 @@ class DictWithPWL(Dict):
             self._free()
         if self.pel is None:
             self._free()
-        Dict._check_this(self, msg)
+        super()._check_this(msg)
         self.pwl._check_this(msg)
         self.pel._check_this(msg)
 
@@ -814,7 +814,7 @@ class DictWithPWL(Dict):
         if self.pel is not None:
             self.pel._free()
             self.pel = None
-        Dict._free(self)
+        super()._free()
 
     def check(self, word):
         """Check spelling of a word.
@@ -827,7 +827,7 @@ class DictWithPWL(Dict):
             return False
         if self.pwl.check(word):
             return True
-        if Dict.check(self, word):
+        if super().check(word):
             return True
         return False
 
@@ -837,7 +837,7 @@ class DictWithPWL(Dict):
         This method tries to guess the correct spelling for a given
         word, returning the possibilities in a list.
         """
-        suggs = Dict.suggest(self, word)
+        suggs = super().suggest(word)
         suggs.extend([w for w in self.pwl.suggest(word) if w not in suggs])
         for i in range(len(suggs) - 1, -1, -1):
             if self.pel.check(suggs[i]):

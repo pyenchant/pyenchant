@@ -349,7 +349,7 @@ class CmdLineChecker:
         file's contents into a unicode string.  The output will be written
         in the same encoding.
         """
-        inStr = "".join(open(infile, "r").readlines())
+        inStr = "".join(open(infile).readlines())
         if enc is not None:
             inStr = inStr.decode(enc)
         self._checker.set_text(inStr)

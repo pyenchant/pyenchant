@@ -43,7 +43,6 @@ prototype for the C version found in Enchant).
 
 """
 
-from __future__ import generators
 
 import os
 import warnings
@@ -179,7 +178,7 @@ class PyPWL:
         if pwl is not None:
             self.pwl = os.path.abspath(pwl)
             self.tag = self.pwl
-            pwl_f = open(pwl, "r")
+            pwl_f = open(pwl)
             for ln in pwl_f:
                 word = ln.strip()
                 self.add_to_session(word)
