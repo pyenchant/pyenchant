@@ -52,7 +52,7 @@ def create_list_view(col_label,):
 
 class GtkSpellCheckerDialog(gtk.Window):
     def __init__(self, *args, **kwargs):
-        gtk.Window.__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.set_title("Spell check")
         self.set_default_size(350, 200)
 
