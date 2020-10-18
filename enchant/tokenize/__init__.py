@@ -241,7 +241,7 @@ class empty_tokenize(tokenize):  # noqa: N801
     _DOC_ERRORS = []
 
     def __init__(self):
-        tokenize.__init__(self, "")
+        super().__init__("")
 
     def next(self):
         raise StopIteration()
@@ -253,7 +253,7 @@ class unit_tokenize(tokenize):  # noqa: N801
     _DOC_ERRORS = []
 
     def __init__(self, text):
-        tokenize.__init__(self, text)
+        super().__init__(text)
         self._done = False
 
     def next(self):
@@ -346,7 +346,7 @@ class Chunker(tokenize):
     pass
 
 
-class Filter(object):
+class Filter:
     """Base class for token filtering functions.
 
     A filter is designed to wrap a tokenizer (or another filter) and do
@@ -388,7 +388,7 @@ class Filter(object):
         """
         return unit_tokenize(word)
 
-    class _TokenFilter(object):
+    class _TokenFilter:
         """Private inner class implementing the tokenizer-wrapping logic.
 
         This might seem convoluted, but we're trying to create something

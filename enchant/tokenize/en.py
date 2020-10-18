@@ -93,7 +93,7 @@ class tokenize(enchant.tokenize.tokenize):  # noqa: N801
             # MySpell provider, disabling for now.
             # Allow unicode typographic apostrophe
             # self._valid_chars = (u"'",u"\u2019")
-            self._valid_chars = (u"'",)
+            self._valid_chars = ("'",)
 
     def _consume_alpha_b(self, text, offset):
         """Consume an alphabetic character from the given bytestring.

@@ -104,8 +104,7 @@ class wxSpellCheckerDialog(wx.Dialog):
     sz = (300, 70)
 
     def __init__(self, parent=None, id=-1, title="Checking Spelling..."):
-        wx.Dialog.__init__(
-            self,
+        super().__init__(
             parent,
             id,
             title,
@@ -280,7 +279,7 @@ class wxSpellCheckerDialog(wx.Dialog):
 def _test():
     class TestDialog(wxSpellCheckerDialog):
         def __init__(self, *args):
-            wxSpellCheckerDialog.__init__(self, *args)
+            super().__init__(*args)
             wx.EVT_CLOSE(self, self.OnClose)
 
         def OnClose(self, evnt):
