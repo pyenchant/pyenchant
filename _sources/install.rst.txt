@@ -9,7 +9,7 @@ The PyEnchant package is available `on pypi <https://pypi.org/project/pyenchant>
 
 You can install it with ``pip`` as usual.
 
-However, to work properly,  PyEnchant needs to:
+However, to work properly, PyEnchant needs to:
 
 * find the Enchant C library
 * find the dictionaries for your particular language
@@ -44,6 +44,16 @@ The quickest way is to install `libenchant` using `Homebrew <https://brew.sh/>`_
 
     brew update
     brew install enchant
+
+If you are using `MacPorts <https://www.macports.org/>`_ you can also
+install the `enchant2 <https://github.com/macports/macports-
+ports/tree/master/textproc/enchant2>`_ package. Please make sure to add
+the port variants for the spellers you’d like to use. For example, to
+build the enchant library for aspell and hunspell, use:
+
+.. code:: bash
+
+   sudo port install enchant2 +aspell +hunspell +applespell
 
 On Windows
 +++++++++++

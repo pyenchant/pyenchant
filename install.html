@@ -179,7 +179,7 @@ the time of writing - <a class="reference external" href="https://github.com/pye
 being the authoritative source.</p>
 <p>The PyEnchant package is available <a class="reference external" href="https://pypi.org/project/pyenchant">on pypi</a>.</p>
 <p>You can install it with <code class="docutils literal notranslate"><span class="pre">pip</span></code> as usual.</p>
-<p>However, to work properly,  PyEnchant needs to:</p>
+<p>However, to work properly, PyEnchant needs to:</p>
 <ul class="simple">
 <li><p>find the Enchant C library</p></li>
 <li><p>find the dictionaries for your particular language</p></li>
@@ -205,6 +205,13 @@ might not bring along <cite>binutils</cite> by default.</p>
 <p>The quickest way is to install <cite>libenchant</cite> using <a class="reference external" href="https://brew.sh/">Homebrew</a>:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">brew update</span>
 <span class="go">brew install enchant</span>
+</pre></div>
+</div>
+<p>If you are using <a class="reference external" href="https://www.macports.org/">MacPorts</a> you can also
+install the <a class="reference external" href="https://github.com/macports/macports-ports/tree/master/textproc/enchant2">enchant2</a> package. Please make sure to add
+the port variants for the spellers you’d like to use. For example, to
+build the enchant library for aspell and hunspell, use:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo port install enchant2 +aspell +hunspell +applespell
 </pre></div>
 </div>
 </div>
