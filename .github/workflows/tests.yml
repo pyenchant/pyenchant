@@ -11,11 +11,6 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         python: [3.5, 3.6, 3.7, 3.8, pypy3]
-        exclude:
-         # pypy3 on Windows has a bug that breaks tox:
-         # https://foss.heptapod.net/pypy/pypy/-/issues/3331
-         - python: pypy3
-           os: windows-latest
         include:
          - python: 3.5
            tox_env: py35
