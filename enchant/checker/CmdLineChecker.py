@@ -41,11 +41,6 @@ import sys
 
 from enchant.checker import SpellChecker
 
-try:
-    get_input = raw_input  # Python 2.x
-except NameError:
-    get_input = input  # Python 3.x
-
 # Helpers
 
 colors = {
@@ -277,7 +272,7 @@ class CmdLineChecker:
         self.print_suggestions()
 
     def read_command(self):
-        cmd = get_input(">> ")
+        cmd = input(">> ")
         cmd = cmd.strip()
 
         if cmd.isdigit():
@@ -324,7 +319,7 @@ class CmdLineChecker:
             return True
 
         if cmd == "e":
-            repl = get_input(info("New Word: "))
+            repl = input(info("New Word: "))
             self.error.replace(repl.strip())
             return True
 
