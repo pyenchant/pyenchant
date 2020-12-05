@@ -1,6 +1,6 @@
 name: website
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   website:
