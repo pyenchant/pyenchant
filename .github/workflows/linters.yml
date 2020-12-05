@@ -1,6 +1,6 @@
 name: linters
 
-on: [push]
+on: [push, pull_request
 
 jobs:
   run_linters:
