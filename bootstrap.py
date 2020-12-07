@@ -52,7 +52,7 @@ def cleanup_data(data_path, bits):
     """ Remove extraneous files from the enchant artifact """
     print(":: Cleaning up ...")
     mingw_path = os.path.join(data_path, "mingw" + bits)
-    # Better filter extra files there that on the appveyor script
+    # Better filter extra files there than in the appveyor script
     for sub_dir in ["share/man", "include", "lib/pkgconfig"]:
         to_rm = os.path.join(mingw_path, sub_dir)
         rm(to_rm)
