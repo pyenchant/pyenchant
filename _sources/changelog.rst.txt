@@ -1,10 +1,13 @@
 Changelog
 =========
 
-Unreleased
-----------
+3.2.0 (2020-12-08)
+-------------------
 
 * Add support for Python 3.9
+* Add trove classifiers for all supported Python versions
+* Run ``pyupgrade`` across the code base
+* Update documentation about MacPorts
 
 3.1.1 (2020-05-31)
 ------------------
