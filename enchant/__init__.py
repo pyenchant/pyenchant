@@ -554,7 +554,7 @@ class Dict(_EnchantObject):
         # Calling free() might fail if python is shutting down
         try:
             self._free()
-        except AttributeError:
+        except (AttributeError, TypeError):
             pass
 
     def _switch_this(self, this, broker):
