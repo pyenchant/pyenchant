@@ -1,10 +1,13 @@
 Changelog
 =========
 
-Next release
-------------
+3.2.1 (2021-06-24)
+--------------------
 
-* Default development branch is now called ``main``.
+
+* Fix ``Dict.__del__`` sometimes raising `TypeError` upon exit (#98). Patch by @rr-
+* Default development branch is now called ``main``
+* Bump ``black`` to 21.6b0
 
 3.2.0 (2020-12-08)
 -------------------
