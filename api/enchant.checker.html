@@ -3,9 +3,9 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>enchant.checker: High-level spellchecking functionality &mdash; PyEnchant 3.2.0 documentation</title>
   
@@ -13,10 +13,15 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
 
   
   
+
   
+  
+
   
 
   
@@ -26,10 +31,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -51,7 +56,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> PyEnchant
+            <a href="../index.html" class="icon icon-home"> PyEnchant
           
 
           
@@ -144,6 +149,8 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
@@ -157,7 +164,7 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="../_sources/api/enchant.checker.rst.txt" rel="nofollow"> View page source</a>
           
         
@@ -182,8 +189,8 @@ if given an array of characters to work with.</p>
 <p>This package also contains several interfaces to the SpellChecker class,
 such as a wxPython GUI dialog and a command-line interface.</p>
 <dl class="py class">
-<dt id="enchant.checker.SpellChecker">
-<em class="property">class </em><code class="sig-prename descclassname">enchant.checker.</code><code class="sig-name descname">SpellChecker</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lang</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">text</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tokenize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">chunkers</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">filters</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="enchant.checker.SpellChecker">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">enchant.checker.</span></span><span class="sig-name descname"><span class="pre">SpellChecker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lang</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tokenize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunkers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class implementing stateful spellchecking behaviour.</p>
 <p>This class is designed to implement a spell-checking loop over
 a block of text, correcting/ignoring/replacing words as required.
@@ -225,28 +232,28 @@ array is modified outside of the spellchecking loop, use the
 ‘set_offset’ method to reposition the internal loop pointer
 to make sure it doesn’t skip any words.</p>
 <dl class="py method">
-<dt id="enchant.checker.SpellChecker.add">
-<code class="sig-name descname">add</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.add" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="enchant.checker.SpellChecker.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.add" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add given word to the personal word list.</p>
 <p>If no word is given, the current erroneous word is added.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="enchant.checker.SpellChecker.add_to_personal">
-<code class="sig-name descname">add_to_personal</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.add_to_personal" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="enchant.checker.SpellChecker.add_to_personal">
+<span class="sig-name descname"><span class="pre">add_to_personal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.add_to_personal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add given word to the personal word list.</p>
 <p>If no word is given, the current erroneous word is added.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="enchant.checker.SpellChecker.check">
-<code class="sig-name descname">check</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.check" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="enchant.checker.SpellChecker.check">
+<span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.check" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check correctness of the given word.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="enchant.checker.SpellChecker.coerce_string">
-<code class="sig-name descname">coerce_string</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em>, <em class="sig-param"><span class="n">enc</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.coerce_string" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="enchant.checker.SpellChecker.coerce_string">
+<span class="sig-name descname"><span class="pre">coerce_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.coerce_string" title="Permalink to this definition">¶</a></dt>
 <dd><p>Coerce string into the required type.</p>
 <p>This method can be used to automatically ensure that strings
 are of the correct type required by this checker - either unicode
@@ -255,21 +262,21 @@ python’s default encoding unless another encoding is specified.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="enchant.checker.SpellChecker.get_text">
-<code class="sig-name descname">get_text</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.get_text" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="enchant.checker.SpellChecker.get_text">
+<span class="sig-name descname"><span class="pre">get_text</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.get_text" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the spell-checked text.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="enchant.checker.SpellChecker.ignore_always">
-<code class="sig-name descname">ignore_always</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.ignore_always" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="enchant.checker.SpellChecker.ignore_always">
+<span class="sig-name descname"><span class="pre">ignore_always</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.ignore_always" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add given word to list of words to ignore.</p>
 <p>If no word is given, the current erroneous word is added.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="enchant.checker.SpellChecker.leading_context">
-<code class="sig-name descname">leading_context</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">chars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.leading_context" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="enchant.checker.SpellChecker.leading_context">
+<span class="sig-name descname"><span class="pre">leading_context</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chars</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.leading_context" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get &lt;chars&gt; characters of leading context.</p>
 <p>This method returns up to &lt;chars&gt; characters of leading
 context - the text that occurs in the string immediately
@@ -277,8 +284,8 @@ before the current erroneous word.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="enchant.checker.SpellChecker.next">
-<code class="sig-name descname">next</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.next" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="enchant.checker.SpellChecker.next">
+<span class="sig-name descname"><span class="pre">next</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.next" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process text up to the next spelling error.</p>
 <p>This method is designed to support the iterator protocol.
 Each time it is called, it will advance the ‘word’ attribute
@@ -295,14 +302,14 @@ sensibly in common idioms such as:</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="enchant.checker.SpellChecker.replace">
-<code class="sig-name descname">replace</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">repl</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.replace" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="enchant.checker.SpellChecker.replace">
+<span class="sig-name descname"><span class="pre">replace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repl</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.replace" title="Permalink to this definition">¶</a></dt>
 <dd><p>Replace the current erroneous word with the given string.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="enchant.checker.SpellChecker.replace_always">
-<code class="sig-name descname">replace_always</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span></em>, <em class="sig-param"><span class="n">repl</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.replace_always" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="enchant.checker.SpellChecker.replace_always">
+<span class="sig-name descname"><span class="pre">replace_always</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.replace_always" title="Permalink to this definition">¶</a></dt>
 <dd><p>Always replace given word with given replacement.</p>
 <p>If a single argument is given, this is used to replace the
 current erroneous word.  If two arguments are given, that
@@ -310,8 +317,8 @@ combination is added to the list for future use.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="enchant.checker.SpellChecker.set_offset">
-<code class="sig-name descname">set_offset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">off</span></em>, <em class="sig-param"><span class="n">whence</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.set_offset" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="enchant.checker.SpellChecker.set_offset">
+<span class="sig-name descname"><span class="pre">set_offset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">off</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">whence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.set_offset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the offset of the tokenization routine.</p>
 <p>For more details on the purpose of the tokenization offset,
 see the documentation of the ‘enchant.tokenize’ module.
@@ -327,23 +334,23 @@ which to change the offset:</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="enchant.checker.SpellChecker.set_text">
-<code class="sig-name descname">set_text</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.set_text" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="enchant.checker.SpellChecker.set_text">
+<span class="sig-name descname"><span class="pre">set_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.set_text" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the text to be spell-checked.</p>
 <p>This method must be called, or the ‘text’ argument supplied
 to the constructor, before calling the ‘next()’ method.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="enchant.checker.SpellChecker.suggest">
-<code class="sig-name descname">suggest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.suggest" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="enchant.checker.SpellChecker.suggest">
+<span class="sig-name descname"><span class="pre">suggest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.suggest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return suggested spellings for the given word.</p>
 <p>If no word is given, the current erroneous word is used.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="enchant.checker.SpellChecker.trailing_context">
-<code class="sig-name descname">trailing_context</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">chars</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.trailing_context" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="enchant.checker.SpellChecker.trailing_context">
+<span class="sig-name descname"><span class="pre">trailing_context</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chars</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.trailing_context" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get &lt;chars&gt; characters of trailing context.</p>
 <p>This method returns up to &lt;chars&gt; characters of trailing
 context - the text that occurs in the string immediately
@@ -351,8 +358,8 @@ after the current erroneous word.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="enchant.checker.SpellChecker.wants_unicode">
-<code class="sig-name descname">wants_unicode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.wants_unicode" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="enchant.checker.SpellChecker.wants_unicode">
+<span class="sig-name descname"><span class="pre">wants_unicode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#enchant.checker.SpellChecker.wants_unicode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check whether the checker wants unicode strings.</p>
 <p>This method will return True if the checker wants unicode strings
 as input, False if it wants normal strings.  It’s important to
@@ -368,37 +375,29 @@ provide the correct type of string to the checker.</p>
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="enchant.tokenize.html" class="btn btn-neutral float-right" title="enchant.tokenize: String tokenization functions for PyEnchant" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="enchant.html" class="btn btn-neutral float-left" title="enchant: Access to the enchant spellchecking library" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="enchant.tokenize.html" class="btn btn-neutral float-right" title="enchant.tokenize: String tokenization functions for PyEnchant" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="enchant.html" class="btn btn-neutral float-left" title="enchant: Access to the enchant spellchecking library" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        
-        &copy; Copyright 2011, Ryan Kelly
+        &#169; Copyright 2011, Ryan Kelly.
 
     </p>
   </div>
     
     
     
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     
     provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 

@@ -3,9 +3,9 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>enchant.tokenize: String tokenization functions for PyEnchant &mdash; PyEnchant 3.2.0 documentation</title>
   
@@ -13,10 +13,15 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
 
   
   
+
   
+  
+
   
 
   
@@ -26,10 +31,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -51,7 +56,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> PyEnchant
+            <a href="../index.html" class="icon icon-home"> PyEnchant
           
 
           
@@ -144,6 +149,8 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
@@ -157,7 +164,7 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="../_sources/api/enchant.tokenize.rst.txt" rel="nofollow"> View page source</a>
           
         
@@ -231,16 +238,16 @@ such as URLs and WikiWords.  This would look something like the following:</p>
 </pre></div>
 </div>
 <dl class="py class">
-<dt id="enchant.tokenize.Chunker">
-<em class="property">class </em><code class="sig-prename descclassname">enchant.tokenize.</code><code class="sig-name descname">Chunker</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.tokenize.Chunker" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="enchant.tokenize.Chunker">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">enchant.tokenize.</span></span><span class="sig-name descname"><span class="pre">Chunker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.tokenize.Chunker" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base class for text chunking functions.</p>
 <p>A chunker is designed to chunk text into large blocks of tokens.  It
 has the same interface as a tokenizer but is for a different purpose.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="enchant.tokenize.EmailFilter">
-<em class="property">class </em><code class="sig-prename descclassname">enchant.tokenize.</code><code class="sig-name descname">EmailFilter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tokenizer</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.tokenize.EmailFilter" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="enchant.tokenize.EmailFilter">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">enchant.tokenize.</span></span><span class="sig-name descname"><span class="pre">EmailFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tokenizer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.tokenize.EmailFilter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filter skipping over email addresses.
 This filter skips any words matching the following regular expression:</p>
 <blockquote>
@@ -250,8 +257,8 @@ This filter skips any words matching the following regular expression:</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="enchant.tokenize.Filter">
-<em class="property">class </em><code class="sig-prename descclassname">enchant.tokenize.</code><code class="sig-name descname">Filter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tokenizer</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.tokenize.Filter" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="enchant.tokenize.Filter">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">enchant.tokenize.</span></span><span class="sig-name descname"><span class="pre">Filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tokenizer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.tokenize.Filter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base class for token filtering functions.</p>
 <p>A filter is designed to wrap a tokenizer (or another filter) and do
 two things:</p>
@@ -269,8 +276,8 @@ tokenize any words that aren’t skipped.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="enchant.tokenize.HTMLChunker">
-<em class="property">class </em><code class="sig-prename descclassname">enchant.tokenize.</code><code class="sig-name descname">HTMLChunker</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.tokenize.HTMLChunker" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="enchant.tokenize.HTMLChunker">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">enchant.tokenize.</span></span><span class="sig-name descname"><span class="pre">HTMLChunker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.tokenize.HTMLChunker" title="Permalink to this definition">¶</a></dt>
 <dd><p>Chunker for breaking up HTML documents into chunks of checkable text.</p>
 <p>The operation of this chunker is very simple - anything between a “&lt;”
 and a “&gt;” will be ignored.  Later versions may improve the algorithm
@@ -278,8 +285,8 @@ slightly.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="enchant.tokenize.HashtagFilter">
-<em class="property">class </em><code class="sig-prename descclassname">enchant.tokenize.</code><code class="sig-name descname">HashtagFilter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tokenizer</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.tokenize.HashtagFilter" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="enchant.tokenize.HashtagFilter">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">enchant.tokenize.</span></span><span class="sig-name descname"><span class="pre">HashtagFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tokenizer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.tokenize.HashtagFilter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filter skipping over #hashtag.
 This filter skips any words matching the following regular expression:</p>
 <blockquote>
@@ -289,8 +296,8 @@ This filter skips any words matching the following regular expression:</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="enchant.tokenize.MentionFilter">
-<em class="property">class </em><code class="sig-prename descclassname">enchant.tokenize.</code><code class="sig-name descname">MentionFilter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tokenizer</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.tokenize.MentionFilter" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="enchant.tokenize.MentionFilter">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">enchant.tokenize.</span></span><span class="sig-name descname"><span class="pre">MentionFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tokenizer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.tokenize.MentionFilter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filter skipping over &#64;mention.
 This filter skips any words matching the following regular expression:</p>
 <blockquote>
@@ -300,8 +307,8 @@ This filter skips any words matching the following regular expression:</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="enchant.tokenize.URLFilter">
-<em class="property">class </em><code class="sig-prename descclassname">enchant.tokenize.</code><code class="sig-name descname">URLFilter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tokenizer</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.tokenize.URLFilter" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="enchant.tokenize.URLFilter">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">enchant.tokenize.</span></span><span class="sig-name descname"><span class="pre">URLFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tokenizer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.tokenize.URLFilter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filter skipping over URLs.
 This filter skips any words matching the following regular expression:</p>
 <blockquote>
@@ -311,8 +318,8 @@ This filter skips any words matching the following regular expression:</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="enchant.tokenize.WikiWordFilter">
-<em class="property">class </em><code class="sig-prename descclassname">enchant.tokenize.</code><code class="sig-name descname">WikiWordFilter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tokenizer</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.tokenize.WikiWordFilter" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="enchant.tokenize.WikiWordFilter">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">enchant.tokenize.</span></span><span class="sig-name descname"><span class="pre">WikiWordFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tokenizer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.tokenize.WikiWordFilter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filter skipping over WikiWords.
 This filter skips any words matching the following regular expression:</p>
 <blockquote>
@@ -322,8 +329,8 @@ This filter skips any words matching the following regular expression:</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="enchant.tokenize.basic_tokenize">
-<em class="property">class </em><code class="sig-prename descclassname">enchant.tokenize.</code><code class="sig-name descname">basic_tokenize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.tokenize.basic_tokenize" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="enchant.tokenize.basic_tokenize">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">enchant.tokenize.</span></span><span class="sig-name descname"><span class="pre">basic_tokenize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.tokenize.basic_tokenize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tokenizer class that performs very basic word-finding.</p>
 <p>This tokenizer does the most basic thing that could work - it splits
 text into words based on whitespace boundaries, and removes basic
@@ -331,14 +338,14 @@ punctuation symbols from the start and end of each word.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="enchant.tokenize.empty_tokenize">
-<em class="property">class </em><code class="sig-prename descclassname">enchant.tokenize.</code><code class="sig-name descname">empty_tokenize</code><a class="headerlink" href="#enchant.tokenize.empty_tokenize" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="enchant.tokenize.empty_tokenize">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">enchant.tokenize.</span></span><span class="sig-name descname"><span class="pre">empty_tokenize</span></span><a class="headerlink" href="#enchant.tokenize.empty_tokenize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tokenizer class that yields no elements.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="enchant.tokenize.get_tokenizer">
-<code class="sig-prename descclassname">enchant.tokenize.</code><code class="sig-name descname">get_tokenizer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tag</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">chunkers</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">filters</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.tokenize.get_tokenizer" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="enchant.tokenize.get_tokenizer">
+<span class="sig-prename descclassname"><span class="pre">enchant.tokenize.</span></span><span class="sig-name descname"><span class="pre">get_tokenizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunkers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.tokenize.get_tokenizer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Locate an appropriate tokenizer by language tag.</p>
 <p>This requires importing the function ‘tokenize’ from an appropriate
 module.  Modules tried are named after the language tag, tried in the
@@ -359,8 +366,8 @@ tokenizer during creation.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="enchant.tokenize.tokenize">
-<em class="property">class </em><code class="sig-prename descclassname">enchant.tokenize.</code><code class="sig-name descname">tokenize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.tokenize.tokenize" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="enchant.tokenize.tokenize">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">enchant.tokenize.</span></span><span class="sig-name descname"><span class="pre">tokenize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.tokenize.tokenize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base class for all tokenizer objects.</p>
 <p>Each tokenizer must be an iterator and provide the ‘offset’
 attribute as described in the documentation for this module.</p>
@@ -370,14 +377,14 @@ the CamelCase more traditional of class names.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="enchant.tokenize.unit_tokenize">
-<em class="property">class </em><code class="sig-prename descclassname">enchant.tokenize.</code><code class="sig-name descname">unit_tokenize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.tokenize.unit_tokenize" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="enchant.tokenize.unit_tokenize">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">enchant.tokenize.</span></span><span class="sig-name descname"><span class="pre">unit_tokenize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.tokenize.unit_tokenize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tokenizer class that yields the text as a single token.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="enchant.tokenize.wrap_tokenizer">
-<code class="sig-prename descclassname">enchant.tokenize.</code><code class="sig-name descname">wrap_tokenizer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tk1</span></em>, <em class="sig-param"><span class="n">tk2</span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.tokenize.wrap_tokenizer" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="enchant.tokenize.wrap_tokenizer">
+<span class="sig-prename descclassname"><span class="pre">enchant.tokenize.</span></span><span class="sig-name descname"><span class="pre">wrap_tokenizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tk1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tk2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.tokenize.wrap_tokenizer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wrap one tokenizer inside another.</p>
 <p>This function takes two tokenizer functions ‘tk1’ and ‘tk2’,
 and returns a new tokenizer function that passes the output
@@ -391,37 +398,29 @@ of tk1 through tk2 before yielding it to the calling code.</p>
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="enchant.utils.html" class="btn btn-neutral float-right" title="enchant.utils: Misc utilities for the enchant package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="enchant.checker.html" class="btn btn-neutral float-left" title="enchant.checker: High-level spellchecking functionality" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="enchant.utils.html" class="btn btn-neutral float-right" title="enchant.utils: Misc utilities for the enchant package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="enchant.checker.html" class="btn btn-neutral float-left" title="enchant.checker: High-level spellchecking functionality" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        
-        &copy; Copyright 2011, Ryan Kelly
+        &#169; Copyright 2011, Ryan Kelly.
 
     </p>
   </div>
     
     
     
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     
     provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
