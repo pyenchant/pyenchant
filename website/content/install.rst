@@ -2,7 +2,7 @@ Installation
 =============
 
 PyEnchant is compatible with Python versions **3.5** and above at
-the time of writing - `tox.ini <https://github.com/pyenchant/pyenchant/blob/master/tox.ini>`_
+the time of writing - `tox.ini <https://github.com/pyenchant/pyenchant/blob/main/tox.ini>`_
 being the authoritative source.
 
 The PyEnchant package is available `on pypi <https://pypi.org/project/pyenchant>`_.

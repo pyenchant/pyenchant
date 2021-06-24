@@ -1,6 +1,11 @@
 Changelog
 =========
 
+Next release
+------------
+
+* Default development branch is now called ``main``.
+
 3.2.0 (2020-12-08)
 -------------------
 

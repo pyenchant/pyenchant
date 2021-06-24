@@ -24,7 +24,7 @@ for more details.
 ## Updating the website
 
 The PyEnchant website is hosted on GitHub pages and there's a GitHub workflow
-to automatically update it every time a commit is pushed on the master branch.
+to automatically update it every time a commit is pushed on the `main` branch.
 
 You can also run `tox -e website-dev` locally to spawn a process that will watch
 the changes in the `website/` directory and auto-refresh connected browsers.
