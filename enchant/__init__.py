@@ -158,12 +158,12 @@ class _EnchantObject:
     def _raise_error(self, default="Unspecified Error", eclass=Error):
         """Raise an exception based on available error messages.
 
-         This method causes an Error to be raised.  Subclasses should
-         override it to retrieve an error indication from the underlying
-         API if possible.  If such a message cannot be retrieved, the
-         argument value <default> is used.  The class of the exception
-         can be specified using the argument <eclass>
-         """
+        This method causes an Error to be raised.  Subclasses should
+        override it to retrieve an error indication from the underlying
+        API if possible.  If such a message cannot be retrieved, the
+        argument value <default> is used.  The class of the exception
+        can be specified using the argument <eclass>
+        """
         raise eclass(default)
 
     _raise_error._DOC_ERRORS = ["eclass"]

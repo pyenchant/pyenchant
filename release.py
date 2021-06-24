@@ -39,7 +39,7 @@ def make_sdist():
 
 
 def main():
-    """ Build artifacts that we need to upload to  pypi """
+    """Build artifacts that we need to upload to  pypi"""
     ensure_empty("build/")
     ensure_empty("dist/")
 

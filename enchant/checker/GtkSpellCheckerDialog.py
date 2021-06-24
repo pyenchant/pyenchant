@@ -35,7 +35,9 @@ import gtk
 COLUMN_SUGGESTION = 0
 
 
-def create_list_view(col_label,):
+def create_list_view(
+    col_label,
+):
     # create list widget
     list_ = gtk.ListStore(str)
     list_view = gtk.TreeView(model=list_)
@@ -222,7 +224,9 @@ class GtkSpellCheckerDialog(gtk.Window):
         for suggestion in suggestions:
             value = "%s" % (suggestion,)
             model.append(
-                [value,]
+                [
+                    value,
+                ]
             )
 
     def setSpellChecker(self, checker):
