@@ -49,7 +49,7 @@ def clean_bin(path):
 
 
 def cleanup_data(data_path, bits):
-    """ Remove extraneous files from the enchant artifact """
+    """Remove extraneous files from the enchant artifact"""
     print(":: Cleaning up ...")
     mingw_path = os.path.join(data_path, "mingw" + bits)
     # Better filter extra files there than in the appveyor script

@@ -457,7 +457,7 @@ def test_finnish_text():
 
 
 def test_typographic_apostrophe():
-    """"Typographic apostrophes should be word separators in English."""
+    """ "Typographic apostrophes should be word separators in English."""
     text = "They\u2019re here"
     expected_tokens = [("They", 0), ("re", 5), ("here", 8)]
     assert list(tokenize_en(text)) == expected_tokens
