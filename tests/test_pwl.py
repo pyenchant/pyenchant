@@ -117,15 +117,3 @@ def test_pypwl(tmp_path):
     assert len(ws) == 2
     assert "hello" in ws
     assert "there" in ws
-
-
-@pytest.mark.skipif(
-    sys.platform == "win32",
-    reason="See https://github.com/pyenchant/pyenchant/issues/140",
-)
-def test_unicode_chars_in_path(tmp_path):
-    """Test that unicode chars in PWL paths are accepted."""
-    filename = r"test_\xe5\xe4\xf6_ing"
-    path = tmp_path / filename
-    d = request_pwl_dict(str(path))
-    assert d
