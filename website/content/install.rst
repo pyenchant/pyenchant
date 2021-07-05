@@ -19,6 +19,15 @@ The way to achieve this depends on the platform you are using:
 Installing the Enchant C library
 --------------------------------
 
+On FreeBSD
+++++++++
+
+The quickest way is to install `libenchant` using `pkg(8) <man.freebsd.org/pkg/8>`_:
+
+.. code-block:: console
+
+    pkg install enchant2
+
 On Linux
 ++++++++
 
@@ -126,8 +135,8 @@ If not, you should install the dictionary for one of the listed providers.
 So for instance, if the ``hunspell`` is listed as a Enchant provider, you
 should install the German dictionary for the ``hunspell`` provider.
 
-On **Linux** and **macOS**, this can be done by installing the ``hunspell-de``
-package.
+On **FreeBSD**, **Linux**, and **macOS**,this can be done
+by installing the ``hunspell-de`` or the ``de-hunspell`` package.
 
 On **Windows**, if you have installed PyEnchant from a
 wheel, you can download the hunspell dictionary files you need
