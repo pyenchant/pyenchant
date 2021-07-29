@@ -20,7 +20,7 @@ Installing the Enchant C library
 --------------------------------
 
 On FreeBSD
-++++++++
++++++++++++
 
 The quickest way is to install `libenchant` using `pkg(8) <man.freebsd.org/pkg/8>`_:
 
