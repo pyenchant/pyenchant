@@ -94,6 +94,7 @@
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#installing-the-enchant-c-library">Installing the Enchant C library</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#on-freebsd">On FreeBSD</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#on-linux">On Linux</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#on-macos">On macOS</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#on-windows">On Windows</a><ul>
@@ -194,6 +195,13 @@ being the authoritative source.</p>
 <p>The way to achieve this depends on the platform you are using:</p>
 <div class="section" id="installing-the-enchant-c-library">
 <h2>Installing the Enchant C library<a class="headerlink" href="#installing-the-enchant-c-library" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="on-freebsd">
+<h3>On FreeBSD<a class="headerlink" href="#on-freebsd" title="Permalink to this headline">¶</a></h3>
+<p>The quickest way is to install <cite>libenchant</cite> using <a class="reference external" href="man.freebsd.org/pkg/8">pkg(8)</a>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pkg install enchant2</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="on-linux">
 <h3>On Linux<a class="headerlink" href="#on-linux" title="Permalink to this headline">¶</a></h3>
 <p>The quickest way is to install <cite>libenchant</cite> using the package manager of
@@ -289,8 +297,8 @@ tutorial section.</p>
 <p>If not, you should install the dictionary for one of the listed providers.</p>
 <p>So for instance, if the <code class="docutils literal notranslate"><span class="pre">hunspell</span></code> is listed as a Enchant provider, you
 should install the German dictionary for the <code class="docutils literal notranslate"><span class="pre">hunspell</span></code> provider.</p>
-<p>On <strong>Linux</strong> and <strong>macOS</strong>, this can be done by installing the <code class="docutils literal notranslate"><span class="pre">hunspell-de</span></code>
-package.</p>
+<p>On <strong>FreeBSD</strong>, <strong>Linux</strong>, and <strong>macOS</strong>,this can be done
+by installing the <code class="docutils literal notranslate"><span class="pre">hunspell-de</span></code> or the <code class="docutils literal notranslate"><span class="pre">de-hunspell</span></code> package.</p>
 <p>On <strong>Windows</strong>, if you have installed PyEnchant from a
 wheel, you can download the hunspell dictionary files you need
 (both the <cite>.dic</cite> and <cite>.aff</cite> extensions) and put them inside
