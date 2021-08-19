@@ -1,5 +1,10 @@
 import pytest
-from enchant import Broker
+from enchant import Broker, get_enchant_version
+
+
+def pytest_sessionstart(session: pytest.Session):
+    enchant_version = get_enchant_version()
+    print("Running with Enchant C library at version", enchant_version)
 
 
 @pytest.fixture(autouse=True, scope="session")
