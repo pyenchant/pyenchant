@@ -38,6 +38,7 @@
 """
 
 import sys
+from argparse import ArgumentParser
 from typing import Optional
 
 from enchant.checker import SpellChecker
@@ -351,14 +352,11 @@ def _run_as_script() -> None:
     This function allows the spellchecker to be invoked from the command-line
     to check spelling in a file.
     """
-    # Check necessary command-line options
-    from optparse import OptionParser
-
-    op = OptionParser()
-    op.add_option(
+    op = ArgumentParser()
+    op.add_argument(
         "-o", "--output", dest="outfile", metavar="FILE", help="write changes into FILE"
     )
-    op.add_option(
+    op.add_argument(
         "-l",
         "--lang",
         dest="lang",
@@ -366,23 +364,19 @@ def _run_as_script() -> None:
         default="en_US",
         help="use language idenfified by TAG",
     )
-    op.add_option(
+    op.add_argument(
         "-e",
         "--encoding",
         dest="enc",
         metavar="ENC",
         help="file is unicode with encoding ENC",
     )
-    (opts, args) = op.parse_args()
-    # Sanity check
-    if len(args) < 1:
-        raise ValueError("Must name a file to check")
-    if len(args) > 1:
-        raise ValueError("Can only check a single file")
+    op.add_argument("infile", metavar="FILE", help="Input file name to check")
+    opts = op.parse_args()
     # Create and run the checker
     chkr = SpellChecker(opts.lang)
     cmdln = CmdLineChecker(chkr)
-    cmdln.run_on_file(args[0], opts.outfile, opts.enc)
+    cmdln.run_on_file(opts.infile, opts.outfile, opts.enc)
 
 
 if __name__ == "__main__":
