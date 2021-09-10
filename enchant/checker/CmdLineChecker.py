@@ -102,19 +102,15 @@ class CmdLineChecker:
 
     _DOC_ERRORS = ["stdout", "stdin"]
 
-    def __init__(self) -> None:
+    def __init__(self, checker: SpellChecker) -> None:
         self._stop = False
-        self._checker = None  # type: Optional[SpellChecker]
+        self._checker = checker
 
-    def set_checker(self, chkr: SpellChecker) -> None:
-        self._checker = chkr
-
-    def get_checker(self, chkr: SpellChecker) -> Optional[SpellChecker]:
+    def get_checker(self, chkr: SpellChecker) -> SpellChecker:
         return self._checker
 
     def run(self) -> None:
         """Run the spellchecking loop."""
-        assert self._checker
         self._stop = False
         for err in self._checker:
             self.error = err
@@ -348,7 +344,6 @@ class CmdLineChecker:
         file's contents into a unicode string.  The output will be written
         in the same encoding.
         """
-        assert self._checker
         inStr = open(infile, "r", encoding=enc).read()
         self._checker.set_text(inStr)
         begin_msg = "Beginning spell check of %s" % infile
@@ -404,8 +399,7 @@ def _run_as_script() -> None:
         raise ValueError("Can only check a single file")
     # Create and run the checker
     chkr = SpellChecker(opts.lang)
-    cmdln = CmdLineChecker()
-    cmdln.set_checker(chkr)
+    cmdln = CmdLineChecker(chkr)
     cmdln.run_on_file(args[0], opts.outfile, opts.enc)
 
 

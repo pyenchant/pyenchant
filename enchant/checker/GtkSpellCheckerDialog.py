@@ -53,12 +53,12 @@ def create_list_view(col_label: str) -> gtk.TreeView:
 
 
 class GtkSpellCheckerDialog(gtk.Window):
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
+    def __init__(self, checker: SpellChecker, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self.set_title("Spell check")
         self.set_default_size(350, 200)
 
-        self._checker = None  # type: Optional[SpellChecker]
+        self._checker = checker
         self._numContext = 40
 
         self.errors = None
@@ -165,7 +165,7 @@ class GtkSpellCheckerDialog(gtk.Window):
         button_box.pack_end(button)
 
         # dictionary label
-        self._dict_lable = gtk.Label("")
+        self._dict_lable = gtk.Label("Dictionary:%s" % (checker.dict.tag,))
         mainbox.pack_start(self._dict_lable, False, False, padding=5)
 
         mainbox.show_all()
@@ -175,20 +175,17 @@ class GtkSpellCheckerDialog(gtk.Window):
         self._advance()
 
     def _onIgnoreAll(self, w: gtk.Widget, *args: Any) -> None:
-        assert self._checker
         print(["ignore all"])
         self._checker.ignore_always()
         self._advance()
 
     def _onReplace(self, *args: Any) -> None:
-        assert self._checker
         print(["Replace"])
         repl = self._getRepl()
         self._checker.replace(repl)
         self._advance()
 
     def _onReplaceAll(self, *args: Any) -> None:
-        assert self._checker
         print(["Replace all"])
         repl = self._getRepl()
         self._checker.replace_always(repl)
@@ -196,7 +193,6 @@ class GtkSpellCheckerDialog(gtk.Window):
 
     def _onAdd(self, *args: Any) -> None:
         """Callback for the "add" button."""
-        assert self._checker
         self._checker.add()
         self._advance()
 
@@ -218,7 +214,6 @@ class GtkSpellCheckerDialog(gtk.Window):
 
     def _getRepl(self) -> str:
         """Get the chosen replacement string."""
-        assert self._checker
         repl = self.replace_text.get_text()
         repl = self._checker.coerce_string(repl)
         return repl
@@ -229,14 +224,6 @@ class GtkSpellCheckerDialog(gtk.Window):
         for suggestion in suggestions:
             value = "%s" % (suggestion,)
             model.append([value])
-
-    def setSpellChecker(self, checker: SpellChecker) -> None:
-        assert checker, "checker can't be None"
-        self._checker = checker
-        self._dict_lable.set_text("Dictionary:%s" % (checker.dict.tag,))
-
-    def getSpellChecker(self, checker: SpellChecker) -> Optional[SpellChecker]:
-        return self._checker
 
     def updateUI(self) -> None:
         self._advance()
@@ -297,13 +284,12 @@ def _test() -> None:
 
     text = "This is sme text with a fw speling errors in it. Here are a fw more to tst it ut."
     print(["BEFORE:", text])
-    chk_dlg = GtkSpellCheckerDialog()
+    chkr = SpellChecker("en_US", text)
+
+    chk_dlg = GtkSpellCheckerDialog(chkr)
     chk_dlg.show()
     chk_dlg.connect("delete_event", gtk.main_quit)
 
-    chkr = SpellChecker("en_US", text)
-
-    chk_dlg.setSpellChecker(chkr)
     chk_dlg.updateUI()
     gtk.main()
 
