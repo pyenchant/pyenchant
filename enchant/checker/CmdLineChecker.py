@@ -133,10 +133,10 @@ class CmdLineChecker:
         error_string = self._build_context(
             self.error.get_text(), self.error.word, self.error.wordpos
         )
-        print([error("ERROR: %s" % color(self.error.word, color="red"))])
-        print([info("")])
-        print([info(error_string)])
-        print([info("")])
+        print(error("ERROR: %s" % color(self.error.word, color="red")))
+        print(info(""))
+        print(info(error_string))
+        print(info(""))
 
     @staticmethod
     def _build_context(text: str, error_word: str, error_start: int) -> str:
@@ -177,96 +177,80 @@ class CmdLineChecker:
                     + ": "
                     + color(sugg, color="bold")
                 )
-        print([info("HOW ABOUT:"), result])
+        print(info("HOW ABOUT:"), result)
 
     def print_help(self) -> None:
         print(
-            [
-                info(
-                    color("0", color="yellow")
-                    + ".."
-                    + color("N", color="yellow")
-                    + ":\t"
-                    + color("replace", color="bold")
-                    + " with the numbered suggestion"
-                )
-            ]
+            info(
+                color("0", color="yellow")
+                + ".."
+                + color("N", color="yellow")
+                + ":\t"
+                + color("replace", color="bold")
+                + " with the numbered suggestion"
+            )
         )
         print(
-            [
-                info(
-                    color("R", color="cyan")
-                    + color("0", color="yellow")
-                    + ".."
-                    + color("R", color="cyan")
-                    + color("N", color="yellow")
-                    + ":\t"
-                    + color("always replace", color="bold")
-                    + " with the numbered suggestion"
-                )
-            ]
+            info(
+                color("R", color="cyan")
+                + color("0", color="yellow")
+                + ".."
+                + color("R", color="cyan")
+                + color("N", color="yellow")
+                + ":\t"
+                + color("always replace", color="bold")
+                + " with the numbered suggestion"
+            )
         )
         print(
-            [
-                info(
-                    color("i", color="cyan")
-                    + ":\t\t"
-                    + color("ignore", color="bold")
-                    + " this word"
-                )
-            ]
+            info(
+                color("i", color="cyan")
+                + ":\t\t"
+                + color("ignore", color="bold")
+                + " this word"
+            )
         )
         print(
-            [
-                info(
-                    color("I", color="cyan")
-                    + ":\t\t"
-                    + color("always ignore", color="bold")
-                    + " this word"
-                )
-            ]
+            info(
+                color("I", color="cyan")
+                + ":\t\t"
+                + color("always ignore", color="bold")
+                + " this word"
+            )
         )
         print(
-            [
-                info(
-                    color("a", color="cyan")
-                    + ":\t\t"
-                    + color("add", color="bold")
-                    + " word to personal dictionary"
-                )
-            ]
+            info(
+                color("a", color="cyan")
+                + ":\t\t"
+                + color("add", color="bold")
+                + " word to personal dictionary"
+            )
         )
         print(
-            [
-                info(
-                    color("e", color="cyan")
-                    + ":\t\t"
-                    + color("edit", color="bold")
-                    + " the word"
-                )
-            ]
+            info(
+                color("e", color="cyan")
+                + ":\t\t"
+                + color("edit", color="bold")
+                + " the word"
+            )
         )
         print(
-            [
-                info(
-                    color("q", color="cyan")
-                    + ":\t\t"
-                    + color("quit", color="bold")
-                    + " checking"
-                )
-            ]
+            info(
+                color("q", color="cyan")
+                + ":\t\t"
+                + color("quit", color="bold")
+                + " checking"
+            )
         )
         print(
-            [
-                info(
-                    color("h", color="cyan")
-                    + ":\t\tprint this "
-                    + color("help", color="bold")
-                    + " message"
-                )
-            ]
+            info(
+                color("h", color="cyan")
+                + ":\t\tprint this "
+                + color("help", color="bold")
+                + " message"
+            )
         )
-        print([info("----------------------------------------------------")])
+        print(info("----------------------------------------------------"))
         self.print_suggestions()
 
     def read_command(self) -> bool:
@@ -277,30 +261,28 @@ class CmdLineChecker:
             repl = int(cmd)
             suggs = self.error.suggest()
             if repl >= len(suggs):
-                print([warning("No suggestion number"), repl])
+                print(warning("No suggestion number"), repl)
                 return False
             print(
-                [
-                    success(
-                        "Replacing '%s' with '%s'"
-                        % (
-                            color(self.error.word, color="red"),
-                            color(suggs[repl], color="green"),
-                        )
+                success(
+                    "Replacing '%s' with '%s'"
+                    % (
+                        color(self.error.word, color="red"),
+                        color(suggs[repl], color="green"),
                     )
-                ]
+                )
             )
             self.error.replace(suggs[repl])
             return True
 
         if cmd[0] == "R":
             if not cmd[1:].isdigit():
-                print([warning("Badly formatted command (try 'help')")])
+                print(warning("Badly formatted command (try 'help')"))
                 return False
             repl = int(cmd[1:])
             suggs = self.error.suggest()
             if repl >= len(suggs):
-                print([warning("No suggestion number"), repl])
+                print(warning("No suggestion number"), repl)
                 return False
             self.error.replace_always(suggs[repl])
             return True
@@ -329,7 +311,7 @@ class CmdLineChecker:
             self.print_help()
             return False
 
-        print([warning("Badly formatted command (try 'help')")])
+        print(warning("Badly formatted command (try 'help')"))
         return False
 
     def run_on_file(
@@ -347,10 +329,10 @@ class CmdLineChecker:
         inStr = open(infile, "r", encoding=enc).read()
         self._checker.set_text(inStr)
         begin_msg = "Beginning spell check of %s" % infile
-        print([info(begin_msg)])
-        print([info("-" * len(begin_msg))])
+        print(info(begin_msg))
+        print(info("-" * len(begin_msg)))
         self.run()
-        print([success("Completed spell check of %s" % infile)])
+        print(success("Completed spell check of %s" % infile))
         outStr = self._checker.get_text()
         if outfile is None:
             outF = open(infile, "w", encoding=enc)
