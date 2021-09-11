@@ -352,11 +352,11 @@ def _run_as_script() -> None:
     This function allows the spellchecker to be invoked from the command-line
     to check spelling in a file.
     """
-    op = ArgumentParser()
-    op.add_argument(
+    parser = ArgumentParser()
+    parser.add_argument(
         "-o", "--output", dest="outfile", metavar="FILE", help="write changes into FILE"
     )
-    op.add_argument(
+    parser.add_argument(
         "-l",
         "--lang",
         dest="lang",
@@ -364,19 +364,19 @@ def _run_as_script() -> None:
         default="en_US",
         help="use language idenfified by TAG",
     )
-    op.add_argument(
+    parser.add_argument(
         "-e",
         "--encoding",
         dest="enc",
         metavar="ENC",
         help="file is unicode with encoding ENC",
     )
-    op.add_argument("infile", metavar="FILE", help="Input file name to check")
-    opts = op.parse_args()
+    parser.add_argument("infile", metavar="FILE", help="Input file name to check")
+    args = parser.parse_args()
     # Create and run the checker
-    chkr = SpellChecker(opts.lang)
+    chkr = SpellChecker(args.lang)
     cmdln = CmdLineChecker(chkr)
-    cmdln.run_on_file(opts.infile, opts.outfile, opts.enc)
+    cmdln.run_on_file(args.infile, args.outfile, args.enc)
 
 
 if __name__ == "__main__":
