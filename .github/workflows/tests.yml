@@ -45,7 +45,6 @@ jobs:
     - name: Install enchant (macOS)
       if: matrix.platform == 'macos'
       run: |
-        brew update
         brew install enchant
 
     - name: Install tox
