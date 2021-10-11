@@ -1,13 +1,9 @@
 Changelog
 =========
 
-3.2.2 (2021-10-05)
-------------------
-
-* Add support for Python 3.10
-
 3.2.1 (2021-06-24)
 --------------------
+
 
 * Fix ``Dict.__del__`` sometimes raising `TypeError` upon exit (#98). Patch by @rr-
 * Default development branch is now called ``main``
