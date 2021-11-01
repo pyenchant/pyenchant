@@ -84,6 +84,8 @@ except ImportError:
         raise
     _e = None  # type: ignore
 
+import functools
+import threading
 from typing import Any, List, NoReturn, Optional, Tuple, Type, Union  # noqa F401
 
 from enchant.errors import *  # noqa F401,F403
@@ -125,6 +127,22 @@ class ProviderDesc:
         return hash(self.name + self.desc + self.file)
 
 
+def check_same_thread(f):
+    @functools.wraps(f)
+    def result(self, *args, **kwargs):
+        current_thread = threading.current_thread()
+        if current_thread.ident != self._thread_ident:
+            warnings.warn(
+                f"Using method from thread '{current_thread.name}' (#{current_thread.ident})\n"
+                + f"but object created on thread '{self._thread_name}' (#{self._thread_ident})\n",
+                category=DeprecationWarning,
+                stacklevel=2,
+            )
+        return f(self, *args, **kwargs)
+
+    return result
+
+
 class _EnchantObject:
     """Base class for enchant objects.
 
@@ -139,6 +157,9 @@ class _EnchantObject:
     """
 
     def __init__(self) -> None:
+        current_thread = threading.current_thread()
+        self._thread_ident = current_thread.ident
+        self._thread_name = current_thread.name
         """_EnchantObject constructor."""
         self._this = None
         #  To be importable when enchant C lib is missing, we need
@@ -258,6 +279,7 @@ class Broker(_EnchantObject):
             _e.broker_free(self._this)
             self._this = None
 
+    @check_same_thread
     def request_dict(self, tag: str = None) -> "Dict":
         """Request a Dict object for the language specified by <tag>.
 
@@ -298,6 +320,7 @@ class Broker(_EnchantObject):
             self._live_dicts[new_dict] += 1
         return new_dict
 
+    @check_same_thread
     def request_pwl_dict(self, pwl: str) -> "Dict":
         """Request a Dict object for a personal word list.
 
@@ -338,6 +361,7 @@ class Broker(_EnchantObject):
         if self._live_dicts[dict] == 0:
             del self._live_dicts[dict]
 
+    @check_same_thread
     def dict_exists(self, tag: str) -> bool:
         """Check availability of a dictionary.
 
@@ -349,6 +373,7 @@ class Broker(_EnchantObject):
         val = _e.broker_dict_exists(self._this, tag.encode())
         return bool(val)
 
+    @check_same_thread
     def set_ordering(self, tag: str, ordering: str) -> None:
         """Set dictionary preferences for a language.
 
@@ -364,6 +389,7 @@ class Broker(_EnchantObject):
         self._check_this()
         _e.broker_set_ordering(self._this, tag.encode(), ordering.encode())
 
+    @check_same_thread
     def describe(self) -> List[ProviderDesc]:
         """Return list of provider descriptions.
 
@@ -388,6 +414,7 @@ class Broker(_EnchantObject):
         file = file.decode()
         self.__describe_result.append((name, desc, file))
 
+    @check_same_thread
     def list_dicts(self) -> List[Tuple[str, ProviderDesc]]:
         """Return list of available dictionaries.
 
@@ -418,6 +445,7 @@ class Broker(_EnchantObject):
         file = file.decode()
         self.__list_dicts_result.append((tag, (name, desc, file)))
 
+    @check_same_thread
     def list_languages(self) -> List[str]:
         """List languages for which dictionaries are available.
 
@@ -452,6 +480,7 @@ class Broker(_EnchantObject):
 
     __describe_dict._DOC_ERRORS = ["desc"]  # type: ignore
 
+    @check_same_thread
     def get_param(self, name: str) -> Any:
         """Get the value of a named parameter on this broker.
 
@@ -470,6 +499,7 @@ class Broker(_EnchantObject):
 
     get_param._DOC_ERRORS = ["param"]  # type: ignore
 
+    @check_same_thread
     def set_param(self, name: str, value: Any) -> None:
         """Set the value of a named parameter on this broker.
 
@@ -624,6 +654,7 @@ class Dict(_EnchantObject):
             if self._broker is not None and self._broker._this is not None:
                 self._broker._free_dict(self)
 
+    @check_same_thread
     def check(self, word: str) -> bool:
         """Check spelling of a word.
 
@@ -642,6 +673,7 @@ class Dict(_EnchantObject):
             return False
         self._raise_error()
 
+    @check_same_thread
     def suggest(self, word: str) -> List[str]:
         """Suggest possible spellings for a word.
 
@@ -656,16 +688,19 @@ class Dict(_EnchantObject):
         suggs = _e.dict_suggest(self._this, word.encode())
         return [w.decode() for w in suggs]
 
+    @check_same_thread
     def add(self, word: str) -> None:
         """Add a word to the user's personal word list."""
         self._check_this()
         _e.dict_add(self._this, word.encode())
 
+    @check_same_thread
     def remove(self, word: str) -> None:
         """Add a word to the user's personal exclude list."""
         self._check_this()
         _e.dict_remove(self._this, word.encode())
 
+    @check_same_thread
     def add_to_pwl(self, word: str) -> None:
         """Add a word to the user's personal word list."""
         warnings.warn(
@@ -676,26 +711,31 @@ class Dict(_EnchantObject):
         self._check_this()
         _e.dict_add_to_pwl(self._this, word.encode())
 
+    @check_same_thread
     def add_to_session(self, word: str) -> None:
         """Add a word to the session personal list."""
         self._check_this()
         _e.dict_add_to_session(self._this, word.encode())
 
+    @check_same_thread
     def remove_from_session(self, word: str) -> None:
         """Add a word to the session exclude list."""
         self._check_this()
         _e.dict_remove_from_session(self._this, word.encode())
 
+    @check_same_thread
     def is_added(self, word: str) -> bool:
         """Check whether a word is in the personal word list."""
         self._check_this()
         return _e.dict_is_added(self._this, word.encode())
 
+    @check_same_thread
     def is_removed(self, word: str) -> bool:
         """Check whether a word is in the personal exclude list."""
         self._check_this()
         return _e.dict_is_removed(self._this, word.encode())
 
+    @check_same_thread
     def store_replacement(self, mis: str, cor: str) -> None:
         """Store a replacement spelling for a miss-spelled word.
 
@@ -831,6 +871,7 @@ class DictWithPWL(Dict):
             self.pel = None
         super()._free()
 
+    @check_same_thread
     def check(self, word: str) -> bool:
         """Check spelling of a word.
 
@@ -846,6 +887,7 @@ class DictWithPWL(Dict):
             return True
         return False
 
+    @check_same_thread
     def suggest(self, word: str) -> List[str]:
         """Suggest possible spellings for a word.
 
@@ -859,6 +901,7 @@ class DictWithPWL(Dict):
                 del suggs[i]
         return suggs
 
+    @check_same_thread
     def add(self, word: str) -> None:
         """Add a word to the associated personal word list.
 
@@ -869,12 +912,14 @@ class DictWithPWL(Dict):
         self.pwl.add(word)
         self.pel.remove(word)
 
+    @check_same_thread
     def remove(self, word: str) -> None:
         """Add a word to the associated exclude list."""
         self._check_this()
         self.pwl.remove(word)
         self.pel.add(word)
 
+    @check_same_thread
     def add_to_pwl(self, word: str) -> None:
         """Add a word to the associated personal word list.
 
@@ -885,11 +930,13 @@ class DictWithPWL(Dict):
         self.pwl.add_to_pwl(word)
         self.pel.remove(word)
 
+    @check_same_thread
     def is_added(self, word: str) -> bool:
         """Check whether a word is in the personal word list."""
         self._check_this()
         return self.pwl.is_added(word)
 
+    @check_same_thread
     def is_removed(self, word: str) -> bool:
         """Check whether a word is in the personal exclude list."""
         self._check_this()
