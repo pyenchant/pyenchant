@@ -84,11 +84,12 @@ except ImportError:
         raise
     _e = None  # type: ignore
 
-from enchant.errors import Error, DictNotFoundError
-from enchant.utils import get_default_language
-from enchant.pypwl import PyPWL
+from typing import Any, List, NoReturn, Optional, Tuple, Type, Union  # noqa F401
+
 from enchant.errors import *  # noqa F401,F403
-from typing import Any, List, NoReturn, Tuple, Optional, Type, Union  # noqa F401
+from enchant.errors import DictNotFoundError, Error
+from enchant.pypwl import PyPWL
+from enchant.utils import get_default_language
 
 
 class ProviderDesc:

@@ -33,9 +33,9 @@ import pytest
 
 import enchant
 import enchant.tokenize
+from enchant.checker import SpellChecker
 from enchant.errors import DefaultLanguageNotFoundError
 from enchant.utils import get_default_language
-from enchant.checker import SpellChecker
 
 
 def test_basic():

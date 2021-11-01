@@ -1,4 +1,5 @@
 import pytest
+
 from enchant import Broker, get_enchant_version
 
 

@@ -28,10 +28,11 @@
 # do so, delete this exception statement from your version.
 #
 
-import gtk
-from enchant.checker import SpellChecker
 from typing import Any, Iterable, List, Optional
 
+import gtk
+
+from enchant.checker import SpellChecker
 
 #   columns
 COLUMN_SUGGESTION = 0

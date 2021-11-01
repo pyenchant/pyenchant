@@ -10,8 +10,8 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys
 import os
+import sys
 
 os.environ["PYENCHANT_IGNORE_MISSING_LIB"] = "1"
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

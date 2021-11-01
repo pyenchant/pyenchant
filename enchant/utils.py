@@ -42,10 +42,11 @@ includes:
 
 """
 
-from enchant.errors import Error
 import locale
-from enchant.errors import *  # noqa F401,F403
 from typing import Callable, Iterable, List, Optional, Sequence  # noqa F401
+
+from enchant.errors import *  # noqa F401,F403
+from enchant.errors import Error
 
 
 def levenshtein(s1: str, s2: str) -> int:

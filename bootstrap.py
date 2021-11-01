@@ -1,11 +1,12 @@
 # Prepare PyEnchant for development
 #
 # On Windows, we need to populate data/ with the result of an Enchant build
-import os
 import glob
-import sys
-import shutil
+import os
 import platform
+import shutil
+import sys
+
 import requests
 
 ENCHANT_TAG = "v2.2.7-appveyor-41"
