@@ -47,9 +47,11 @@
 """
 _DOC_ERRORS = ["ShowModal"]
 
-import wx
-from enchant.checker import SpellChecker
 from typing import Any, Optional
+
+import wx
+
+from enchant.checker import SpellChecker
 
 
 class wxSpellCheckerDialog(wx.Dialog):

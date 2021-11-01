@@ -7,7 +7,6 @@ of having spelling errors in a spellchecking package!
 
 import os
 
-
 WORDS = [
     "spellchecking",
     "utf",
@@ -77,12 +76,12 @@ WORDS = [
 def test_docstrings():
     """Test that all our docstrings are error-free."""
     import enchant
-    import enchant.utils
+    import enchant.checker
+    import enchant.checker.CmdLineChecker
     import enchant.pypwl
     import enchant.tokenize
     import enchant.tokenize.en
-    import enchant.checker
-    import enchant.checker.CmdLineChecker
+    import enchant.utils
 
     try:
         import enchant.checker.GtkSpellCheckerDialog

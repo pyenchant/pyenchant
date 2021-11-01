@@ -33,16 +33,14 @@ import pytest
 
 from enchant.tokenize import (
     EmailFilter,
-    URLFilter,
     HTMLChunker,
+    URLFilter,
     WikiWordFilter,
     basic_tokenize,
     empty_tokenize,
     get_tokenizer,
     wrap_tokenizer,
 )
-
-
 from enchant.tokenize.en import tokenize as tokenize_en
 
 

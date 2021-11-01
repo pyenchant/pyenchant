@@ -109,12 +109,12 @@ _DOC_ERRORS = [
     "tkns",
 ]
 
+import array
 import re
 import warnings
-import array
+from typing import Callable, Iterable, List, Optional, Tuple, Type, Union, cast
 
 from enchant.errors import TokenizerNotFoundError
-from typing import cast, Callable, Iterable, List, Optional, Union, Tuple, Type
 
 Token = Tuple[str, int]
 

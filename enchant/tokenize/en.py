@@ -37,9 +37,9 @@
 """
 
 import unicodedata
+from typing import Any, Callable, Container, Union  # noqa F401
 
 import enchant.tokenize
-from typing import Any, Callable, Container, Union  # noqa F401
 
 _TextLike = Union[bytes, str, bytearray]
 _BinaryLike = Union[bytes, bytearray]

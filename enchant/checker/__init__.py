@@ -47,19 +47,18 @@ such as a wxPython GUI dialog and a command-line interface.
 
 import array
 import warnings
+from typing import List, Optional, Type, Union
 
 import enchant
+from enchant import Dict
+from enchant.errors import *  # noqa F401,F403
 from enchant.errors import (
     DefaultLanguageNotFoundError,
     DictNotFoundError,
     TokenizerNotFoundError,
 )
-from enchant.tokenize import get_tokenizer
+from enchant.tokenize import Chunker, Filter, get_tokenizer, tokenize
 from enchant.utils import get_default_language
-from enchant.errors import *  # noqa F401,F403
-from enchant.tokenize import tokenize, Chunker, Filter
-from enchant import Dict
-from typing import List, Optional, Type, Union
 
 
 class SpellChecker:

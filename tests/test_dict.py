@@ -4,11 +4,11 @@ with a dictionary for the "en_US" language.
 """
 import pickle
 
-import enchant
-from enchant import dict_exists, Dict, DictNotFoundError, Error
-from enchant.utils import get_default_language
-
 import pytest
+
+import enchant
+from enchant import Dict, DictNotFoundError, Error, dict_exists
+from enchant.utils import get_default_language
 
 
 @pytest.fixture

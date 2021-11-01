@@ -49,14 +49,14 @@
 
 """
 
-import sys
+import ctypes
+import ctypes.util
 import os
 import os.path
-import ctypes
-from ctypes import c_char_p, c_int, c_size_t, c_void_p, pointer, CFUNCTYPE, POINTER
-import ctypes.util
 import platform
+import sys
 import textwrap
+from ctypes import CFUNCTYPE, POINTER, c_char_p, c_int, c_size_t, c_void_p, pointer
 from typing import Callable, List, Optional, TypeVar  # noqa F401
 
 

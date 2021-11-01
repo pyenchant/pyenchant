@@ -1,7 +1,8 @@
 import sys
+
 import pytest
 
-from enchant import request_pwl_dict, DictWithPWL, PyPWL
+from enchant import DictWithPWL, PyPWL, request_pwl_dict
 
 
 @pytest.fixture
