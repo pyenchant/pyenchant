@@ -130,6 +130,16 @@ might not bring along <cite>binutils</cite> by default.</p>
 <span class="go">brew install enchant</span>
 </pre></div>
 </div>
+<p>If you are using Apple Silicon and it displays this error:
+<code class="docutils literal notranslate"><span class="pre">The</span> <span class="pre">'enchant'</span> <span class="pre">C</span> <span class="pre">library</span> <span class="pre">was</span> <span class="pre">not</span> <span class="pre">found</span> <span class="pre">and</span> <span class="pre">maybe</span> <span class="pre">needs</span> <span class="pre">to</span> <span class="pre">be</span> <span class="pre">installed.</span></code>,
+as a workaround, you may need to install an x86_64 (Intel) version of <cite>enchant</cite>.
+In order to do so, you need to install the x86_64 version of Homebrew in
+<code class="docutils literal notranslate"><span class="pre">/usr/local/</span></code> and then use this version to install the corresponding
+version of <cite>enchant</cite>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>arch -x86_64 /bin/bash -c <span class="s2">&quot;</span><span class="k">$(</span>curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh<span class="k">)</span><span class="s2">&quot;</span>
+arch -x86_64 /usr/local/bin/brew install enchant
+</pre></div>
+</div>
 <p>If you are using <a class="reference external" href="https://www.macports.org/">MacPorts</a> you can also
 install the <a class="reference external" href="https://github.com/macports/macports-ports/tree/master/textproc/enchant2">enchant2</a> package. Please make sure to add
 the port variants for the spellers you’d like to use. For example, to
