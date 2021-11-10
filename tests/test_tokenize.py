@@ -478,5 +478,5 @@ def test_typographic_apostrophe():
     ],
 )
 def test_tokenize_en_byte(text, expected):
-    """Test tokeniting bytes."""
+    """Test tokenizing bytes."""
     assert list(tokenize_en(text)) == expected
