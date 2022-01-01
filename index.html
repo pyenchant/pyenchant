@@ -81,7 +81,7 @@
 library with the flexibility of Python and a nice “Pythonic”
 object-oriented interface. It also aims to provide some higher-level
 functionality than is available in the C API.</p>
-<p>To get started, check out the comprehensive <a class="reference internal" href="tutorial.html"><span class="doc">tutorial</span></a> or the auto-generated <a class="reference internal" href="api/enchant.html"><span class="doc">API listing</span></a>. If you just want to get up and running in a hurry, here’s a quick sample of PyEnchant in action:</p>
+<p>Here’s a quick sample of PyEnchant in action:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">enchant</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">enchant</span><span class="o">.</span><span class="n">Dict</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">)</span>
@@ -93,7 +93,12 @@ functionality than is available in the C API.</p>
 <span class="go">&gt;&gt;&gt;</span>
 </pre></div>
 </div>
-<p>Otherwise, take a look at the documentation index:</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>In genereal, PyEnchant will <strong>not</strong> work out of the box after having
+been installed with <cite>pip</cite>. See the <a class="reference internal" href="install.html#installation"><span class="std std-ref">Installation</span></a> section for
+more details.</p>
+</div>
 </section>
 <section id="documentation-index">
 <h2>Documentation Index<a class="headerlink" href="#documentation-index" title="Permalink to this headline"></a></h2>
