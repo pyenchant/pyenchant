@@ -118,6 +118,8 @@ class ProviderDesc:
 
     def __eq__(self, pd):
         """Equality operator on ProviderDesc objects."""
+        if not isinstance(pd, ProviderDesc):
+            return False
         return self.name == pd.name and self.desc == pd.desc and self.file == pd.file
 
     def __hash__(self):
