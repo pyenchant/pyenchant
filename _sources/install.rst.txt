@@ -53,12 +53,12 @@ The quickest way is to install `libenchant` using `Homebrew <https://brew.sh/>`_
 
     brew update
     brew install enchant
-    
-If you are using Apple Silicon and it displays this error: 
-``The 'enchant' C library was not found and maybe needs to be installed.``, 
+
+If you are using Apple Silicon and it displays this error:
+``The 'enchant' C library was not found and maybe needs to be installed.``,
 as a workaround, you may need to install an x86_64 (Intel) version of `enchant`.
-In order to do so, you need to install the x86_64 version of Homebrew in 
-``/usr/local/`` and then use this version to install the corresponding 
+In order to do so, you need to install the x86_64 version of Homebrew in
+``/usr/local/`` and then use this version to install the corresponding
 version of `enchant`.
 
 .. code-block:: bash
