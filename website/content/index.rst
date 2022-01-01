@@ -11,7 +11,7 @@ library with the flexibility of Python and a nice "Pythonic"
 object-oriented interface. It also aims to provide some higher-level
 functionality than is available in the C API.
 
-To get started, check out the comprehensive :doc:`tutorial<tutorial>` or the auto-generated :doc:`API listing<api/enchant>`. If you just want to get up and running in a hurry, here's a quick sample of PyEnchant in action::
+Here's a quick sample of PyEnchant in action::
 
     >>> import enchant
     >>> d = enchant.Dict("en_US")
@@ -24,7 +24,11 @@ To get started, check out the comprehensive :doc:`tutorial<tutorial>` or the aut
     >>>
 
 
-Otherwise, take a look at the documentation index:
+.. warning::
+   In genereal, PyEnchant will **not** work out of the box after having
+   been installed with `pip`. See the :ref:`installation` section for
+   more details.
+
 
 Documentation Index
 -------------------

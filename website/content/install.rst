@@ -1,3 +1,5 @@
+.. _installation:
+
 Installation
 =============
 
@@ -125,6 +127,12 @@ Cons:
  * It only works with the ``python3`` binary of the ``MinGW`` distribution,
    so typically *not* the one you've installed from `python.org`.
 
+On an other platfrom
+++++++++++++++++++++++
+
+Unfortunately, if your platfrom is not listed here, there's a good chanche that
+PyEnchant will not work. Feel free to open an issue on PyEnchant bug tracker if
+this is the case.
 
 Installing a dictionary
 ------------------------
