@@ -55,4 +55,5 @@ jobs:
 
     - name: Run tests
       run: |
-        tox -e ${{ matrix.tox_env }}
+        tox -e ${{ matrix.tox_env }} bootstrap
+        tox -e ${{ matrix.tox_env }} test

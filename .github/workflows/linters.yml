@@ -24,6 +24,6 @@ jobs:
 
     - name: Run linters
       run: |
-        tox -e linters
+        tox -e py310 lint
 
 

@@ -25,7 +25,7 @@ jobs:
 
     - name: Build website
       run: |
-        tox -e website
+        tox -e py310 sphinx
 
     - name: Deploy (if main)
       if: github.ref == 'refs/heads/main'
