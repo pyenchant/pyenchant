@@ -37,7 +37,7 @@ def sphinx(c, autobuild=False, builder="html"):
     build_dir = "website/build"
     source_dir = "website/content"
     conf_dir = "website"
-    out_dir = f"website/{builder}"
+    out_dir = f"website/out/{builder}"
     if autobuild:
         script = "sphinx-autobuild"
     else:
