@@ -1,6 +1,6 @@
 import pytest
 
-from enchant import Broker, Dict
+from enchant import Broker
 
 
 @pytest.fixture
@@ -77,15 +77,6 @@ def test_prov_ordering(broker):
             assert (d.provider, tag, order) == (prov, tag, order)
             del d
             del b2
-
-
-def test_unicode_tag(broker):
-    """Test that unicode language tags are accepted"""
-    d1 = broker._request_dict_data("en_US")
-    assert d1
-    broker._free_dict_data(d1)
-    d1 = Dict("en_US")
-    assert d1
 
 
 def test_get_set_param(broker):
