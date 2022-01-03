@@ -11,6 +11,6 @@ def test_get_user_config_dir():
     """
     try:
         user_dir = enchant.get_user_config_dir()
-        print(user_dir)
+        assert user_dir
     except AttributeError:
-        pass
+        assert True
