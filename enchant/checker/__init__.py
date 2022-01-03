@@ -50,7 +50,6 @@ import warnings
 from typing import Dict as PythonDict
 from typing import List, Optional, Type, Union
 
-import enchant
 from enchant import Dict
 from enchant.errors import *  # noqa F401,F403
 from enchant.errors import (
@@ -144,15 +143,17 @@ class SpellChecker:
             lang = get_default_language()
         if isinstance(lang, (str, bytes)):
             try:
-                dict = enchant.Dict(lang)
+                dict = Dict(lang)
             except DictNotFoundError:
                 raise DefaultLanguageNotFoundError(lang) from None
-        else:
+        elif isinstance(lang, Dict):
             dict = lang
             try:
                 lang = dict.tag
             except AttributeError:
                 lang = get_default_language()
+        else:
+            raise TypeError(lang)
         if lang is None:
             raise DefaultLanguageNotFoundError from None
         self.lang: str = lang
