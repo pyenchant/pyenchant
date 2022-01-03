@@ -47,6 +47,7 @@ such as a wxPython GUI dialog and a command-line interface.
 
 import array
 import warnings
+from typing import Dict as PythonDict
 from typing import List, Optional, Type, Union
 
 import enchant
@@ -154,8 +155,8 @@ class SpellChecker:
                 lang = get_default_language()
         if lang is None:
             raise DefaultLanguageNotFoundError from None
-        self.lang = lang
-        self.dict = dict
+        self.lang: str = lang
+        self.dict: Dict = dict
         if tokenize is None:
             try:
                 tokenize = get_tokenizer(lang, chunkers, filters)
@@ -164,10 +165,10 @@ class SpellChecker:
                 tokenize = get_tokenizer(None, chunkers, filters)
         self._tokenize = tokenize
 
-        self.word = None
-        self.wordpos = None
-        self._ignore_words = {}
-        self._replace_words = {}
+        self.word: Optional[str] = None
+        self.wordpos: Optional[int] = None
+        self._ignore_words: PythonDict[str, bool] = {}
+        self._replace_words: PythonDict[str, str] = {}
         # Default to the empty string as the text to be checked
         self._text = array.array("u")
         self._use_tostring = False
@@ -206,7 +207,7 @@ class SpellChecker:
             return self._array_to_string(self._text)
         return self._text
 
-    def _array_to_string(self, text):
+    def _array_to_string(self, text: array.array) -> str:
         """Format an internal array as a standard string."""
         if text.typecode == "u":
             return text.tounicode()
