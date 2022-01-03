@@ -176,7 +176,7 @@ class SpellChecker:
         if text is not None:
             self.set_text(text)
 
-    def __iter__(self):
+    def __iter__(self) -> "SpellChecker":
         """Each SpellChecker object is its own iterator"""
         return self
 
@@ -243,7 +243,7 @@ class SpellChecker:
                 return text.encode(enc)
         return text
 
-    def __next__(self):
+    def __next__(self) -> "SpellChecker":
         return self.next()
 
     def next(self) -> "SpellChecker":
