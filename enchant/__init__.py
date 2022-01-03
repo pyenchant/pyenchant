@@ -541,9 +541,9 @@ class Dict(_EnchantObject):
         if tag is None:
             tag = get_default_language()
             if tag is None:
-                err = "No tag specified and default language could not "
-                err = err + "be determined."
-                raise Error(err)
+                raise Error(
+                    "No tag specified and default language could not be determined."
+                )
         self.tag = tag
         # If no broker was given, use the default broker
         if broker is None:
