@@ -146,7 +146,7 @@ class tokenize:  # noqa: N801
     def next(self) -> Token:
         raise NotImplementedError()
 
-    def __iter__(self):
+    def __iter__(self) -> "tokenize":
         return self
 
     def set_offset(self, offset: int, replaced: bool = False) -> None:
@@ -166,11 +166,14 @@ class tokenize:  # noqa: N801
     offset = property(_get_offset, _set_offset)
 
 
+_Filter = Union[Type[tokenize], "Filter"]
+
+
 def get_tokenizer(
     tag: Optional[str] = None,
     chunkers: Optional[Iterable[Union[Type["Chunker"], Type["Filter"]]]] = None,
     filters: Optional[Iterable[Type["Filter"]]] = None,
-) -> tokenize:
+) -> "Filter":
     """Locate an appropriate tokenizer by language tag.
 
     This requires importing the function `tokenize` from an appropriate
@@ -227,7 +230,7 @@ def get_tokenizer(
     #    * begin with basic whitespace tokenization
     #    * apply each of the given filters in turn
     #    * apply language-specific rules
-    tokenizer = basic_tokenize
+    tokenizer: _Filter = basic_tokenize
     if chunkers is not None:
         for c in reversed(list(chunkers)):
             tokenizer = wrap_tokenizer(c, tokenizer)
@@ -303,7 +306,7 @@ class basic_tokenize(tokenize):  # noqa: N801
         raise StopIteration()
 
 
-def _try_tokenizer(mod_name: str) -> Optional[Callable]:
+def _try_tokenizer(mod_name: str) -> Optional[Type[tokenize]]:
     """Look for a tokenizer in the named module.
 
     Returns the function if found, None otherwise.
@@ -313,12 +316,9 @@ def _try_tokenizer(mod_name: str) -> Optional[Callable]:
     mod_name = mod_base + mod_name
     try:
         mod = __import__(mod_name, globals(), {}, func_name)
-        return getattr(mod, func_name)
+        return cast(Type[tokenize], getattr(mod, func_name))
     except ImportError:
         return None
-
-
-_Filter = Union[Type[tokenize], "Filter"]
 
 
 def wrap_tokenizer(tk1: _Filter, tk2: _Filter) -> "Filter":
