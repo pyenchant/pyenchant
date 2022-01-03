@@ -20,8 +20,5 @@ def check_words(words):
 def test_can_use_multiprocessing():
     words = ["hello" for i in range(1000)]
     input = [words for i in range(1000)]
-    print("Starting")
     pool = Pool(10)
-    for i, result in enumerate(pool.imap_unordered(check_words, input)):
-        assert result
-    print("Finished")
+    assert all(pool.imap_unordered(check_words, input))
