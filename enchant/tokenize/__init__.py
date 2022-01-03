@@ -461,7 +461,7 @@ class Filter:
 
         offset = property(_get_offset, _set_offset)
 
-        def set_offset(self, val, replaced: bool = False) -> None:
+        def set_offset(self, val: int, replaced: bool = False) -> None:
             old_offset = self._tokenizer.offset
             self._tokenizer.set_offset(val, replaced=replaced)
             # If we move forward within the current word, also set on _curtok.
