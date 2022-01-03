@@ -438,12 +438,13 @@ class Filter:
                     self._curpos = pos
                     self._curtok = self._split(word)
 
-        def _to_string(self, word) -> str:
-            if type(word) is array.array:
+        def _to_string(self, word: Union[array.array, str]) -> str:
+            if isinstance(word, array.array):
                 if word.typecode == "u":
                     return word.tounicode()
                 elif word.typecode == "c":
                     return word.tostring()
+                raise TypeError(word.typecode)
             return word
 
         # Pass on access to 'offset' to the underlying tokenizer.

@@ -115,7 +115,7 @@ class SpellChecker:
     def __init__(
         self,
         lang: Union[Dict, None, str] = None,
-        text: Optional[str] = None,
+        text: Union[None, array.array, bytes, str] = None,
         tokenize: Union[None, Type[tokenize], Filter] = None,
         chunkers: Optional[List[Chunker]] = None,
         filters: Optional[List[Filter]] = None,
@@ -180,22 +180,24 @@ class SpellChecker:
         """Each SpellChecker object is its own iterator"""
         return self
 
-    def set_text(self, text: str) -> None:
+    def set_text(self, text: Union[bytes, str, array.array]) -> None:
         """Set the text to be spell-checked.
 
         This method must be called, or the `text` argument supplied
         to the constructor, before calling the method :py:meth:`next()`.
         """
         # Convert to an array object if necessary
-        if isinstance(text, (str, bytes)):
-            if type(text) is str:
-                self._text = array.array("u", text)
-            else:
-                self._text = array.array("c", text)
+        if isinstance(text, bytes):
+            self._text = array.array("c", text)
             self._use_tostring = True
-        else:
+        elif isinstance(text, str):
+            self._text = array.array("u", text)
+            self._use_tostring = True
+        elif isinstance(text, array.array):
             self._text = text
             self._use_tostring = False
+        else:
+            raise TypeError(text)
         self._tokens = self._tokenize(self._text)
 
     def get_text(self) -> str:
