@@ -247,7 +247,7 @@ class empty_tokenize(tokenize):  # noqa: N801
     def __init__(self) -> None:
         super().__init__("")
 
-    def next(self):
+    def next(self) -> Token:
         raise StopIteration()
 
 
@@ -258,7 +258,7 @@ class unit_tokenize(tokenize):  # noqa: N801
         super().__init__(text)
         self._done = False
 
-    def next(self):
+    def next(self) -> Token:
         if self._done:
             raise StopIteration()
         self._done = True
@@ -277,7 +277,7 @@ class basic_tokenize(tokenize):  # noqa: N801
     strip_from_start = '"' + "'`(["
     strip_from_end = '"' + "'`]).!,?;:"
 
-    def next(self):
+    def next(self) -> Token:
         text = self._text
         offset = self._offset
         while True:
@@ -420,7 +420,7 @@ class Filter:
         def __iter__(self):
             return self
 
-        def __next__(self):
+        def __next__(self) -> Token:
             return self.next()
 
         def next(self) -> Token:
