@@ -167,9 +167,9 @@ class tokenize:  # noqa: N801
 
 
 def get_tokenizer(
-    tag: str = None,
-    chunkers: Iterable[Union[Type["Chunker"], Type["Filter"]]] = None,
-    filters: Iterable[Type["Filter"]] = None,
+    tag: Optional[str] = None,
+    chunkers: Optional[Iterable[Union[Type["Chunker"], Type["Filter"]]]] = None,
+    filters: Optional[Iterable[Type["Filter"]]] = None,
 ) -> tokenize:
     """Locate an appropriate tokenizer by language tag.
 

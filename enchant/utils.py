@@ -76,7 +76,7 @@ def trim_suggestions(
     word: str,
     suggs: Iterable[str],
     maxlen: int,
-    calcdist: Callable[[str, str], int] = None,
+    calcdist: Optional[Callable[[str, str], int]] = None,
 ) -> List[str]:
     """Trim a list of suggestions to a maximum length.
 

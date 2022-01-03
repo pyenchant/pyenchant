@@ -114,11 +114,11 @@ class SpellChecker:
 
     def __init__(
         self,
-        lang: Union[Dict, str] = None,
+        lang: Union[Dict, None, str] = None,
         text: Optional[str] = None,
-        tokenize: Union[Type[tokenize], Filter] = None,
-        chunkers: List[Chunker] = None,
-        filters: List[Filter] = None,
+        tokenize: Union[None, Type[tokenize], Filter] = None,
+        chunkers: Optional[List[Chunker]] = None,
+        filters: Optional[List[Filter]] = None,
     ) -> None:
         """Constructor for the `SpellChecker` class.
 

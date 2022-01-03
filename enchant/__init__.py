@@ -148,7 +148,7 @@ class _EnchantObject:
         if _e is not None:
             self._init_this()
 
-    def _check_this(self, msg: str = None) -> None:
+    def _check_this(self, msg: Optional[str] = None) -> None:
         """Check that :py:attr:`_this` is set to a pointer, rather than `None`."""
         if self._this is None:
             if msg is None:
@@ -260,7 +260,7 @@ class Broker(_EnchantObject):
             _e.broker_free(self._this)
             self._this = None
 
-    def request_dict(self, tag: str = None) -> "Dict":
+    def request_dict(self, tag: Optional[str] = None) -> "Dict":
         """Request a :py:class:`Dict` object for the language specified by `tag`.
 
         This method constructs and returns a :py:class:`Dict` object for the
@@ -781,7 +781,11 @@ class DictWithPWL(Dict):
     _DOC_ERRORS = ["pel", "pel", "PEL", "pel"]
 
     def __init__(
-        self, tag: str, pwl: str = None, pel: str = None, broker: Broker = None
+        self,
+        tag: str,
+        pwl: Optional[str] = None,
+        pel: Optional[str] = None,
+        broker: Optional[Broker] = None,
     ) -> None:
         """DictWithPWL constructor.
 

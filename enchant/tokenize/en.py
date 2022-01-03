@@ -37,7 +37,7 @@
 """
 
 import unicodedata
-from typing import Any, Callable, Container, Union  # noqa F401
+from typing import Any, Callable, Container, Optional, Union  # noqa F401
 
 import enchant.tokenize
 
@@ -65,7 +65,9 @@ class tokenize(enchant.tokenize.tokenize):  # noqa: N801
 
     _DOC_ERRORS = ["pos", "pos"]
 
-    def __init__(self, text: _TextLike, valid_chars: Container[str] = None) -> None:
+    def __init__(
+        self, text: _TextLike, valid_chars: Optional[Container[str]] = None
+    ) -> None:
         self._valid_chars = valid_chars  # type: Container[str] # type: ignore
         self._text = text  # type: ignore
         self._offset = 0
