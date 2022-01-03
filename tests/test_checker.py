@@ -111,33 +111,48 @@ def test_chunkers():
     assert chkr.get_text() == text
 
 
-def test_chunkers_and_filters():
+class TestChunkersAndFilters:
     """Test SpellChecker with the 'chunkers' and 'filters' arguments."""
+
     text = """I contain <html a=xjvf>tags</html> that should be skipped
               along with a <a href='http://example.com/">link to
               http://example.com/</a> that should also be skipped"""
-    # There are no errors when things are correctly skipped
-    chkr = SpellChecker(
-        "en_US",
-        text=text,
-        filters=[enchant.tokenize.URLFilter],
-        chunkers=[enchant.tokenize.HTMLChunker],
-    )
-    for err in chkr:
-        pytest.fail("Extraneous spelling errors were found")
-    assert chkr.get_text() == text
-    # The "html" is an error when not using HTMLChunker
-    chkr = SpellChecker("en_US", text=text, filters=[enchant.tokenize.URLFilter])
-    for err in chkr:
-        assert err.word == "html"
-        break
-    assert chkr.get_text() == text
-    # The "http" from the URL is an error when not using URLFilter
-    chkr = SpellChecker("en_US", text=text, chunkers=[enchant.tokenize.HTMLChunker])
-    for err in chkr:
-        assert err.word == "http"
-        break
-    assert chkr.get_text() == text
+
+    def test_chunkers_and_filters(self) -> None:
+        # There are no errors when things are correctly skipped
+        chkr = SpellChecker(
+            "en_US",
+            text=self.text,
+            filters=[enchant.tokenize.URLFilter],
+            chunkers=[enchant.tokenize.HTMLChunker],
+        )
+        for err in chkr:
+            pytest.fail("Extraneous spelling errors were found")
+        assert chkr.get_text() == self.text
+
+    def test_filter_only(self) -> None:
+        # The "html" is an error when not using HTMLChunker
+        chkr = SpellChecker(
+            "en_US",
+            text=self.text,
+            filters=[enchant.tokenize.URLFilter],
+        )
+        for err in chkr:
+            assert err.word == "html"
+            break
+        assert chkr.get_text() == self.text
+
+    def test_chunkter_only(self) -> None:
+        # The "http" from the URL is an error when not using URLFilter
+        chkr = SpellChecker(
+            "en_US",
+            text=self.text,
+            chunkers=[enchant.tokenize.HTMLChunker],
+        )
+        for err in chkr:
+            assert err.word == "http"
+            break
+        assert chkr.get_text() == self.text
 
 
 def test_unicode():
