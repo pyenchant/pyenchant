@@ -76,6 +76,9 @@ __version__ = "3.2.2"
 
 import os
 import warnings
+from typing import Any
+from typing import Dict as PythonDict
+from typing import List, NoReturn, Optional, Tuple, Type, TypeVar, Union, cast
 
 try:
     from enchant import _enchant as _e
@@ -84,12 +87,12 @@ except ImportError:
         raise
     _e = None  # type: ignore
 
-from typing import Any, List, NoReturn, Optional, Tuple, Type, Union  # noqa F401
-
 from enchant.errors import *  # noqa F401,F403
 from enchant.errors import DictNotFoundError, Error
 from enchant.pypwl import PyPWL
 from enchant.utils import get_default_language
+
+_CP = TypeVar("_CP")  # bound=ctypes.c_void_p
 
 
 class ProviderDesc:
@@ -116,13 +119,13 @@ class ProviderDesc:
     def __repr__(self) -> str:
         return str(self)
 
-    def __eq__(self, pd):
+    def __eq__(self, pd: object) -> bool:
         """Equality operator on ProviderDesc objects."""
         if not isinstance(pd, ProviderDesc):
             return False
         return self.name == pd.name and self.desc == pd.desc and self.file == pd.file
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         """Hash operator on ProviderDesc objects."""
         return hash(self.name + self.desc + self.file)
 
@@ -175,7 +178,7 @@ class _EnchantObject:
 
     _raise_error._DOC_ERRORS = ["eclass"]  # type: ignore
 
-    def __getstate__(self):
+    def __getstate__(self) -> PythonDict[str, Any]:
         """Customize pickling of PyEnchant objects.
 
         Since it's not safe for multiple objects to share the same C-library
@@ -185,7 +188,7 @@ class _EnchantObject:
         state["_this"] = None
         return state
 
-    def __setstate__(self, state):
+    def __setstate__(self, state: PythonDict[str, Any]) -> None:
         self.__dict__.update(state)
         self._init_this()
 
@@ -218,7 +221,7 @@ class Broker(_EnchantObject):
         self._this = _e.broker_init()
         if not self._this:
             raise Error("Could not initialise an enchant broker.")
-        self._live_dicts = {}
+        self._live_dicts: PythonDict[_e.t_dict, int] = {}
 
     def __del__(self) -> None:
         """Broker object destructor."""
@@ -228,7 +231,7 @@ class Broker(_EnchantObject):
         except (AttributeError, TypeError):
             pass
 
-    def __getstate__(self):
+    def __getstate__(self) -> PythonDict[str, Any]:
         state = super().__getstate__()
         state.pop("_live_dicts")
         return state
@@ -298,7 +301,7 @@ class Broker(_EnchantObject):
             self._live_dicts[new_dict] = 1
         else:
             self._live_dicts[new_dict] += 1
-        return new_dict
+        return cast(_e.t_dict, new_dict)
 
     def request_pwl_dict(self, pwl: str) -> "Dict":
         """Request a Dict object for a personal word list.
@@ -374,7 +377,7 @@ class Broker(_EnchantObject):
         :py:class:`ProviderDesc` object.
         """
         self._check_this()
-        self.__describe_result = []
+        self.__describe_result: List[Tuple[str, str, str]] = []
         _e.broker_describe(self._this, self.__describe_callback)
         return [ProviderDesc(*r) for r in self.__describe_result]
 
@@ -403,11 +406,13 @@ class Broker(_EnchantObject):
         through which that dictionary can be obtained.
         """
         self._check_this()
-        self.__list_dicts_result = []
+        self.__list_dicts_result: List[Tuple[str, Tuple[str, str, str]]] = []
         _e.broker_list_dicts(self._this, self.__list_dicts_callback)
         return [(r[0], ProviderDesc(*r[1])) for r in self.__list_dicts_result]
 
-    def __list_dicts_callback(self, tag, name, desc, file):
+    def __list_dicts_callback(
+        self, tag: bytes, name: bytes, desc: bytes, file: bytes,
+    ) -> None:
         """Collector callback for listing dictionaries.
 
         This method is used as a callback into the _enchant function
@@ -426,22 +431,23 @@ class Broker(_EnchantObject):
         This function returns a list of language tags for which a
         dictionary is available.
         """
-        langs = []
+        langs: List[str] = []
         for (tag, prov) in self.list_dicts():
             if tag not in langs:
                 langs.append(tag)
         return langs
 
-    def __describe_dict(self, dict_data):
+    # UNUSED
+    def __describe_dict(self, dict_data: _e.t_dict) -> Tuple[str, str, str, str]:
         """Get the description tuple for a dict data object.
         `dict_data` must be a C-library pointer to an enchant dictionary.
         The return value is a tuple of the form:
                 (<tag>,<name>,<desc>,<file>)
         """
         # Define local callback function
-        cb_result = []
+        cb_result: List[Tuple[str, str, str, str]] = []
 
-        def cb_func(tag, name, desc, file):
+        def cb_func(tag: bytes, name: bytes, desc: bytes, file: bytes) -> None:
             tag = tag.decode()
             name = name.decode()
             desc = desc.decode()
@@ -568,7 +574,7 @@ class Dict(_EnchantObject):
         except (AttributeError, TypeError):
             pass
 
-    def _switch_this(self, this, broker: Broker) -> None:
+    def _switch_this(self, this: _e.t_dict, broker: Broker) -> None:
         """Switch the underlying C-library pointer for this object.
 
         As all useful state for a `Dict` is stored by the underlying C-library
@@ -735,7 +741,7 @@ class Dict(_EnchantObject):
         _e.dict_describe(self._this, self.__describe_callback)
         return self.__describe_result
 
-    def __describe_callback(self, tag, name, desc, file):
+    def __describe_callback(self, tag: bytes, name: bytes, desc: bytes, file: bytes) -> None:
         """Collector callback for dictionary description.
 
         This method is used as a callback into the `_enchant` function
@@ -803,17 +809,16 @@ class DictWithPWL(Dict):
                 f = open(pwl, "wt")
                 f.close()
                 del f
-            self.pwl = self._broker.request_pwl_dict(pwl)
+            self.pwl: Union[None, PyPWL, Dict] = self._broker.request_pwl_dict(pwl)
         else:
             self.pwl = PyPWL()
+
         if pel is not None:
             if not os.path.exists(pel):
                 f = open(pel, "wt")
                 f.close()
                 del f
-            self.pel = self._broker.request_pwl_dict(
-                pel
-            )  # type: Union[None, _e.t_dict, PyPWL]
+            self.pel: Union[None, PyPWL, Dict] = self._broker.request_pwl_dict(pel)
         else:
             self.pel = PyPWL()
 

@@ -57,7 +57,7 @@ import platform
 import sys
 import textwrap
 from ctypes import CFUNCTYPE, POINTER, c_char_p, c_int, c_size_t, c_void_p, pointer
-from typing import Callable, List, Optional, TypeVar  # noqa F401
+from typing import Callable, List, Optional, TypeVar
 
 
 def from_prefix(prefix: str) -> str:
@@ -258,7 +258,7 @@ def broker_list_dicts(broker: _B, cbfunc) -> None:
 
 
 try:
-    broker_get_param = e.enchant_broker_get_param  # type: Callable[[_B, bytes], bytes]
+    broker_get_param: Callable[[_B, bytes], bytes] = e.enchant_broker_get_param
 except AttributeError:
     #  Make the lookup error occur at runtime
     def broker_get_param(broker: _B, name: bytes) -> bytes:
@@ -269,9 +269,7 @@ else:
     broker_get_param.restype = c_char_p  # type: ignore
 
 try:
-    broker_set_param = (
-        e.enchant_broker_set_param
-    )  # type: Callable[[_B, bytes, bytes], None]
+    broker_set_param: Callable[[_B, bytes, bytes], None] = e.enchant_broker_set_param
 except AttributeError:
     #  Make the lookup error occur at runtime
     def broker_set_param(broker: _B, name: bytes, value: bytes) -> None:
@@ -282,7 +280,7 @@ else:
     broker_set_param.restype = None  # type: ignore
 
 try:
-    get_version = e.enchant_get_version  # type: Callable[[], bytes]
+    get_version: Callable[[], bytes] = e.enchant_get_version
 except AttributeError:
     #  Make the lookup error occur at runtime
     def get_version() -> bytes:
@@ -293,7 +291,7 @@ else:
     get_version.restype = c_char_p  # type: ignore
 
 try:
-    set_prefix_dir = e.enchant_set_prefix_dir  # type: Callable[[bytes], None]
+    set_prefix_dir: Callable[[bytes], None] = e.enchant_set_prefix_dir
 except AttributeError:
     #  Make the lookup error occur at runtime
     def set_prefix_dir(path: bytes):
@@ -304,7 +302,7 @@ else:
     set_prefix_dir.restype = None  # type: ignore
 
 try:
-    get_user_config_dir = e.enchant_get_user_config_dir  # type: Callable[[], bytes]
+    get_user_config_dir: Callable[[], bytes] = e.enchant_get_user_config_dir
 except AttributeError:
     #  Make the lookup error occur at runtime
     def get_user_config_dir() -> bytes:

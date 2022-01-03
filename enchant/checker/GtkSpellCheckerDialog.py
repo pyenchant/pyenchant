@@ -71,7 +71,7 @@ class GtkSpellCheckerDialog(Gtk.Window):
         self.add_accel_group(accel_group)
 
         # list of widgets to disable if there's no spell error left
-        self._conditional_widgets = []  # type: List[Gtk.Widget]
+        self._conditional_widgets: List[Gtk.Widget] = []
         conditional = self._conditional_widgets.append
 
         # layout
