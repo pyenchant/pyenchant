@@ -114,7 +114,7 @@ def test_chunkers():
 class TestChunkersAndFilters:
     """Test SpellChecker with the 'chunkers' and 'filters' arguments."""
 
-    text = """I contain <html a=xjvf>tags</html> that should be skipped
+    text = """I contain <xjvf a=xjvf>tags</xjvf> that should be skipped
               along with a <a href='http://example.com/">link to
               http://example.com/</a> that should also be skipped"""
 
@@ -138,7 +138,7 @@ class TestChunkersAndFilters:
             filters=[enchant.tokenize.URLFilter],
         )
         for err in chkr:
-            assert err.word == "html"
+            assert err.word == "xjvf"
             break
         assert chkr.get_text() == self.text
 
