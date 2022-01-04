@@ -52,7 +52,7 @@ from enchant.errors import Error
 def levenshtein(s1: str, s2: str) -> int:
     """Calculate the Levenshtein distance between two strings.
 
-    This is straight from Wikipedia.
+    This is straight from `Wikipedia <https://en.wikipedia.org/wiki/Levenshtein_distance>`_.
     """
     if len(s1) < len(s2):
         return levenshtein(s2, s1)
