@@ -234,13 +234,9 @@ def test_default_language():
     # Two cases: either SpellChecker() without argument works
     # and its lang is the default language, or
     # it does not and we get a DefaultLanguageNotFoundError
-    caught_err = None
     try:
         checker = SpellChecker()
-    except DefaultLanguageNotFoundError as e:
-        caught_err = e
-
-    if caught_err:
+    except DefaultLanguageNotFoundError:
         # At this point, caught_err must be DefaultLanguageNotFoundError, so
         # we're done testing
         return
