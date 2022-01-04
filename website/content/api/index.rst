@@ -16,6 +16,7 @@ By module
 
    enchant.rst
    enchant.checker.rst
+   enchant.errors.rst
    enchant.tokenize.rst
    enchant.utils.rst
    enchant.pypwl.rst
