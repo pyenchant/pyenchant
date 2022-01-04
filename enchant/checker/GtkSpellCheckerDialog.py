@@ -28,7 +28,7 @@
 # do so, delete this exception statement from your version.
 #
 
-from typing import Any, Iterable, List, Optional
+from typing import Any, Iterable, List, cast
 
 import gi
 
@@ -215,7 +215,7 @@ class GtkSpellCheckerDialog(Gtk.Window):
         """Get the chosen replacement string."""
         repl = self.replace_text.get_text()
         repl = self._checker.coerce_string(repl)
-        return repl
+        return cast(str, repl)
 
     def _fillSuggestionList(self, suggestions: Iterable[str]) -> None:
         model = self.suggestion_list_view.get_model()

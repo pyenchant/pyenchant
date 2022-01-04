@@ -47,6 +47,7 @@ such as a wxPython GUI dialog and a command-line interface.
 
 import array
 import warnings
+from typing import Any
 from typing import Dict as PythonDict
 from typing import List, Optional, Type, Union
 
@@ -202,7 +203,7 @@ class SpellChecker:
             raise TypeError(text)
         self._tokens = self._tokenize(self._text)
 
-    def get_text(self) -> str:
+    def get_text(self) -> Any:
         """Return the spell-checked text."""
         if self._use_tostring:
             return self._array_to_string(self._text)
