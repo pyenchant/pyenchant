@@ -54,10 +54,10 @@ class tokenize(enchant.tokenize.tokenize):  # noqa: N801
 
         (<word>,<pos>)
 
-    Where <word> is the word string found and <pos> is the position
+    Where `word` is the word string found and `pos` is the position
     of the start of the word within the text.
 
-    The optional argument <valid_chars> may be used to specify a
+    The optional argument `valid_chars` may be used to specify a
     list of additional characters that can form part of a word.
     By default, this list contains only the apostrophe ('). Note that
     these characters cannot appear at the start or end of a word.

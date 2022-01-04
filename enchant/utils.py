@@ -84,7 +84,7 @@ def trim_suggestions(
     to trim it down to a maximum length.  It tries to keep the "best"
     suggestions based on similarity to the original word.
 
-    If the optional "calcdist" argument is provided, it must be a callable
+    If the optional `calcdist` argument is provided, it must be a callable
     taking two words and returning the distance between them.  It will be
     used to determine which words to retain in the list.  The default is
     a simple Levenshtein distance.
@@ -99,15 +99,15 @@ def trim_suggestions(
 def get_default_language(default: Optional[str] = None) -> Optional[str]:
     """Determine the user's default language, if possible.
 
-    This function uses the 'locale' module to try to determine
+    This function uses the :py:mod:`locale` module to try to determine
     the user's preferred language.  The return value is as
     follows:
 
-        * if a locale is available for the LC_MESSAGES category,
+        * if a locale is available for the `LC_MESSAGES` category,
           that language is used
         * if a default locale is available, that language is used
-        * if the keyword argument <default> is given, it is used
-        * if nothing else works, None is returned
+        * if the keyword argument `default` is given, it is used
+        * if nothing else works, `None` is returned
 
     Note that determining the user's language is in general only
     possible if they have set the necessary environment variables

@@ -33,16 +33,16 @@
 
     enchant.checker.wxSpellCheckerDialog: wxPython spellchecker interface
 
-    This module provides the class wxSpellCheckerDialog, which provides
+    This module provides the class :py:class:`wxSpellCheckerDialog`, which provides
     a wxPython dialog that can be used as an interface to a spell checking
     session.  Currently it is intended as a proof-of-concept and demonstration
     class, but it should be suitable for general-purpose use in a program.
 
-    The class must be given an enchant.checker.SpellChecker object with
+    The class must be given an :py:class:`enchant.checker.SpellChecker` object with
     which to operate.  It can (in theory...) be used in modal and non-modal
-    modes.  Use Show() when operating on an array of characters as it will
+    modes.  Use `Show()` when operating on an array of characters as it will
     modify the array in place, meaning other work can be done at the same
-    time.  Use ShowModal() when operating on a static string.
+    time.  Use `ShowModal()` when operating on a static string.
 
 """
 _DOC_ERRORS = ["ShowModal"]
@@ -62,7 +62,7 @@ class wxSpellCheckerDialog(wx.Dialog):
     how to do this, although it should be useful for applications that
     just need a simple graphical spellchecker.
 
-    To use, a SpellChecker instance must be created and passed to the
+    To use, a :py:class:`SpellChecker` instance must be created and passed to the
     dialog before it is shown:
 
         >>> chkr = SpellChecker("en_AU",text)
@@ -72,7 +72,7 @@ class wxSpellCheckerDialog(wx.Dialog):
     This is most useful when the text to be checked is in the form of
     a character array, as it will be modified in place as the user
     interacts with the dialog.  For checking strings, the final result
-    will need to be obtained from the SpellChecker object:
+    will need to be obtained from the `SpellChecker` object:
 
         >>> chkr = SpellChecker("en_AU",text)
         >>> dlg = wxSpellCheckerDialog(chkr,None,-1,"")

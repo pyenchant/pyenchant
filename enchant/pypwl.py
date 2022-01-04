@@ -90,8 +90,8 @@ class Trie:
     def search(self, word: str, nerrs: int = 0) -> List[str]:
         """Search for the given word, possibly making errors.
 
-        This method searches the trie for the given <word>, making
-        precisely <nerrs> errors.  It returns a list of words found.
+        This method searches the trie for the given `word`, making
+        precisely `nerrs` errors.  It returns a list of words found.
         """
         res = []  # type: List[str]
         # Terminate if we've run out of errors
@@ -171,7 +171,7 @@ class PyPWL:
         will be read from this file, and new entries will be written to
         it automatically.
 
-        If <pwl> is not specified or None, the list is maintained in
+        If `pwl` is not specified or None, the list is maintained in
         memory only.
         """
         self.provider = None
@@ -192,7 +192,7 @@ class PyPWL:
         """Check spelling of a word.
 
         This method takes a word in the dictionary language and returns
-        True if it is correctly spelled, and false otherwise.
+        `True` if it is correctly spelled, and `False` otherwise.
         """
         res = self._words.search(word)
         return bool(res)
@@ -256,9 +256,9 @@ class PyPWL:
         """Store a replacement spelling for a miss-spelled word.
 
         This method makes a suggestion to the spellchecking engine that the
-        miss-spelled word <mis> is in fact correctly spelled as <cor>.  Such
-        a suggestion will typically mean that <cor> appears early in the
-        list of suggested spellings offered for later instances of <mis>.
+        miss-spelled word `mis` is in fact correctly spelled as `cor`.  Such
+        a suggestion will typically mean that `cor` appears early in the
+        list of suggested spellings offered for later instances of `mis`.
         """
         # Too much work for this simple spellchecker
         pass

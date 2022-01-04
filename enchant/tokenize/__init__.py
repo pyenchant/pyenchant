@@ -43,20 +43,20 @@ form, one for each word found::
 
     (<word>,<pos>)
 
-The meanings of these fields should be clear: <word> is the word
-that was found and <pos> is the position within the text at which
+The meanings of these fields should be clear: `word` is the word
+that was found and `pos` is the position within the text at which
 the word began (zero indexed, of course).  The function will work
 on any string-like object that supports array-slicing; in particular
-character-array objects from the 'array' module may be used.
+character-array objects from the :py:mod:`array` module may be used.
 
-The iterator also provides the attribute 'offset' which gives the current
+The iterator also provides the attribute :py:attr:`~.tokenize.offset` which gives the current
 position of the tokenizer inside the string being split, and the method
-'set_offset' for manually adjusting this position.  This can be used for
+:py:meth:`~tokenize.set_offset` for manually adjusting this position.  This can be used for
 example if the string's contents have changed during the tokenization
 process.
 
 To obtain an appropriate tokenization function for the language
-identified by <tag>, use the function 'get_tokenizer(tag)'::
+identified by `tag`, use the function :py:func:`get_tokenizer`::
 
     tknzr = get_tokenizer("en_US")
     for (word,pos) in tknzr("text to be tokenized goes here")
@@ -64,8 +64,8 @@ identified by <tag>, use the function 'get_tokenizer(tag)'::
 
 This library is designed to be easily extendible by third-party
 authors.  To register a tokenization function for the language
-<tag>, implement it as the function 'tokenize' within the
-module enchant.tokenize.<tag>.  The 'get_tokenizer' function
+`tag`, implement it as the function `tokenize` within the
+module `enchant.tokenize.<tag>`.  The function :py:func:`get_tokenizer`
 will automatically detect it.  Note that the underscore must be
 used as the tag component separator in this case, in order to
 form a valid python module name. (e.g. "en_US" rather than "en-US")
@@ -74,16 +74,16 @@ Currently, a tokenizer has only been implemented for the English
 language.  Based on the author's limited experience, this should
 be at least partially suitable for other languages.
 
-This module also provides various implementations of "Chunkers" and
-"Filters".  These classes are designed to make it easy to work with
+This module also provides various implementations of Chunkers and
+Filters.  These classes are designed to make it easy to work with
 text in a variety of common formats, by detecting and excluding parts
 of the text that don't need to be checked.
 
-A Chunker is a class designed to break a body of text into large chunks
-of checkable content; for example the HTMLChunker class extracts the
+A :py:class:`Chunker` is a class designed to break a body of text into large chunks
+of checkable content; for example the :py:class:`HTMLChunker` class extracts the
 text content from all HTML tags but excludes the tags themselves.
-A Filter is a class designed to skip individual words during the checking
-process; for example the URLFilter class skips over any words that
+A :py:class:`Filter` is a class designed to skip individual words during the checking
+process; for example the :py:class:`URLFilter` class skips over any words that
 have the format of a URL.
 
 For example, to spellcheck an HTML document it is necessary to split the
@@ -126,7 +126,7 @@ Error = TokenizerNotFoundError
 class tokenize:  # noqa: N801
     """Base class for all tokenizer objects.
 
-    Each tokenizer must be an iterator and provide the 'offset'
+    Each tokenizer must be an iterator and provide the :py:attr:`offset`
     attribute as described in the documentation for this module.
 
     While tokenizers are in fact classes, they should be treated
@@ -157,8 +157,8 @@ class tokenize:  # noqa: N801
 
     def _set_offset(self, offset: int) -> None:
         msg = (
-            "changing a tokenizers 'offset' attribute is deprecated;"
-            " use the 'set_offset' method"
+            "changing a tokenizers :py:attr:`offset` attribute is deprecated;"
+            " use the :py:meth:`set_offset` method"
         )
         warnings.warn(msg, category=DeprecationWarning, stacklevel=2)
         self.set_offset(offset)
@@ -173,20 +173,20 @@ def get_tokenizer(
 ) -> tokenize:
     """Locate an appropriate tokenizer by language tag.
 
-    This requires importing the function 'tokenize' from an appropriate
+    This requires importing the function `tokenize` from an appropriate
     module.  Modules tried are named after the language tag, tried in the
     following order:
 
         * the entire tag (e.g. "en_AU.py")
         * the base country code of the tag (e.g. "en.py")
 
-    If the language tag is None, a default tokenizer (actually the English
+    If the language tag is `None`, a default tokenizer (actually the English
     one) is returned.  It's unicode aware and should work OK for most
     latin-derived languages.
 
-    If a suitable function cannot be found, raises TokenizerNotFoundError.
+    If a suitable function cannot be found, raises :py:exc:`~.errors.TokenizerNotFoundError`.
 
-    If given and not None, 'chunkers' and 'filters' must be lists of chunker
+    If given and not `None`, `chunkers` and `filters` must be lists of chunker
     classes and filter classes respectively.  These will be applied to the
     tokenizer during creation.
     """
@@ -331,9 +331,9 @@ _Filter = Union[Type[tokenize], "Filter"]
 def wrap_tokenizer(tk1: _Filter, tk2: _Filter) -> "Filter":
     """Wrap one tokenizer inside another.
 
-    This function takes two tokenizer functions 'tk1' and 'tk2',
+    This function takes two tokenizer functions `tk1` and `tk2`,
     and returns a new tokenizer function that passes the output
-    of tk1 through tk2 before yielding it to the calling code.
+    of `tk1` through `tk2` before yielding it to the calling code.
     """
     # This logic is already implemented in the Filter class.
     # We simply use tk2 as the _split() method for a filter
@@ -359,15 +359,15 @@ class Chunker(tokenize):
 class Filter:
     """Base class for token filtering functions.
 
-    A filter is designed to wrap a tokenizer (or another filter) and do
+    A filter is designed to wrap a tokenizer (or another :py:class:`Filter`) and do
     two things:
 
       * skip over tokens
       * split tokens into sub-tokens
 
     Subclasses have two basic options for customising their behaviour.  The
-    method _skip(word) may be overridden to return True for words that
-    should be skipped, and false otherwise.  The method _split(word) may
+    method :py:meth:`_skip` may be overridden to return `True` for words that
+    should be skipped, and `False` otherwise.  The method :py:meth:`_split` may
     be overridden as tokenization function that will be applied to further
     tokenize any words that aren't skipped.
     """
@@ -383,7 +383,7 @@ class Filter:
     def _skip(self, word: str) -> bool:
         """Filter method for identifying skippable tokens.
 
-        If this method returns true, the given word will be skipped by
+        If this method returns `True`, the given word will be skipped by
         the filter.  This should be overridden in subclasses to produce the
         desired functionality.  The default behaviour is not to skip any words.
         """
@@ -402,7 +402,7 @@ class Filter:
         """Private inner class implementing the tokenizer-wrapping logic.
 
         This might seem convoluted, but we're trying to create something
-        akin to a meta-class - when Filter(tknzr) is called it must return
+        akin to a meta-class - when `Filter(tknzr)` is called it must return
         a *callable* that can then be applied to a particular string to
         perform the tokenization.  Since we need to manage a lot of state
         during tokenization, returning a class is the best option.

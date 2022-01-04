@@ -37,7 +37,7 @@ visit the project website:
 
     https://abiword.github.io/enchant/
 
-Spellchecking is performed using 'Dict' objects, which represent
+Spellchecking is performed using :py:class:`Dict` objects, which represent
 a language dictionary.  Their use is best demonstrated by a quick
 example::
 
@@ -56,18 +56,18 @@ including an additional code - for example, "en_AU" refers to Australian
 English.  The later form is preferred as it is more widely supported.
 
 To check whether a dictionary exists for a given language, the function
-'dict_exists' is available.  Dictionaries may also be created using the
-function 'request_dict'.
+:py:func:`dict_exists` is available.  Dictionaries may also be created using the
+function :py:func:`request_dict`.
 
 A finer degree of control over the dictionaries and how they are created
-can be obtained using one or more 'Broker' objects.  These objects are
+can be obtained using one or more :py:class:`Broker` objects.  These objects are
 responsible for locating dictionaries for a specific language.
 
 Note that unicode strings are expected throughout the entire API.
 Bytestrings should not be passed into any function.
 
 Errors that occur in this module are reported by raising subclasses
-of 'Error'.
+of :py:exc:`~.errors.Error`.
 
 """
 _DOC_ERRORS = ["enchnt", "enchnt", "incant", "fr"]
@@ -97,9 +97,9 @@ class ProviderDesc:
 
     Each provider has the following information associated with it:
 
-        * name:        Internal provider name (e.g. "aspell")
-        * desc:        Human-readable description (e.g. "Aspell Provider")
-        * file:        Location of the library containing the provider
+        * :py:attr:`name`:        Internal provider name (e.g. "aspell")
+        * :py:attr:`desc`:        Human-readable description (e.g. "Aspell Provider")
+        * :py:attr:`file`:        Location of the library containing the provider
 
     """
 
@@ -134,8 +134,8 @@ class _EnchantObject:
     the '_enchant' C-library in a consistent way.  All public objects
     from the 'enchant' module are subclasses of this class.
 
-    All enchant objects have an attribute '_this' which contains the
-    pointer to the underlying C-library object.  The method '_check_this'
+    All enchant objects have an attribute :py:attr:`_this` which contains the
+    pointer to the underlying C-library object.  The method :py:meth:`_check_this`
     can be called to ensure that this point is not None, raising an
     exception if it is.
     """
@@ -149,7 +149,7 @@ class _EnchantObject:
             self._init_this()
 
     def _check_this(self, msg: str = None) -> None:
-        """Check that self._this is set to a pointer, rather than None."""
+        """Check that :py:attr:`_this` is set to a pointer, rather than `None`."""
         if self._this is None:
             if msg is None:
                 msg = "%s unusable: the underlying C-library object has been freed."
@@ -165,11 +165,11 @@ class _EnchantObject:
     ) -> NoReturn:
         """Raise an exception based on available error messages.
 
-        This method causes an Error to be raised.  Subclasses should
+        This method causes an :py:exc:`~.errors.Error` to be raised.  Subclasses should
         override it to retrieve an error indication from the underlying
         API if possible.  If such a message cannot be retrieved, the
-        argument value <default> is used.  The class of the exception
-        can be specified using the argument <eclass>
+        argument value `default` is used.  The class of the exception
+        can be specified using the argument `eclass`
         """
         raise eclass(default)
 
@@ -193,10 +193,10 @@ class _EnchantObject:
 class Broker(_EnchantObject):
     """Broker object for the Enchant spellchecker.
 
-    Broker objects are responsible for locating and managing dictionaries.
-    Unless custom functionality is required, there is no need to use Broker
-    objects directly. The 'enchant' module provides a default broker object
-    so that 'Dict' objects can be created directly.
+    `Broker` objects are responsible for locating and managing dictionaries.
+    Unless custom functionality is required, there is no need to use `Broker`
+    objects directly. The py:mod:`enchant` module provides a default broker object
+    so that :py:class:`Dict` objects can be created directly.
 
     The most important methods of this class include:
 
@@ -209,7 +209,7 @@ class Broker(_EnchantObject):
     def __init__(self) -> None:
         """Broker object constructor.
 
-        This method is the constructor for the 'Broker' object.  No
+        This method is the constructor for the `Broker` object.  No
         arguments are required.
         """
         super().__init__()
@@ -246,9 +246,9 @@ class Broker(_EnchantObject):
         """Free system resource associated with a Broker object.
 
         This method can be called to free the underlying system resources
-        associated with a Broker object.  It is called automatically when
+        associated with a `Broker` object.  It is called automatically when
         the object is garbage collected.  If called explicitly, the
-        Broker and any associated Dict objects must no longer be used.
+        `Broker` and any associated `Dict` objects must no longer be used.
         """
         if self._this is not None:
             # During shutdown, this finalizer may be called before
@@ -261,21 +261,21 @@ class Broker(_EnchantObject):
             self._this = None
 
     def request_dict(self, tag: str = None) -> "Dict":
-        """Request a Dict object for the language specified by <tag>.
+        """Request a :py:class:`Dict` object for the language specified by `tag`.
 
-        This method constructs and returns a Dict object for the
-        requested language.  'tag' should be a string of the appropriate
+        This method constructs and returns a :py:class:`Dict` object for the
+        requested language.  `tag` should be a string of the appropriate
         form for specifying a language, such as "fr" (French) or "en_AU"
         (Australian English).  The existence of a specific language can
-        be tested using the 'dict_exists' method.
+        be tested using the method :py:meth:`dict_exists`.
 
-        If <tag> is not given or is None, an attempt is made to determine
-        the current language in use.  If this cannot be determined, Error
+        If `tag` is not given or is `None`, an attempt is made to determine
+        the current language in use.  If this cannot be determined, :py:exc:`~.errors.Error`
         is raised.
 
         .. note::
-            this method is functionally equivalent to calling the Dict()
-            constructor and passing in the <broker> argument.
+            this method is functionally equivalent to calling the :py:class:`Dict()`
+            constructor and passing in the `broker` argument.
 
         """
         return Dict(tag, self)
@@ -303,7 +303,7 @@ class Broker(_EnchantObject):
     def request_pwl_dict(self, pwl: str) -> "Dict":
         """Request a Dict object for a personal word list.
 
-        This method behaves as 'request_dict' but rather than returning
+        This method behaves as :py:meth:`request_dict` but rather than returning
         a dictionary for a specific language, it returns a dictionary
         referencing a personal word list.  A personal word list is a file
         of custom dictionary entries, one word per line.
@@ -324,8 +324,8 @@ class Broker(_EnchantObject):
     def _free_dict(self, dict: "Dict") -> None:
         """Free memory associated with a dictionary.
 
-        This method frees system resources associated with a Dict object.
-        It is equivalent to calling the object's 'free' method.  Once this
+        This method frees system resources associated with a `Dict` object.
+        It is equivalent to calling the object`s `free' method.  Once this
         method has been called on a dictionary, it must not be used again.
         """
         self._free_dict_data(dict._this)
@@ -344,8 +344,8 @@ class Broker(_EnchantObject):
         """Check availability of a dictionary.
 
         This method checks whether there is a dictionary available for
-        the language specified by 'tag'.  It returns True if a dictionary
-        is available, and False otherwise.
+        the language specified by `tag`.  It returns `True` if a dictionary
+        is available, and `False` otherwise.
         """
         self._check_this()
         val = _e.broker_dict_exists(self._this, tag.encode())
@@ -356,11 +356,11 @@ class Broker(_EnchantObject):
 
         The Enchant library supports the use of multiple dictionary programs
         and multiple languages.  This method specifies which dictionaries
-        the broker should prefer when dealing with a given language.  'tag'
-        must be an appropriate language specification and 'ordering' is a
+        the broker should prefer when dealing with a given language.  `tag`
+        must be an appropriate language specification and `ordering` is a
         string listing the dictionaries in order of preference.  For example
         a valid ordering might be "aspell,myspell,ispell".
-        The value of 'tag' can also be set to "*" to set a default ordering
+        The value of `tag` can also be set to "*" to set a default ordering
         for all languages for which one has not been set explicitly.
         """
         self._check_this()
@@ -371,7 +371,7 @@ class Broker(_EnchantObject):
 
         This method returns a list of descriptions of each of the
         dictionary providers available.  Each entry in the list is a
-        ProviderDesc object.
+        :py:class:`ProviderDesc` object.
         """
         self._check_this()
         self.__describe_result = []
@@ -382,8 +382,8 @@ class Broker(_EnchantObject):
         """Collector callback for dictionary description.
 
         This method is used as a callback into the _enchant function
-        'enchant_broker_describe'.  It collects the given arguments in
-        a tuple and appends them to the list '__describe_result'.
+        `enchant_broker_describe`.  It collects the given arguments in
+        a tuple and appends them to the list :py:attr:`__describe_result`.
         """
         name = name.decode()
         desc = desc.decode()
@@ -398,8 +398,8 @@ class Broker(_EnchantObject):
 
             (tag,provider)
 
-        where <tag> is the language lag for the dictionary and
-        <provider> is a ProviderDesc object describing the provider
+        where `tag` is the language lag for the dictionary and
+        `provider` is a :py:class:`ProviderDesc` object describing the provider
         through which that dictionary can be obtained.
         """
         self._check_this()
@@ -411,8 +411,8 @@ class Broker(_EnchantObject):
         """Collector callback for listing dictionaries.
 
         This method is used as a callback into the _enchant function
-        'enchant_broker_list_dicts'.  It collects the given arguments into
-        an appropriate tuple and appends them to '__list_dicts_result'.
+        `enchant_broker_list_dicts`.  It collects the given arguments into
+        an appropriate tuple and appends them to :py:attr:`__list_dicts_result`.
         """
         tag = tag.decode()
         name = name.decode()
@@ -434,7 +434,7 @@ class Broker(_EnchantObject):
 
     def __describe_dict(self, dict_data):
         """Get the description tuple for a dict data object.
-        <dict_data> must be a C-library pointer to an enchant dictionary.
+        `dict_data` must be a C-library pointer to an enchant dictionary.
         The return value is a tuple of the form:
                 (<tag>,<name>,<desc>,<file>)
         """
@@ -494,24 +494,24 @@ class Dict(_EnchantObject):
 
     Dictionary objects are responsible for checking the spelling of words
     and suggesting possible corrections.  Each dictionary is owned by a
-    Broker object, but unless a new Broker has explicitly been created
-    then this will be the 'enchant' module default Broker and is of little
+    :py:class:`Broker` object, but unless a new :py:class:`Broker` has explicitly been created
+    then this will be the :py:mod:`enchant` module default :py:class:`Broker` and is of little
     interest.
 
     The important methods of this class include:
 
-        * check():              check whether a word id spelled correctly
-        * suggest():            suggest correct spellings for a word
-        * add():                add a word to the user's personal dictionary
-        * remove():             add a word to the user's personal exclude list
-        * add_to_session():     add a word to the current spellcheck session
-        * store_replacement():  indicate a replacement for a given word
+        * :py:meth:`check()`:              check whether a word id spelled correctly
+        * :py:meth:`suggest()`:            suggest correct spellings for a word
+        * :py:meth:`add()`:                add a word to the user's personal dictionary
+        * :py:meth:`remove()`:             add a word to the user's personal exclude list
+        * :py:meth:`add_to_session()`:     add a word to the current spellcheck session
+        * :py:meth:`store_replacement()`:  indicate a replacement for a given word
 
     Information about the dictionary is available using the following
     attributes:
 
-        * tag:        the language tag of the dictionary
-        * provider:   a ProviderDesc object for the dictionary provider
+        * :py:attr:`tag`:        the language tag of the dictionary
+        * :py:attr:`provider`:   a :py:class:`ProviderDesc` object for the dictionary provider
 
     """
 
@@ -521,18 +521,18 @@ class Dict(_EnchantObject):
         """Dict object constructor.
 
         A dictionary belongs to a specific language, identified by the
-        string <tag>.  If the tag is not given or is None, an attempt to
-        determine the language currently in use is made using the 'locale'
-        module.  If the current language cannot be determined, Error is raised.
+        string `tag`.  If the tag is not given or is `None`, an attempt to
+        determine the language currently in use is made using the :py:mod:`locale`
+        module.  If the current language cannot be determined, :py:exc:`~.errors.Error` is raised.
 
-        If <tag> is instead given the value of False, a 'dead' Dict object
+        If `tag` is instead given the value of `False`, a 'dead' Dict object
         is created without any reference to a language.  This is typically
         only useful within PyEnchant itself.  Any other non-string value
-        for <tag> raises Error.
+        for `tag` raises :py:exc:`~.errors.Error`.
 
-        Each dictionary must also have an associated Broker object which
+        Each dictionary must also have an associated `Broker` object which
         obtains the dictionary information from the underlying system. This
-        may be specified using <broker>.  If not given, the default broker
+        may be specified using `broker`.  If not given, the default broker
         is used.
         """
         # Initialise misc object attributes to None
@@ -571,15 +571,15 @@ class Dict(_EnchantObject):
     def _switch_this(self, this, broker: Broker) -> None:
         """Switch the underlying C-library pointer for this object.
 
-        As all useful state for a Dict is stored by the underlying C-library
+        As all useful state for a `Dict` is stored by the underlying C-library
         pointer, it is very convenient to allow this to be switched at
         run-time.  Pass a new dict data object into this method to affect
-        the necessary changes.  The creating Broker object (at the Python
+        the necessary changes.  The creating `Broker` object (at the Python
         level) must also be provided.
 
         This should *never* *ever* be used by application code.  It's
-        a convenience for developers only, replacing the clunkier <data>
-        parameter to __init__ from earlier versions.
+        a convenience for developers only, replacing the clunkier `data`
+        parameter to `__init__` from earlier versions.
         """
         # Free old dict data
         Dict._free(self)
@@ -594,11 +594,11 @@ class Dict(_EnchantObject):
     _switch_this._DOC_ERRORS = ["init"]  # type: ignore
 
     def _check_this(self, msg: Optional[str] = None) -> None:
-        """Extend _EnchantObject._check_this() to check Broker validity.
+        """Extend `_EnchantObject._check_this()` to check Broker validity.
 
         It is possible for the managing Broker object to be freed without
-        freeing the Dict.  Thus validity checking must take into account
-        self._broker._this as well as self._this.
+        freeing the `Dict`.  Thus validity checking must take into account
+        `self._broker._this` as well as `self._this`.
         """
         if self._broker is None or self._broker._this is None:
             self._this = None
@@ -607,17 +607,17 @@ class Dict(_EnchantObject):
     def _raise_error(
         self, default: str = "Unspecified Error", eclass: Type[Error] = Error
     ) -> NoReturn:
-        """Overrides _EnchantObject._raise_error to check dict errors."""
+        """Overrides `_EnchantObject._raise_error` to check dict errors."""
         err = _e.dict_get_error(self._this)
         if err == "" or err is None:
             raise eclass(default)
         raise eclass(err.decode())
 
     def _free(self) -> None:
-        """Free the system resources associated with a Dict object.
+        """Free the system resources associated with a `Dict` object.
 
-        This method frees underlying system resources for a Dict object.
-        Once it has been called, the Dict object must no longer be used.
+        This method frees underlying system resources for a `Dict` object.
+        Once it has been called, the `Dict` object must no longer be used.
         It is called automatically when the object is garbage collected.
         """
         if self._this is not None:
@@ -630,7 +630,7 @@ class Dict(_EnchantObject):
         """Check spelling of a word.
 
         This method takes a word in the dictionary language and returns
-        True if it is correctly spelled, and false otherwise.
+        `True` if it is correctly spelled, and `False` otherwise.
         """
         self._check_this()
         # Enchant asserts that the word is non-empty.
@@ -702,9 +702,9 @@ class Dict(_EnchantObject):
         """Store a replacement spelling for a miss-spelled word.
 
         This method makes a suggestion to the spellchecking engine that the
-        miss-spelled word <mis> is in fact correctly spelled as <cor>.  Such
-        a suggestion will typically mean that <cor> appears early in the
-        list of suggested spellings offered for later instances of <mis>.
+        miss-spelled word `mis` is in fact correctly spelled as `cor`.  Such
+        a suggestion will typically mean that `cor` appears early in the
+        list of suggested spellings offered for later instances of `mis`.
         """
         if not mis:
             raise ValueError("can't store replacement for an empty string")
@@ -728,7 +728,7 @@ class Dict(_EnchantObject):
             * dictionary file
 
         Direct use of this method is not recommended - instead, access this
-        information through the 'tag' and 'provider' attributes.
+        information through the attributes :py:attr:`tag` and :py:attr:`provider`.
         """
         if check_this:
             self._check_this()
@@ -738,9 +738,9 @@ class Dict(_EnchantObject):
     def __describe_callback(self, tag, name, desc, file):
         """Collector callback for dictionary description.
 
-        This method is used as a callback into the _enchant function
-        'enchant_dict_describe'.  It collects the given arguments in
-        a tuple and stores them in the attribute '__describe_result'.
+        This method is used as a callback into the `_enchant` function
+        `enchant_dict_describe`.  It collects the given arguments in
+        a tuple and stores them in the attribute :py:attr:`__describe_result`.
         """
         tag = tag.decode()
         name = name.decode()
@@ -758,24 +758,24 @@ class DictWithPWL(Dict):
         to explicitly maintain a separate word list in addition to
         the default one.
 
-    This class behaves as the standard Dict class, but also manages a
+    This class behaves as the standard class :py:class:`Dict`, but also manages a
     personal word list stored in a separate file.  The file must be
-    specified at creation time by the 'pwl' argument to the constructor.
+    specified at creation time by the `pwl` argument to the constructor.
     Words added to the dictionary are automatically appended to the pwl file.
 
     A personal exclude list can also be managed, by passing another filename
-    to the constructor in the optional 'pel' argument.  If this is not given,
+    to the constructor in the optional `pel` argument.  If this is not given,
     requests to exclude words are ignored.
 
-    If either 'pwl' or 'pel' are None, an in-memory word list is used.
-    This will prevent calls to add() and remove() from affecting the user's
+    If either `pwl` or `pel` are `None`, an in-memory word list is used.
+    This will prevent calls to :py:meth:`add()` and :py:meth:`remove()` from affecting the user's
     default word lists.
 
-    The Dict object managing the PWL is available as the 'pwl' attribute.
-    The Dict object managing the PEL is available as the 'pel' attribute.
+    The `Dict` object managing the PWL is available as the :py:attr:`pwl` attribute.
+    The `Dict` object managing the PEL is available as the :py:attr:`pel` attribute.
 
-    To create a DictWithPWL from the user's default language, use None
-    as the 'tag' argument.
+    To create a `DictWithPWL` from the user's default language, use `None`
+    as the `tag` argument.
     """
 
     _DOC_ERRORS = ["pel", "pel", "PEL", "pel"]
@@ -785,11 +785,11 @@ class DictWithPWL(Dict):
     ) -> None:
         """DictWithPWL constructor.
 
-        The argument 'pwl', if not None, names a file containing the
+        The argument `pwl`, if not `None,` names a file containing the
         personal word list.  If this file does not exist, it is created
         with default permissions.
 
-        The argument 'pel', if not None, names a file containing the personal
+        The argument `pel`, if not `None,` names a file containing the personal
         exclude list.  If this file does not exist, it is created with
         default permissions.
         """
@@ -814,7 +814,7 @@ class DictWithPWL(Dict):
             self.pel = PyPWL()
 
     def _check_this(self, msg: Optional[str] = None) -> None:
-        """Extend Dict._check_this() to check PWL validity."""
+        """Extend :py:meth:`Dict._check_this()` to check PWL validity."""
         if self.pwl is None:
             self._free()
         if self.pel is None:
@@ -824,7 +824,7 @@ class DictWithPWL(Dict):
         self.pel._check_this(msg)
 
     def _free(self) -> None:
-        """Extend Dict._free() to free the PWL as well."""
+        """Extend :py:meth:`Dict._free()` to free the PWL as well."""
         if self.pwl is not None:
             self.pwl._free()
             self.pwl = None
@@ -837,7 +837,7 @@ class DictWithPWL(Dict):
         """Check spelling of a word.
 
         This method takes a word in the dictionary language and returns
-        True if it is correctly spelled, and false otherwise.  It checks
+        `True` if it is correctly spelled, and `False` otherwise.  It checks
         both the dictionary and the personal word list.
         """
         if self.pel.check(word):

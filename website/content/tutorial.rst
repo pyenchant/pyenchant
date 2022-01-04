@@ -9,7 +9,7 @@ Once installed, PyEnchant's functionality is available in the "enchant" module.
 Creating and Using Dictionary Objects
 ++++++++++++++++++++++++++++++++++++++
 
-The most important object in the PyEnchant module is the Dict object, which represents a dictionary. These objects are used to check the spelling of words and to get suggestions for misspelled words. The following shows how to construct a simple Dict and use it to check some words::
+The most important object in the PyEnchant module is the Dict object, which represents a dictionary. These objects are used to check the spelling of words and to get suggestions for misspelled words. The following shows how to construct a simple :py:class:`~enchant.Dict` and use it to check some words::
 
     >>> import enchant
     >>> d = enchant.Dict("en_US")
@@ -40,9 +40,9 @@ Of course, this may still fail if the appropriate dictionary is not available. I
 
 There are several top-level functions in the enchant module which can be used to deal with dictionaries:
 
-    * dict_exists: Check whether a Dict is available for a given language
-    * request_dict: Construct and return a new Dict object
-    * list_languages: List the languages for which Dicts are available
+    * :py:func:`~enchant.dict_exists`: Check whether a Dict is available for a given language
+    * :py:func:`~enchant.request_dict`: Construct and return a new Dict object
+    * :py:func:`~enchant.list_languages`: List the languages for which Dicts are available
 
 ::
 
@@ -56,19 +56,19 @@ There are several top-level functions in the enchant module which can be used to
   >>> enchant.list_languages()
   ['en', 'en_CA', 'en_GB', 'en_US', 'eo', 'fr', 'fr_CH', 'fr_FR']
 
-As shown previously, the check method of a Dict object can be used to check whether a word is correctly spelled. To get suggestions for a misspelled word, use the suggest method as shown below::
+As shown previously, the method :py:meth:`~enchant.Dict.check` can be used to check whether a word is correctly spelled. To get suggestions for a misspelled word, use the suggest method as shown below::
 
   >>> d.suggest("Helo")
   ['He lo', 'He-lo', 'Hello', 'Helot', 'Help', 'Halo', 'Hell', 'Held', 'Helm', 'Hero', "He'll"]
 
 The suggestions are returned in a list, ordered from most likely replacement to least likely.
 
-Once a correction is made to a miss-spelled word, it is often useful to store this correction in some way for later use. The Dict object provides several methods to handle this:
+Once a correction is made to a miss-spelled word, it is often useful to store this correction in some way for later use. The :py:class:`~enchant.Dict` object provides several methods to handle this:
 
-    * add: store an unrecognised word in the user's personal dictionary so that it is recognised as correct in the future.
-    * remove: store a recognised word in the user's personal exclude list, so that it is identified as an error in the future.
-    * add_to_session: store an unrecognised word so that it will be recognised as correct while the Dict object is still in use.
-    * store_replacement: note that one word was used to replace another, meaning that it will appear higher in the list of suggestions in the future.
+    * :py:meth:`~enchant.Dict.add`: store an unrecognised word in the user's personal dictionary so that it is recognised as correct in the future.
+    * :py:meth:`~enchant.Dict.remove`: store a recognised word in the user's personal exclude list, so that it is identified as an error in the future.
+    * :py:meth:`~enchant.Dict.add_to_session`: store an unrecognised word so that it will be recognised as correct while the Dict object is still in use.
+    * :py:meth:`~enchant.Dict.store_replacement`: note that one word was used to replace another, meaning that it will appear higher in the list of suggestions in the future.
 
 
 Personal Word Lists
@@ -80,7 +80,7 @@ Dict objects can also be used to check words against a custom list of correctly-
 
 The personal word list Dict object can be used in the same way as Dict objects which reference a language dictionary. When the object's add method is called, new entries will be appended to the bottom of the file.
 
-PyEnchant also provides the class DictWithPWL which can be used to combine a language dictionary and a personal word list file::
+PyEnchant also provides the class :py:class:`~enchant.DictWithPWL` which can be used to combine a language dictionary and a personal word list file::
 
   >>> d2 = enchant.DictWithPWL("en_US","mywords.txt")
   >>> d2.check("Hello")
@@ -90,9 +90,9 @@ PyEnchant also provides the class DictWithPWL which can be used to combine a lan
 Checking entire blocks of text
 ++++++++++++++++++++++++++++++
 
-While the enchant.Dict objects are useful for spellchecking individual words, they cannot be used directly to check, for example, an entire paragraph. The module enchant.checker provides a class SpellChecker which is designed to handle this task.
+While the :py:class:`enchant.Dict` objects are useful for spellchecking individual words, they cannot be used directly to check, for example, an entire paragraph. The module :py:mod:`enchant.checker` provides a class :py:class:`~enchant.checker.SpellChecker` which is designed to handle this task.
 
-SpellChecker objects are created in the same way as Dict objects - by passing a language tag to the constructor. The set_text method is used to set the text which is to be checked. Once this is done, the SpellChecker object can be used as an iterator over the spelling mistakes in the text. This is best illustrated by a simple example. The following code will print out the errors encountered in a string::
+`SpellChecker` objects are created in the same way as `Dict` objects - by passing a language tag to the constructor. The method :py:meth:`~enchant.checker.SpellChecker.set_text` is used to set the text which is to be checked. Once this is done, the SpellChecker object can be used as an iterator over the spelling mistakes in the text. This is best illustrated by a simple example. The following code will print out the errors encountered in a string::
 
   >>> from enchant.checker import SpellChecker
   >>> chkr = SpellChecker("en_US")
@@ -104,7 +104,7 @@ SpellChecker objects are created in the same way as Dict objects - by passing a 
   ERROR: txt
   ERROR: erors
 
-The SpellChecker can use filters to ignore certain word forms, by passing a list of filters in as a keyword argument::
+The `SpellChecker` can use filters to ignore certain word forms, by passing a list of filters in as a keyword argument::
 
   >>> from enchant.checker import SpellChecker
   >>> from enchant.tokenize import EmailFilter, URLFilter
@@ -116,7 +116,7 @@ The iterator paradigm can be used to implement a wide variety of spellchecking f
 wxSpellCheckerDialog
 ++++++++++++++++++++
 
-The module enchant.checker.wxSpellCheckerDialog provides the class wxSpellCheckerDialog which can be used to interactively check the spelling of some text. The code below shows how to create and use such a dialog from within a wxPython application.
+The module :py:mod:`enchant.checker.wxSpellCheckerDialog` provides the class :py:class:`~enchant.checker.wxSpellCheckerDialog.wxSpellCheckerDialog` which can be used to interactively check the spelling of some text. The code below shows how to create and use such a dialog from within a wxPython application.
 
 It will pop up a simple spellchecking dialog like the one shown here. Each spelling error is highlighted in turn, with the buttons offering a range of options for how to deal with the error:
 
@@ -144,7 +144,7 @@ It will pop up a simple spellchecking dialog like the one shown here. Each spell
 CmdLineChecker
 ++++++++++++++
 
-The module enchant.checker.CmdLineChecker provides the class CmdLineChecker which can be used to interactively check the spelling of some text. It uses standard input and standard output to interact with the user through a command-line interface. The code below shows how to create and use this class from within a python application, along with a short sample checking session::
+The module :py:mod:`enchant.checker.CmdLineChecker` provides the class :py:class:`~enchant.checker.CmdLineChecker.CmdLineChecker` which can be used to interactively check the spelling of some text. It uses standard input and standard output to interact with the user through a command-line interface. The code below shows how to create and use this class from within a python application, along with a short sample checking session::
 
   >>> import enchant
   >>> import enchant.checker
@@ -177,13 +177,13 @@ The module enchant.checker.CmdLineChecker provides the class CmdLineChecker whic
   >>> chkr.get_text()
   'this is some example txt'
 
-As shown by this simple example, the CmdLineChecker prints each error it encounters, along with a list of suggested replacements. The user enters the desired behavior using short alphanumeric commands, as explained by the output of the 'help' command.
+As shown by this simple example, the `CmdLineChecker` prints each error it encounters, along with a list of suggested replacements. The user enters the desired behavior using short alphanumeric commands, as explained by the output of the 'help' command.
 
 
 Tokenization: splitting text into words
 +++++++++++++++++++++++++++++++++++++++
 
-An important task in spellchecking is splitting a body of text up into its constitutive words, each of which is then passed to a Dict object for checking. PyEnchant provides the enchant.tokenize module to assist with this task. The purpose of this module is to provide an appropriate tokenization function which can be used to split the text. Usually, all that is required is the get_tokenizer function::
+An important task in spellchecking is splitting a body of text up into its constitutive words, each of which is then passed to a :py:class:`~enchant.Dict` object for checking. PyEnchant provides the :py:mod:`enchant.tokenize` module to assist with this task. The purpose of this module is to provide an appropriate tokenization function which can be used to split the text. Usually, all that is required is the function :py:func:`~enchant.tokenize.get_tokenizer`::
 
   >>> from enchant.tokenize import get_tokenizer
   >>> tknzr = get_tokenizer("en_US")
@@ -192,9 +192,9 @@ An important task in spellchecking is splitting a body of text up into its const
   >>> [w for w in tknzr("this is some simple text")]
   [('this', 0), ('is', 5), ('some', 8), ('simple', 13), ('text', 20)]
 
-As shown in the example above, the function get_tokenizer takes a language tag as input, and returns a tokenization class that is appropriate for that language. Instantiating this class with some text returns an iterator which will yield the words contained in that text. This is exactly the mechanism that the SpellChecker class uses internally to split text into a series of words.
+As shown in the example above, the function :py:func:`~enchant.tokenize.get_tokenizer` takes a language tag as input, and returns a tokenization class that is appropriate for that language. Instantiating this class with some text returns an iterator which will yield the words contained in that text. This is exactly the mechanism that the class :py:class:`enchant.tokenize.SpellChecker` uses internally to split text into a series of words.
 
-The items produced by the tokenizer are tuples of the form (WORD,POS) where WORD is the word which was found and POS is the position within the string at which that word begins.
+The items produced by the tokenizer are tuples of the form `(WORD,POS)` where `WORD` is the word which was found and `POS` is the position within the string at which that word begins.
 
 
 Chunkers
@@ -202,7 +202,7 @@ Chunkers
 
 In many applications, checkable text may be intermingled with some sort of markup (e.g. HTML tags) which does not need to be checked. To have the tokenizer return only those words that should be checked, it can be augmented with one or more chunkers.
 
-A chunker is simply a special tokenizer function that breaks text up into large chunks rather than individual tokens. They are typically used by passing a list of chunkers to the get_tokenizer function::
+A chunker is simply a special tokenizer function that breaks text up into large chunks rather than individual tokens. They are typically used by passing a list of chunkers to the function :py:func:`~enchant.tokenize.get_tokenizer`::
 
   >>> from enchant.tokenize import get_tokenizer, HTMLChunker
   >>>
@@ -216,9 +216,9 @@ A chunker is simply a special tokenizer function that breaks text up into large 
   [('this', 0), ('is', 5), ('really', 32), ('important', 39), ('text', 56)]
 
 
-When the HTMLChunker is applied to the tokenizer, the <span> tag and its contents are removed from the list of words.
+When the :py:class:`~enchant.tokenize.HTMLChunker` is applied to the tokenizer, the <span> tag and its contents are removed from the list of words.
 
-Currently the only implemented chunker is HTMLChunker. A chunker for LaTeX documents is in the works.
+Currently the only implemented chunker is :py:class:`~enchant.tokenize.HTMLChunker`. A chunker for LaTeX documents is in the works.
 
 
 Filters
@@ -226,7 +226,7 @@ Filters
 
 In many applications, it is common for spellchecking to ignore words that have a certain form. For example, when spellchecking an email it is customary to ignore email addresses and URLs. This can be achieved by augmenting the tokenization process with filters.
 
-A filter is simply a wrapper around a tokenizer that can (1) drop certain words from the stream, and (2) further split words into sub-tokens. They are typically used by passing a list of filters to the get_tokenizer function::
+A filter is simply a wrapper around a tokenizer that can (1) drop certain words from the stream, and (2) further split words into sub-tokens. They are typically used by passing a list of filters to the function :py:func:`~enchant.tokenize.get_tokenizer`::
 
   >>> from enchant.tokenize import get_tokenizer, EmailFilter
   >>>
@@ -238,9 +238,9 @@ A filter is simply a wrapper around a tokenizer that can (1) drop certain words 
   >>> [w for w in tknzr("send an email to fake@example.com please")]
   [('send', 0), ('an', 5), ('email', 8), ('to', 14), ('please', 34)]
 
-When the EmailFilter is applied to the tokenizer, the email address is removed from the list of words.
+When the :py:class:`~enchant.tokenize.EmailFilter` is applied to the tokenizer, the email address is removed from the list of words.
 
-Currently implemented filters are EmailFilter, URLFilter and WikiWordFilter.
+Currently implemented filters are :py:class:`~enchant.tokenize.EmailFilter`, :py:class:`~enchant.tokenize.URLFilter` and :py:class:`~enchant.tokenize.WikiWordFilter`.
 
 
 Advanced PyEnchant Usage
@@ -253,7 +253,7 @@ The underlying programming model provided by the Enchant library is based on the
 
 In this way, enchant forms a "wrapper" around existing spellchecking tools in order to provide a common programming interface.
 
-The provider which is managing a particular Dict object can be determined by accessing its provider attribute. This is a ProviderDesc object with the properties name, desc and file::
+The provider which is managing a particular :py:class:`~enchant.Dict` object can be determined by accessing its provider attribute. This is a :py:class:`~enchant.ProviderDesc` object with the properties :py:attr:`~enchant.ProviderDesc.name`, :py:attr:`~enchant.ProviderDesc.desc` and :py:attr:`~enchant.ProviderDesc.file`::
 
   >>> d = enchant.Dict("en_US")
   >>> d.provider <Enchant: Aspell Provider>
@@ -268,7 +268,7 @@ The provider which is managing a particular Dict object can be determined by acc
 Brokers
 +++++++
 
-The details of which provider is used to create a particular dictionary are managed by a Broker object. Such objects have methods for creating dictionaries and checking whether a particular dictionary exists, as shown in the example below::
+The details of which provider is used to create a particular dictionary are managed by a :py:class:`~enchant.Broker` object. Such objects have methods for creating dictionaries and checking whether a particular dictionary exists, as shown in the example below::
 
   >>> b = enchant.Broker()
   >>> b
@@ -283,7 +283,7 @@ The details of which provider is used to create a particular dictionary are mana
   >>> d
   <enchant.Dict object at 0x2aaaabdff8d0>
 
-Brokers also have the method describe which determines which providers are available, and the method list_dicts which lists the dictionaries available through each provider::
+Brokers also have the method :py:meth:`~enchant.Broker.describe` which determines which providers are available, and the method :py:meth:`~enchant.Broker.list_dicts` which lists the dictionaries available through each provider::
 
   >>> b = enchant.Broker()
   >>> b.describe()
@@ -295,7 +295,7 @@ Brokers also have the method describe which determines which providers are avail
 The Default Broker
 ~~~~~~~~~~~~~~~~~~
 
-In normal use, the functionality provided by brokers is not useful to the programmer. To make the programmer's job easier, PyEnchant creates a default Broker object and uses it whenever one is not explicitly given. For example, the default broker is used when creating dictionary objects directly. This object is available as enchant._broker::
+In normal use, the functionality provided by brokers is not useful to the programmer. To make the programmer's job easier, PyEnchant creates a default :py:class:`~enchant.Broker` object and uses it whenever one is not explicitly given. For example, the default broker is used when creating dictionary objects directly. This object is available as :py:data:`enchant._broker`::
 
   >>> enchant._broker
   <enchant.Broker object at 0x2aaaabdff590>
@@ -303,7 +303,7 @@ In normal use, the functionality provided by brokers is not useful to the progra
   >>> d._broker
   <enchant.Broker object at 0x2aaaabdff590>
 
-You may have noticed that the top-level functions provided by the enchant module (such as request_dict, dict_exists and list_languages) match the methods provided by the Broker class. These functions are in fact the instance methods of the default Broker object::
+You may have noticed that the top-level functions provided by the enchant module (such as :py:func:`~enchant.request_dict`, :py:func:`~enchant.dict_exists` and :py:func:`~enchant.list_languages`) match the methods provided by the :py:class:`~enchant.Broker` class. These functions are in fact the instance methods of the default :py:class:`~enchant.Broker` object::
 
   >>> enchant._broker
   <enchant.Broker object at 0x2aaaabdff590>
@@ -318,7 +318,7 @@ You may have noticed that the top-level functions provided by the enchant module
 Provider Ordering
 ~~~~~~~~~~~~~~~~~
 
-Which provider is used for which language is determined by the provider ordering of the Broker. This can be altered using the set_ordering method. This method accepts a language tag and a comma-separated list of provider names in the order that they should be checked. A language tag of "*" means that the ordering should be the default for all languages where an explicit ordering has not been given.
+Which provider is used for which language is determined by the provider ordering of the :py:class:`~enchant.Broker`. This can be altered using the method :py:meth:`~enchant.Broker.set_ordering`. This method accepts a language tag and a comma-separated list of provider names in the order that they should be checked. A language tag of "*" means that the ordering should be the default for all languages where an explicit ordering has not been given.
 
 The following example states that for American English the MySpell provider should be tried first, followed by the aspell provider. For all other languages, the ordering is reversed::
 
@@ -336,8 +336,8 @@ The user can also set their preferred ordering using enchant configuration files
 Extending enchant.tokenize
 ++++++++++++++++++++++++++
 
-As explained above, the module enchant.tokenize provides the ability to split text into its component words. The current implementation is based only on the rules for the English language, and so might not be completely suitable for your language of choice. Fortunately, it is straightforward to extend the functionality of this module.
+As explained above, the module :py:mod:`enchant.tokenize` provides the ability to split text into its component words. The current implementation is based only on the rules for the English language, and so might not be completely suitable for your language of choice. Fortunately, it is straightforward to extend the functionality of this module.
 
-To implement a new tokenization routine for the language TAG, simply create a class/function "tokenize" within the module "enchant.tokenize.TAG". This function will automatically be detected by the module's get_tokenizer function and used when appropriate. The easiest way to accomplish this is to copy the module "enchant.tokenize.en" and modify it to suit your needs.
+To implement a new tokenization routine for the language `TAG`, simply create a class/function `tokenize` within the module `enchant.tokenize.<TAG>`. This function will automatically be detected by the module's function :py:func:`~enchant.tokenize.get_tokenizer` and used when appropriate. The easiest way to accomplish this is to copy the module :py:mod:`enchant.tokenize.en` and modify it to suit your needs.
 
 The author would be very grateful for tokenization routines for languages other than English which can be incorporated back into the main PyEnchant distribution.

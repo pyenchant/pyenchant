@@ -70,6 +70,10 @@ WORDS = [
     "runtime",
     "py",
     "meth",
+    "attr",
+    "func",
+    "exc",
+    "enchant",
 ]
 
 
