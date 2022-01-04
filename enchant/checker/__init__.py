@@ -217,9 +217,7 @@ class SpellChecker:
         as input, False if it wants normal strings.  It's important to
         provide the correct type of string to the checker.
         """
-        if self._text.typecode == "u":
-            return True
-        return False
+        return self._text.typecode == "u"
 
     def coerce_string(self, text: str, enc: Optional[str] = None) -> str:
         """Coerce string into the required type.
