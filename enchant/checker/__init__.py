@@ -166,8 +166,8 @@ class SpellChecker:
                 tokenize = get_tokenizer(None, chunkers, filters)
         self._tokenize = tokenize
 
-        self.word: Optional[str] = None
-        self.wordpos: Optional[int] = None
+        self.word = ""
+        self.wordpos = 0
         self._ignore_words: PythonDict[str, bool] = {}
         self._replace_words: PythonDict[str, str] = {}
         # Default to the empty string as the text to be checked
