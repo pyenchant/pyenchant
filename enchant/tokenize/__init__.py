@@ -229,9 +229,8 @@ def get_tokenizer(
     #    * apply language-specific rules
     tokenizer = basic_tokenize
     if chunkers is not None:
-        chunkers = list(chunkers)
-        for i in range(len(chunkers) - 1, -1, -1):
-            tokenizer = wrap_tokenizer(chunkers[i], tokenizer)
+        for c in reversed(list(chunkers)):
+            tokenizer = wrap_tokenizer(c, tokenizer)
     if filters is not None:
         for f in filters:
             tokenizer = f(tokenizer)
