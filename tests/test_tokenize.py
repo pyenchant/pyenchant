@@ -83,8 +83,6 @@ of words. Also need to "test" the (handling) of 'quoted' words."""
         ("words", 177),
     ]
     assert output == [i for i in basic_tokenize(input)]
-    for (itm_o, itm_v) in zip(output, basic_tokenize(input)):
-        assert itm_o == itm_v
 
 
 def test_tokenize_strip():
@@ -101,8 +99,6 @@ def test_tokenize_strip():
         (">>", 51),
     ]
     assert output == [i for i in basic_tokenize(input)]
-    for (itm_o, itm_v) in zip(output, basic_tokenize(input)):
-        assert itm_o, itm_v
 
 
 def test_wrap_tokenizer():
@@ -307,8 +303,6 @@ def test_html_chunker():
         ("characters", 190),
     ]
     assert out == exp
-    for (word, pos) in out:
-        assert text[pos : pos + len(word)] == word
 
 
 def test_tokenize_en():
@@ -349,8 +343,6 @@ of words. Also need to "test" the handling of 'quoted' words."""
         ("quoted", 167),
         ("words", 175),
     ]
-    for (itm_o, itm_v) in zip(output, tokenize_en(input)):
-        assert itm_o == itm_v
 
 
 def test_unicode_basic():
@@ -390,8 +382,6 @@ def test_bug1591450():
         ("numbers", 104),
         ("Done", 134),
     ]
-    for (itm_o, itm_v) in zip(output, tokenize_en(input)):
-        assert itm_o == itm_v
 
 
 def test_bug2785373():
