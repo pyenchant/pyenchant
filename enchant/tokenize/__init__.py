@@ -502,9 +502,7 @@ class URLFilter(Filter):
     _pattern = re.compile(r"^[a-zA-Z]+://[^\s].*")
 
     def _skip(self, word: str) -> bool:
-        if self._pattern.match(word):
-            return True
-        return False
+        return bool(self._pattern.match(word))
 
 
 class WikiWordFilter(Filter):
@@ -518,9 +516,7 @@ class WikiWordFilter(Filter):
     _pattern = re.compile(r"^([A-Z]\w+[A-Z]+\w+)")
 
     def _skip(self, word: str) -> bool:
-        if self._pattern.match(word):
-            return True
-        return False
+        return bool(self._pattern.match(word))
 
 
 class EmailFilter(Filter):
@@ -534,9 +530,7 @@ class EmailFilter(Filter):
     _pattern = re.compile(r"^.+@[^.].*\.[a-z]{2,}$")
 
     def _skip(self, word: str) -> bool:
-        if self._pattern.match(word):
-            return True
-        return False
+        return bool(self._pattern.match(word))
 
 
 class MentionFilter(Filter):
@@ -551,9 +545,7 @@ class MentionFilter(Filter):
     _pattern = re.compile(r"(\A|\s)@(\w+)")
 
     def _skip(self, word: str) -> bool:
-        if self._pattern.match(word):
-            return True
-        return False
+        return bool(self._pattern.match(word))
 
 
 class HashtagFilter(Filter):
@@ -568,9 +560,7 @@ class HashtagFilter(Filter):
     _pattern = re.compile(r"(\A|\s)#(\w+)")
 
     def _skip(self, word: str) -> bool:
-        if self._pattern.match(word):
-            return True
-        return False
+        return bool(self._pattern.match(word))
 
 
 class HTMLChunker(Chunker):
