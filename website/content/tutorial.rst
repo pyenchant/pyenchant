@@ -25,7 +25,7 @@ When the current language can be determined, it operates as follows::
   >>> d = enchant.Dict()
   >>> d.tag
   'en_AU'
-  >>> print d.tag
+  >>> print(d.tag)
   en_AU
 
 Of course, this may still fail if the appropriate dictionary is not available. If it cannot be determined, the behavior is as follows::
@@ -98,7 +98,7 @@ SpellChecker objects are created in the same way as Dict objects - by passing a 
   >>> chkr = SpellChecker("en_US")
   >>> chkr.set_text("This is sme sample txt with erors.")
   >>> for err in chkr:
-  ...     print "ERROR:", err.word
+  ...     print("ERROR:", err.word)
   ...
   ERROR: sme
   ERROR: txt
