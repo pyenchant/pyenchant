@@ -48,6 +48,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="index.html#by-module">By module</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="enchant.html">enchant:  Access to the enchant spellchecking library</a></li>
 <li class="toctree-l3"><a class="reference internal" href="enchant.checker.html">enchant.checker:  High-level spellchecking functionality</a></li>
+<li class="toctree-l3"><a class="reference internal" href="enchant.errors.html">enchant.errors:  Error class definitions for the enchant library</a></li>
 <li class="toctree-l3"><a class="reference internal" href="enchant.tokenize.html">enchant.tokenize:    String tokenization functions for PyEnchant</a></li>
 <li class="toctree-l3"><a class="reference internal" href="enchant.utils.html">enchant.utils:    Misc utilities for the enchant package</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">pypwl:  pure-python personal word list in the style of Enchant</a></li>
@@ -125,7 +126,7 @@ For a PWL, this means appending it to the file.</p>
 <span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#enchant.pypwl.PyPWL.check" title="Permalink to this definition"></a></dt>
 <dd><p>Check spelling of a word.</p>
 <p>This method takes a word in the dictionary language and returns
-True if it is correctly spelled, and false otherwise.</p>
+<cite>True</cite> if it is correctly spelled, and <cite>False</cite> otherwise.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -151,9 +152,9 @@ True if it is correctly spelled, and false otherwise.</p>
 <span class="sig-name descname"><span class="pre">store_replacement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#enchant.pypwl.PyPWL.store_replacement" title="Permalink to this definition"></a></dt>
 <dd><p>Store a replacement spelling for a miss-spelled word.</p>
 <p>This method makes a suggestion to the spellchecking engine that the
-miss-spelled word &lt;mis&gt; is in fact correctly spelled as &lt;cor&gt;.  Such
-a suggestion will typically mean that &lt;cor&gt; appears early in the
-list of suggested spellings offered for later instances of &lt;mis&gt;.</p>
+miss-spelled word <cite>mis</cite> is in fact correctly spelled as <cite>cor</cite>.  Such
+a suggestion will typically mean that <cite>cor</cite> appears early in the
+list of suggested spellings offered for later instances of <cite>mis</cite>.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -177,8 +178,8 @@ when traversing the Trie.</p>
 <dt class="sig sig-object py" id="enchant.pypwl.Trie.search">
 <span class="sig-name descname"><span class="pre">search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nerrs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#enchant.pypwl.Trie.search" title="Permalink to this definition"></a></dt>
 <dd><p>Search for the given word, possibly making errors.</p>
-<p>This method searches the trie for the given &lt;word&gt;, making
-precisely &lt;nerrs&gt; errors.  It returns a list of words found.</p>
+<p>This method searches the trie for the given <cite>word</cite>, making
+precisely <cite>nerrs</cite> errors.  It returns a list of words found.</p>
 </dd></dl>
 
 </dd></dl>

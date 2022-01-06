@@ -48,6 +48,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="index.html#by-module">By module</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="enchant.html">enchant:  Access to the enchant spellchecking library</a></li>
 <li class="toctree-l3"><a class="reference internal" href="enchant.checker.html">enchant.checker:  High-level spellchecking functionality</a></li>
+<li class="toctree-l3"><a class="reference internal" href="enchant.errors.html">enchant.errors:  Error class definitions for the enchant library</a></li>
 <li class="toctree-l3"><a class="reference internal" href="enchant.tokenize.html">enchant.tokenize:    String tokenization functions for PyEnchant</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">enchant.utils:    Misc utilities for the enchant package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="enchant.pypwl.html">pypwl:  pure-python personal word list in the style of Enchant</a></li>
@@ -101,16 +102,16 @@ includes:</p>
 <dt class="sig sig-object py" id="enchant.utils.get_default_language">
 <span class="sig-prename descclassname"><span class="pre">enchant.utils.</span></span><span class="sig-name descname"><span class="pre">get_default_language</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#enchant.utils.get_default_language" title="Permalink to this definition"></a></dt>
 <dd><p>Determine the user’s default language, if possible.</p>
-<p>This function uses the ‘locale’ module to try to determine
+<p>This function uses the <code class="xref py py-mod docutils literal notranslate"><span class="pre">locale</span></code> module to try to determine
 the user’s preferred language.  The return value is as
 follows:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>if a locale is available for the LC_MESSAGES category,
+<li><p>if a locale is available for the <cite>LC_MESSAGES</cite> category,
 that language is used</p></li>
 <li><p>if a default locale is available, that language is used</p></li>
-<li><p>if the keyword argument &lt;default&gt; is given, it is used</p></li>
-<li><p>if nothing else works, None is returned</p></li>
+<li><p>if the keyword argument <cite>default</cite> is given, it is used</p></li>
+<li><p>if nothing else works, <cite>None</cite> is returned</p></li>
 </ul>
 </div></blockquote>
 <p>Note that determining the user’s language is in general only
@@ -122,7 +123,7 @@ on their system.</p>
 <dt class="sig sig-object py" id="enchant.utils.levenshtein">
 <span class="sig-prename descclassname"><span class="pre">enchant.utils.</span></span><span class="sig-name descname"><span class="pre">levenshtein</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#enchant.utils.levenshtein" title="Permalink to this definition"></a></dt>
 <dd><p>Calculate the Levenshtein distance between two strings.</p>
-<p>This is straight from Wikipedia.</p>
+<p>This is straight from <a class="reference external" href="https://en.wikipedia.org/wiki/Levenshtein_distance">Wikipedia</a>.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -132,7 +133,7 @@ on their system.</p>
 <p>If the list of suggested words is too long, you can use this function
 to trim it down to a maximum length.  It tries to keep the “best”
 suggestions based on similarity to the original word.</p>
-<p>If the optional “calcdist” argument is provided, it must be a callable
+<p>If the optional <cite>calcdist</cite> argument is provided, it must be a callable
 taking two words and returning the distance between them.  It will be
 used to determine which words to retain in the list.  The default is
 a simple Levenshtein distance.</p>

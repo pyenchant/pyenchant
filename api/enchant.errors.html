@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>API Listing &mdash; PyEnchant 3.2.2 documentation</title>
+  <title>enchant.errors: Error class definitions for the enchant library &mdash; PyEnchant 3.2.2 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -18,8 +18,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="enchant: Access to the enchant spellchecking library" href="enchant.html" />
-    <link rel="prev" title="Tutorial" href="../tutorial.html" /> 
+    <link rel="next" title="enchant.tokenize: String tokenization functions for PyEnchant" href="enchant.tokenize.html" />
+    <link rel="prev" title="enchant.checker: High-level spellchecking functionality" href="enchant.checker.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -43,12 +43,12 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">API Listing</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#full-list">Full list</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#by-module">By module</a><ul>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API Listing</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#full-list">Full list</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#by-module">By module</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="enchant.html">enchant:  Access to the enchant spellchecking library</a></li>
 <li class="toctree-l3"><a class="reference internal" href="enchant.checker.html">enchant.checker:  High-level spellchecking functionality</a></li>
-<li class="toctree-l3"><a class="reference internal" href="enchant.errors.html">enchant.errors:  Error class definitions for the enchant library</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">enchant.errors:  Error class definitions for the enchant library</a></li>
 <li class="toctree-l3"><a class="reference internal" href="enchant.tokenize.html">enchant.tokenize:    String tokenization functions for PyEnchant</a></li>
 <li class="toctree-l3"><a class="reference internal" href="enchant.utils.html">enchant.utils:    Misc utilities for the enchant package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="enchant.pypwl.html">pypwl:  pure-python personal word list in the style of Enchant</a></li>
@@ -75,9 +75,10 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>API Listing</li>
+          <li><a href="index.html">API Listing</a> &raquo;</li>
+      <li>enchant.errors:  Error class definitions for the enchant library</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/api/index.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/api/enchant.errors.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -85,36 +86,42 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="api-listing">
-<h1>API Listing<a class="headerlink" href="#api-listing" title="Permalink to this headline"></a></h1>
-<p>This is an auto-generated listing of the PyEnchant API.</p>
-<section id="full-list">
-<h2>Full list<a class="headerlink" href="#full-list" title="Permalink to this headline"></a></h2>
-<ul class="simple">
-<li><p><a class="reference internal" href="../genindex.html"><span class="std std-ref">API index</span></a></p></li>
-</ul>
-</section>
-<section id="by-module">
-<h2>By module<a class="headerlink" href="#by-module" title="Permalink to this headline"></a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="enchant.html">enchant:  Access to the enchant spellchecking library</a></li>
-<li class="toctree-l1"><a class="reference internal" href="enchant.checker.html">enchant.checker:  High-level spellchecking functionality</a></li>
-<li class="toctree-l1"><a class="reference internal" href="enchant.errors.html">enchant.errors:  Error class definitions for the enchant library</a></li>
-<li class="toctree-l1"><a class="reference internal" href="enchant.tokenize.html">enchant.tokenize:    String tokenization functions for PyEnchant</a></li>
-<li class="toctree-l1"><a class="reference internal" href="enchant.utils.html">enchant.utils:    Misc utilities for the enchant package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="enchant.pypwl.html">pypwl:  pure-python personal word list in the style of Enchant</a></li>
-</ul>
-</div>
-</section>
+  <span class="target" id="module-enchant.errors"></span><section id="enchant-errors-error-class-definitions-for-the-enchant-library">
+<h1>enchant.errors:  Error class definitions for the enchant library<a class="headerlink" href="#enchant-errors-error-class-definitions-for-the-enchant-library" title="Permalink to this headline"></a></h1>
+<p>All error classes are defined in this separate sub-module, so that they
+can safely be imported without causing circular dependencies.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="enchant.errors.DefaultLanguageNotFoundError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">enchant.errors.</span></span><span class="sig-name descname"><span class="pre">DefaultLanguageNotFoundError</span></span><a class="headerlink" href="#enchant.errors.DefaultLanguageNotFoundError" title="Permalink to this definition"></a></dt>
+<dd><p>Exception raised when a default language could not be found.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="enchant.errors.DictNotFoundError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">enchant.errors.</span></span><span class="sig-name descname"><span class="pre">DictNotFoundError</span></span><a class="headerlink" href="#enchant.errors.DictNotFoundError" title="Permalink to this definition"></a></dt>
+<dd><p>Exception raised when a requested dictionary could not be found.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="enchant.errors.Error">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">enchant.errors.</span></span><span class="sig-name descname"><span class="pre">Error</span></span><a class="headerlink" href="#enchant.errors.Error" title="Permalink to this definition"></a></dt>
+<dd><p>Base exception class for the enchant module.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="enchant.errors.TokenizerNotFoundError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">enchant.errors.</span></span><span class="sig-name descname"><span class="pre">TokenizerNotFoundError</span></span><a class="headerlink" href="#enchant.errors.TokenizerNotFoundError" title="Permalink to this definition"></a></dt>
+<dd><p>Exception raised when a requested tokenizer could not be found.</p>
+</dd></dl>
+
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../tutorial.html" class="btn btn-neutral float-left" title="Tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="enchant.html" class="btn btn-neutral float-right" title="enchant: Access to the enchant spellchecking library" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="enchant.checker.html" class="btn btn-neutral float-left" title="enchant.checker: High-level spellchecking functionality" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="enchant.tokenize.html" class="btn btn-neutral float-right" title="enchant.tokenize: String tokenization functions for PyEnchant" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

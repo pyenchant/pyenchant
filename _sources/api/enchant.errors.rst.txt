@@ -1,0 +1,4 @@
+
+.. automodule:: enchant.errors
+   :members:
+

@@ -18,7 +18,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="enchant.tokenize: String tokenization functions for PyEnchant" href="enchant.tokenize.html" />
+    <link rel="next" title="enchant.errors: Error class definitions for the enchant library" href="enchant.errors.html" />
     <link rel="prev" title="enchant: Access to the enchant spellchecking library" href="enchant.html" /> 
 </head>
 
@@ -48,6 +48,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="index.html#by-module">By module</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="enchant.html">enchant:  Access to the enchant spellchecking library</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">enchant.checker:  High-level spellchecking functionality</a></li>
+<li class="toctree-l3"><a class="reference internal" href="enchant.errors.html">enchant.errors:  Error class definitions for the enchant library</a></li>
 <li class="toctree-l3"><a class="reference internal" href="enchant.tokenize.html">enchant.tokenize:    String tokenization functions for PyEnchant</a></li>
 <li class="toctree-l3"><a class="reference internal" href="enchant.utils.html">enchant.utils:    Misc utilities for the enchant package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="enchant.pypwl.html">pypwl:  pure-python personal word list in the style of Enchant</a></li>
@@ -90,7 +91,7 @@
 <p>This package is designed to host higher-level spellchecking functionality
 than is available in the base enchant package.  It should make writing
 applications that follow common usage idioms significantly easier.</p>
-<p>The most useful class is SpellChecker, which implements a spellchecking
+<p>The most useful class is <a class="reference internal" href="#enchant.checker.SpellChecker" title="enchant.checker.SpellChecker"><code class="xref py py-class docutils literal notranslate"><span class="pre">SpellChecker</span></code></a>, which implements a spellchecking
 loop over a block of text.  It is capable of modifying the text in-place
 if given an array of characters to work with.</p>
 <p>This package also contains several interfaces to the SpellChecker class,
@@ -103,13 +104,13 @@ such as a wxPython GUI dialog and a command-line interface.</p>
 a block of text, correcting/ignoring/replacing words as required.
 This loop is implemented using an iterator paradigm so it can be
 embedded inside other loops of control.</p>
-<p>The SpellChecker object is stateful, and the appropriate methods
+<p>The <cite>SpellChecker</cite> object is stateful, and the appropriate methods
 must be called to alter its state and affect the progress of
 the spell checking session.  At any point during the checking
-session, the attribute ‘word’ will hold the current erroneously
+session, the attribute <code class="xref py py-attr docutils literal notranslate"><span class="pre">word</span></code> will hold the current erroneously
 spelled word under consideration.  The action to take on this word
-is determined by calling methods such as ‘replace’, ‘replace_always’
-and ‘ignore_always’.  Once this is done, calling ‘next’ advances
+is determined by calling methods such as <a class="reference internal" href="#enchant.checker.SpellChecker.replace" title="enchant.checker.SpellChecker.replace"><code class="xref py py-meth docutils literal notranslate"><span class="pre">replace()</span></code></a>, <a class="reference internal" href="#enchant.checker.SpellChecker.replace_always" title="enchant.checker.SpellChecker.replace_always"><code class="xref py py-meth docutils literal notranslate"><span class="pre">replace_always()</span></code></a>
+and <a class="reference internal" href="#enchant.checker.SpellChecker.ignore_always" title="enchant.checker.SpellChecker.ignore_always"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ignore_always()</span></code></a>.  Once this is done, calling <a class="reference internal" href="#enchant.checker.SpellChecker.next" title="enchant.checker.SpellChecker.next"><code class="xref py py-meth docutils literal notranslate"><span class="pre">next()</span></code></a> advances
 to the next misspelled word.</p>
 <p>As a quick (and rather silly) example, the following code replaces
 each misspelled word with the string “SPAM”:</p>
@@ -123,20 +124,20 @@ each misspelled word with the string “SPAM”:</p>
 <span class="go">&gt;&gt;&gt;</span>
 </pre></div>
 </div>
-<p>Internally, the SpellChecker always works with arrays of (possibly
+<p>Internally, the <cite>SpellChecker</cite> always works with arrays of (possibly
 unicode) character elements.  This allows the in-place modification
 of the string as it is checked, and is the closest thing Python has
 to a mutable string.  The text can be set as any of a normal string,
 unicode string, character array or unicode character array. The
-‘get_text’ method will return the modified array object if an
+<a class="reference internal" href="#enchant.checker.SpellChecker.get_text" title="enchant.checker.SpellChecker.get_text"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_text()</span></code></a> method will return the modified array object if an
 array is used, or a new string object if a string it used.</p>
-<p>Words input to the SpellChecker may be either plain strings or
+<p>Words input to the <cite>SpellChecker</cite> may be either plain strings or
 unicode objects.  They will be converted to the same type as the
 text being checked, using python’s default encoding/decoding
 settings.</p>
 <p>If using an array of characters with this object and the
 array is modified outside of the spellchecking loop, use the
-‘set_offset’ method to reposition the internal loop pointer
+method <a class="reference internal" href="#enchant.checker.SpellChecker.set_offset" title="enchant.checker.SpellChecker.set_offset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_offset()</span></code></a> to reposition the internal loop pointer
 to make sure it doesn’t skip any words.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="enchant.checker.SpellChecker.add">
@@ -184,8 +185,8 @@ python’s default encoding unless another encoding is specified.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="enchant.checker.SpellChecker.leading_context">
 <span class="sig-name descname"><span class="pre">leading_context</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chars</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#enchant.checker.SpellChecker.leading_context" title="Permalink to this definition"></a></dt>
-<dd><p>Get &lt;chars&gt; characters of leading context.</p>
-<p>This method returns up to &lt;chars&gt; characters of leading
+<dd><p>Get <cite>chars</cite> characters of leading context.</p>
+<p>This method returns up to <cite>chars</cite> characters of leading
 context - the text that occurs in the string immediately
 before the current erroneous word.</p>
 </dd></dl>
@@ -195,17 +196,15 @@ before the current erroneous word.</p>
 <span class="sig-name descname"><span class="pre">next</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#enchant.checker.SpellChecker" title="enchant.checker.SpellChecker"><span class="pre">enchant.checker.SpellChecker</span></a></span></span><a class="headerlink" href="#enchant.checker.SpellChecker.next" title="Permalink to this definition"></a></dt>
 <dd><p>Process text up to the next spelling error.</p>
 <p>This method is designed to support the iterator protocol.
-Each time it is called, it will advance the ‘word’ attribute
+Each time it is called, it will advance the <code class="xref py py-attr docutils literal notranslate"><span class="pre">word</span></code> attribute
 to the next spelling error in the text.  When no more errors
-are found, it will raise StopIteration.</p>
-<p>The method will always return self, so that it can be used
+are found, it will raise <code class="xref py py-exc docutils literal notranslate"><span class="pre">StopIteration</span></code>.</p>
+<p>The method will always return <cite>self</cite>, so that it can be used
 sensibly in common idioms such as:</p>
-<blockquote>
-<div><dl class="simple">
-<dt>for err in checker:</dt><dd><p>err.do_something()</p>
-</dd>
-</dl>
-</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">err</span> <span class="ow">in</span> <span class="n">checker</span><span class="p">:</span>
+    <span class="n">err</span><span class="o">.</span><span class="n">do_something</span><span class="p">()</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -228,14 +227,14 @@ combination is added to the list for future use.</p>
 <span class="sig-name descname"><span class="pre">set_offset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">off</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">whence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#enchant.checker.SpellChecker.set_offset" title="Permalink to this definition"></a></dt>
 <dd><p>Set the offset of the tokenization routine.</p>
 <p>For more details on the purpose of the tokenization offset,
-see the documentation of the ‘enchant.tokenize’ module.
-The optional argument whence indicates the method by
+see the documentation of the module <a class="reference internal" href="enchant.tokenize.html#module-enchant.tokenize" title="enchant.tokenize"><code class="xref py py-mod docutils literal notranslate"><span class="pre">enchant.tokenize</span></code></a>.
+The optional argument <cite>whence</cite> indicates the method by
 which to change the offset:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>0 (the default) treats &lt;off&gt; as an increment</p></li>
-<li><p>1 treats &lt;off&gt; as a distance from the start</p></li>
-<li><p>2 treats &lt;off&gt; as a distance from the end</p></li>
+<li><p>0 (the default) treats <cite>off</cite> as an increment</p></li>
+<li><p>1 treats <cite>off</cite> as a distance from the start</p></li>
+<li><p>2 treats <cite>off</cite> as a distance from the end</p></li>
 </ul>
 </div></blockquote>
 </dd></dl>
@@ -244,8 +243,8 @@ which to change the offset:</p>
 <dt class="sig sig-object py" id="enchant.checker.SpellChecker.set_text">
 <span class="sig-name descname"><span class="pre">set_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#enchant.checker.SpellChecker.set_text" title="Permalink to this definition"></a></dt>
 <dd><p>Set the text to be spell-checked.</p>
-<p>This method must be called, or the ‘text’ argument supplied
-to the constructor, before calling the ‘next()’ method.</p>
+<p>This method must be called, or the <cite>text</cite> argument supplied
+to the constructor, before calling the method <a class="reference internal" href="#enchant.checker.SpellChecker.next" title="enchant.checker.SpellChecker.next"><code class="xref py py-meth docutils literal notranslate"><span class="pre">next()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -258,8 +257,8 @@ to the constructor, before calling the ‘next()’ method.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="enchant.checker.SpellChecker.trailing_context">
 <span class="sig-name descname"><span class="pre">trailing_context</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chars</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#enchant.checker.SpellChecker.trailing_context" title="Permalink to this definition"></a></dt>
-<dd><p>Get &lt;chars&gt; characters of trailing context.</p>
-<p>This method returns up to &lt;chars&gt; characters of trailing
+<dd><p>Get <cite>chars</cite> characters of trailing context.</p>
+<p>This method returns up to <cite>chars</cite> characters of trailing
 context - the text that occurs in the string immediately
 after the current erroneous word.</p>
 </dd></dl>
@@ -268,8 +267,8 @@ after the current erroneous word.</p>
 <dt class="sig sig-object py" id="enchant.checker.SpellChecker.wants_unicode">
 <span class="sig-name descname"><span class="pre">wants_unicode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#enchant.checker.SpellChecker.wants_unicode" title="Permalink to this definition"></a></dt>
 <dd><p>Check whether the checker wants unicode strings.</p>
-<p>This method will return True if the checker wants unicode strings
-as input, False if it wants normal strings.  It’s important to
+<p>This method will return <cite>True</cite> if the checker wants unicode strings
+as input, <cite>False</cite> if it wants normal strings.  It’s important to
 provide the correct type of string to the checker.</p>
 </dd></dl>
 
@@ -282,7 +281,7 @@ provide the correct type of string to the checker.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="enchant.html" class="btn btn-neutral float-left" title="enchant: Access to the enchant spellchecking library" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="enchant.tokenize.html" class="btn btn-neutral float-right" title="enchant.tokenize: String tokenization functions for PyEnchant" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="enchant.errors.html" class="btn btn-neutral float-right" title="enchant.errors: Error class definitions for the enchant library" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

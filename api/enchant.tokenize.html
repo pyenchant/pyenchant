@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="enchant.utils: Misc utilities for the enchant package" href="enchant.utils.html" />
-    <link rel="prev" title="enchant.checker: High-level spellchecking functionality" href="enchant.checker.html" /> 
+    <link rel="prev" title="enchant.errors: Error class definitions for the enchant library" href="enchant.errors.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -48,6 +48,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="index.html#by-module">By module</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="enchant.html">enchant:  Access to the enchant spellchecking library</a></li>
 <li class="toctree-l3"><a class="reference internal" href="enchant.checker.html">enchant.checker:  High-level spellchecking functionality</a></li>
+<li class="toctree-l3"><a class="reference internal" href="enchant.errors.html">enchant.errors:  Error class definitions for the enchant library</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">enchant.tokenize:    String tokenization functions for PyEnchant</a></li>
 <li class="toctree-l3"><a class="reference internal" href="enchant.utils.html">enchant.utils:    Misc utilities for the enchant package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="enchant.pypwl.html">pypwl:  pure-python personal word list in the style of Enchant</a></li>
@@ -97,18 +98,18 @@ form, one for each word found:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="o">&lt;</span><span class="n">word</span><span class="o">&gt;</span><span class="p">,</span><span class="o">&lt;</span><span class="n">pos</span><span class="o">&gt;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The meanings of these fields should be clear: &lt;word&gt; is the word
-that was found and &lt;pos&gt; is the position within the text at which
+<p>The meanings of these fields should be clear: <cite>word</cite> is the word
+that was found and <cite>pos</cite> is the position within the text at which
 the word began (zero indexed, of course).  The function will work
 on any string-like object that supports array-slicing; in particular
-character-array objects from the ‘array’ module may be used.</p>
-<p>The iterator also provides the attribute ‘offset’ which gives the current
+character-array objects from the <code class="xref py py-mod docutils literal notranslate"><span class="pre">array</span></code> module may be used.</p>
+<p>The iterator also provides the attribute <code class="xref py py-attr docutils literal notranslate"><span class="pre">offset</span></code> which gives the current
 position of the tokenizer inside the string being split, and the method
-‘set_offset’ for manually adjusting this position.  This can be used for
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">set_offset()</span></code> for manually adjusting this position.  This can be used for
 example if the string’s contents have changed during the tokenization
 process.</p>
 <p>To obtain an appropriate tokenization function for the language
-identified by &lt;tag&gt;, use the function ‘get_tokenizer(tag)’:</p>
+identified by <cite>tag</cite>, use the function <a class="reference internal" href="#enchant.tokenize.get_tokenizer" title="enchant.tokenize.get_tokenizer"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_tokenizer()</span></code></a>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tknzr</span> <span class="o">=</span> <span class="n">get_tokenizer</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">)</span>
 <span class="k">for</span> <span class="p">(</span><span class="n">word</span><span class="p">,</span><span class="n">pos</span><span class="p">)</span> <span class="ow">in</span> <span class="n">tknzr</span><span class="p">(</span><span class="s2">&quot;text to be tokenized goes here&quot;</span><span class="p">)</span>
     <span class="n">do_something</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
@@ -116,23 +117,23 @@ identified by &lt;tag&gt;, use the function ‘get_tokenizer(tag)’:</p>
 </div>
 <p>This library is designed to be easily extendible by third-party
 authors.  To register a tokenization function for the language
-&lt;tag&gt;, implement it as the function ‘tokenize’ within the
-module enchant.tokenize.&lt;tag&gt;.  The ‘get_tokenizer’ function
+<cite>tag</cite>, implement it as the function <cite>tokenize</cite> within the
+module <cite>enchant.tokenize.&lt;tag&gt;</cite>.  The function <a class="reference internal" href="#enchant.tokenize.get_tokenizer" title="enchant.tokenize.get_tokenizer"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_tokenizer()</span></code></a>
 will automatically detect it.  Note that the underscore must be
 used as the tag component separator in this case, in order to
 form a valid python module name. (e.g. “en_US” rather than “en-US”)</p>
 <p>Currently, a tokenizer has only been implemented for the English
 language.  Based on the author’s limited experience, this should
 be at least partially suitable for other languages.</p>
-<p>This module also provides various implementations of “Chunkers” and
-“Filters”.  These classes are designed to make it easy to work with
+<p>This module also provides various implementations of Chunkers and
+Filters.  These classes are designed to make it easy to work with
 text in a variety of common formats, by detecting and excluding parts
 of the text that don’t need to be checked.</p>
-<p>A Chunker is a class designed to break a body of text into large chunks
-of checkable content; for example the HTMLChunker class extracts the
+<p>A <a class="reference internal" href="#enchant.tokenize.Chunker" title="enchant.tokenize.Chunker"><code class="xref py py-class docutils literal notranslate"><span class="pre">Chunker</span></code></a> is a class designed to break a body of text into large chunks
+of checkable content; for example the <a class="reference internal" href="#enchant.tokenize.HTMLChunker" title="enchant.tokenize.HTMLChunker"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTMLChunker</span></code></a> class extracts the
 text content from all HTML tags but excludes the tags themselves.
-A Filter is a class designed to skip individual words during the checking
-process; for example the URLFilter class skips over any words that
+A <a class="reference internal" href="#enchant.tokenize.Filter" title="enchant.tokenize.Filter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Filter</span></code></a> is a class designed to skip individual words during the checking
+process; for example the <a class="reference internal" href="#enchant.tokenize.URLFilter" title="enchant.tokenize.URLFilter"><code class="xref py py-class docutils literal notranslate"><span class="pre">URLFilter</span></code></a> class skips over any words that
 have the format of a URL.</p>
 <p>For example, to spellcheck an HTML document it is necessary to split the
 text into chunks based on HTML tags, and to filter out common word forms
@@ -167,7 +168,7 @@ This filter skips any words matching the following regular expression:</p>
 <dt class="sig sig-object py" id="enchant.tokenize.Filter">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">enchant.tokenize.</span></span><span class="sig-name descname"><span class="pre">Filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tokenizer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#enchant.tokenize.tokenize" title="enchant.tokenize.tokenize"><span class="pre">enchant.tokenize.tokenize</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#enchant.tokenize.Filter" title="enchant.tokenize.Filter"><span class="pre">enchant.tokenize.Filter</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.tokenize.Filter" title="Permalink to this definition"></a></dt>
 <dd><p>Base class for token filtering functions.</p>
-<p>A filter is designed to wrap a tokenizer (or another filter) and do
+<p>A filter is designed to wrap a tokenizer (or another <a class="reference internal" href="#enchant.tokenize.Filter" title="enchant.tokenize.Filter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Filter</span></code></a>) and do
 two things:</p>
 <blockquote>
 <div><ul class="simple">
@@ -176,8 +177,8 @@ two things:</p>
 </ul>
 </div></blockquote>
 <p>Subclasses have two basic options for customising their behaviour.  The
-method _skip(word) may be overridden to return True for words that
-should be skipped, and false otherwise.  The method _split(word) may
+method <code class="xref py py-meth docutils literal notranslate"><span class="pre">_skip()</span></code> may be overridden to return <cite>True</cite> for words that
+should be skipped, and <cite>False</cite> otherwise.  The method <code class="xref py py-meth docutils literal notranslate"><span class="pre">_split()</span></code> may
 be overridden as tokenization function that will be applied to further
 tokenize any words that aren’t skipped.</p>
 </dd></dl>
@@ -254,7 +255,7 @@ punctuation symbols from the start and end of each word.</p>
 <dt class="sig sig-object py" id="enchant.tokenize.get_tokenizer">
 <span class="sig-prename descclassname"><span class="pre">enchant.tokenize.</span></span><span class="sig-name descname"><span class="pre">get_tokenizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunkers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#enchant.tokenize.Chunker" title="enchant.tokenize.Chunker"><span class="pre">enchant.tokenize.Chunker</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#enchant.tokenize.Filter" title="enchant.tokenize.Filter"><span class="pre">enchant.tokenize.Filter</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#enchant.tokenize.Filter" title="enchant.tokenize.Filter"><span class="pre">enchant.tokenize.Filter</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#enchant.tokenize.tokenize" title="enchant.tokenize.tokenize"><span class="pre">enchant.tokenize.tokenize</span></a></span></span><a class="headerlink" href="#enchant.tokenize.get_tokenizer" title="Permalink to this definition"></a></dt>
 <dd><p>Locate an appropriate tokenizer by language tag.</p>
-<p>This requires importing the function ‘tokenize’ from an appropriate
+<p>This requires importing the function <cite>tokenize</cite> from an appropriate
 module.  Modules tried are named after the language tag, tried in the
 following order:</p>
 <blockquote>
@@ -263,11 +264,11 @@ following order:</p>
 <li><p>the base country code of the tag (e.g. “en.py”)</p></li>
 </ul>
 </div></blockquote>
-<p>If the language tag is None, a default tokenizer (actually the English
+<p>If the language tag is <cite>None</cite>, a default tokenizer (actually the English
 one) is returned.  It’s unicode aware and should work OK for most
 latin-derived languages.</p>
-<p>If a suitable function cannot be found, raises TokenizerNotFoundError.</p>
-<p>If given and not None, ‘chunkers’ and ‘filters’ must be lists of chunker
+<p>If a suitable function cannot be found, raises <a class="reference internal" href="enchant.errors.html#enchant.errors.TokenizerNotFoundError" title="enchant.errors.TokenizerNotFoundError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TokenizerNotFoundError</span></code></a>.</p>
+<p>If given and not <cite>None</cite>, <cite>chunkers</cite> and <cite>filters</cite> must be lists of chunker
 classes and filter classes respectively.  These will be applied to the
 tokenizer during creation.</p>
 </dd></dl>
@@ -276,7 +277,7 @@ tokenizer during creation.</p>
 <dt class="sig sig-object py" id="enchant.tokenize.tokenize">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">enchant.tokenize.</span></span><span class="sig-name descname"><span class="pre">tokenize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.tokenize.tokenize" title="Permalink to this definition"></a></dt>
 <dd><p>Base class for all tokenizer objects.</p>
-<p>Each tokenizer must be an iterator and provide the ‘offset’
+<p>Each tokenizer must be an iterator and provide the <code class="xref py py-attr docutils literal notranslate"><span class="pre">offset</span></code>
 attribute as described in the documentation for this module.</p>
 <p>While tokenizers are in fact classes, they should be treated
 like functions, and so are named using lower_case rather than
@@ -293,9 +294,9 @@ the CamelCase more traditional of class names.</p>
 <dt class="sig sig-object py" id="enchant.tokenize.wrap_tokenizer">
 <span class="sig-prename descclassname"><span class="pre">enchant.tokenize.</span></span><span class="sig-name descname"><span class="pre">wrap_tokenizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tk1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#enchant.tokenize.tokenize" title="enchant.tokenize.tokenize"><span class="pre">enchant.tokenize.tokenize</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#enchant.tokenize.Filter" title="enchant.tokenize.Filter"><span class="pre">enchant.tokenize.Filter</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tk2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#enchant.tokenize.tokenize" title="enchant.tokenize.tokenize"><span class="pre">enchant.tokenize.tokenize</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#enchant.tokenize.Filter" title="enchant.tokenize.Filter"><span class="pre">enchant.tokenize.Filter</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#enchant.tokenize.Filter" title="enchant.tokenize.Filter"><span class="pre">enchant.tokenize.Filter</span></a></span></span><a class="headerlink" href="#enchant.tokenize.wrap_tokenizer" title="Permalink to this definition"></a></dt>
 <dd><p>Wrap one tokenizer inside another.</p>
-<p>This function takes two tokenizer functions ‘tk1’ and ‘tk2’,
+<p>This function takes two tokenizer functions <cite>tk1</cite> and <cite>tk2</cite>,
 and returns a new tokenizer function that passes the output
-of tk1 through tk2 before yielding it to the calling code.</p>
+of <cite>tk1</cite> through <cite>tk2</cite> before yielding it to the calling code.</p>
 </dd></dl>
 
 </section>
@@ -304,7 +305,7 @@ of tk1 through tk2 before yielding it to the calling code.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="enchant.checker.html" class="btn btn-neutral float-left" title="enchant.checker: High-level spellchecking functionality" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="enchant.errors.html" class="btn btn-neutral float-left" title="enchant.errors: Error class definitions for the enchant library" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="enchant.utils.html" class="btn btn-neutral float-right" title="enchant.utils: Misc utilities for the enchant package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

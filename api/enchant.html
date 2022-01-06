@@ -48,6 +48,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="index.html#by-module">By module</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">enchant:  Access to the enchant spellchecking library</a></li>
 <li class="toctree-l3"><a class="reference internal" href="enchant.checker.html">enchant.checker:  High-level spellchecking functionality</a></li>
+<li class="toctree-l3"><a class="reference internal" href="enchant.errors.html">enchant.errors:  Error class definitions for the enchant library</a></li>
 <li class="toctree-l3"><a class="reference internal" href="enchant.tokenize.html">enchant.tokenize:    String tokenization functions for PyEnchant</a></li>
 <li class="toctree-l3"><a class="reference internal" href="enchant.utils.html">enchant.utils:    Misc utilities for the enchant package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="enchant.pypwl.html">pypwl:  pure-python personal word list in the style of Enchant</a></li>
@@ -93,7 +94,7 @@ visit the project website:</p>
 <blockquote>
 <div><p><a class="reference external" href="https://abiword.github.io/enchant/">https://abiword.github.io/enchant/</a></p>
 </div></blockquote>
-<p>Spellchecking is performed using ‘Dict’ objects, which represent
+<p>Spellchecking is performed using <a class="reference internal" href="#enchant.Dict" title="enchant.Dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a> objects, which represent
 a language dictionary.  Their use is best demonstrated by a quick
 example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">enchant</span>
@@ -111,23 +112,23 @@ and “fr” (French).  Specific language dialects can be specified by
 including an additional code - for example, “en_AU” refers to Australian
 English.  The later form is preferred as it is more widely supported.</p>
 <p>To check whether a dictionary exists for a given language, the function
-‘dict_exists’ is available.  Dictionaries may also be created using the
-function ‘request_dict’.</p>
+<a class="reference internal" href="#enchant.dict_exists" title="enchant.dict_exists"><code class="xref py py-func docutils literal notranslate"><span class="pre">dict_exists()</span></code></a> is available.  Dictionaries may also be created using the
+function <a class="reference internal" href="#enchant.request_dict" title="enchant.request_dict"><code class="xref py py-func docutils literal notranslate"><span class="pre">request_dict()</span></code></a>.</p>
 <p>A finer degree of control over the dictionaries and how they are created
-can be obtained using one or more ‘Broker’ objects.  These objects are
+can be obtained using one or more <a class="reference internal" href="#enchant.Broker" title="enchant.Broker"><code class="xref py py-class docutils literal notranslate"><span class="pre">Broker</span></code></a> objects.  These objects are
 responsible for locating dictionaries for a specific language.</p>
 <p>Note that unicode strings are expected throughout the entire API.
 Bytestrings should not be passed into any function.</p>
 <p>Errors that occur in this module are reported by raising subclasses
-of ‘Error’.</p>
+of <a class="reference internal" href="enchant.errors.html#enchant.errors.Error" title="enchant.errors.Error"><code class="xref py py-exc docutils literal notranslate"><span class="pre">Error</span></code></a>.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="enchant.Broker">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">enchant.</span></span><span class="sig-name descname"><span class="pre">Broker</span></span><a class="headerlink" href="#enchant.Broker" title="Permalink to this definition"></a></dt>
 <dd><p>Broker object for the Enchant spellchecker.</p>
-<p>Broker objects are responsible for locating and managing dictionaries.
-Unless custom functionality is required, there is no need to use Broker
-objects directly. The ‘enchant’ module provides a default broker object
-so that ‘Dict’ objects can be created directly.</p>
+<p><cite>Broker</cite> objects are responsible for locating and managing dictionaries.
+Unless custom functionality is required, there is no need to use <cite>Broker</cite>
+objects directly. The py:mod:<cite>enchant</cite> module provides a default broker object
+so that <a class="reference internal" href="#enchant.Dict" title="enchant.Dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a> objects can be created directly.</p>
 <p>The most important methods of this class include:</p>
 <blockquote>
 <div><ul class="simple">
@@ -142,7 +143,7 @@ so that ‘Dict’ objects can be created directly.</p>
 <dd><p>Return list of provider descriptions.</p>
 <p>This method returns a list of descriptions of each of the
 dictionary providers available.  Each entry in the list is a
-ProviderDesc object.</p>
+<a class="reference internal" href="#enchant.ProviderDesc" title="enchant.ProviderDesc"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProviderDesc</span></code></a> object.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -150,8 +151,8 @@ ProviderDesc object.</p>
 <span class="sig-name descname"><span class="pre">dict_exists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#enchant.Broker.dict_exists" title="Permalink to this definition"></a></dt>
 <dd><p>Check availability of a dictionary.</p>
 <p>This method checks whether there is a dictionary available for
-the language specified by ‘tag’.  It returns True if a dictionary
-is available, and False otherwise.</p>
+the language specified by <cite>tag</cite>.  It returns <cite>True</cite> if a dictionary
+is available, and <cite>False</cite> otherwise.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -176,8 +177,8 @@ broker.  Each entry in the list is a two-tuple of the form:</p>
 <blockquote>
 <div><p>(tag,provider)</p>
 </div></blockquote>
-<p>where &lt;tag&gt; is the language lag for the dictionary and
-&lt;provider&gt; is a ProviderDesc object describing the provider
+<p>where <cite>tag</cite> is the language lag for the dictionary and
+<cite>provider</cite> is a <a class="reference internal" href="#enchant.ProviderDesc" title="enchant.ProviderDesc"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProviderDesc</span></code></a> object describing the provider
 through which that dictionary can be obtained.</p>
 </dd></dl>
 
@@ -192,19 +193,19 @@ dictionary is available.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="enchant.Broker.request_dict">
 <span class="sig-name descname"><span class="pre">request_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#enchant.Dict" title="enchant.Dict"><span class="pre">enchant.Dict</span></a></span></span><a class="headerlink" href="#enchant.Broker.request_dict" title="Permalink to this definition"></a></dt>
-<dd><p>Request a Dict object for the language specified by &lt;tag&gt;.</p>
-<p>This method constructs and returns a Dict object for the
-requested language.  ‘tag’ should be a string of the appropriate
+<dd><p>Request a <a class="reference internal" href="#enchant.Dict" title="enchant.Dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a> object for the language specified by <cite>tag</cite>.</p>
+<p>This method constructs and returns a <a class="reference internal" href="#enchant.Dict" title="enchant.Dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a> object for the
+requested language.  <cite>tag</cite> should be a string of the appropriate
 form for specifying a language, such as “fr” (French) or “en_AU”
 (Australian English).  The existence of a specific language can
-be tested using the ‘dict_exists’ method.</p>
-<p>If &lt;tag&gt; is not given or is None, an attempt is made to determine
-the current language in use.  If this cannot be determined, Error
+be tested using the method <a class="reference internal" href="#enchant.dict_exists" title="enchant.dict_exists"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dict_exists()</span></code></a>.</p>
+<p>If <cite>tag</cite> is not given or is <cite>None</cite>, an attempt is made to determine
+the current language in use.  If this cannot be determined, <a class="reference internal" href="enchant.errors.html#enchant.errors.Error" title="enchant.errors.Error"><code class="xref py py-exc docutils literal notranslate"><span class="pre">Error</span></code></a>
 is raised.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>this method is functionally equivalent to calling the Dict()
-constructor and passing in the &lt;broker&gt; argument.</p>
+<p>this method is functionally equivalent to calling the <a class="reference internal" href="#enchant.Dict" title="enchant.Dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict()</span></code></a>
+constructor and passing in the <cite>broker</cite> argument.</p>
 </div>
 </dd></dl>
 
@@ -212,7 +213,7 @@ constructor and passing in the &lt;broker&gt; argument.</p>
 <dt class="sig sig-object py" id="enchant.Broker.request_pwl_dict">
 <span class="sig-name descname"><span class="pre">request_pwl_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pwl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#enchant.Dict" title="enchant.Dict"><span class="pre">enchant.Dict</span></a></span></span><a class="headerlink" href="#enchant.Broker.request_pwl_dict" title="Permalink to this definition"></a></dt>
 <dd><p>Request a Dict object for a personal word list.</p>
-<p>This method behaves as ‘request_dict’ but rather than returning
+<p>This method behaves as <a class="reference internal" href="#enchant.request_dict" title="enchant.request_dict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">request_dict()</span></code></a> but rather than returning
 a dictionary for a specific language, it returns a dictionary
 referencing a personal word list.  A personal word list is a file
 of custom dictionary entries, one word per line.</p>
@@ -224,11 +225,11 @@ of custom dictionary entries, one word per line.</p>
 <dd><p>Set dictionary preferences for a language.</p>
 <p>The Enchant library supports the use of multiple dictionary programs
 and multiple languages.  This method specifies which dictionaries
-the broker should prefer when dealing with a given language.  ‘tag’
-must be an appropriate language specification and ‘ordering’ is a
+the broker should prefer when dealing with a given language.  <cite>tag</cite>
+must be an appropriate language specification and <cite>ordering</cite> is a
 string listing the dictionaries in order of preference.  For example
 a valid ordering might be “aspell,myspell,ispell”.
-The value of ‘tag’ can also be set to “*” to set a default ordering
+The value of <cite>tag</cite> can also be set to “*” to set a default ordering
 for all languages for which one has not been set explicitly.</p>
 </dd></dl>
 
@@ -253,26 +254,26 @@ library version 2.0 and above</p>
 <dd><p>Dictionary object for the Enchant spellchecker.</p>
 <p>Dictionary objects are responsible for checking the spelling of words
 and suggesting possible corrections.  Each dictionary is owned by a
-Broker object, but unless a new Broker has explicitly been created
-then this will be the ‘enchant’ module default Broker and is of little
+<a class="reference internal" href="#enchant.Broker" title="enchant.Broker"><code class="xref py py-class docutils literal notranslate"><span class="pre">Broker</span></code></a> object, but unless a new <a class="reference internal" href="#enchant.Broker" title="enchant.Broker"><code class="xref py py-class docutils literal notranslate"><span class="pre">Broker</span></code></a> has explicitly been created
+then this will be the <a class="reference internal" href="#module-enchant" title="enchant"><code class="xref py py-mod docutils literal notranslate"><span class="pre">enchant</span></code></a> module default <a class="reference internal" href="#enchant.Broker" title="enchant.Broker"><code class="xref py py-class docutils literal notranslate"><span class="pre">Broker</span></code></a> and is of little
 interest.</p>
 <p>The important methods of this class include:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>check():              check whether a word id spelled correctly</p></li>
-<li><p>suggest():            suggest correct spellings for a word</p></li>
-<li><p>add():                add a word to the user’s personal dictionary</p></li>
-<li><p>remove():             add a word to the user’s personal exclude list</p></li>
-<li><p>add_to_session():     add a word to the current spellcheck session</p></li>
-<li><p>store_replacement():  indicate a replacement for a given word</p></li>
+<li><p><a class="reference internal" href="#enchant.Dict.check" title="enchant.Dict.check"><code class="xref py py-meth docutils literal notranslate"><span class="pre">check()</span></code></a>:              check whether a word id spelled correctly</p></li>
+<li><p><a class="reference internal" href="#enchant.Dict.suggest" title="enchant.Dict.suggest"><code class="xref py py-meth docutils literal notranslate"><span class="pre">suggest()</span></code></a>:            suggest correct spellings for a word</p></li>
+<li><p><a class="reference internal" href="#enchant.Dict.add" title="enchant.Dict.add"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add()</span></code></a>:                add a word to the user’s personal dictionary</p></li>
+<li><p><a class="reference internal" href="#enchant.Dict.remove" title="enchant.Dict.remove"><code class="xref py py-meth docutils literal notranslate"><span class="pre">remove()</span></code></a>:             add a word to the user’s personal exclude list</p></li>
+<li><p><a class="reference internal" href="#enchant.Dict.add_to_session" title="enchant.Dict.add_to_session"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_to_session()</span></code></a>:     add a word to the current spellcheck session</p></li>
+<li><p><a class="reference internal" href="#enchant.Dict.store_replacement" title="enchant.Dict.store_replacement"><code class="xref py py-meth docutils literal notranslate"><span class="pre">store_replacement()</span></code></a>:  indicate a replacement for a given word</p></li>
 </ul>
 </div></blockquote>
 <p>Information about the dictionary is available using the following
 attributes:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>tag:        the language tag of the dictionary</p></li>
-<li><p>provider:   a ProviderDesc object for the dictionary provider</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">tag</span></code>:        the language tag of the dictionary</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">provider</span></code>:   a <a class="reference internal" href="#enchant.ProviderDesc" title="enchant.ProviderDesc"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProviderDesc</span></code></a> object for the dictionary provider</p></li>
 </ul>
 </div></blockquote>
 <dl class="py method">
@@ -298,7 +299,7 @@ attributes:</p>
 <span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#enchant.Dict.check" title="Permalink to this definition"></a></dt>
 <dd><p>Check spelling of a word.</p>
 <p>This method takes a word in the dictionary language and returns
-True if it is correctly spelled, and false otherwise.</p>
+<cite>True</cite> if it is correctly spelled, and <cite>False</cite> otherwise.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -330,9 +331,9 @@ True if it is correctly spelled, and false otherwise.</p>
 <span class="sig-name descname"><span class="pre">store_replacement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#enchant.Dict.store_replacement" title="Permalink to this definition"></a></dt>
 <dd><p>Store a replacement spelling for a miss-spelled word.</p>
 <p>This method makes a suggestion to the spellchecking engine that the
-miss-spelled word &lt;mis&gt; is in fact correctly spelled as &lt;cor&gt;.  Such
-a suggestion will typically mean that &lt;cor&gt; appears early in the
-list of suggested spellings offered for later instances of &lt;mis&gt;.</p>
+miss-spelled word <cite>mis</cite> is in fact correctly spelled as <cite>cor</cite>.  Such
+a suggestion will typically mean that <cite>cor</cite> appears early in the
+list of suggested spellings offered for later instances of <cite>mis</cite>.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -356,20 +357,20 @@ exclude list.  This class is now only needed if you want
 to explicitly maintain a separate word list in addition to
 the default one.</p>
 </div>
-<p>This class behaves as the standard Dict class, but also manages a
+<p>This class behaves as the standard class <a class="reference internal" href="#enchant.Dict" title="enchant.Dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>, but also manages a
 personal word list stored in a separate file.  The file must be
-specified at creation time by the ‘pwl’ argument to the constructor.
+specified at creation time by the <cite>pwl</cite> argument to the constructor.
 Words added to the dictionary are automatically appended to the pwl file.</p>
 <p>A personal exclude list can also be managed, by passing another filename
-to the constructor in the optional ‘pel’ argument.  If this is not given,
+to the constructor in the optional <cite>pel</cite> argument.  If this is not given,
 requests to exclude words are ignored.</p>
-<p>If either ‘pwl’ or ‘pel’ are None, an in-memory word list is used.
-This will prevent calls to add() and remove() from affecting the user’s
+<p>If either <cite>pwl</cite> or <cite>pel</cite> are <cite>None</cite>, an in-memory word list is used.
+This will prevent calls to <a class="reference internal" href="#enchant.DictWithPWL.add" title="enchant.DictWithPWL.add"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add()</span></code></a> and <a class="reference internal" href="#enchant.DictWithPWL.remove" title="enchant.DictWithPWL.remove"><code class="xref py py-meth docutils literal notranslate"><span class="pre">remove()</span></code></a> from affecting the user’s
 default word lists.</p>
-<p>The Dict object managing the PWL is available as the ‘pwl’ attribute.
-The Dict object managing the PEL is available as the ‘pel’ attribute.</p>
-<p>To create a DictWithPWL from the user’s default language, use None
-as the ‘tag’ argument.</p>
+<p>The <cite>Dict</cite> object managing the PWL is available as the <code class="xref py py-attr docutils literal notranslate"><span class="pre">pwl</span></code> attribute.
+The <cite>Dict</cite> object managing the PEL is available as the <code class="xref py py-attr docutils literal notranslate"><span class="pre">pel</span></code> attribute.</p>
+<p>To create a <cite>DictWithPWL</cite> from the user’s default language, use <cite>None</cite>
+as the <cite>tag</cite> argument.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="enchant.DictWithPWL.add">
 <span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#enchant.DictWithPWL.add" title="Permalink to this definition"></a></dt>
@@ -391,7 +392,7 @@ automatically saves the list to disk.</p>
 <span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#enchant.DictWithPWL.check" title="Permalink to this definition"></a></dt>
 <dd><p>Check spelling of a word.</p>
 <p>This method takes a word in the dictionary language and returns
-True if it is correctly spelled, and false otherwise.  It checks
+<cite>True</cite> if it is correctly spelled, and <cite>False</cite> otherwise.  It checks
 both the dictionary and the personal word list.</p>
 </dd></dl>
 
@@ -430,9 +431,9 @@ word, returning the possibilities in a list.</p>
 <p>Each provider has the following information associated with it:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>name:        Internal provider name (e.g. “aspell”)</p></li>
-<li><p>desc:        Human-readable description (e.g. “Aspell Provider”)</p></li>
-<li><p>file:        Location of the library containing the provider</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">name</span></code>:        Internal provider name (e.g. “aspell”)</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">desc</span></code>:        Human-readable description (e.g. “Aspell Provider”)</p></li>
+<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">file</span></code>:        Location of the library containing the provider</p></li>
 </ul>
 </div></blockquote>
 </dd></dl>
@@ -442,8 +443,8 @@ word, returning the possibilities in a list.</p>
 <span class="sig-prename descclassname"><span class="pre">enchant.</span></span><span class="sig-name descname"><span class="pre">dict_exists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#enchant.dict_exists" title="Permalink to this definition"></a></dt>
 <dd><p>Check availability of a dictionary.</p>
 <p>This method checks whether there is a dictionary available for
-the language specified by ‘tag’.  It returns True if a dictionary
-is available, and False otherwise.</p>
+the language specified by <cite>tag</cite>.  It returns <cite>True</cite> if a dictionary
+is available, and <cite>False</cite> otherwise.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -481,8 +482,8 @@ broker.  Each entry in the list is a two-tuple of the form:</p>
 <blockquote>
 <div><p>(tag,provider)</p>
 </div></blockquote>
-<p>where &lt;tag&gt; is the language lag for the dictionary and
-&lt;provider&gt; is a ProviderDesc object describing the provider
+<p>where <cite>tag</cite> is the language lag for the dictionary and
+<cite>provider</cite> is a <a class="reference internal" href="#enchant.ProviderDesc" title="enchant.ProviderDesc"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProviderDesc</span></code></a> object describing the provider
 through which that dictionary can be obtained.</p>
 </dd></dl>
 
@@ -497,19 +498,19 @@ dictionary is available.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="enchant.request_dict">
 <span class="sig-prename descclassname"><span class="pre">enchant.</span></span><span class="sig-name descname"><span class="pre">request_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#enchant.Dict" title="enchant.Dict"><span class="pre">enchant.Dict</span></a></span></span><a class="headerlink" href="#enchant.request_dict" title="Permalink to this definition"></a></dt>
-<dd><p>Request a Dict object for the language specified by &lt;tag&gt;.</p>
-<p>This method constructs and returns a Dict object for the
-requested language.  ‘tag’ should be a string of the appropriate
+<dd><p>Request a <a class="reference internal" href="#enchant.Dict" title="enchant.Dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a> object for the language specified by <cite>tag</cite>.</p>
+<p>This method constructs and returns a <a class="reference internal" href="#enchant.Dict" title="enchant.Dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a> object for the
+requested language.  <cite>tag</cite> should be a string of the appropriate
 form for specifying a language, such as “fr” (French) or “en_AU”
 (Australian English).  The existence of a specific language can
-be tested using the ‘dict_exists’ method.</p>
-<p>If &lt;tag&gt; is not given or is None, an attempt is made to determine
-the current language in use.  If this cannot be determined, Error
+be tested using the method <a class="reference internal" href="#enchant.dict_exists" title="enchant.dict_exists"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dict_exists()</span></code></a>.</p>
+<p>If <cite>tag</cite> is not given or is <cite>None</cite>, an attempt is made to determine
+the current language in use.  If this cannot be determined, <a class="reference internal" href="enchant.errors.html#enchant.errors.Error" title="enchant.errors.Error"><code class="xref py py-exc docutils literal notranslate"><span class="pre">Error</span></code></a>
 is raised.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>this method is functionally equivalent to calling the Dict()
-constructor and passing in the &lt;broker&gt; argument.</p>
+<p>this method is functionally equivalent to calling the <a class="reference internal" href="#enchant.Dict" title="enchant.Dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict()</span></code></a>
+constructor and passing in the <cite>broker</cite> argument.</p>
 </div>
 </dd></dl>
 
@@ -517,7 +518,7 @@ constructor and passing in the &lt;broker&gt; argument.</p>
 <dt class="sig sig-object py" id="enchant.request_pwl_dict">
 <span class="sig-prename descclassname"><span class="pre">enchant.</span></span><span class="sig-name descname"><span class="pre">request_pwl_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pwl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#enchant.Dict" title="enchant.Dict"><span class="pre">enchant.Dict</span></a></span></span><a class="headerlink" href="#enchant.request_pwl_dict" title="Permalink to this definition"></a></dt>
 <dd><p>Request a Dict object for a personal word list.</p>
-<p>This method behaves as ‘request_dict’ but rather than returning
+<p>This method behaves as <a class="reference internal" href="#enchant.request_dict" title="enchant.request_dict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">request_dict()</span></code></a> but rather than returning
 a dictionary for a specific language, it returns a dictionary
 referencing a personal word list.  A personal word list is a file
 of custom dictionary entries, one word per line.</p>
