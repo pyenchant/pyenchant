@@ -244,8 +244,6 @@ get_tokenizer._DOC_ERRORS = ["py", "py"]  # type: ignore
 class empty_tokenize(tokenize):  # noqa: N801
     """Tokenizer class that yields no elements."""
 
-    _DOC_ERRORS = []  # type: ignore
-
     def __init__(self) -> None:
         super().__init__("")
 
@@ -255,8 +253,6 @@ class empty_tokenize(tokenize):  # noqa: N801
 
 class unit_tokenize(tokenize):  # noqa: N801
     """Tokenizer class that yields the text as a single token."""
-
-    _DOC_ERRORS = []  # type: ignore
 
     def __init__(self, text: str) -> None:
         super().__init__(text)
@@ -276,8 +272,6 @@ class basic_tokenize(tokenize):  # noqa: N801
     text into words based on whitespace boundaries, and removes basic
     punctuation symbols from the start and end of each word.
     """
-
-    _DOC_ERRORS = []  # type: ignore
 
     # Chars to remove from start/end of words
     strip_from_start = '"' + "'`(["
