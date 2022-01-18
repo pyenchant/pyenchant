@@ -262,6 +262,27 @@ def test_combined_filter(test_text):
     ]
 
 
+def test_filter_with_chunkter() -> None:
+    """Test using both chunkers and filters"""
+    text = "<p>Look at https://pyenchant.github.io/pyenchant/</p>"
+    tknzr = get_tokenizer("en_US", chunkers=(HTMLChunker,), filters=(URLFilter,))
+    assert list(tknzr(text)) == [
+        ("Look", 3),
+        ("at", 8),
+    ]
+
+
+@pytest.mark.filterwarnings("ignore")
+def test_deprecated() -> None:
+    """Test deprecated way of passing filter via chunkers"""
+    text = "Look at https://pyenchant.github.io/pyenchant/"
+    tknzr = get_tokenizer("en_US", (URLFilter,))  # type: ignore
+    assert list(tknzr(text)) == [
+        ("Look", 0),
+        ("at", 5),
+    ]
+
+
 def test_html_chunker():
     """Test filtering of URLs"""
     text = """hello<html><head><title>my title</title></head><body>this is a
