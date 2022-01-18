@@ -123,7 +123,39 @@ Token = Tuple[str, int]
 Error = TokenizerNotFoundError
 
 
-class tokenize:  # noqa: N801
+class _tokenize:  # noqa: N801
+    """Abstract base class for tokenizer objects."""
+
+    def __next__(self) -> Token:
+        return self.next()
+
+    def next(self) -> Token:
+        raise NotImplementedError()
+
+    def __iter__(self) -> "_tokenize":
+        return self
+
+    def set_offset(self, offset: int, replaced: bool = False) -> None:
+        raise NotImplementedError()
+
+    def get_offset(self) -> int:
+        raise NotImplementedError()
+
+    @property
+    def offset(self) -> int:
+        return self.get_offset()
+
+    @offset.setter
+    def offset(self, offset: int) -> None:
+        msg = (
+            "changing a tokenizers :py:attr:`offset` attribute is deprecated;"
+            " use the :py:meth:`set_offset` method"
+        )
+        warnings.warn(msg, category=DeprecationWarning, stacklevel=2)
+        self.set_offset(offset)
+
+
+class tokenize(_tokenize):  # noqa: N801
     """Base class for all tokenizer objects.
 
     Each tokenizer must be an iterator and provide the :py:attr:`offset`
@@ -140,30 +172,11 @@ class tokenize:  # noqa: N801
         self._text = text
         self._offset = 0
 
-    def __next__(self) -> Token:
-        return self.next()
-
-    def next(self) -> Token:
-        raise NotImplementedError()
-
-    def __iter__(self) -> "tokenize":
-        return self
-
     def set_offset(self, offset: int, replaced: bool = False) -> None:
         self._offset = offset
 
-    def _get_offset(self) -> int:
+    def get_offset(self) -> int:
         return self._offset
-
-    def _set_offset(self, offset: int) -> None:
-        msg = (
-            "changing a tokenizers :py:attr:`offset` attribute is deprecated;"
-            " use the :py:meth:`set_offset` method"
-        )
-        warnings.warn(msg, category=DeprecationWarning, stacklevel=2)
-        self.set_offset(offset)
-
-    offset = property(_get_offset, _set_offset)
 
 
 _Filter = Union[Type[tokenize], "Filter"]
@@ -391,7 +404,7 @@ class Filter:
         """
         return unit_tokenize(word)
 
-    class _TokenFilter:
+    class _TokenFilter(_tokenize):
         """Private inner class implementing the tokenizer-wrapping logic.
 
         This might seem convoluted, but we're trying to create something
@@ -416,12 +429,6 @@ class Filter:
             self._curtok = empty_tokenize()
             self._curword = ""
             self._curpos = 0
-
-        def __iter__(self):
-            return self
-
-        def __next__(self) -> Token:
-            return self.next()
 
         def next(self) -> Token:
             # Try to get the next sub-token from word currently being split.
@@ -448,18 +455,8 @@ class Filter:
             return word
 
         # Pass on access to 'offset' to the underlying tokenizer.
-        def _get_offset(self) -> int:
+        def get_offset(self) -> int:
             return self._tokenizer.offset
-
-        def _set_offset(self, offset: int) -> None:
-            msg = (
-                "changing a tokenizers 'offset' attribute is deprecated;"
-                " use the 'set_offset' method"
-            )
-            warnings.warn(msg, category=DeprecationWarning, stacklevel=2)
-            self.set_offset(offset)
-
-        offset = property(_get_offset, _set_offset)
 
         def set_offset(self, val: int, replaced: bool = False) -> None:
             old_offset = self._tokenizer.offset
