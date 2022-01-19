@@ -112,7 +112,7 @@ _DOC_ERRORS = [
 import array
 import re
 import warnings
-from typing import Callable, Iterable, List, Optional, Tuple, Type, Union, cast
+from typing import Any, Callable, Iterable, List, Optional, Tuple, Type, Union, cast
 
 from enchant.errors import TokenizerNotFoundError
 
@@ -382,7 +382,7 @@ class Filter:
         """Filter class constructor."""
         self._tokenizer = tokenizer
 
-    def __call__(self, *args, **kwds):
+    def __call__(self, *args: Any, **kwds: Any) -> _tokenize:
         tkn = self._tokenizer(*args, **kwds)
         return self._TokenFilter(tkn, self._skip, self._split)
 

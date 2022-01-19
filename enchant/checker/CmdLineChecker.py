@@ -39,7 +39,7 @@
 
 import sys
 from argparse import ArgumentParser
-from typing import Optional
+from typing import IO, Optional
 
 from enchant.checker import SpellChecker
 
@@ -336,7 +336,7 @@ class CmdLineChecker:
         print(success("Completed spell check of %s" % infile))
         outStr = self._checker.get_text()
         if outfile is None:
-            outF = open(infile, "w", encoding=enc)
+            outF: IO[str] = open(infile, "w", encoding=enc)
         elif outfile == "-":
             outF = sys.stdout
         else:
