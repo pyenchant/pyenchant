@@ -495,12 +495,12 @@ class URLFilter(Filter):
     r"""Filter skipping over URLs.
     This filter skips any words matching the following regular expression:
 
-           ^[a-zA-Z]+:\/\/[^\s].*
+           ^[a-zA-Z]+://[^\s].*
 
     That is, any words that are URLs.
     """
     _DOC_ERRORS = ["zA"]
-    _pattern = re.compile(r"^[a-zA-Z]+:\/\/[^\s].*")
+    _pattern = re.compile(r"^[a-zA-Z]+://[^\s].*")
 
     def _skip(self, word: str) -> bool:
         if self._pattern.match(word):
@@ -528,11 +528,11 @@ class EmailFilter(Filter):
     r"""Filter skipping over email addresses.
     This filter skips any words matching the following regular expression:
 
-           ^.+@[^\.].*\.[a-z]{2,}$
+           ^.+@[^.].*\.[a-z]{2,}$
 
     That is, any words that resemble email addresses.
     """
-    _pattern = re.compile(r"^.+@[^\.].*\.[a-z]{2,}$")
+    _pattern = re.compile(r"^.+@[^.].*\.[a-z]{2,}$")
 
     def _skip(self, word: str) -> bool:
         if self._pattern.match(word):
