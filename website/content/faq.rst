@@ -12,7 +12,7 @@ How do I report bugs, give feedback etc?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can use the issue reporting tools on the `github project
-page <https://github.com/rfk/pyenchant/issues>`__ .
+page <https://github.com/pyenchant/pyenchant/issues>`__ .
 
 How is PyEnchant licensed?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
