@@ -57,7 +57,7 @@ The quickest way is to install `libenchant` using `Homebrew <https://brew.sh/>`_
     brew install enchant
 
 Apple Silicon related errors
-~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you get this error:
 ``The 'enchant' C library was not found and maybe needs to be installed.``,
