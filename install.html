@@ -45,7 +45,11 @@
 <li class="toctree-l2"><a class="reference internal" href="#installing-the-enchant-c-library">Installing the Enchant C library</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#on-freebsd">On FreeBSD</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#on-linux">On Linux</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#on-macos">On macOS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#on-macos">On macOS</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#apple-silicon-related-errors">Apple Silicon related errors</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#macports">MacPorts</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#on-windows">On Windows</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#using-the-binary-wheel">Using the binary wheel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#using-mingw">Using MinGW</a></li>
@@ -131,16 +135,33 @@ might not bring along <cite>binutils</cite> by default.</p>
 <span class="go">brew install enchant</span>
 </pre></div>
 </div>
-<p>If you are using Apple Silicon and it displays this error:
+<section id="apple-silicon-related-errors">
+<h4>Apple Silicon related errors<a class="headerlink" href="#apple-silicon-related-errors" title="Permalink to this headline"></a></h4>
+<p>If you get this error:
 <code class="docutils literal notranslate"><span class="pre">The</span> <span class="pre">'enchant'</span> <span class="pre">C</span> <span class="pre">library</span> <span class="pre">was</span> <span class="pre">not</span> <span class="pre">found</span> <span class="pre">and</span> <span class="pre">maybe</span> <span class="pre">needs</span> <span class="pre">to</span> <span class="pre">be</span> <span class="pre">installed.</span></code>,
-as a workaround, you may need to install an x86_64 (Intel) version of <cite>enchant</cite>.
-In order to do so, you need to install the x86_64 version of Homebrew in
+as a workaround, you may need to install an <code class="docutils literal notranslate"><span class="pre">x86_64</span></code> (Intel) version of <code class="docutils literal notranslate"><span class="pre">enchant</span></code>.
+In order to do so, you need to install the <code class="docutils literal notranslate"><span class="pre">x86_64</span></code> version of Homebrew in
 <code class="docutils literal notranslate"><span class="pre">/usr/local/</span></code> and then use this version to install the corresponding
-version of <cite>enchant</cite>.</p>
+version of <code class="docutils literal notranslate"><span class="pre">enchant</span></code>.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>arch -x86_64 /bin/bash -c <span class="s2">&quot;</span><span class="k">$(</span>curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh<span class="k">)</span><span class="s2">&quot;</span>
 arch -x86_64 /usr/local/bin/brew install enchant
 </pre></div>
 </div>
+<p>If you get this error:
+<code class="docutils literal notranslate"><span class="pre">[...]</span> <span class="pre">(mach-o</span> <span class="pre">file,</span> <span class="pre">but</span> <span class="pre">is</span> <span class="pre">an</span> <span class="pre">incompatible</span> <span class="pre">architecture</span> <span class="pre">(have</span> <span class="pre">'x86_64',</span> <span class="pre">need</span> <span class="pre">'arm64e')),</span> <span class="pre">[...]</span></code>
+This means that you are mixing architectures (the <code class="docutils literal notranslate"><span class="pre">arm64</span></code> native one with architecture and the <code class="docutils literal notranslate"><span class="pre">x86_64</span></code> architecture emulated by Rosetta2) between the <code class="docutils literal notranslate"><span class="pre">libenchant</span></code> (installed with Homebrew) and your python interpreter that <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">enchant</span></code>. This can happen if you keep parallel python environments for different architecures.</p>
+<p>If you are using <code class="docutils literal notranslate"><span class="pre">conda</span></code> environments , please note that the <code class="docutils literal notranslate"><span class="pre">pyenchant</span></code> cannot yet be installed via <code class="docutils literal notranslate"><span class="pre">conda</span></code> on MacOS (see <a class="reference external" href="https://github.com/pyenchant/pyenchant/issues/279#issuecomment-1047079747">this comment</a>). You’ll have to install it via <code class="docutils literal notranslate"><span class="pre">pip</span></code>, and it causes some troubles if you are in a <code class="docutils literal notranslate"><span class="pre">arm64</span></code> <code class="docutils literal notranslate"><span class="pre">conda</span></code> environment.
+If you installed Python using <code class="docutils literal notranslate"><span class="pre">conda</span></code>, it won’t find the <code class="docutils literal notranslate"><span class="pre">enchant</span></code> C library because it won’t look under the native library homebrew installation folder (<code class="docutils literal notranslate"><span class="pre">/opt/homebrew/lib/</span></code>) where it was installed via <code class="docutils literal notranslate"><span class="pre">brew</span> <span class="pre">install</span> <span class="pre">enchant</span></code>.
+There are 3 workarounds to this problem:</p>
+<ul class="simple">
+<li><p>set the environment variable <code class="docutils literal notranslate"><span class="pre">PYENCHANT_LIBRARY_PATH=/opt/homebrew/lib/libenchant-2.2.dylib</span></code> or</p></li>
+<li><p>set the environment variable <code class="docutils literal notranslate"><span class="pre">DYLD_LIBRARY_PATH=/opt/homebrew/lib/</span></code> or</p></li>
+<li><p>use the python installed with <code class="docutils literal notranslate"><span class="pre">homebrew</span></code> (<code class="docutils literal notranslate"><span class="pre">/opt/homebrew/Cellar/python&#64;&lt;version&gt;</span></code>) instead of the one installed by <code class="docutils literal notranslate"><span class="pre">conda</span></code>, but you lose the benefit of using different python versions in different environments.</p></li>
+</ul>
+<p>Refer to the comments in <a class="reference external" href="https://github.com/pyenchant/pyenchant/issues/265">this issue</a> for a more detailled description of some of the issues related to Apple Silicon.</p>
+</section>
+<section id="macports">
+<h4>MacPorts<a class="headerlink" href="#macports" title="Permalink to this headline"></a></h4>
 <p>If you are using <a class="reference external" href="https://www.macports.org/">MacPorts</a> you can also
 install the <a class="reference external" href="https://github.com/macports/macports-ports/tree/master/textproc/enchant2">enchant2</a> package. Please make sure to add
 the port variants for the spellers you’d like to use. For example, to
@@ -148,6 +169,7 @@ build the enchant library for aspell and hunspell, use:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo port install enchant2 +aspell +hunspell +applespell
 </pre></div>
 </div>
+</section>
 </section>
 <section id="on-windows">
 <h3>On Windows<a class="headerlink" href="#on-windows" title="Permalink to this headline"></a></h3>
