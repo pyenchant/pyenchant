@@ -257,7 +257,6 @@ except AttributeError:
     def broker_get_param(broker: _B, name: bytes) -> bytes:
         return e.enchant_broker_get_param(broker, name)
 
-
 else:
     broker_get_param.argtypes = [t_broker, c_char_p]  # type: ignore
     broker_get_param.restype = c_char_p  # type: ignore
@@ -271,7 +270,6 @@ except AttributeError:
     def broker_set_param(broker: _B, name: bytes, value: bytes) -> None:
         return e.enchant_broker_set_param(broker, name, value)
 
-
 else:
     broker_set_param.argtypes = [t_broker, c_char_p, c_char_p]  # type: ignore
     broker_set_param.restype = None  # type: ignore
@@ -282,7 +280,6 @@ except AttributeError:
     #  Make the lookup error occur at runtime
     def get_version() -> bytes:
         return e.enchant_get_version()
-
 
 else:
     get_version.argtypes = []  # type: ignore
@@ -295,7 +292,6 @@ except AttributeError:
     def set_prefix_dir(path: bytes):
         return e.enchant_set_prefix_dir(path)
 
-
 else:
     set_prefix_dir.argtypes = [c_char_p]  # type: ignore
     set_prefix_dir.restype = None  # type: ignore
@@ -306,7 +302,6 @@ except AttributeError:
     #  Make the lookup error occur at runtime
     def get_user_config_dir() -> bytes:
         return e.enchant_get_user_config_dir()
-
 
 else:
     get_user_config_dir.argtypes = []  # type: ignore
