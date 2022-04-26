@@ -500,7 +500,7 @@ class Dict(_EnchantObject):
 
     The important methods of this class include:
 
-        * :py:meth:`check()`:              check whether a word id spelled correctly
+        * :py:meth:`check()`:              check whether a word is spelled correctly
         * :py:meth:`suggest()`:            suggest correct spellings for a word
         * :py:meth:`add()`:                add a word to the user's personal dictionary
         * :py:meth:`remove()`:             add a word to the user's personal exclude list
