@@ -14,7 +14,9 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -47,11 +49,81 @@
 <li class="toctree-l2"><a class="reference internal" href="index.html#full-list">Full list</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="index.html#by-module">By module</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">enchant:  Access to the enchant spellchecking library</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enchant.Broker"><code class="docutils literal notranslate"><span class="pre">Broker</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#enchant.Broker.describe"><code class="docutils literal notranslate"><span class="pre">Broker.describe()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enchant.Broker.dict_exists"><code class="docutils literal notranslate"><span class="pre">Broker.dict_exists()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enchant.Broker.get_param"><code class="docutils literal notranslate"><span class="pre">Broker.get_param()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enchant.Broker.list_dicts"><code class="docutils literal notranslate"><span class="pre">Broker.list_dicts()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enchant.Broker.list_languages"><code class="docutils literal notranslate"><span class="pre">Broker.list_languages()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enchant.Broker.request_dict"><code class="docutils literal notranslate"><span class="pre">Broker.request_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enchant.Broker.request_pwl_dict"><code class="docutils literal notranslate"><span class="pre">Broker.request_pwl_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enchant.Broker.set_ordering"><code class="docutils literal notranslate"><span class="pre">Broker.set_ordering()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enchant.Broker.set_param"><code class="docutils literal notranslate"><span class="pre">Broker.set_param()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#enchant.Dict"><code class="docutils literal notranslate"><span class="pre">Dict</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#enchant.Dict.add"><code class="docutils literal notranslate"><span class="pre">Dict.add()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enchant.Dict.add_to_pwl"><code class="docutils literal notranslate"><span class="pre">Dict.add_to_pwl()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enchant.Dict.add_to_session"><code class="docutils literal notranslate"><span class="pre">Dict.add_to_session()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enchant.Dict.check"><code class="docutils literal notranslate"><span class="pre">Dict.check()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enchant.Dict.is_added"><code class="docutils literal notranslate"><span class="pre">Dict.is_added()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enchant.Dict.is_removed"><code class="docutils literal notranslate"><span class="pre">Dict.is_removed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enchant.Dict.remove"><code class="docutils literal notranslate"><span class="pre">Dict.remove()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enchant.Dict.remove_from_session"><code class="docutils literal notranslate"><span class="pre">Dict.remove_from_session()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enchant.Dict.store_replacement"><code class="docutils literal notranslate"><span class="pre">Dict.store_replacement()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enchant.Dict.suggest"><code class="docutils literal notranslate"><span class="pre">Dict.suggest()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#enchant.DictWithPWL"><code class="docutils literal notranslate"><span class="pre">DictWithPWL</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#enchant.DictWithPWL.add"><code class="docutils literal notranslate"><span class="pre">DictWithPWL.add()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enchant.DictWithPWL.add_to_pwl"><code class="docutils literal notranslate"><span class="pre">DictWithPWL.add_to_pwl()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enchant.DictWithPWL.check"><code class="docutils literal notranslate"><span class="pre">DictWithPWL.check()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enchant.DictWithPWL.is_added"><code class="docutils literal notranslate"><span class="pre">DictWithPWL.is_added()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enchant.DictWithPWL.is_removed"><code class="docutils literal notranslate"><span class="pre">DictWithPWL.is_removed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enchant.DictWithPWL.remove"><code class="docutils literal notranslate"><span class="pre">DictWithPWL.remove()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enchant.DictWithPWL.suggest"><code class="docutils literal notranslate"><span class="pre">DictWithPWL.suggest()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#enchant.ProviderDesc"><code class="docutils literal notranslate"><span class="pre">ProviderDesc</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enchant.dict_exists"><code class="docutils literal notranslate"><span class="pre">dict_exists()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enchant.get_enchant_version"><code class="docutils literal notranslate"><span class="pre">get_enchant_version()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enchant.get_param"><code class="docutils literal notranslate"><span class="pre">get_param()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enchant.get_user_config_dir"><code class="docutils literal notranslate"><span class="pre">get_user_config_dir()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enchant.list_dicts"><code class="docutils literal notranslate"><span class="pre">list_dicts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enchant.list_languages"><code class="docutils literal notranslate"><span class="pre">list_languages()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enchant.request_dict"><code class="docutils literal notranslate"><span class="pre">request_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enchant.request_pwl_dict"><code class="docutils literal notranslate"><span class="pre">request_pwl_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enchant.set_param"><code class="docutils literal notranslate"><span class="pre">set_param()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enchant.set_prefix_dir"><code class="docutils literal notranslate"><span class="pre">set_prefix_dir()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="enchant.checker.html">enchant.checker:  High-level spellchecking functionality</a></li>
+<li class="toctree-l3"><a class="reference internal" href="enchant.checker.html#enchant.checker.SpellChecker"><code class="docutils literal notranslate"><span class="pre">SpellChecker</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="enchant.errors.html">enchant.errors:  Error class definitions for the enchant library</a></li>
+<li class="toctree-l3"><a class="reference internal" href="enchant.errors.html#enchant.errors.DefaultLanguageNotFoundError"><code class="docutils literal notranslate"><span class="pre">DefaultLanguageNotFoundError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="enchant.errors.html#enchant.errors.DictNotFoundError"><code class="docutils literal notranslate"><span class="pre">DictNotFoundError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="enchant.errors.html#enchant.errors.Error"><code class="docutils literal notranslate"><span class="pre">Error</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="enchant.errors.html#enchant.errors.TokenizerNotFoundError"><code class="docutils literal notranslate"><span class="pre">TokenizerNotFoundError</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="enchant.tokenize.html">enchant.tokenize:    String tokenization functions for PyEnchant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="enchant.tokenize.html#enchant.tokenize.Chunker"><code class="docutils literal notranslate"><span class="pre">Chunker</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="enchant.tokenize.html#enchant.tokenize.EmailFilter"><code class="docutils literal notranslate"><span class="pre">EmailFilter</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="enchant.tokenize.html#enchant.tokenize.Filter"><code class="docutils literal notranslate"><span class="pre">Filter</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="enchant.tokenize.html#enchant.tokenize.HTMLChunker"><code class="docutils literal notranslate"><span class="pre">HTMLChunker</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="enchant.tokenize.html#enchant.tokenize.HashtagFilter"><code class="docutils literal notranslate"><span class="pre">HashtagFilter</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="enchant.tokenize.html#enchant.tokenize.MentionFilter"><code class="docutils literal notranslate"><span class="pre">MentionFilter</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="enchant.tokenize.html#enchant.tokenize.URLFilter"><code class="docutils literal notranslate"><span class="pre">URLFilter</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="enchant.tokenize.html#enchant.tokenize.WikiWordFilter"><code class="docutils literal notranslate"><span class="pre">WikiWordFilter</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="enchant.tokenize.html#enchant.tokenize.basic_tokenize"><code class="docutils literal notranslate"><span class="pre">basic_tokenize</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="enchant.tokenize.html#enchant.tokenize.empty_tokenize"><code class="docutils literal notranslate"><span class="pre">empty_tokenize</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="enchant.tokenize.html#enchant.tokenize.get_tokenizer"><code class="docutils literal notranslate"><span class="pre">get_tokenizer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="enchant.tokenize.html#enchant.tokenize.tokenize"><code class="docutils literal notranslate"><span class="pre">tokenize</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="enchant.tokenize.html#enchant.tokenize.unit_tokenize"><code class="docutils literal notranslate"><span class="pre">unit_tokenize</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="enchant.tokenize.html#enchant.tokenize.wrap_tokenizer"><code class="docutils literal notranslate"><span class="pre">wrap_tokenizer()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="enchant.utils.html">enchant.utils:    Misc utilities for the enchant package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="enchant.utils.html#enchant.utils.get_default_language"><code class="docutils literal notranslate"><span class="pre">get_default_language()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="enchant.utils.html#enchant.utils.levenshtein"><code class="docutils literal notranslate"><span class="pre">levenshtein()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="enchant.utils.html#enchant.utils.trim_suggestions"><code class="docutils literal notranslate"><span class="pre">trim_suggestions()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="enchant.pypwl.html">pypwl:  pure-python personal word list in the style of Enchant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="enchant.pypwl.html#enchant.pypwl.PyPWL"><code class="docutils literal notranslate"><span class="pre">PyPWL</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="enchant.pypwl.html#enchant.pypwl.Trie"><code class="docutils literal notranslate"><span class="pre">Trie</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -87,7 +159,7 @@
            <div itemprop="articleBody">
              
   <span class="target" id="module-enchant"></span><section id="enchant-access-to-the-enchant-spellchecking-library">
-<h1>enchant:  Access to the enchant spellchecking library<a class="headerlink" href="#enchant-access-to-the-enchant-spellchecking-library" title="Permalink to this headline"></a></h1>
+<h1>enchant:  Access to the enchant spellchecking library<a class="headerlink" href="#enchant-access-to-the-enchant-spellchecking-library" title="Permalink to this heading"></a></h1>
 <p>This module provides several classes for performing spell checking
 via the Enchant spellchecking library.  For more details on Enchant,
 visit the project website:</p>
@@ -121,6 +193,7 @@ responsible for locating dictionaries for a specific language.</p>
 Bytestrings should not be passed into any function.</p>
 <p>Errors that occur in this module are reported by raising subclasses
 of <a class="reference internal" href="enchant.errors.html#enchant.errors.Error" title="enchant.errors.Error"><code class="xref py py-exc docutils literal notranslate"><span class="pre">Error</span></code></a>.</p>
+</section>
 <dl class="py class">
 <dt class="sig sig-object py" id="enchant.Broker">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">enchant.</span></span><span class="sig-name descname"><span class="pre">Broker</span></span><a class="headerlink" href="#enchant.Broker" title="Permalink to this definition"></a></dt>
@@ -139,7 +212,7 @@ so that <a class="reference internal" href="#enchant.Dict" title="enchant.Dict">
 </div></blockquote>
 <dl class="py method">
 <dt class="sig sig-object py" id="enchant.Broker.describe">
-<span class="sig-name descname"><span class="pre">describe</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#enchant.ProviderDesc" title="enchant.ProviderDesc"><span class="pre">enchant.ProviderDesc</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#enchant.Broker.describe" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">describe</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#enchant.ProviderDesc" title="enchant.ProviderDesc"><span class="pre">ProviderDesc</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#enchant.Broker.describe" title="Permalink to this definition"></a></dt>
 <dd><p>Return list of provider descriptions.</p>
 <p>This method returns a list of descriptions of each of the
 dictionary providers available.  Each entry in the list is a
@@ -170,7 +243,7 @@ library version 2.0 and above</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="enchant.Broker.list_dicts">
-<span class="sig-name descname"><span class="pre">list_dicts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#enchant.ProviderDesc" title="enchant.ProviderDesc"><span class="pre">enchant.ProviderDesc</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#enchant.Broker.list_dicts" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">list_dicts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#enchant.ProviderDesc" title="enchant.ProviderDesc"><span class="pre">ProviderDesc</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#enchant.Broker.list_dicts" title="Permalink to this definition"></a></dt>
 <dd><p>Return list of available dictionaries.</p>
 <p>This method returns a list of dictionaries available to the
 broker.  Each entry in the list is a two-tuple of the form:</p>
@@ -192,7 +265,7 @@ dictionary is available.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="enchant.Broker.request_dict">
-<span class="sig-name descname"><span class="pre">request_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#enchant.Dict" title="enchant.Dict"><span class="pre">enchant.Dict</span></a></span></span><a class="headerlink" href="#enchant.Broker.request_dict" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">request_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#enchant.Dict" title="enchant.Dict"><span class="pre">Dict</span></a></span></span><a class="headerlink" href="#enchant.Broker.request_dict" title="Permalink to this definition"></a></dt>
 <dd><p>Request a <a class="reference internal" href="#enchant.Dict" title="enchant.Dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a> object for the language specified by <cite>tag</cite>.</p>
 <p>This method constructs and returns a <a class="reference internal" href="#enchant.Dict" title="enchant.Dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a> object for the
 requested language.  <cite>tag</cite> should be a string of the appropriate
@@ -211,7 +284,7 @@ constructor and passing in the <cite>broker</cite> argument.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="enchant.Broker.request_pwl_dict">
-<span class="sig-name descname"><span class="pre">request_pwl_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pwl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#enchant.Dict" title="enchant.Dict"><span class="pre">enchant.Dict</span></a></span></span><a class="headerlink" href="#enchant.Broker.request_pwl_dict" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">request_pwl_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pwl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#enchant.Dict" title="enchant.Dict"><span class="pre">Dict</span></a></span></span><a class="headerlink" href="#enchant.Broker.request_pwl_dict" title="Permalink to this definition"></a></dt>
 <dd><p>Request a Dict object for a personal word list.</p>
 <p>This method behaves as <a class="reference internal" href="#enchant.request_dict" title="enchant.request_dict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">request_dict()</span></code></a> but rather than returning
 a dictionary for a specific language, it returns a dictionary
@@ -250,7 +323,7 @@ library version 2.0 and above</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="enchant.Dict">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">enchant.</span></span><span class="sig-name descname"><span class="pre">Dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">broker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#enchant.Broker" title="enchant.Broker"><span class="pre">enchant.Broker</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Dict" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">enchant.</span></span><span class="sig-name descname"><span class="pre">Dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">broker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#enchant.Broker" title="enchant.Broker"><span class="pre">Broker</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.Dict" title="Permalink to this definition"></a></dt>
 <dd><p>Dictionary object for the Enchant spellchecker.</p>
 <p>Dictionary objects are responsible for checking the spelling of words
 and suggesting possible corrections.  Each dictionary is owned by a
@@ -348,7 +421,7 @@ word, returning the possibilities in a list.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="enchant.DictWithPWL">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">enchant.</span></span><span class="sig-name descname"><span class="pre">DictWithPWL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pwl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">broker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#enchant.Broker" title="enchant.Broker"><span class="pre">enchant.Broker</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.DictWithPWL" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">enchant.</span></span><span class="sig-name descname"><span class="pre">DictWithPWL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pwl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">broker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#enchant.Broker" title="enchant.Broker"><span class="pre">Broker</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#enchant.DictWithPWL" title="Permalink to this definition"></a></dt>
 <dd><p>Dictionary with separately-managed personal word list.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -475,7 +548,7 @@ Enchant providers to look for custom dictionaries.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="enchant.list_dicts">
-<span class="sig-prename descclassname"><span class="pre">enchant.</span></span><span class="sig-name descname"><span class="pre">list_dicts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#enchant.ProviderDesc" title="enchant.ProviderDesc"><span class="pre">enchant.ProviderDesc</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#enchant.list_dicts" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">enchant.</span></span><span class="sig-name descname"><span class="pre">list_dicts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#enchant.ProviderDesc" title="enchant.ProviderDesc"><span class="pre">ProviderDesc</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#enchant.list_dicts" title="Permalink to this definition"></a></dt>
 <dd><p>Return list of available dictionaries.</p>
 <p>This method returns a list of dictionaries available to the
 broker.  Each entry in the list is a two-tuple of the form:</p>
@@ -497,7 +570,7 @@ dictionary is available.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="enchant.request_dict">
-<span class="sig-prename descclassname"><span class="pre">enchant.</span></span><span class="sig-name descname"><span class="pre">request_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#enchant.Dict" title="enchant.Dict"><span class="pre">enchant.Dict</span></a></span></span><a class="headerlink" href="#enchant.request_dict" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">enchant.</span></span><span class="sig-name descname"><span class="pre">request_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#enchant.Dict" title="enchant.Dict"><span class="pre">Dict</span></a></span></span><a class="headerlink" href="#enchant.request_dict" title="Permalink to this definition"></a></dt>
 <dd><p>Request a <a class="reference internal" href="#enchant.Dict" title="enchant.Dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a> object for the language specified by <cite>tag</cite>.</p>
 <p>This method constructs and returns a <a class="reference internal" href="#enchant.Dict" title="enchant.Dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a> object for the
 requested language.  <cite>tag</cite> should be a string of the appropriate
@@ -516,7 +589,7 @@ constructor and passing in the <cite>broker</cite> argument.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="enchant.request_pwl_dict">
-<span class="sig-prename descclassname"><span class="pre">enchant.</span></span><span class="sig-name descname"><span class="pre">request_pwl_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pwl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#enchant.Dict" title="enchant.Dict"><span class="pre">enchant.Dict</span></a></span></span><a class="headerlink" href="#enchant.request_pwl_dict" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">enchant.</span></span><span class="sig-name descname"><span class="pre">request_pwl_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pwl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#enchant.Dict" title="enchant.Dict"><span class="pre">Dict</span></a></span></span><a class="headerlink" href="#enchant.request_pwl_dict" title="Permalink to this definition"></a></dt>
 <dd><p>Request a Dict object for a personal word list.</p>
 <p>This method behaves as <a class="reference internal" href="#enchant.request_dict" title="enchant.request_dict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">request_dict()</span></code></a> but rather than returning
 a dictionary for a specific language, it returns a dictionary
@@ -545,7 +618,6 @@ library version 2.0 and above</p>
 required.</p>
 </dd></dl>
 
-</section>
 
 
            </div>

@@ -14,7 +14,9 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -99,12 +101,12 @@
            <div itemprop="articleBody">
              
   <section id="tutorial">
-<h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline"></a></h1>
+<h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this heading"></a></h1>
 <section id="basic-pyenchant-usage">
-<h2>Basic PyEnchant usage<a class="headerlink" href="#basic-pyenchant-usage" title="Permalink to this headline"></a></h2>
+<h2>Basic PyEnchant usage<a class="headerlink" href="#basic-pyenchant-usage" title="Permalink to this heading"></a></h2>
 <p>Once installed, PyEnchant’s functionality is available in the “enchant” module.</p>
 <section id="creating-and-using-dictionary-objects">
-<h3>Creating and Using Dictionary Objects<a class="headerlink" href="#creating-and-using-dictionary-objects" title="Permalink to this headline"></a></h3>
+<h3>Creating and Using Dictionary Objects<a class="headerlink" href="#creating-and-using-dictionary-objects" title="Permalink to this heading"></a></h3>
 <p>The most important object in the PyEnchant module is the Dict object, which represents a dictionary. These objects are used to check the spelling of words and to get suggestions for misspelled words. The following shows how to construct a simple <a class="reference internal" href="api/enchant.html#enchant.Dict" title="enchant.Dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a> and use it to check some words:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">enchant</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">enchant</span><span class="o">.</span><span class="n">Dict</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">)</span>
@@ -168,7 +170,7 @@
 </div></blockquote>
 </section>
 <section id="personal-word-lists">
-<h3>Personal Word Lists<a class="headerlink" href="#personal-word-lists" title="Permalink to this headline"></a></h3>
+<h3>Personal Word Lists<a class="headerlink" href="#personal-word-lists" title="Permalink to this heading"></a></h3>
 <p>Dict objects can also be used to check words against a custom list of correctly-spelled words known as a Personal Word List. This is simply a file listing the words to be considered, one word per line. The following example creates a Dict object for the personal word list stored in “mywords.txt”:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pwl</span> <span class="o">=</span> <span class="n">enchant</span><span class="o">.</span><span class="n">request_pwl_dict</span><span class="p">(</span><span class="s2">&quot;mywords.txt&quot;</span><span class="p">)</span>
 </pre></div>
@@ -182,7 +184,7 @@
 </div>
 </section>
 <section id="checking-entire-blocks-of-text">
-<h3>Checking entire blocks of text<a class="headerlink" href="#checking-entire-blocks-of-text" title="Permalink to this headline"></a></h3>
+<h3>Checking entire blocks of text<a class="headerlink" href="#checking-entire-blocks-of-text" title="Permalink to this heading"></a></h3>
 <p>While the <a class="reference internal" href="api/enchant.html#enchant.Dict" title="enchant.Dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">enchant.Dict</span></code></a> objects are useful for spellchecking individual words, they cannot be used directly to check, for example, an entire paragraph. The module <a class="reference internal" href="api/enchant.checker.html#module-enchant.checker" title="enchant.checker"><code class="xref py py-mod docutils literal notranslate"><span class="pre">enchant.checker</span></code></a> provides a class <a class="reference internal" href="api/enchant.checker.html#enchant.checker.SpellChecker" title="enchant.checker.SpellChecker"><code class="xref py py-class docutils literal notranslate"><span class="pre">SpellChecker</span></code></a> which is designed to handle this task.</p>
 <p><cite>SpellChecker</cite> objects are created in the same way as <cite>Dict</cite> objects - by passing a language tag to the constructor. The method <a class="reference internal" href="api/enchant.checker.html#enchant.checker.SpellChecker.set_text" title="enchant.checker.SpellChecker.set_text"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_text()</span></code></a> is used to set the text which is to be checked. Once this is done, the SpellChecker object can be used as an iterator over the spelling mistakes in the text. This is best illustrated by a simple example. The following code will print out the errors encountered in a string:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">enchant.checker</span> <span class="kn">import</span> <span class="n">SpellChecker</span>
@@ -205,7 +207,7 @@
 <p>The iterator paradigm can be used to implement a wide variety of spellchecking functionality. As examples of how this can be done, PyEnchant provides a wxPython-based spellchecking dialog and a command-line spellchecking program. While intended mainly as functionality demos, they are also quite useful in their own right.</p>
 </section>
 <section id="wxspellcheckerdialog">
-<h3>wxSpellCheckerDialog<a class="headerlink" href="#wxspellcheckerdialog" title="Permalink to this headline"></a></h3>
+<h3>wxSpellCheckerDialog<a class="headerlink" href="#wxspellcheckerdialog" title="Permalink to this heading"></a></h3>
 <p>The module <code class="xref py py-mod docutils literal notranslate"><span class="pre">enchant.checker.wxSpellCheckerDialog</span></code> provides the class <code class="xref py py-class docutils literal notranslate"><span class="pre">wxSpellCheckerDialog</span></code> which can be used to interactively check the spelling of some text. The code below shows how to create and use such a dialog from within a wxPython application.</p>
 <p>It will pop up a simple spellchecking dialog like the one shown here. Each spelling error is highlighted in turn, with the buttons offering a range of options for how to deal with the error:</p>
 <blockquote>
@@ -232,7 +234,7 @@
 </div>
 </section>
 <section id="cmdlinechecker">
-<h3>CmdLineChecker<a class="headerlink" href="#cmdlinechecker" title="Permalink to this headline"></a></h3>
+<h3>CmdLineChecker<a class="headerlink" href="#cmdlinechecker" title="Permalink to this heading"></a></h3>
 <p>The module <code class="xref py py-mod docutils literal notranslate"><span class="pre">enchant.checker.CmdLineChecker</span></code> provides the class <code class="xref py py-class docutils literal notranslate"><span class="pre">CmdLineChecker</span></code> which can be used to interactively check the spelling of some text. It uses standard input and standard output to interact with the user through a command-line interface. The code below shows how to create and use this class from within a python application, along with a short sample checking session:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">enchant</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">enchant.checker</span>
@@ -269,7 +271,7 @@
 <p>As shown by this simple example, the <cite>CmdLineChecker</cite> prints each error it encounters, along with a list of suggested replacements. The user enters the desired behavior using short alphanumeric commands, as explained by the output of the ‘help’ command.</p>
 </section>
 <section id="tokenization-splitting-text-into-words">
-<h3>Tokenization: splitting text into words<a class="headerlink" href="#tokenization-splitting-text-into-words" title="Permalink to this headline"></a></h3>
+<h3>Tokenization: splitting text into words<a class="headerlink" href="#tokenization-splitting-text-into-words" title="Permalink to this heading"></a></h3>
 <p>An important task in spellchecking is splitting a body of text up into its constitutive words, each of which is then passed to a <a class="reference internal" href="api/enchant.html#enchant.Dict" title="enchant.Dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a> object for checking. PyEnchant provides the <a class="reference internal" href="api/enchant.tokenize.html#module-enchant.tokenize" title="enchant.tokenize"><code class="xref py py-mod docutils literal notranslate"><span class="pre">enchant.tokenize</span></code></a> module to assist with this task. The purpose of this module is to provide an appropriate tokenization function which can be used to split the text. Usually, all that is required is the function <a class="reference internal" href="api/enchant.tokenize.html#enchant.tokenize.get_tokenizer" title="enchant.tokenize.get_tokenizer"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_tokenizer()</span></code></a>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">enchant.tokenize</span> <span class="kn">import</span> <span class="n">get_tokenizer</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tknzr</span> <span class="o">=</span> <span class="n">get_tokenizer</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">)</span>
@@ -282,7 +284,7 @@
 <p>As shown in the example above, the function <a class="reference internal" href="api/enchant.tokenize.html#enchant.tokenize.get_tokenizer" title="enchant.tokenize.get_tokenizer"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_tokenizer()</span></code></a> takes a language tag as input, and returns a tokenization class that is appropriate for that language. Instantiating this class with some text returns an iterator which will yield the words contained in that text. This is exactly the mechanism that the class <code class="xref py py-class docutils literal notranslate"><span class="pre">enchant.tokenize.SpellChecker</span></code> uses internally to split text into a series of words.</p>
 <p>The items produced by the tokenizer are tuples of the form <cite>(WORD,POS)</cite> where <cite>WORD</cite> is the word which was found and <cite>POS</cite> is the position within the string at which that word begins.</p>
 <section id="chunkers">
-<h4>Chunkers<a class="headerlink" href="#chunkers" title="Permalink to this headline"></a></h4>
+<h4>Chunkers<a class="headerlink" href="#chunkers" title="Permalink to this heading"></a></h4>
 <p>In many applications, checkable text may be intermingled with some sort of markup (e.g. HTML tags) which does not need to be checked. To have the tokenizer return only those words that should be checked, it can be augmented with one or more chunkers.</p>
 <p>A chunker is simply a special tokenizer function that breaks text up into large chunks rather than individual tokens. They are typically used by passing a list of chunkers to the function <a class="reference internal" href="api/enchant.tokenize.html#enchant.tokenize.get_tokenizer" title="enchant.tokenize.get_tokenizer"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_tokenizer()</span></code></a>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">enchant.tokenize</span> <span class="kn">import</span> <span class="n">get_tokenizer</span><span class="p">,</span> <span class="n">HTMLChunker</span>
@@ -301,7 +303,7 @@
 <p>Currently the only implemented chunker is <a class="reference internal" href="api/enchant.tokenize.html#enchant.tokenize.HTMLChunker" title="enchant.tokenize.HTMLChunker"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTMLChunker</span></code></a>. A chunker for LaTeX documents is in the works.</p>
 </section>
 <section id="filters">
-<h4>Filters<a class="headerlink" href="#filters" title="Permalink to this headline"></a></h4>
+<h4>Filters<a class="headerlink" href="#filters" title="Permalink to this heading"></a></h4>
 <p>In many applications, it is common for spellchecking to ignore words that have a certain form. For example, when spellchecking an email it is customary to ignore email addresses and URLs. This can be achieved by augmenting the tokenization process with filters.</p>
 <p>A filter is simply a wrapper around a tokenizer that can (1) drop certain words from the stream, and (2) further split words into sub-tokens. They are typically used by passing a list of filters to the function <a class="reference internal" href="api/enchant.tokenize.html#enchant.tokenize.get_tokenizer" title="enchant.tokenize.get_tokenizer"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_tokenizer()</span></code></a>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">enchant.tokenize</span> <span class="kn">import</span> <span class="n">get_tokenizer</span><span class="p">,</span> <span class="n">EmailFilter</span>
@@ -321,9 +323,9 @@
 </section>
 </section>
 <section id="advanced-pyenchant-usage">
-<h2>Advanced PyEnchant Usage<a class="headerlink" href="#advanced-pyenchant-usage" title="Permalink to this headline"></a></h2>
+<h2>Advanced PyEnchant Usage<a class="headerlink" href="#advanced-pyenchant-usage" title="Permalink to this heading"></a></h2>
 <section id="providers">
-<h3>Providers<a class="headerlink" href="#providers" title="Permalink to this headline"></a></h3>
+<h3>Providers<a class="headerlink" href="#providers" title="Permalink to this heading"></a></h3>
 <p>The underlying programming model provided by the Enchant library is based on the notion of Providers. A provider is a piece of code that provides spell-checking services which Enchant can use to perform its work. Different providers exist for performing spellchecking using different frameworks - for example there is an aspell provider and a MySpell provider.</p>
 <p>In this way, enchant forms a “wrapper” around existing spellchecking tools in order to provide a common programming interface.</p>
 <p>The provider which is managing a particular <a class="reference internal" href="api/enchant.html#enchant.Dict" title="enchant.Dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a> object can be determined by accessing its provider attribute. This is a <a class="reference internal" href="api/enchant.html#enchant.ProviderDesc" title="enchant.ProviderDesc"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProviderDesc</span></code></a> object with the properties <code class="xref py py-attr docutils literal notranslate"><span class="pre">name</span></code>, <code class="xref py py-attr docutils literal notranslate"><span class="pre">desc</span></code> and <code class="xref py py-attr docutils literal notranslate"><span class="pre">file</span></code>:</p>
@@ -339,7 +341,7 @@
 </div>
 </section>
 <section id="brokers">
-<h3>Brokers<a class="headerlink" href="#brokers" title="Permalink to this headline"></a></h3>
+<h3>Brokers<a class="headerlink" href="#brokers" title="Permalink to this heading"></a></h3>
 <p>The details of which provider is used to create a particular dictionary are managed by a <a class="reference internal" href="api/enchant.html#enchant.Broker" title="enchant.Broker"><code class="xref py py-class docutils literal notranslate"><span class="pre">Broker</span></code></a> object. Such objects have methods for creating dictionaries and checking whether a particular dictionary exists, as shown in the example below:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">enchant</span><span class="o">.</span><span class="n">Broker</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">b</span>
@@ -364,7 +366,7 @@
 </pre></div>
 </div>
 <section id="the-default-broker">
-<h4>The Default Broker<a class="headerlink" href="#the-default-broker" title="Permalink to this headline"></a></h4>
+<h4>The Default Broker<a class="headerlink" href="#the-default-broker" title="Permalink to this heading"></a></h4>
 <p>In normal use, the functionality provided by brokers is not useful to the programmer. To make the programmer’s job easier, PyEnchant creates a default <a class="reference internal" href="api/enchant.html#enchant.Broker" title="enchant.Broker"><code class="xref py py-class docutils literal notranslate"><span class="pre">Broker</span></code></a> object and uses it whenever one is not explicitly given. For example, the default broker is used when creating dictionary objects directly. This object is available as <code class="xref py py-data docutils literal notranslate"><span class="pre">enchant._broker</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">enchant</span><span class="o">.</span><span class="n">_broker</span>
 <span class="go">&lt;enchant.Broker object at 0x2aaaabdff590&gt;</span>
@@ -384,7 +386,7 @@
 </div>
 </section>
 <section id="provider-ordering">
-<span id="id1"></span><h4>Provider Ordering<a class="headerlink" href="#provider-ordering" title="Permalink to this headline"></a></h4>
+<span id="id1"></span><h4>Provider Ordering<a class="headerlink" href="#provider-ordering" title="Permalink to this heading"></a></h4>
 <p>Which provider is used for which language is determined by the provider ordering of the <a class="reference internal" href="api/enchant.html#enchant.Broker" title="enchant.Broker"><code class="xref py py-class docutils literal notranslate"><span class="pre">Broker</span></code></a>. This can be altered using the method <a class="reference internal" href="api/enchant.html#enchant.Broker.set_ordering" title="enchant.Broker.set_ordering"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_ordering()</span></code></a>. This method accepts a language tag and a comma-separated list of provider names in the order that they should be checked. A language tag of “*” means that the ordering should be the default for all languages where an explicit ordering has not been given.</p>
 <p>The following example states that for American English the MySpell provider should be tried first, followed by the aspell provider. For all other languages, the ordering is reversed:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">enchant</span><span class="o">.</span><span class="n">Broker</span><span class="p">()</span>
@@ -400,7 +402,7 @@
 </section>
 </section>
 <section id="extending-enchant-tokenize">
-<h3>Extending enchant.tokenize<a class="headerlink" href="#extending-enchant-tokenize" title="Permalink to this headline"></a></h3>
+<h3>Extending enchant.tokenize<a class="headerlink" href="#extending-enchant-tokenize" title="Permalink to this heading"></a></h3>
 <p>As explained above, the module <a class="reference internal" href="api/enchant.tokenize.html#module-enchant.tokenize" title="enchant.tokenize"><code class="xref py py-mod docutils literal notranslate"><span class="pre">enchant.tokenize</span></code></a> provides the ability to split text into its component words. The current implementation is based only on the rules for the English language, and so might not be completely suitable for your language of choice. Fortunately, it is straightforward to extend the functionality of this module.</p>
 <p>To implement a new tokenization routine for the language <cite>TAG</cite>, simply create a class/function <cite>tokenize</cite> within the module <cite>enchant.tokenize.&lt;TAG&gt;</cite>. This function will automatically be detected by the module’s function <a class="reference internal" href="api/enchant.tokenize.html#enchant.tokenize.get_tokenizer" title="enchant.tokenize.get_tokenizer"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_tokenizer()</span></code></a> and used when appropriate. The easiest way to accomplish this is to copy the module <code class="xref py py-mod docutils literal notranslate"><span class="pre">enchant.tokenize.en</span></code> and modify it to suit your needs.</p>
 <p>The author would be very grateful for tokenization routines for languages other than English which can be incorporated back into the main PyEnchant distribution.</p>
