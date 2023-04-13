@@ -25,7 +25,7 @@ jobs:
          - python: "3.10"
            tox_env: "py310"
          - python: "3.11"
-           tox_env: "py312"
+           tox_env: "py311"
          - python: "3.12-dev"
            tox_env: "py312"
          - python: "pypy-3.8"
@@ -46,7 +46,7 @@ jobs:
     - name: Install libenchant-dev (linux)
       if: matrix.platform == 'linux'
       run: |
-        sudo apt install libenchant-dev
+        sudo apt install libenchant-2-dev
 
     - name: Install enchant (macOS)
       if: matrix.platform == 'macos'
