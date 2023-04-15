@@ -109,6 +109,13 @@ def from_system() -> Optional[str]:
         "libenchant-1",
     ]
 
+    # On M1 macs, Homebrew is in /opt, which isn't on the default
+    # DYLD_LIBRARY_PATH. Look for the homebrew path explicitly.
+    if sys.platform == "darwin" and platform.machine() == "arm64":
+        candidates.extend(
+            [f"/opt/homebrew/lib/{candidate}" for candidate in candidates]
+        )
+
     for name in candidates:
         find_message("with name ", name)
         res = ctypes.util.find_library(name)
