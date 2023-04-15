@@ -56,37 +56,8 @@ The quickest way is to install `libenchant` using `Homebrew <https://brew.sh/>`_
     brew update
     brew install enchant
 
-Apple Silicon related errors
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-If you get this error:
-``The 'enchant' C library was not found and maybe needs to be installed.``,
-as a workaround, you may need to install an ``x86_64`` (Intel) version of ``enchant``.
-In order to do so, you need to install the ``x86_64`` version of Homebrew in
-``/usr/local/`` and then use this version to install the corresponding
-version of ``enchant``.
-
-.. code-block:: bash
-
-    arch -x86_64 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    arch -x86_64 /usr/local/bin/brew install enchant
-    
-If you get this error:
-``[...] (mach-o file, but is an incompatible architecture (have 'x86_64', need 'arm64e')), [...]``
-This means that you are mixing architectures (the ``arm64`` native one with architecture and the ``x86_64`` architecture emulated by Rosetta2) between the ``libenchant`` (installed with Homebrew) and your python interpreter that ``import enchant``. This can happen if you keep parallel python environments for different architecures.
-
-If you are using ``conda`` environments , please note that the ``pyenchant`` cannot yet be installed via ``conda`` on MacOS (see `this comment <https://github.com/pyenchant/pyenchant/issues/279#issuecomment-1047079747>`_). You'll have to install it via ``pip``, and it causes some troubles if you are in a ``arm64`` ``conda`` environment.
-If you installed Python using ``conda``, it won't find the ``enchant`` C library because it won't look under the native library homebrew installation folder (``/opt/homebrew/lib/``) where it was installed via ``brew install enchant``.
-There are 3 workarounds to this problem:
-
-* set the environment variable ``PYENCHANT_LIBRARY_PATH=/opt/homebrew/lib/libenchant-2.2.dylib`` or
-* set the environment variable ``DYLD_LIBRARY_PATH=/opt/homebrew/lib/`` or
-* use the python installed with ``homebrew`` (``/opt/homebrew/Cellar/python@<version>``) instead of the one installed by ``conda``, but you lose the benefit of using different python versions in different environments.
-
-Refer to the comments in `this issue <https://github.com/pyenchant/pyenchant/issues/265>`_ for a more detailled description of some of the issues related to Apple Silicon.
-
 MacPorts
-~~~~~~~~~~~
+~~~~~~~~
 
 If you are using `MacPorts <https://www.macports.org/>`_ you can also
 install the `enchant2 <https://github.com/macports/macports-
