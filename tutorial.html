@@ -225,7 +225,7 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">wx</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">enchant.checker</span> <span class="kn">import</span> <span class="n">SpellChecker</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">enchant.checker.wxSpellCheckerDialog</span> <span class="kn">import</span> <span class="n">wxSpellCheckerDialog</span>
-<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">app</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">PySimpleApp</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;This is sme text with a fw speling errors in it. Here are a fw more to tst it ut.&quot;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dlg</span> <span class="o">=</span> <span class="n">wxSpellCheckerDialog</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
@@ -266,7 +266,7 @@
 <span class="go">HOW ABOUT: [&#39;text&#39;, &#39;TX&#39;, &#39;ext&#39;]</span>
 <span class="go">&gt;&gt; i</span>
 <span class="go">DONE</span>
-<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">chkr</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span>
 <span class="go">&#39;this is some example txt&#39;</span>
 </pre></div>
@@ -291,12 +291,12 @@
 <p>In many applications, checkable text may be intermingled with some sort of markup (e.g. HTML tags) which does not need to be checked. To have the tokenizer return only those words that should be checked, it can be augmented with one or more chunkers.</p>
 <p>A chunker is simply a special tokenizer function that breaks text up into large chunks rather than individual tokens. They are typically used by passing a list of chunkers to the function <a class="reference internal" href="api/enchant.tokenize.html#enchant.tokenize.get_tokenizer" title="enchant.tokenize.get_tokenizer"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_tokenizer()</span></code></a>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">enchant.tokenize</span> <span class="kn">import</span> <span class="n">get_tokenizer</span><span class="p">,</span> <span class="n">HTMLChunker</span>
-<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tknzr</span> <span class="o">=</span> <span class="n">get_tokenizer</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">tknzr</span><span class="p">(</span><span class="s2">&quot;this is &lt;span class=&#39;important&#39;&gt;really important&lt;/span&gt; text&quot;</span><span class="p">)]</span>
 <span class="go">[(&#39;this&#39;, 0), (&#39;is&#39;, 5), (&#39;span&#39;, 9), (&#39;class&#39;, 14), (&#39;important&#39;, 21), (&#39;really&#39;, 32), (&#39;important&#39;, 39), (&#39;span&#39;, 50), (&#39;text&#39;, 56)]</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tknzr</span> <span class="o">=</span> <span class="n">get_tokenizer</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">,</span><span class="n">chunkers</span><span class="o">=</span><span class="p">(</span><span class="n">HTMLChunker</span><span class="p">,))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">tknzr</span><span class="p">(</span><span class="s2">&quot;this is &lt;span class=&#39;important&#39;&gt;really important&lt;/span&gt; text&quot;</span><span class="p">)]</span>
 <span class="go">[(&#39;this&#39;, 0), (&#39;is&#39;, 5), (&#39;really&#39;, 32), (&#39;important&#39;, 39), (&#39;text&#39;, 56)]</span>
@@ -310,11 +310,11 @@
 <p>In many applications, it is common for spellchecking to ignore words that have a certain form. For example, when spellchecking an email it is customary to ignore email addresses and URLs. This can be achieved by augmenting the tokenization process with filters.</p>
 <p>A filter is simply a wrapper around a tokenizer that can (1) drop certain words from the stream, and (2) further split words into sub-tokens. They are typically used by passing a list of filters to the function <a class="reference internal" href="api/enchant.tokenize.html#enchant.tokenize.get_tokenizer" title="enchant.tokenize.get_tokenizer"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_tokenizer()</span></code></a>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">enchant.tokenize</span> <span class="kn">import</span> <span class="n">get_tokenizer</span><span class="p">,</span> <span class="n">EmailFilter</span>
-<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tknzr</span> <span class="o">=</span> <span class="n">get_tokenizer</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">tknzr</span><span class="p">(</span><span class="s2">&quot;send an email to fake@example.com please&quot;</span><span class="p">)]</span>
 <span class="go">[(&#39;send&#39;, 0), (&#39;an&#39;, 5), (&#39;email&#39;, 8), (&#39;to&#39;, 14), (&#39;fake@example.com&#39;, 17), (&#39;please&#39;, 34)]</span>
-<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tknzr</span> <span class="o">=</span> <span class="n">get_tokenizer</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">,</span> <span class="n">filters</span><span class="o">=</span><span class="p">[</span><span class="n">EmailFilter</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">tknzr</span><span class="p">(</span><span class="s2">&quot;send an email to fake@example.com please&quot;</span><span class="p">)]</span>
 <span class="go">[(&#39;send&#39;, 0), (&#39;an&#39;, 5), (&#39;email&#39;, 8), (&#39;to&#39;, 14), (&#39;please&#39;, 34)]</span>
