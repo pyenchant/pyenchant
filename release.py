@@ -47,7 +47,7 @@ def main() -> None:
     make_wheel_any()
     make_sdist()
 
-    print("Done!. Artifacts are in dist/, ready for upload")
+    print("Done. Artifacts are in dist/, ready for upload.")
 
 
 if __name__ == "__main__":
