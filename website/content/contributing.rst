@@ -36,30 +36,27 @@ the changes in the `website/` directory and auto-refresh connected browsers.
 Making a new release
 ---------------------
 
+Re-building the Enchant C library for Windows
++++++++++++++++++++++++++++++++++++++++++++++
+
+In order to publish the Windows wheels to pypi, you must first compile
+the code in the `Enchant repository <https://github.com/AbiWord/enchant/>`_
+so that the Windows wheels are usable out of the box.
+
+To do that, we have a fork at ``https://github.com/pyenchant/enchant`` where we publish
+DLLs for the Enchant library as GitHub releases, and a ``bootstrap.py`` file that downloads them.
+
+Unfortunately, `AbiWord` switched from AppVeyor to GitHub Actions and our fork is still using AppVeyor, which means
+we are stuck with Enchant v2.2.7 for now ...
+
+
 Publishing to pypi.org
 +++++++++++++++++++++++
 
-Then you need to bump the version number in `setup.cfg` and publish a new release on Pypi. You can do it
-with `tbump <https://github.com/TankerHQ/tbump>`_
+Then you need to bump the version number in ``setup.cfg`` and publish a new release on Pypi. You can do it
+with `tbump <https://github.com/TankerHQ/tbump>`_, which will automate the process:
 
 .. code-block:: console
 
     pipx install tbump
     tbump <new-version>
-
-Re-building the Enchant C library
-++++++++++++++++++++++++++++++++++
-
-Say a new Enchant version is out, and you want to make a new PyEnchant
-release containing the pre-compiled Enchant C library.
-
-Here are the steps:
-
-#. Clone `our Enchant fork <https://github.com/pyenchant/enchant>`_
-#. Checkout the `packaging` branch
-#. Rebase the branch on top of the appropriate upstream tag
-#. Push it and wait the for appveyor builds to kick in. *Note: you do not need to create a pull request!*.
-#. Once the appveyor jobs are complete, download the artifacts
-#. Push a tag looking like `v<upstream version>-appveyor-<appveyor build number>` in the `pyenchant/enchant` repository
-#. Create a release on the tag and and attach the appveyor artifacts to it - that way they won't get lost in 6 months!
-#. Adapt the `./bootstrap.py` file with the tag you just pushed
