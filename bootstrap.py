@@ -9,23 +9,40 @@ import sys
 
 import requests
 
-ENCHANT_TAG = "v2.2.7-appveyor-41"
+ENCHANT_TAG = "v2.3.4-gh-4"
 
 DOWNLOAD_URL = "https://github.com/pyenchant/enchant/releases/download/"
 
 
-def bootstrap_windows(platform: str) -> None:
-    bits = {"win32": "32", "win_amd64": "64"}[platform]
-    archive_name = "enchant-prefix" + "-" + bits + ".zip"
+def get_bits() -> int:
+    bits, linkage = platform.architecture()
+    if sys.platform == "win32":
+        if linkage != "WindowsPE":
+            sys.exit("Unsupported platform: " + linkage)
+        if bits == "32bit":
+            return 32
+        elif bits == "64bit":
+            return 64
+        else:
+            sys.exit("Unsupported number of bits: ", bits)
+    else:
+        # It's 2023 ...
+        return 64
+
+
+def bootstrap_windows(*, bits: int) -> None:
+    suffix = {32: "i686", 64: "x86_64"}[bits]
+    archive_name = "enchant" + "-" + suffix + ".zip"
     artifact_url = DOWNLOAD_URL + ENCHANT_TAG + "/" + archive_name
     print(":: Retrieving artifact from", artifact_url, "...")
     response = requests.get(artifact_url, stream=True)
+    response.raise_for_status()
     with open(archive_name, "wb") as f:
         shutil.copyfileobj(response.raw, f)
     data_path = "enchant/data/"
     print(":: Unpacking artifact to", data_path, "...")
     shutil.unpack_archive(archive_name, data_path)
-    cleanup_data(data_path, bits)
+    cleanup_data(data_path, bits=bits)
 
 
 def rm(path: str) -> None:
@@ -49,10 +66,10 @@ def clean_bin(path: str) -> None:
         rm(exe)
 
 
-def cleanup_data(data_path: str, bits: str) -> None:
+def cleanup_data(data_path: str, *, bits: int) -> None:
     """Remove extraneous files from the enchant artifact"""
     print(":: Cleaning up ...")
-    mingw_path = os.path.join(data_path, "mingw" + bits)
+    mingw_path = os.path.join(data_path, "mingw" + str(bits))
     # Better filter extra files there than in the appveyor script
     for sub_dir in ["share/man", "include", "lib/pkgconfig"]:
         to_rm = os.path.join(mingw_path, sub_dir)
@@ -65,17 +82,9 @@ def cleanup_data(data_path: str, bits: str) -> None:
 
 
 def main() -> None:
-    bits, linkage = platform.architecture()
+    bits = get_bits()
     if sys.platform == "win32":
-        if linkage != "WindowsPE":
-            sys.exit("Unsupported platform: " + linkage)
-        if bits == "32bit":
-            platform_name = "win32"
-        elif bits == "64bit":
-            platform_name = "win_amd64"
-        else:
-            sys.exit("Unsupported number of bits: ", bits)
-        bootstrap_windows(platform_name)
+        bootstrap_windows(bits=bits)
 
 
 if __name__ == "__main__":
