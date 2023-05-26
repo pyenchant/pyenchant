@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contributing to PyEnchant &mdash; PyEnchant 3.2.2 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Changelog" href="changelog.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            PyEnchant
+          </a>
+              <div class="version">
+                3.2.2
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API Listing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shootout.html">Provider Shootout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Contributing to PyEnchant</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#opening-bugs">Opening bugs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#submitting-pull-requests">Submitting Pull Requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#updating-the-website">Updating the website</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#making-a-new-release">Making a new release</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#re-building-the-enchant-c-library-for-windows">Re-building the Enchant C library for Windows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#publishing-to-pypi-org">Publishing to pypi.org</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PyEnchant</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Contributing to PyEnchant</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/contributing.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="contributing-to-pyenchant">
+<h1>Contributing to PyEnchant<a class="headerlink" href="#contributing-to-pyenchant" title="Permalink to this heading"></a></h1>
+<section id="opening-bugs">
+<h2>Opening bugs<a class="headerlink" href="#opening-bugs" title="Permalink to this heading"></a></h2>
+<p>Please use the <a class="reference external" href="https://github.com/pyenchant/pyenchant/blob/main/.github/ISSUE_TEMPLATE/bug_report.md">GitHub Template</a> for bug reports</p>
+</section>
+<section id="submitting-pull-requests">
+<h2>Submitting Pull Requests<a class="headerlink" href="#submitting-pull-requests" title="Permalink to this heading"></a></h2>
+<p>If you want to submit a pull request, it’s advised to run the CI checks locally:</p>
+<ul class="simple">
+<li><p>Install Python3</p></li>
+<li><p>Install <cite>tox</cite></p></li>
+<li><p>Run <cite>tox</cite> with the proper list of environments:</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">tox -e website -e linters -e pyXY</span>
+</pre></div>
+</div>
+<p>(Replace <cite>pyXY</cite> by your current Python installation)</p>
+<p>Note: you will need an <cite>en_US</cite> dictionary installed for the tests to run. See <a class="reference internal" href="install.html#installation"><span class="std std-ref">Installation</span></a> for more details.
+for more details.</p>
+</section>
+<section id="updating-the-website">
+<h2>Updating the website<a class="headerlink" href="#updating-the-website" title="Permalink to this heading"></a></h2>
+<p>The PyEnchant website is hosted on GitHub pages and there’s a GitHub workflow
+to automatically update it every time a commit is pushed on the <cite>main</cite> branch.</p>
+<p>You can also run <cite>tox -e website-dev</cite> locally to spawn a process that will watch
+the changes in the <cite>website/</cite> directory and auto-refresh connected browsers.</p>
+</section>
+<section id="making-a-new-release">
+<h2>Making a new release<a class="headerlink" href="#making-a-new-release" title="Permalink to this heading"></a></h2>
+<section id="re-building-the-enchant-c-library-for-windows">
+<h3>Re-building the Enchant C library for Windows<a class="headerlink" href="#re-building-the-enchant-c-library-for-windows" title="Permalink to this heading"></a></h3>
+<p>In order to publish the Windows wheels to pypi, you must first compile
+the code in the <a class="reference external" href="https://github.com/AbiWord/enchant/">Enchant repository</a>
+so that the Windows wheels are usable out of the box.</p>
+<p>To do that, we have a fork at <code class="docutils literal notranslate"><span class="pre">https://github.com/pyenchant/enchant</span></code> where we publish
+DLLs for the Enchant library as GitHub releases, and a <code class="docutils literal notranslate"><span class="pre">bootstrap.py</span></code> file that downloads them.</p>
+<p>Unfortunately, <cite>AbiWord</cite> switched from AppVeyor to GitHub Actions and our fork is still using AppVeyor, which means
+we are stuck with Enchant v2.2.7 for now …</p>
+</section>
+<section id="publishing-to-pypi-org">
+<h3>Publishing to pypi.org<a class="headerlink" href="#publishing-to-pypi-org" title="Permalink to this heading"></a></h3>
+<p>Then you need to bump the version number in <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> and publish a new release on Pypi. You can do it
+with <a class="reference external" href="https://github.com/TankerHQ/tbump">tbump</a>, which will automate the process:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pipx install tbump</span>
+<span class="go">tbump &lt;new-version&gt;</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="changelog.html" class="btn btn-neutral float-left" title="Changelog" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2011, Ryan Kelly.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

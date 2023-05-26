@@ -42,3 +42,4 @@ Documentation Index
    faq.rst
    shootout.rst
    changelog.rst
+   contributing.rst
