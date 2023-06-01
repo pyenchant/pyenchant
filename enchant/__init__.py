@@ -81,6 +81,13 @@ from typing import Dict as PythonDict
 from typing import List, NoReturn, Optional, Tuple, Type, TypeVar, Union, cast
 
 try:
+    from typing import Literal  # Python 3.8+
+
+    LiteralFalse = Literal[False]
+except ImportError:
+    LiteralFalse = bool  # type: ignore[misc]
+
+try:
     from enchant import _enchant as _e
 except ImportError:
     if not os.environ.get("PYENCHANT_IGNORE_MISSING_LIB", False):
@@ -522,7 +529,9 @@ class Dict(_EnchantObject):
     """
 
     def __init__(
-        self, tag: Optional[str] = None, broker: Optional[Broker] = None
+        self,
+        tag: Union[LiteralFalse, None, str] = None,
+        broker: Optional[Broker] = None,
     ) -> None:
         """Dict object constructor.
 
