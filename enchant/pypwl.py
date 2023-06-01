@@ -46,7 +46,7 @@ prototype for the C version found in Enchant).
 
 import os
 import warnings
-from typing import Dict, Iterable, Iterator, List, Optional  # noqa F401
+from typing import Dict, Iterable, Iterator, List, Optional
 
 
 class Trie:
@@ -59,7 +59,7 @@ class Trie:
 
     def __init__(self, words: Iterable[str] = ()) -> None:
         self._eos = False  # whether I am the end of a word
-        self._keys = {}  # type: Dict[str, Trie] # letters at this level of the trie
+        self._keys: Dict[str, Trie] = {}  # letters at this level of the trie
         for w in words:
             self.insert(w)
 
@@ -93,7 +93,7 @@ class Trie:
         This method searches the trie for the given `word`, making
         precisely `nerrs` errors.  It returns a list of words found.
         """
-        res = []  # type: List[str]
+        res: List[str] = []
         # Terminate if we've run out of errors
         if nerrs < 0:
             return res
@@ -177,7 +177,7 @@ class PyPWL:
         self.provider = None
         self._words = Trie()
         if pwl is not None:
-            self.pwl = os.path.abspath(pwl)  # type: Optional[str]
+            self.pwl: Optional[str] = os.path.abspath(pwl)
             self.tag = self.pwl
             pwl_f = open(pwl)
             for ln in pwl_f:
@@ -275,7 +275,7 @@ class PyPWL:
 
     #  No-op methods to support internal use as a Dict() replacement
 
-    def _check_this(self, msg: str) -> None:
+    def _check_this(self, msg: Optional[str] = None) -> None:
         pass
 
     def _free(self) -> None:

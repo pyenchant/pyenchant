@@ -28,32 +28,34 @@
 # do so, delete this exception statement from your version.
 #
 
-from typing import Any, Iterable, List, Optional
+from typing import Any, Iterable, List, cast
 
-import gtk
+import gi
 
 from enchant.checker import SpellChecker
+
+gi.require_version("Gdk", "3.0")
+gi.require_version("Gtk", "3.0")
+from gi.repository import Gdk, Gtk
 
 #   columns
 COLUMN_SUGGESTION = 0
 
 
-def create_list_view(col_label: str) -> gtk.TreeView:
+def create_list_view(col_label: str) -> Gtk.TreeView:
     # create list widget
-    list_ = gtk.ListStore(str)
-    list_view = gtk.TreeView(model=list_)
+    list_ = Gtk.ListStore(str)
+    list_view = Gtk.TreeView(model=list_)
 
-    list_view.set_rules_hint(True)
-    list_view.get_selection().set_mode(gtk.SELECTION_SINGLE)
-    # Add Colums
-    renderer = gtk.CellRendererText()
-    renderer.set_data("column", COLUMN_SUGGESTION)
-    column = gtk.TreeViewColumn(col_label, renderer, text=COLUMN_SUGGESTION)
+    list_view.get_selection().set_mode(Gtk.SelectionMode.SINGLE)
+    # Add Columns
+    renderer = Gtk.CellRendererText()
+    column = Gtk.TreeViewColumn(col_label, renderer, text=COLUMN_SUGGESTION)
     list_view.append_column(column)
     return list_view
 
 
-class GtkSpellCheckerDialog(gtk.Window):
+class GtkSpellCheckerDialog(Gtk.Window):
     def __init__(self, checker: SpellChecker, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self.set_title("Spell check")
@@ -65,30 +67,30 @@ class GtkSpellCheckerDialog(gtk.Window):
         self.errors = None
 
         # create accel group
-        accel_group = gtk.AccelGroup()
+        accel_group = Gtk.AccelGroup()
         self.add_accel_group(accel_group)
 
         # list of widgets to disable if there's no spell error left
-        self._conditional_widgets = []  # type: List[gtk.Widget]
+        self._conditional_widgets: List[Gtk.Widget] = []
         conditional = self._conditional_widgets.append
 
         # layout
-        mainbox = gtk.VBox(spacing=5)
-        hbox = gtk.HBox(spacing=5)
+        mainbox = Gtk.VBox(spacing=5)
+        hbox = Gtk.HBox(spacing=5)
         self.add(mainbox)
-        mainbox.pack_start(hbox, padding=5)
+        mainbox.pack_start(hbox, True, True, 5)
 
-        box1 = gtk.VBox(spacing=5)
-        hbox.pack_start(box1, padding=5)
+        box1 = Gtk.VBox(spacing=5)
+        hbox.pack_start(box1, True, True, 5)
         conditional(box1)
 
         # unrecognized word
-        text_view_lable = gtk.Label("Unrecognized word")
-        text_view_lable.set_justify(gtk.JUSTIFY_LEFT)
-        box1.pack_start(text_view_lable, False, False)
+        text_view_lable = Gtk.Label(label="Unrecognized word")
+        text_view_lable.set_justify(Gtk.Justification.LEFT)
+        box1.pack_start(text_view_lable, False, False, 0)
 
-        text_view = gtk.TextView()
-        text_view.set_wrap_mode(gtk.WRAP_WORD)
+        text_view = Gtk.TextView()
+        text_view.set_wrap_mode(Gtk.WrapMode.WORD)
         text_view.set_editable(False)
         text_view.set_cursor_visible(False)
         self.error_text = text_view.get_buffer()
@@ -96,86 +98,87 @@ class GtkSpellCheckerDialog(gtk.Window):
         text_buffer.create_tag("fg_black", foreground="black")
         text_buffer.create_tag("fg_red", foreground="red")
 
-        box1.pack_start(text_view)
+        box1.pack_start(text_view, True, True, 0)
 
         # Change to
-        change_to_box = gtk.HBox()
-        box1.pack_start(change_to_box, False, False)
+        change_to_box = Gtk.HBox()
+        box1.pack_start(change_to_box, False, False, 0)
 
-        change_to_label = gtk.Label("Change to:")
-        self.replace_text = gtk.Entry()
-        text_view_lable.set_justify(gtk.JUSTIFY_LEFT)
-        change_to_box.pack_start(change_to_label, False, False)
-        change_to_box.pack_start(self.replace_text)
+        change_to_label = Gtk.Label(label="Change to:")
+        change_to_label.set_justify(Gtk.Justification.LEFT)
+        self.replace_text = Gtk.Entry()
+        change_to_box.pack_start(change_to_label, False, False, 0)
+        change_to_box.pack_start(self.replace_text, True, True, 0)
 
         # scrolled window
-        sw = gtk.ScrolledWindow()
-        sw.set_shadow_type(gtk.SHADOW_ETCHED_IN)
-        sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-        box1.pack_start(sw)
+        sw = Gtk.ScrolledWindow()
+        sw.set_shadow_type(Gtk.ShadowType.ETCHED_IN)
+        sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+        box1.pack_start(sw, True, True, 0)
 
         self.suggestion_list_view = create_list_view("Suggestions")
         self.suggestion_list_view.connect("button_press_event", self._onButtonPress)
-        self.suggestion_list_view.connect("cursor-changed", self._onSuggestionChanged)
         sw.add(self.suggestion_list_view)
+        select = self.suggestion_list_view.get_selection()
+        select.connect("changed", self._onSuggestionChanged)
 
         # ---Buttons---#000000#FFFFFF----------------------------------------------------
-        button_box = gtk.VButtonBox()
-        hbox.pack_start(button_box, False, False)
+        button_box = Gtk.VButtonBox()
+        hbox.pack_start(button_box, False, False, 5)
 
         # Ignore
-        button = gtk.Button("Ignore")
+        button = Gtk.Button.new_with_label("Ignore")
         button.connect("clicked", self._onIgnore)
-        button.add_accelerator(
-            "activate", accel_group, gtk.keysyms.Return, 0, gtk.ACCEL_VISIBLE
-        )
-        button_box.pack_start(button)
+        button_box.pack_start(button, True, True, 0)
         conditional(button)
 
         # Ignore all
-        button = gtk.Button("Ignore All")
+        button = Gtk.Button.new_with_label("Ignore All")
         button.connect("clicked", self._onIgnoreAll)
-        button_box.pack_start(button)
+        button_box.pack_start(button, True, True, 0)
         conditional(button)
 
         # Replace
-        button = gtk.Button("Replace")
+        button = Gtk.Button.new_with_label("Replace")
         button.connect("clicked", self._onReplace)
-        button_box.pack_start(button)
+        button_box.pack_start(button, True, True, 0)
         conditional(button)
 
         # Replace all
-        button = gtk.Button("Replace All")
+        button = Gtk.Button.new_with_label("Replace All")
         button.connect("clicked", self._onReplaceAll)
-        button_box.pack_start(button)
+        button_box.pack_start(button, True, True, 0)
         conditional(button)
 
         # Recheck button
-        button = gtk.Button("_Add")
+        button = Gtk.Button.new_with_mnemonic("_Add")
         button.connect("clicked", self._onAdd)
 
-        button_box.pack_start(button)
+        button_box.pack_start(button, True, True, 0)
         conditional(button)
 
         # Close button
-        button = gtk.Button(stock=gtk.STOCK_CLOSE)
-        button.connect("clicked", self._onClose)
-        button.add_accelerator(
-            "activate", accel_group, gtk.keysyms.Escape, 0, gtk.ACCEL_VISIBLE
-        )
-        button_box.pack_end(button)
+        button = Gtk.Button.new_from_icon_name("window-close", Gtk.IconSize.BUTTON)
+        button.connect("clicked", Gtk.main_quit)
+        button_box.pack_end(button, True, True, 0)
 
         # dictionary label
-        self._dict_lable = gtk.Label("Dictionary:%s" % (checker.dict.tag,))
-        mainbox.pack_start(self._dict_lable, False, False, padding=5)
+        self._dict_lable = Gtk.Label(label="Dictionary:%s" % (checker.dict.tag,))
+        mainbox.pack_start(self._dict_lable, False, False, 5)
+
+        # keyboard shortcuts
+        accel = Gtk.AccelGroup()
+        accel.connect(Gdk.KEY_Return, 0, 0, self._onIgnore)
+        accel.connect(Gdk.KEY_Escape, 0, 0, Gtk.main_quit)
+        self.add_accel_group(accel)
 
         mainbox.show_all()
 
-    def _onIgnore(self, w: gtk.Widget, *args: Any) -> None:
+    def _onIgnore(self, w: Gtk.Widget, *args: Any) -> None:
         print(["ignore"])
         self._advance()
 
-    def _onIgnoreAll(self, w: gtk.Widget, *args: Any) -> None:
+    def _onIgnoreAll(self, w: Gtk.Widget, *args: Any) -> None:
         print(["ignore all"])
         self._checker.ignore_always()
         self._advance()
@@ -197,17 +200,12 @@ class GtkSpellCheckerDialog(gtk.Window):
         self._checker.add()
         self._advance()
 
-    def _onClose(self, w: gtk.Widget, *args: Any) -> bool:
-        self.emit("delete_event", gtk.gdk.Event(gtk.gdk.BUTTON_PRESS))
-        return True
-
-    def _onButtonPress(self, widget: gtk.Widget, event) -> None:
-        if event.type == gtk.gdk._2BUTTON_PRESS:
+    def _onButtonPress(self, widget: Gtk.Widget, event: Gdk.EventButton) -> None:
+        if event.type == Gdk.EventType._2BUTTON_PRESS:
             print(["Double click!"])
             self._onReplace()
 
-    def _onSuggestionChanged(self, widget: gtk.Widget, *args: Any) -> None:
-        selection = self.suggestion_list_view.get_selection()
+    def _onSuggestionChanged(self, selection: Gtk.TreeSelection) -> None:
         model, iter = selection.get_selected()
         if iter:
             suggestion = model.get_value(iter, COLUMN_SUGGESTION)
@@ -217,7 +215,7 @@ class GtkSpellCheckerDialog(gtk.Window):
         """Get the chosen replacement string."""
         repl = self.replace_text.get_text()
         repl = self._checker.coerce_string(repl)
-        return repl
+        return cast(str, repl)
 
     def _fillSuggestionList(self, suggestions: Iterable[str]) -> None:
         model = self.suggestion_list_view.get_model()
@@ -281,18 +279,16 @@ class GtkSpellCheckerDialog(gtk.Window):
 
 
 def _test() -> None:
-    from enchant.checker import SpellChecker
-
     text = "This is sme text with a fw speling errors in it. Here are a fw more to tst it ut."
     print(["BEFORE:", text])
     chkr = SpellChecker("en_US", text)
 
     chk_dlg = GtkSpellCheckerDialog(chkr)
     chk_dlg.show()
-    chk_dlg.connect("delete_event", gtk.main_quit)
+    chk_dlg.connect("delete_event", Gtk.main_quit)
 
     chk_dlg.updateUI()
-    gtk.main()
+    Gtk.main()
 
 
 if __name__ == "__main__":

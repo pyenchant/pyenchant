@@ -20,10 +20,6 @@ message_template = "Bump to {new_version}"
 tag_template = "v{new_version}"
 
 [[file]]
-src = "setup.cfg"
-search = "version = {current_version}"
-
-[[file]]
 src = "enchant/__init__.py"
 search = '__version__ = "{current_version}"'
 

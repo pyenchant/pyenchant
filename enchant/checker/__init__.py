@@ -47,11 +47,12 @@ such as a wxPython GUI dialog and a command-line interface.
 
 import array
 import warnings
+from typing import Any
+from typing import Dict as PythonDict
 from typing import List, Optional, Type, Union
 
-import enchant
 from enchant import Dict
-from enchant.errors import *  # noqa F401,F403
+from enchant.errors import *  # noqa: F401,F403
 from enchant.errors import (
     DefaultLanguageNotFoundError,
     DictNotFoundError,
@@ -114,11 +115,11 @@ class SpellChecker:
 
     def __init__(
         self,
-        lang: Union[Dict, str] = None,
-        text: Optional[str] = None,
-        tokenize: Union[Type[tokenize], Filter] = None,
-        chunkers: List[Chunker] = None,
-        filters: List[Filter] = None,
+        lang: Union[Dict, None, str] = None,
+        text: Union[None, array.array, bytes, str] = None,
+        tokenize: Union[None, Type[tokenize], Filter] = None,
+        chunkers: Optional[List[Chunker]] = None,
+        filters: Optional[List[Filter]] = None,
     ) -> None:
         """Constructor for the `SpellChecker` class.
 
@@ -143,19 +144,21 @@ class SpellChecker:
             lang = get_default_language()
         if isinstance(lang, (str, bytes)):
             try:
-                dict = enchant.Dict(lang)
+                dict = Dict(lang)
             except DictNotFoundError:
                 raise DefaultLanguageNotFoundError(lang) from None
-        else:
+        elif isinstance(lang, Dict):
             dict = lang
             try:
                 lang = dict.tag
             except AttributeError:
                 lang = get_default_language()
+        else:
+            raise TypeError(lang)
         if lang is None:
             raise DefaultLanguageNotFoundError from None
-        self.lang = lang
-        self.dict = dict
+        self.lang: str = lang
+        self.dict: Dict = dict
         if tokenize is None:
             try:
                 tokenize = get_tokenizer(lang, chunkers, filters)
@@ -164,10 +167,10 @@ class SpellChecker:
                 tokenize = get_tokenizer(None, chunkers, filters)
         self._tokenize = tokenize
 
-        self.word = None
-        self.wordpos = None
-        self._ignore_words = {}
-        self._replace_words = {}
+        self.word = ""
+        self.wordpos = 0
+        self._ignore_words: PythonDict[str, bool] = {}
+        self._replace_words: PythonDict[str, str] = {}
         # Default to the empty string as the text to be checked
         self._text = array.array("u")
         self._use_tostring = False
@@ -176,35 +179,37 @@ class SpellChecker:
         if text is not None:
             self.set_text(text)
 
-    def __iter__(self):
+    def __iter__(self) -> "SpellChecker":
         """Each SpellChecker object is its own iterator"""
         return self
 
-    def set_text(self, text: str) -> None:
+    def set_text(self, text: Union[bytes, str, array.array]) -> None:
         """Set the text to be spell-checked.
 
         This method must be called, or the `text` argument supplied
         to the constructor, before calling the method :py:meth:`next()`.
         """
         # Convert to an array object if necessary
-        if isinstance(text, (str, bytes)):
-            if type(text) is str:
-                self._text = array.array("u", text)
-            else:
-                self._text = array.array("c", text)
+        if isinstance(text, bytes):
+            self._text = array.array("c", text)
             self._use_tostring = True
-        else:
+        elif isinstance(text, str):
+            self._text = array.array("u", text)
+            self._use_tostring = True
+        elif isinstance(text, array.array):
             self._text = text
             self._use_tostring = False
+        else:
+            raise TypeError(text)
         self._tokens = self._tokenize(self._text)
 
-    def get_text(self) -> str:
+    def get_text(self) -> Any:
         """Return the spell-checked text."""
         if self._use_tostring:
             return self._array_to_string(self._text)
         return self._text
 
-    def _array_to_string(self, text):
+    def _array_to_string(self, text: array.array) -> str:
         """Format an internal array as a standard string."""
         if text.typecode == "u":
             return text.tounicode()
@@ -241,7 +246,7 @@ class SpellChecker:
                 return text.encode(enc)
         return text
 
-    def __next__(self):
+    def __next__(self) -> "SpellChecker":
         return self.next()
 
     def next(self) -> "SpellChecker":

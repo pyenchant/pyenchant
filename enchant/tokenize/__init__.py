@@ -112,7 +112,7 @@ _DOC_ERRORS = [
 import array
 import re
 import warnings
-from typing import Callable, Iterable, List, Optional, Tuple, Type, Union, cast
+from typing import Any, Callable, Iterable, List, Optional, Tuple, Type, Union, cast
 
 from enchant.errors import TokenizerNotFoundError
 
@@ -123,7 +123,39 @@ Token = Tuple[str, int]
 Error = TokenizerNotFoundError
 
 
-class tokenize:  # noqa: N801
+class _tokenize:  # noqa: N801
+    """Abstract base class for tokenizer objects."""
+
+    def __next__(self) -> Token:
+        return self.next()
+
+    def next(self) -> Token:
+        raise NotImplementedError()
+
+    def __iter__(self) -> "_tokenize":
+        return self
+
+    def set_offset(self, offset: int, replaced: bool = False) -> None:
+        raise NotImplementedError()
+
+    def get_offset(self) -> int:
+        raise NotImplementedError()
+
+    @property
+    def offset(self) -> int:
+        return self.get_offset()
+
+    @offset.setter
+    def offset(self, offset: int) -> None:
+        msg = (
+            "changing a tokenizers :py:attr:`offset` attribute is deprecated;"
+            " use the :py:meth:`set_offset` method"
+        )
+        warnings.warn(msg, category=DeprecationWarning, stacklevel=2)
+        self.set_offset(offset)
+
+
+class tokenize(_tokenize):  # noqa: N801
     """Base class for all tokenizer objects.
 
     Each tokenizer must be an iterator and provide the :py:attr:`offset`
@@ -140,37 +172,21 @@ class tokenize:  # noqa: N801
         self._text = text
         self._offset = 0
 
-    def __next__(self) -> Token:
-        return self.next()
-
-    def next(self) -> Token:
-        raise NotImplementedError()
-
-    def __iter__(self):
-        return self
-
     def set_offset(self, offset: int, replaced: bool = False) -> None:
         self._offset = offset
 
-    def _get_offset(self) -> int:
+    def get_offset(self) -> int:
         return self._offset
 
-    def _set_offset(self, offset: int) -> None:
-        msg = (
-            "changing a tokenizers :py:attr:`offset` attribute is deprecated;"
-            " use the :py:meth:`set_offset` method"
-        )
-        warnings.warn(msg, category=DeprecationWarning, stacklevel=2)
-        self.set_offset(offset)
 
-    offset = property(_get_offset, _set_offset)
+_Filter = Union[Type[tokenize], "Filter"]
 
 
 def get_tokenizer(
-    tag: str = None,
-    chunkers: Iterable[Union[Type["Chunker"], Type["Filter"]]] = None,
-    filters: Iterable[Type["Filter"]] = None,
-) -> tokenize:
+    tag: Optional[str] = None,
+    chunkers: Optional[Iterable[Type["Chunker"]]] = None,
+    filters: Optional[Iterable[Type["Filter"]]] = None,
+) -> "Filter":
     """Locate an appropriate tokenizer by language tag.
 
     This requires importing the function `tokenize` from an appropriate
@@ -227,11 +243,10 @@ def get_tokenizer(
     #    * begin with basic whitespace tokenization
     #    * apply each of the given filters in turn
     #    * apply language-specific rules
-    tokenizer = basic_tokenize
+    tokenizer: _Filter = basic_tokenize
     if chunkers is not None:
-        chunkers = list(chunkers)
-        for i in range(len(chunkers) - 1, -1, -1):
-            tokenizer = wrap_tokenizer(chunkers[i], tokenizer)
+        for c in reversed(list(chunkers)):
+            tokenizer = wrap_tokenizer(c, tokenizer)
     if filters is not None:
         for f in filters:
             tokenizer = f(tokenizer)
@@ -245,25 +260,21 @@ get_tokenizer._DOC_ERRORS = ["py", "py"]  # type: ignore
 class empty_tokenize(tokenize):  # noqa: N801
     """Tokenizer class that yields no elements."""
 
-    _DOC_ERRORS = []  # type: ignore
-
     def __init__(self) -> None:
         super().__init__("")
 
-    def next(self):
+    def next(self) -> Token:
         raise StopIteration()
 
 
 class unit_tokenize(tokenize):  # noqa: N801
     """Tokenizer class that yields the text as a single token."""
 
-    _DOC_ERRORS = []  # type: ignore
-
     def __init__(self, text: str) -> None:
         super().__init__(text)
         self._done = False
 
-    def next(self):
+    def next(self) -> Token:
         if self._done:
             raise StopIteration()
         self._done = True
@@ -278,13 +289,11 @@ class basic_tokenize(tokenize):  # noqa: N801
     punctuation symbols from the start and end of each word.
     """
 
-    _DOC_ERRORS = []  # type: ignore
-
     # Chars to remove from start/end of words
     strip_from_start = '"' + "'`(["
     strip_from_end = '"' + "'`]).!,?;:"
 
-    def next(self):
+    def next(self) -> Token:
         text = self._text
         offset = self._offset
         while True:
@@ -310,7 +319,7 @@ class basic_tokenize(tokenize):  # noqa: N801
         raise StopIteration()
 
 
-def _try_tokenizer(mod_name: str) -> Optional[Callable]:
+def _try_tokenizer(mod_name: str) -> Optional[Type[tokenize]]:
     """Look for a tokenizer in the named module.
 
     Returns the function if found, None otherwise.
@@ -320,12 +329,9 @@ def _try_tokenizer(mod_name: str) -> Optional[Callable]:
     mod_name = mod_base + mod_name
     try:
         mod = __import__(mod_name, globals(), {}, func_name)
-        return getattr(mod, func_name)
+        return cast(Type[tokenize], getattr(mod, func_name))
     except ImportError:
         return None
-
-
-_Filter = Union[Type[tokenize], "Filter"]
 
 
 def wrap_tokenizer(tk1: _Filter, tk2: _Filter) -> "Filter":
@@ -376,7 +382,7 @@ class Filter:
         """Filter class constructor."""
         self._tokenizer = tokenizer
 
-    def __call__(self, *args, **kwds):
+    def __call__(self, *args: Any, **kwds: Any) -> _tokenize:
         tkn = self._tokenizer(*args, **kwds)
         return self._TokenFilter(tkn, self._skip, self._split)
 
@@ -398,7 +404,7 @@ class Filter:
         """
         return unit_tokenize(word)
 
-    class _TokenFilter:
+    class _TokenFilter(_tokenize):
         """Private inner class implementing the tokenizer-wrapping logic.
 
         This might seem convoluted, but we're trying to create something
@@ -424,12 +430,6 @@ class Filter:
             self._curword = ""
             self._curpos = 0
 
-        def __iter__(self):
-            return self
-
-        def __next__(self):
-            return self.next()
-
         def next(self) -> Token:
             # Try to get the next sub-token from word currently being split.
             # If unavailable, move on to the next word and try again.
@@ -445,29 +445,20 @@ class Filter:
                     self._curpos = pos
                     self._curtok = self._split(word)
 
-        def _to_string(self, word) -> str:
-            if type(word) is array.array:
+        def _to_string(self, word: Union[array.array, str]) -> str:
+            if isinstance(word, array.array):
                 if word.typecode == "u":
                     return word.tounicode()
                 elif word.typecode == "c":
                     return word.tostring()
+                raise TypeError(word.typecode)
             return word
 
         # Pass on access to 'offset' to the underlying tokenizer.
-        def _get_offset(self) -> int:
+        def get_offset(self) -> int:
             return self._tokenizer.offset
 
-        def _set_offset(self, offset: int) -> None:
-            msg = (
-                "changing a tokenizers 'offset' attribute is deprecated;"
-                " use the 'set_offset' method"
-            )
-            warnings.warn(msg, category=DeprecationWarning, stacklevel=2)
-            self.set_offset(offset)
-
-        offset = property(_get_offset, _set_offset)
-
-        def set_offset(self, val, replaced: bool = False) -> None:
+        def set_offset(self, val: int, replaced: bool = False) -> None:
             old_offset = self._tokenizer.offset
             self._tokenizer.set_offset(val, replaced=replaced)
             # If we move forward within the current word, also set on _curtok.
@@ -495,17 +486,15 @@ class URLFilter(Filter):
     r"""Filter skipping over URLs.
     This filter skips any words matching the following regular expression:
 
-           ^[a-zA-Z]+:\/\/[^\s].*
+           ^[a-zA-Z]+://[^\s].*
 
     That is, any words that are URLs.
     """
     _DOC_ERRORS = ["zA"]
-    _pattern = re.compile(r"^[a-zA-Z]+:\/\/[^\s].*")
+    _pattern = re.compile(r"^[a-zA-Z]+://[^\s].*")
 
     def _skip(self, word: str) -> bool:
-        if self._pattern.match(word):
-            return True
-        return False
+        return bool(self._pattern.match(word))
 
 
 class WikiWordFilter(Filter):
@@ -519,25 +508,21 @@ class WikiWordFilter(Filter):
     _pattern = re.compile(r"^([A-Z]\w+[A-Z]+\w+)")
 
     def _skip(self, word: str) -> bool:
-        if self._pattern.match(word):
-            return True
-        return False
+        return bool(self._pattern.match(word))
 
 
 class EmailFilter(Filter):
     r"""Filter skipping over email addresses.
     This filter skips any words matching the following regular expression:
 
-           ^.+@[^\.].*\.[a-z]{2,}$
+           ^.+@[^.].*\.[a-z]{2,}$
 
     That is, any words that resemble email addresses.
     """
-    _pattern = re.compile(r"^.+@[^\.].*\.[a-z]{2,}$")
+    _pattern = re.compile(r"^.+@[^.].*\.[a-z]{2,}$")
 
     def _skip(self, word: str) -> bool:
-        if self._pattern.match(word):
-            return True
-        return False
+        return bool(self._pattern.match(word))
 
 
 class MentionFilter(Filter):
@@ -552,9 +537,7 @@ class MentionFilter(Filter):
     _pattern = re.compile(r"(\A|\s)@(\w+)")
 
     def _skip(self, word: str) -> bool:
-        if self._pattern.match(word):
-            return True
-        return False
+        return bool(self._pattern.match(word))
 
 
 class HashtagFilter(Filter):
@@ -569,9 +552,7 @@ class HashtagFilter(Filter):
     _pattern = re.compile(r"(\A|\s)#(\w+)")
 
     def _skip(self, word: str) -> bool:
-        if self._pattern.match(word):
-            return True
-        return False
+        return bool(self._pattern.match(word))
 
 
 class HTMLChunker(Chunker):

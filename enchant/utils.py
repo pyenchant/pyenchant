@@ -43,9 +43,9 @@ includes:
 """
 
 import locale
-from typing import Callable, Iterable, List, Optional, Sequence  # noqa F401
+from typing import Callable, Iterable, List, Optional, Sequence
 
-from enchant.errors import *  # noqa F401,F403
+from enchant.errors import *  # noqa: F401,F403
 from enchant.errors import Error
 
 
@@ -59,7 +59,7 @@ def levenshtein(s1: str, s2: str) -> int:
     if not s1:
         return len(s2)
 
-    previous_row = range(len(s2) + 1)  # type: Sequence[int]
+    previous_row: Sequence[int] = range(len(s2) + 1)
     for i, c1 in enumerate(s1):
         current_row = [i + 1]
         for j, c2 in enumerate(s2):
@@ -76,7 +76,7 @@ def trim_suggestions(
     word: str,
     suggs: Iterable[str],
     maxlen: int,
-    calcdist: Callable[[str, str], int] = None,
+    calcdist: Optional[Callable[[str, str], int]] = None,
 ) -> List[str]:
     """Trim a list of suggestions to a maximum length.
 

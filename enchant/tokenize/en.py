@@ -37,7 +37,7 @@
 """
 
 import unicodedata
-from typing import Any, Callable, Container, Union  # noqa F401
+from typing import Any, Callable, Container, Optional, Union
 
 import enchant.tokenize
 
@@ -65,8 +65,10 @@ class tokenize(enchant.tokenize.tokenize):  # noqa: N801
 
     _DOC_ERRORS = ["pos", "pos"]
 
-    def __init__(self, text: _TextLike, valid_chars: Container[str] = None) -> None:
-        self._valid_chars = valid_chars  # type: Container[str] # type: ignore
+    def __init__(
+        self, text: _TextLike, valid_chars: Optional[Container[str]] = None
+    ) -> None:
+        self._valid_chars: Container[str] = valid_chars  # type: ignore
         self._text = text  # type: ignore
         self._offset = 0
         # Select proper implementation of self._consume_alpha.
@@ -86,7 +88,7 @@ class tokenize(enchant.tokenize.tokenize):  # noqa: N801
                 self._initialize_for_binary()
 
     def _initialize_for_binary(self) -> None:
-        self._consume_alpha = self._consume_alpha_b  # type: Callable[[Any, int], int]
+        self._consume_alpha: Callable[[Any, int], int] = self._consume_alpha_b
         if self._valid_chars is None:
             self._valid_chars = ("'",)
 
