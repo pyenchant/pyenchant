@@ -945,7 +945,7 @@ def set_prefix_dir(path: str) -> None:
     Called automatically when the Python library is imported when
     required.
     """
-    return _e.set_prefix_dir(path)
+    return _e.set_prefix_dir(path.encode())
 
     set_prefix_dir._DOC_ERRORS = ["plugins"]
 
