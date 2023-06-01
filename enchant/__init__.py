@@ -452,7 +452,6 @@ class Broker(_EnchantObject):
         The return value is a tuple of the form:
                 (<tag>,<name>,<desc>,<file>)
         """
-        # Define local callback function
         cb_result: List[Tuple[str, str, str, str]] = []
 
         def cb_func(tag: bytes, name: bytes, desc: bytes, file: bytes) -> None:
@@ -465,7 +464,6 @@ class Broker(_EnchantObject):
                 )
             )
 
-        # Actually call the describer function
         _e.dict_describe(dict_data, cb_func)
         return cb_result[0]
 
@@ -769,7 +767,6 @@ class Dict(_EnchantObject):
 
         _e.dict_describe(self._this, describe_callback)
         return describe_result[0]
-
 
 
 class DictWithPWL(Dict):
