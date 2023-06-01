@@ -52,7 +52,7 @@ from typing import Dict as PythonDict
 from typing import List, Optional, Type, Union
 
 from enchant import Dict
-from enchant.errors import *  # noqa F401,F403
+from enchant.errors import *  # noqa: F401,F403
 from enchant.errors import (
     DefaultLanguageNotFoundError,
     DictNotFoundError,

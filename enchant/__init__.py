@@ -94,7 +94,7 @@ except ImportError:
         raise
     _e = None  # type: ignore
 
-from enchant.errors import *  # noqa F401,F403
+from enchant.errors import *  # noqa: F401,F403
 from enchant.errors import DictNotFoundError, Error
 from enchant.pypwl import PyPWL
 from enchant.utils import get_default_language

@@ -10,21 +10,21 @@ from typing import Any, Iterator, List, Set, Tuple
 import pytest
 
 import enchant
-import enchant.checker  # noqa F401
-import enchant.checker.CmdLineChecker  # noqa F401
-import enchant.errors  # noqa F401
-import enchant.pypwl  # noqa F401
-import enchant.tokenize  # noqa F401
-import enchant.tokenize.en  # noqa F401
-import enchant.utils  # noqa F401
+import enchant.checker  # noqa: F401
+import enchant.checker.CmdLineChecker  # noqa: F401
+import enchant.errors  # noqa: F401
+import enchant.pypwl  # noqa: F401
+import enchant.tokenize  # noqa: F401
+import enchant.tokenize.en  # noqa: F401
+import enchant.utils  # noqa: F401
 
 try:
-    import enchant.checker.GtkSpellCheckerDialog  # noqa F401
+    import enchant.checker.GtkSpellCheckerDialog  # noqa: F401
 except ImportError:
     pass
 
 try:
-    import enchant.checker.wxSpellCheckerDialog  # noqa F401
+    import enchant.checker.wxSpellCheckerDialog  # noqa: F401
 except ImportError:
     pass
 
