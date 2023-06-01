@@ -338,8 +338,9 @@ class Broker(_EnchantObject):
         It is equivalent to calling the object`s `free' method.  Once this
         method has been called on a dictionary, it must not be used again.
         """
-        self._free_dict_data(dict._this)
-        dict._this = None
+        if dict._this is not None:
+            self._free_dict_data(dict._this)
+            dict._this = None
         dict._broker = None
 
     def _free_dict_data(self, dict: _e.t_dict) -> None:
@@ -384,6 +385,7 @@ class Broker(_EnchantObject):
         :py:class:`ProviderDesc` object.
         """
         self._check_this()
+        assert self._this is not None
         describe_result: List[ProviderDesc] = []
 
         def describe_callback(name: bytes, desc: bytes, file: bytes) -> None:
@@ -411,6 +413,7 @@ class Broker(_EnchantObject):
         through which that dictionary can be obtained.
         """
         self._check_this()
+        assert self._this is not None
         list_dicts_result: List[Tuple[str, ProviderDesc]] = []
 
         def list_dicts_callback(
@@ -480,6 +483,7 @@ class Broker(_EnchantObject):
             This method does **not** work when using the Enchant C
             library version 2.0 and above
         """
+        assert self._this is not None
         param = _e.broker_get_param(self._this, name.encode())
         return param.decode() if param is not None else None
 
@@ -496,6 +500,7 @@ class Broker(_EnchantObject):
             This method does **not** work when using the Enchant C
             library version 2.0 and above
         """
+        assert self._this is not None
         _e.broker_set_param(
             self._this,
             name.encode(),
@@ -564,7 +569,7 @@ class Dict(_EnchantObject):
         # If no broker was given, use the default broker
         if broker is None:
             broker = _broker
-        self._broker = broker
+        self._broker: Optional[Broker] = broker
         # Now let the superclass initialise the C-library object
         super().__init__()
 
@@ -573,6 +578,7 @@ class Dict(_EnchantObject):
         # Otherwise, use the broker to get C-library pointer data.
         self._this = None
         if self.tag:
+            assert self._broker is not None
             this = self._broker._request_dict_data(self.tag)
             self._switch_this(this, self._broker)
 
@@ -649,6 +655,7 @@ class Dict(_EnchantObject):
         `True` if it is correctly spelled, and `False` otherwise.
         """
         self._check_this()
+        assert self._this is not None
         # Enchant asserts that the word is non-empty.
         # Check it up-front to avoid nasty warnings on stderr.
         if len(word) == 0:
@@ -667,6 +674,7 @@ class Dict(_EnchantObject):
         word, returning the possibilities in a list.
         """
         self._check_this()
+        assert self._this is not None
         # Enchant asserts that the word is non-empty.
         # Check it up-front to avoid nasty warnings on stderr.
         if len(word) == 0:
@@ -677,11 +685,13 @@ class Dict(_EnchantObject):
     def add(self, word: str) -> None:
         """Add a word to the user's personal word list."""
         self._check_this()
+        assert self._this is not None
         _e.dict_add(self._this, word.encode())
 
     def remove(self, word: str) -> None:
         """Add a word to the user's personal exclude list."""
         self._check_this()
+        assert self._this is not None
         _e.dict_remove(self._this, word.encode())
 
     def add_to_pwl(self, word: str) -> None:
@@ -692,26 +702,31 @@ class Dict(_EnchantObject):
             stacklevel=2,
         )
         self._check_this()
+        assert self._this is not None
         _e.dict_add_to_pwl(self._this, word.encode())
 
     def add_to_session(self, word: str) -> None:
         """Add a word to the session personal list."""
         self._check_this()
+        assert self._this is not None
         _e.dict_add_to_session(self._this, word.encode())
 
     def remove_from_session(self, word: str) -> None:
         """Add a word to the session exclude list."""
         self._check_this()
+        assert self._this is not None
         _e.dict_remove_from_session(self._this, word.encode())
 
     def is_added(self, word: str) -> bool:
         """Check whether a word is in the personal word list."""
         self._check_this()
+        assert self._this is not None
         return _e.dict_is_added(self._this, word.encode())
 
     def is_removed(self, word: str) -> bool:
         """Check whether a word is in the personal exclude list."""
         self._check_this()
+        assert self._this is not None
         return _e.dict_is_removed(self._this, word.encode())
 
     def store_replacement(self, mis: str, cor: str) -> None:
@@ -727,6 +742,7 @@ class Dict(_EnchantObject):
         if not cor:
             raise ValueError("can't store empty string as a replacement")
         self._check_this()
+        assert self._this is not None
         _e.dict_store_replacement(self._this, mis.encode(), cor.encode())
 
     store_replacement._DOC_ERRORS = ["mis", "mis"]  # type: ignore
@@ -748,6 +764,7 @@ class Dict(_EnchantObject):
         """
         if check_this:
             self._check_this()
+        assert self._this is not None
         describe_result: List[Tuple[str, str, str, str]] = []
 
         def describe_callback(
@@ -823,6 +840,7 @@ class DictWithPWL(Dict):
                 f = open(pwl, "wt")
                 f.close()
                 del f
+            assert self._broker is not None
             self.pwl: Union[None, PyPWL, Dict] = self._broker.request_pwl_dict(pwl)
         else:
             self.pwl = PyPWL()
@@ -832,6 +850,7 @@ class DictWithPWL(Dict):
                 f = open(pel, "wt")
                 f.close()
                 del f
+            assert self._broker is not None
             self.pel: Union[None, PyPWL, Dict] = self._broker.request_pwl_dict(pel)
         else:
             self.pel = PyPWL()
@@ -843,8 +862,10 @@ class DictWithPWL(Dict):
         if self.pel is None:
             self._free()
         super()._check_this(msg)
-        self.pwl._check_this(msg)
-        self.pel._check_this(msg)
+        if self.pwl is not None:
+            self.pwl._check_this(msg)
+        if self.pel is not None:
+            self.pel._check_this(msg)
 
     def _free(self) -> None:
         """Extend :py:meth:`Dict._free()` to free the PWL as well."""
@@ -863,8 +884,10 @@ class DictWithPWL(Dict):
         `True` if it is correctly spelled, and `False` otherwise.  It checks
         both the dictionary and the personal word list.
         """
+        assert self.pel is not None
         if self.pel.check(word):
             return False
+        assert self.pwl is not None
         if self.pwl.check(word):
             return True
         if super().check(word):
@@ -878,7 +901,9 @@ class DictWithPWL(Dict):
         word, returning the possibilities in a list.
         """
         suggs = super().suggest(word)
+        assert self.pwl is not None
         suggs.extend([w for w in self.pwl.suggest(word) if w not in suggs])
+        assert self.pel is not None
         for i in range(len(suggs) - 1, -1, -1):
             if self.pel.check(suggs[i]):
                 del suggs[i]
@@ -891,13 +916,17 @@ class DictWithPWL(Dict):
         automatically saves the list to disk.
         """
         self._check_this()
+        assert self.pwl is not None
         self.pwl.add(word)
+        assert self.pel is not None
         self.pel.remove(word)
 
     def remove(self, word: str) -> None:
         """Add a word to the associated exclude list."""
         self._check_this()
+        assert self.pwl is not None
         self.pwl.remove(word)
+        assert self.pel is not None
         self.pel.add(word)
 
     def add_to_pwl(self, word: str) -> None:
@@ -907,17 +936,21 @@ class DictWithPWL(Dict):
         automatically saves the list to disk.
         """
         self._check_this()
+        assert self.pwl is not None
         self.pwl.add_to_pwl(word)
+        assert self.pel is not None
         self.pel.remove(word)
 
     def is_added(self, word: str) -> bool:
         """Check whether a word is in the personal word list."""
         self._check_this()
+        assert self.pwl is not None
         return self.pwl.is_added(word)
 
     def is_removed(self, word: str) -> bool:
         """Check whether a word is in the personal exclude list."""
         self._check_this()
+        assert self.pel is not None
         return self.pel.is_added(word)
 
 

@@ -275,7 +275,7 @@ class PyPWL:
 
     #  No-op methods to support internal use as a Dict() replacement
 
-    def _check_this(self, msg: str) -> None:
+    def _check_this(self, msg: Optional[str] = None) -> None:
         pass
 
     def _free(self) -> None:
