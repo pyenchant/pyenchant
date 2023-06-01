@@ -456,11 +456,14 @@ class Broker(_EnchantObject):
         cb_result: List[Tuple[str, str, str, str]] = []
 
         def cb_func(tag: bytes, name: bytes, desc: bytes, file: bytes) -> None:
-            tag = tag.decode()
-            name = name.decode()
-            desc = desc.decode()
-            file = file.decode()
-            cb_result.append((tag, name, desc, file))
+            cb_result.append(
+                (
+                    tag.decode(),
+                    name.decode(),
+                    desc.decode(),
+                    file.decode(),
+                )
+            )
 
         # Actually call the describer function
         _e.dict_describe(dict_data, cb_func)
@@ -480,9 +483,7 @@ class Broker(_EnchantObject):
             library version 2.0 and above
         """
         param = _e.broker_get_param(self._this, name.encode())
-        if param is not None:
-            param = param.decode()
-        return param
+        return param.decode() if param is not None else None
 
     get_param._DOC_ERRORS = ["param"]  # type: ignore
 
@@ -497,10 +498,11 @@ class Broker(_EnchantObject):
             This method does **not** work when using the Enchant C
             library version 2.0 and above
         """
-        name = name.encode()
-        if value is not None:
-            value = value.encode()
-        _e.broker_set_param(self._this, name, value)
+        _e.broker_set_param(
+            self._this,
+            name.encode(),
+            value.encode() if value is not None else None,
+        )
 
 
 class Dict(_EnchantObject):
