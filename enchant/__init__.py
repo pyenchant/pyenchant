@@ -78,7 +78,7 @@ import os
 import warnings
 from typing import Any
 from typing import Dict as PythonDict
-from typing import List, NoReturn, Optional, Tuple, Type, TypeVar, Union, cast
+from typing import Generic, List, NoReturn, Optional, Tuple, Type, TypeVar, Union, cast
 
 try:
     from typing import Literal  # Python 3.8+
@@ -98,6 +98,9 @@ from enchant.errors import *  # noqa F401,F403
 from enchant.errors import DictNotFoundError, Error
 from enchant.pypwl import PyPWL
 from enchant.utils import get_default_language
+
+_CP = TypeVar("_CP")  # bound=ctypes.c_void_p
+
 
 _CP = TypeVar("_CP")  # bound=ctypes.c_void_p
 
@@ -137,7 +140,7 @@ class ProviderDesc:
         return hash(self.name + self.desc + self.file)
 
 
-class _EnchantObject:
+class _EnchantObject(Generic[_CP]):
     """Base class for enchant objects.
 
     This class implements some general functionality for interfacing with
@@ -152,7 +155,7 @@ class _EnchantObject:
 
     def __init__(self) -> None:
         """_EnchantObject constructor."""
-        self._this = None
+        self._this: Optional[_CP] = None
         #  To be importable when enchant C lib is missing, we need
         #  to create a dummy default broker.
         if _e is not None:
@@ -200,7 +203,7 @@ class _EnchantObject:
         self._init_this()
 
 
-class Broker(_EnchantObject):
+class Broker(_EnchantObject[_e.t_broker]):
     """Broker object for the Enchant spellchecker.
 
     `Broker` objects are responsible for locating and managing dictionaries.
@@ -508,7 +511,7 @@ class Broker(_EnchantObject):
         )
 
 
-class Dict(_EnchantObject):
+class Dict(_EnchantObject[_e.t_dict]):
     """Dictionary object for the Enchant spellchecker.
 
     Dictionary objects are responsible for checking the spelling of words
