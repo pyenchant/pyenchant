@@ -724,13 +724,13 @@ class Dict(_EnchantObject[_e.t_dict]):
         """Check whether a word is in the personal word list."""
         self._check_this()
         assert self._this is not None
-        return _e.dict_is_added(self._this, word.encode())
+        return bool(_e.dict_is_added(self._this, word.encode()))
 
     def is_removed(self, word: str) -> bool:
         """Check whether a word is in the personal exclude list."""
         self._check_this()
         assert self._this is not None
-        return _e.dict_is_removed(self._this, word.encode())
+        return bool(_e.dict_is_removed(self._this, word.encode()))
 
     def store_replacement(self, mis: str, cor: str) -> None:
         """Store a replacement spelling for a miss-spelled word.
