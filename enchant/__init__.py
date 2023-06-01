@@ -384,21 +384,19 @@ class Broker(_EnchantObject):
         :py:class:`ProviderDesc` object.
         """
         self._check_this()
-        self.__describe_result: List[Tuple[str, str, str]] = []
-        _e.broker_describe(self._this, self.__describe_callback)
-        return [ProviderDesc(*r) for r in self.__describe_result]
+        describe_result: List[ProviderDesc] = []
 
-    def __describe_callback(self, name: bytes, desc: bytes, file: bytes) -> None:
-        """Collector callback for dictionary description.
+        def describe_callback(name: bytes, desc: bytes, file: bytes) -> None:
+            describe_result.append(
+                ProviderDesc(
+                    name.decode(),
+                    desc.decode(),
+                    file.decode(),
+                )
+            )
 
-        This method is used as a callback into the _enchant function
-        `enchant_broker_describe`.  It collects the given arguments in
-        a tuple and appends them to the list :py:attr:`__describe_result`.
-        """
-        name = name.decode()
-        desc = desc.decode()
-        file = file.decode()
-        self.__describe_result.append((name, desc, file))
+        _e.broker_describe(self._this, describe_callback)
+        return describe_result
 
     def list_dicts(self) -> List[Tuple[str, ProviderDesc]]:
         """Return list of available dictionaries.
@@ -413,24 +411,27 @@ class Broker(_EnchantObject):
         through which that dictionary can be obtained.
         """
         self._check_this()
-        self.__list_dicts_result: List[Tuple[str, Tuple[str, str, str]]] = []
-        _e.broker_list_dicts(self._this, self.__list_dicts_callback)
-        return [(r[0], ProviderDesc(*r[1])) for r in self.__list_dicts_result]
+        list_dicts_result: List[Tuple[str, ProviderDesc]] = []
 
-    def __list_dicts_callback(
-        self, tag: bytes, name: bytes, desc: bytes, file: bytes,
-    ) -> None:
-        """Collector callback for listing dictionaries.
+        def list_dicts_callback(
+            tag: bytes,
+            name: bytes,
+            desc: bytes,
+            file: bytes,
+        ) -> None:
+            list_dicts_result.append(
+                (
+                    tag.decode(),
+                    ProviderDesc(
+                        name.decode(),
+                        desc.decode(),
+                        file.decode(),
+                    ),
+                )
+            )
 
-        This method is used as a callback into the _enchant function
-        `enchant_broker_list_dicts`.  It collects the given arguments into
-        an appropriate tuple and appends them to :py:attr:`__list_dicts_result`.
-        """
-        tag = tag.decode()
-        name = name.decode()
-        desc = desc.decode()
-        file = file.decode()
-        self.__list_dicts_result.append((tag, (name, desc, file)))
+        _e.broker_list_dicts(self._this, list_dicts_callback)
+        return list_dicts_result
 
     def list_languages(self) -> List[str]:
         """List languages for which dictionaries are available.
@@ -747,21 +748,26 @@ class Dict(_EnchantObject):
         """
         if check_this:
             self._check_this()
-        _e.dict_describe(self._this, self.__describe_callback)
-        return self.__describe_result
+        describe_result: List[Tuple[str, str, str, str]] = []
 
-    def __describe_callback(self, tag: bytes, name: bytes, desc: bytes, file: bytes) -> None:
-        """Collector callback for dictionary description.
+        def describe_callback(
+            tag: bytes,
+            name: bytes,
+            desc: bytes,
+            file: bytes,
+        ) -> None:
+            describe_result.append(
+                (
+                    tag.decode(),
+                    name.decode(),
+                    desc.decode(),
+                    file.decode(),
+                )
+            )
 
-        This method is used as a callback into the `_enchant` function
-        `enchant_dict_describe`.  It collects the given arguments in
-        a tuple and stores them in the attribute :py:attr:`__describe_result`.
-        """
-        tag = tag.decode()
-        name = name.decode()
-        desc = desc.decode()
-        file = file.decode()
-        self.__describe_result = (tag, name, desc, file)
+        _e.dict_describe(self._this, describe_callback)
+        return describe_result[0]
+
 
 
 class DictWithPWL(Dict):
