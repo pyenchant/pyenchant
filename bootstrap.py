@@ -9,7 +9,7 @@ import sys
 
 import requests
 
-ENCHANT_TAG = "v2.3.4-gh-4"
+ENCHANT_TAG = "v2.3.4-gh-9"
 
 DOWNLOAD_URL = "https://github.com/pyenchant/enchant/releases/download/"
 
