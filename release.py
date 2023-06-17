@@ -12,14 +12,16 @@ def run(*cmd: str) -> None:
 
 def ensure_empty(data_path: str) -> None:
     if os.path.exists(data_path):
+        print("rm", data_path)
         shutil.rmtree(data_path)
     os.mkdir(data_path)
 
 
-def make_windows_wheel(platform: str) -> None:
+def make_windows_wheel(bits: int) -> None:
     ensure_empty("build/")
     ensure_empty("enchant/data/")
-    bootstrap_windows(platform)
+    bootstrap_windows(bits=bits)
+    platform = {32: "win32", 64: "win_amd64"}[bits]
     run("python", "setup.py", "bdist_wheel", "--plat-name", platform)
 
 
@@ -41,8 +43,8 @@ def main() -> None:
     ensure_empty("dist/")
 
     print("Building artifacts for new release ...")
-    make_windows_wheel(platform="win_amd64")
-    make_windows_wheel(platform="win32")
+    make_windows_wheel(bits=32)
+    make_windows_wheel(bits=64)
 
     make_wheel_any()
     make_sdist()
