@@ -1,7 +1,7 @@
 github_url = "https://github.com/pyenchant/pyenchant"
 
 [version]
-current = "3.2.2"
+current = "3.3.0rc1"
 
 regex = '''
   (?P<major>\d+)
