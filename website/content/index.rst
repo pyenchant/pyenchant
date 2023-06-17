@@ -25,7 +25,7 @@ Here's a quick sample of PyEnchant in action::
 
 
 .. warning::
-   In genereal, PyEnchant will **not** work out of the box after having
+   In general, PyEnchant will **not** work out of the box after having
    been installed with `pip`. See the :ref:`installation` section for
    more details.
 
