@@ -1,6 +1,24 @@
 Changelog
 =========
 
+3.3.0 (unreleased)
+------------------
+
+* Add tokenizer for the German language
+* Improve support for macOS M1 architecture
+* Add support for Python 3.11
+* Remove support for Python 3.6
+* Numerous documentation updates
+* Start adding type annotations (still a work in progress)
+* For the `enchant.checker` package: always setup SpellChecker.
+* Display project urls on ``pypi.org``
+* Sort all imports with ``isort``
+* Numerous tests cleanups
+* Update FSF address in LICENSE.txt
+* Windows wheels:
+   * Use ``enchant`` archive generated from GitHub Actions
+   * Bmup ``enchant`` from 2.2.7 to 3.4.4
+
 3.2.2 (2021-10-05)
 ------------------
 
