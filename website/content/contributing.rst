@@ -46,15 +46,11 @@ so that the Windows wheels are usable out of the box.
 To do that, we have a fork at ``https://github.com/pyenchant/enchant`` where we publish
 DLLs for the Enchant library as GitHub releases, and a ``bootstrap.py`` file that downloads them.
 
-Unfortunately, `AbiWord` switched from AppVeyor to GitHub Actions and our fork is still using AppVeyor, which means
-we are stuck with Enchant v2.2.7 for now ...
-
-
 Publishing to pypi.org
 +++++++++++++++++++++++
 
 Then you need to bump the version number in ``setup.cfg`` and publish a new release on Pypi. You can do it
-with `tbump <https://github.com/TankerHQ/tbump>`_, which will automate the process:
+with `tbump <https://github.com/your-tools/tbump>`_, which will automate the process:
 
 .. code-block:: console
 
