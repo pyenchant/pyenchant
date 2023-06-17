@@ -125,13 +125,11 @@ the code in the <a class="reference external" href="https://github.com/AbiWord/e
 so that the Windows wheels are usable out of the box.</p>
 <p>To do that, we have a fork at <code class="docutils literal notranslate"><span class="pre">https://github.com/pyenchant/enchant</span></code> where we publish
 DLLs for the Enchant library as GitHub releases, and a <code class="docutils literal notranslate"><span class="pre">bootstrap.py</span></code> file that downloads them.</p>
-<p>Unfortunately, <cite>AbiWord</cite> switched from AppVeyor to GitHub Actions and our fork is still using AppVeyor, which means
-we are stuck with Enchant v2.2.7 for now …</p>
 </section>
 <section id="publishing-to-pypi-org">
 <h3>Publishing to pypi.org<a class="headerlink" href="#publishing-to-pypi-org" title="Permalink to this heading"></a></h3>
 <p>Then you need to bump the version number in <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> and publish a new release on Pypi. You can do it
-with <a class="reference external" href="https://github.com/TankerHQ/tbump">tbump</a>, which will automate the process:</p>
+with <a class="reference external" href="https://github.com/your-tools/tbump">tbump</a>, which will automate the process:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pipx install tbump</span>
 <span class="go">tbump &lt;new-version&gt;</span>
 </pre></div>
