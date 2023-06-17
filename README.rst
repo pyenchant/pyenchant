@@ -35,25 +35,12 @@ More information is available on the Enchant website:
     https://abiword.github.io/enchant/
 
 
-How do I use it?
-----------------
+How do I use PyEnchant ?
+-------------------------
 
-For Windows users, install the pre-built binary packages using
-pip::
-
-    pip install pyenchant
-
-
-These packages bundle a pre-built copy of the underlying enchant library.
-Users on other platforms will need to install "enchant" using their system
-package manager (brew on macOS).
-
-Once the software is installed, python's on-line help facilities can
-get you started.  Launch python and issue the following commands:
-
-    >>> import enchant
-    >>> help(enchant)
-
+*Warning*: in general, PyEnchant will **not** work out of the box after
+having been installed with `pip` (or any other installation method) -
+see `the documentation <https://pyenchant.github.io/pyenchant/>`_ for more details.
 
 
 Who is responsible for all this?
