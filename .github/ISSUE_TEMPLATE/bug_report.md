@@ -29,8 +29,9 @@ If applicable, post the output of :
 
 ```python
 import enchant
-d = enchant.Dict()
-print(vars(d))
+from pprint import pprint
+d = enchant.request_dict("EN_US")  # or an other language
+pprint(vars(d))
 ```
 
 Thanks!
