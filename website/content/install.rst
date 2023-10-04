@@ -28,7 +28,7 @@ The quickest way is to install `libenchant` using `pkg(8) <man.freebsd.org/pkg/8
 
 .. code-block:: console
 
-    pkg install enchant2
+    pkg install enchant-2
 
 On Linux
 ++++++++
