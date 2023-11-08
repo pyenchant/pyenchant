@@ -11,11 +11,11 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=f4ee2b9d"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -99,7 +99,7 @@
            <div itemprop="articleBody">
              
   <section id="installation">
-<span id="id1"></span><h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h1>
+<span id="id1"></span><h1>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h1>
 <p>PyEnchant is compatible with Python versions <strong>3.7</strong> and above at
 the time of writing - <a class="reference external" href="https://github.com/pyenchant/pyenchant/blob/main/tox.ini">tox.ini</a>
 being the authoritative source.</p>
@@ -112,16 +112,16 @@ being the authoritative source.</p>
 </ul>
 <p>The way to achieve this depends on the platform you are using:</p>
 <section id="installing-the-enchant-c-library">
-<h2>Installing the Enchant C library<a class="headerlink" href="#installing-the-enchant-c-library" title="Permalink to this heading"></a></h2>
+<h2>Installing the Enchant C library<a class="headerlink" href="#installing-the-enchant-c-library" title="Link to this heading"></a></h2>
 <section id="on-freebsd">
-<h3>On FreeBSD<a class="headerlink" href="#on-freebsd" title="Permalink to this heading"></a></h3>
+<h3>On FreeBSD<a class="headerlink" href="#on-freebsd" title="Link to this heading"></a></h3>
 <p>The quickest way is to install <cite>libenchant</cite> using <a class="reference external" href="man.freebsd.org/pkg/8">pkg(8)</a>:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pkg install enchant2</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pkg install enchant-2</span>
 </pre></div>
 </div>
 </section>
 <section id="on-linux">
-<h3>On Linux<a class="headerlink" href="#on-linux" title="Permalink to this heading"></a></h3>
+<h3>On Linux<a class="headerlink" href="#on-linux" title="Link to this heading"></a></h3>
 <p>The quickest way is to install <cite>libenchant</cite> using the package manager of
 your current distribution. PyEnchant tries to be compatible with a large
 number of <cite>libenchant</cite> versions. If you find an incompatibility with
@@ -134,14 +134,14 @@ however statically linked distributions (like Alpine Linux)
 might not bring along <cite>binutils</cite> by default.</p>
 </section>
 <section id="on-macos">
-<h3>On macOS<a class="headerlink" href="#on-macos" title="Permalink to this heading"></a></h3>
+<h3>On macOS<a class="headerlink" href="#on-macos" title="Link to this heading"></a></h3>
 <p>The quickest way is to install <cite>libenchant</cite> using <a class="reference external" href="https://brew.sh/">Homebrew</a>:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">brew update</span>
 <span class="go">brew install enchant</span>
 </pre></div>
 </div>
 <section id="macports">
-<h4>MacPorts<a class="headerlink" href="#macports" title="Permalink to this heading"></a></h4>
+<h4>MacPorts<a class="headerlink" href="#macports" title="Link to this heading"></a></h4>
 <p>If you are using <a class="reference external" href="https://www.macports.org/">MacPorts</a> you can also
 install the <a class="reference external" href="https://github.com/macports/macports-ports/tree/master/textproc/enchant2">enchant2</a> package. Please make sure to add
 the port variants for the spellers you’d like to use. For example, to
@@ -152,12 +152,12 @@ build the enchant library for aspell and hunspell, use:</p>
 </section>
 </section>
 <section id="on-windows">
-<h3>On Windows<a class="headerlink" href="#on-windows" title="Permalink to this heading"></a></h3>
+<h3>On Windows<a class="headerlink" href="#on-windows" title="Link to this heading"></a></h3>
 <p>The <cite>enchant</cite> C library depends on <cite>glib2</cite>, which poses some interesting challenges.</p>
 <p>There are two ways to use install the PyEnchant library on Windows,
 both with their pros and cons.</p>
 <section id="using-the-binary-wheel">
-<h4>Using the binary wheel<a class="headerlink" href="#using-the-binary-wheel" title="Permalink to this heading"></a></h4>
+<h4>Using the binary wheel<a class="headerlink" href="#using-the-binary-wheel" title="Link to this heading"></a></h4>
 <p>The Windows binary wheels on <em>pypi.org</em> contain a pre-compiled <cite>enchant</cite> library,
 if your Python version is compatible, it will get used by <cite>pip</cite> automatically.</p>
 <p>Pros:</p>
@@ -176,7 +176,7 @@ if your Python version is compatible, it will get used by <cite>pip</cite> autom
 </div></blockquote>
 </section>
 <section id="using-mingw">
-<h4>Using MinGW<a class="headerlink" href="#using-mingw" title="Permalink to this heading"></a></h4>
+<h4>Using MinGW<a class="headerlink" href="#using-mingw" title="Link to this heading"></a></h4>
 <p>An other way to use <cite>pyenchant</cite> is to install MinGW (for instance
 with <a class="reference external" href="https://chocolatey.org/">Chocolatey</a>), then use  <cite>pacman</cite> to install
 the <cite>libenchant</cite> and all its dependencies.</p>
@@ -203,14 +203,14 @@ so typically <em>not</em> the one you’ve installed from <cite>python.org</cite
 </section>
 </section>
 <section id="on-an-other-platfrom">
-<h3>On an other platfrom<a class="headerlink" href="#on-an-other-platfrom" title="Permalink to this heading"></a></h3>
+<h3>On an other platfrom<a class="headerlink" href="#on-an-other-platfrom" title="Link to this heading"></a></h3>
 <p>Unfortunately, if your platfrom is not listed here, there’s a good chanche that
 PyEnchant will not work. Feel free to open an issue on PyEnchant bug tracker if
 this is the case.</p>
 </section>
 </section>
 <section id="installing-a-dictionary">
-<h2>Installing a dictionary<a class="headerlink" href="#installing-a-dictionary" title="Permalink to this heading"></a></h2>
+<h2>Installing a dictionary<a class="headerlink" href="#installing-a-dictionary" title="Link to this heading"></a></h2>
 <p>Let’s assume you want to use PyEnchant on a text written in German.</p>
 <p>First, use the Enchant Python API to list known languages and providers:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">enchant</span>
@@ -233,7 +233,7 @@ wheel, you can download the hunspell dictionary files you need
 can find many dictionaries in <a class="reference external" href="https://cgit.freedesktop.org/libreoffice/dictionaries/tree/">LibreOffice sources</a>.</p>
 </section>
 <section id="troubleshooting">
-<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this heading"></a></h2>
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h2>
 <p>Despite our best efforts, it is possible that the procedures documented above
 do not work.</p>
 <p>To have a clue about what is wrong, you can set the <cite>PYENCHANT_VERBOSE_FIND</cite> environment

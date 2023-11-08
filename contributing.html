@@ -11,11 +11,11 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=f4ee2b9d"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -89,13 +89,13 @@
            <div itemprop="articleBody">
              
   <section id="contributing-to-pyenchant">
-<h1>Contributing to PyEnchant<a class="headerlink" href="#contributing-to-pyenchant" title="Permalink to this heading"></a></h1>
+<h1>Contributing to PyEnchant<a class="headerlink" href="#contributing-to-pyenchant" title="Link to this heading"></a></h1>
 <section id="opening-bugs">
-<h2>Opening bugs<a class="headerlink" href="#opening-bugs" title="Permalink to this heading"></a></h2>
+<h2>Opening bugs<a class="headerlink" href="#opening-bugs" title="Link to this heading"></a></h2>
 <p>Please use the <a class="reference external" href="https://github.com/pyenchant/pyenchant/blob/main/.github/ISSUE_TEMPLATE/bug_report.md">GitHub Template</a> for bug reports</p>
 </section>
 <section id="submitting-pull-requests">
-<h2>Submitting Pull Requests<a class="headerlink" href="#submitting-pull-requests" title="Permalink to this heading"></a></h2>
+<h2>Submitting Pull Requests<a class="headerlink" href="#submitting-pull-requests" title="Link to this heading"></a></h2>
 <p>If you want to submit a pull request, it’s advised to run the CI checks locally:</p>
 <ul class="simple">
 <li><p>Install Python3</p></li>
@@ -110,16 +110,16 @@
 for more details.</p>
 </section>
 <section id="updating-the-website">
-<h2>Updating the website<a class="headerlink" href="#updating-the-website" title="Permalink to this heading"></a></h2>
+<h2>Updating the website<a class="headerlink" href="#updating-the-website" title="Link to this heading"></a></h2>
 <p>The PyEnchant website is hosted on GitHub pages and there’s a GitHub workflow
 to automatically update it every time a commit is pushed on the <cite>main</cite> branch.</p>
 <p>You can also run <cite>tox -e website-dev</cite> locally to spawn a process that will watch
 the changes in the <cite>website/</cite> directory and auto-refresh connected browsers.</p>
 </section>
 <section id="making-a-new-release">
-<h2>Making a new release<a class="headerlink" href="#making-a-new-release" title="Permalink to this heading"></a></h2>
+<h2>Making a new release<a class="headerlink" href="#making-a-new-release" title="Link to this heading"></a></h2>
 <section id="re-building-the-enchant-c-library-for-windows">
-<h3>Re-building the Enchant C library for Windows<a class="headerlink" href="#re-building-the-enchant-c-library-for-windows" title="Permalink to this heading"></a></h3>
+<h3>Re-building the Enchant C library for Windows<a class="headerlink" href="#re-building-the-enchant-c-library-for-windows" title="Link to this heading"></a></h3>
 <p>In order to publish the Windows wheels to pypi, you must first compile
 the code in the <a class="reference external" href="https://github.com/AbiWord/enchant/">Enchant repository</a>
 so that the Windows wheels are usable out of the box.</p>
@@ -127,7 +127,7 @@ so that the Windows wheels are usable out of the box.</p>
 DLLs for the Enchant library as GitHub releases, and a <code class="docutils literal notranslate"><span class="pre">bootstrap.py</span></code> file that downloads them.</p>
 </section>
 <section id="publishing-to-pypi-org">
-<h3>Publishing to pypi.org<a class="headerlink" href="#publishing-to-pypi-org" title="Permalink to this heading"></a></h3>
+<h3>Publishing to pypi.org<a class="headerlink" href="#publishing-to-pypi-org" title="Link to this heading"></a></h3>
 <p>Then you need to bump the version number in <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> and publish a new release on Pypi. You can do it
 with <a class="reference external" href="https://github.com/your-tools/tbump">tbump</a>, which will automate the process:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pipx install tbump</span>
