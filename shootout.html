@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Provider Shootout &mdash; PyEnchant 3.3.0rc1 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -14,7 +16,7 @@
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="_static/documentation_options.js?v=f4ee2b9d"></script>
-        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -88,13 +90,11 @@ is loosely based on the aspell comparison tests run by Kevin Atkinson
 (<a class="reference external" href="http://aspell.net/test/">http://aspell.net/test/</a>) and used the test data that he provides, but
 the code is pure Python and written from scratch.</p>
 <p>The following table summarises results from three spellchecking
-providers, all using PyEnchant 1.1.0 and Enchant 1.1.5:</p>
+providers, all using PyEnchant 3.2.2 and Enchant 2.7.3:</p>
 <ul class="simple">
-<li><p><em>aspell:</em> Aspell backend, version 0.60.2</p></li>
-<li><p><em>ispell:</em> Ispell backend, with dictionaries from AbiWord’s <a class="reference external" href="http://sourceforge.net/project/showfiles.php?group_id=15518&amp;package_id=25690">AbiSpell
-component</a></p></li>
-<li><p><em>myspell:</em> MySpell backend, with dictionaries from
-<a class="reference external" href="http://lingucomponent.openoffice.org/spell_dic.html">OpenOffice.org</a></p></li>
+<li><p><em>aspell:</em> Aspell backend, version 0.60.8.1</p></li>
+<li><p><em>hunspell:</em> Hunspell backend, version 1.7.2, with dictionaries from <a class="reference external" href="http://wordlist.aspell.net/">SCOWL</a></p></li>
+<li><p><em>nuspell:</em> Nuspell backend, version 5.1.4, with the same dictionaries as Hunspell</p></li>
 </ul>
 <table class="docutils align-default">
 <thead>
@@ -105,36 +105,41 @@ component</a></p></li>
 <th class="head"><p>FIRST5</p></th>
 <th class="head"><p>FIRST10</p></th>
 <th class="head"><p>AVG DIST</p></th>
+<th class="head"><p>TIME</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>aspell</p></td>
-<td><p>97.9</p></td>
-<td><p>87.2</p></td>
-<td><p>50.0</p></td>
-<td><p>77.6</p></td>
-<td><p>84.4</p></td>
-<td><p>1.77</p></td>
+<td><p>97.7</p></td>
+<td><p>88.9</p></td>
+<td><p>57.1</p></td>
+<td><p>81.0</p></td>
+<td><p>85.3</p></td>
+<td><p>1.61</p></td>
+<td><p>0.5</p></td>
 </tr>
-<tr class="row-odd"><td><p>ispell</p></td>
-<td><p>99.8</p></td>
-<td><p>53.4</p></td>
-<td><p>34.0</p></td>
-<td><p>50.6</p></td>
-<td><p>51.7</p></td>
-<td><p>1.10</p></td>
+<tr class="row-odd"><td><p>hunspell</p></td>
+<td><p>97.7</p></td>
+<td><p>76.5</p></td>
+<td><p>54.7</p></td>
+<td><p>75.0</p></td>
+<td><p>76.3</p></td>
+<td><p>0.58</p></td>
+<td><p>11.8</p></td>
 </tr>
-<tr class="row-even"><td><p>myspell</p></td>
-<td><p>99.2</p></td>
-<td><p>69.5</p></td>
-<td><p>45.9</p></td>
-<td><p>64.1</p></td>
-<td><p>68.8</p></td>
-<td><p>1.06</p></td>
+<tr class="row-even"><td><p>nuspell</p></td>
+<td><p>97.7</p></td>
+<td><p>77.3</p></td>
+<td><p>55.3</p></td>
+<td><p>74.8</p></td>
+<td><p>76.5</p></td>
+<td><p>0.70</p></td>
+<td><p>17.2</p></td>
 </tr>
 </tbody>
 </table>
-<p>The statistics were collected on test data containing over 500 words and
+<p>The statistics were collected on test data containing over 500 US
+English words and
 express the following quantities:</p>
 <ul class="simple">
 <li><p><em>EXISTED:</em> percentage of correctly-spelled test words that were
@@ -152,12 +157,9 @@ spelling was in the first ten suggestions made by the spellchecker.</p></li>
 <li><p><em>AVG DIST:</em> average position of the correct spelling of a word within
 the list of suggestions returned by the spellchecker, with zero
 meaning the word was at the front of the list.</p></li>
+<li><p><em>TIME:</em> duration of the test, in seconds, averaged over three runs,
+on an Intel Core i7-860 processor.</p></li>
 </ul>
-<p>On the basis of this data, the default provider for the stand-alone
-Windows distribution was changed from ispell to myspell for version
-1.1.0. The two have similar language coverage and quality of suggestions
-(EXISTED and AVG DIST respectively) but myspell has a significantly
-better ability to guess the intended spelling of a word (SUGGESTED).</p>
 </section>
 
 

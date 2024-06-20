@@ -9,23 +9,22 @@ is loosely based on the aspell comparison tests run by Kevin Atkinson
 the code is pure Python and written from scratch.
 
 The following table summarises results from three spellchecking
-providers, all using PyEnchant 1.1.0 and Enchant 1.1.5:
+providers, all using PyEnchant 3.2.2 and Enchant 2.7.3:
 
--  *aspell:* Aspell backend, version 0.60.2
--  *ispell:* Ispell backend, with dictionaries from AbiWord's `AbiSpell
-   component <http://sourceforge.net/project/showfiles.php?group_id=15518&package_id=25690>`__
--  *myspell:* MySpell backend, with dictionaries from
-   `OpenOffice.org <http://lingucomponent.openoffice.org/spell_dic.html>`__
+-  *aspell:* Aspell backend, version 0.60.8.1
+-  *hunspell:* Hunspell backend, version 1.7.2, with dictionaries from `SCOWL <http://wordlist.aspell.net/>`__
+-  *nuspell:* Nuspell backend, version 5.1.4, with the same dictionaries as Hunspell
 
-======== ======= ========= ===== ====== ======= ========
-Provider EXISTED SUGGESTED FIRST FIRST5 FIRST10 AVG DIST
-======== ======= ========= ===== ====== ======= ========
-aspell   97.9    87.2      50.0  77.6   84.4    1.77
-ispell   99.8    53.4      34.0  50.6   51.7    1.10
-myspell  99.2    69.5      45.9  64.1   68.8    1.06
-======== ======= ========= ===== ====== ======= ========
+======== ======= ========= ===== ====== ======= ======== ====
+Provider EXISTED SUGGESTED FIRST FIRST5 FIRST10 AVG DIST TIME
+======== ======= ========= ===== ====== ======= ======== ====
+aspell   97.7    88.9      57.1  81.0   85.3    1.61      0.5
+hunspell 97.7    76.5      54.7  75.0   76.3    0.58     11.8
+nuspell  97.7    77.3      55.3  74.8   76.5    0.70     17.2
+======== ======= ========= ===== ====== ======= ======== ====
 
-The statistics were collected on test data containing over 500 words and
+The statistics were collected on test data containing over 500 US
+English words and
 express the following quantities:
 
 -  *EXISTED:* percentage of correctly-spelled test words that were
@@ -43,9 +42,5 @@ express the following quantities:
 -  *AVG DIST:* average position of the correct spelling of a word within
    the list of suggestions returned by the spellchecker, with zero
    meaning the word was at the front of the list.
-
-On the basis of this data, the default provider for the stand-alone
-Windows distribution was changed from ispell to myspell for version
-1.1.0. The two have similar language coverage and quality of suggestions
-(EXISTED and AVG DIST respectively) but myspell has a significantly
-better ability to guess the intended spelling of a word (SUGGESTED).
+-  *TIME:* duration of the test, in seconds, averaged over three runs,
+   on an Intel Core i7-860 processor.
