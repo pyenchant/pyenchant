@@ -44,10 +44,10 @@ import enchant.utils
 # Providers can also be named "pypwl:<encode>" where <encode> is
 # the encoding function to use for PyPWL.  All PyPWL instances
 # will use <wordsfile> as their word list
-providers = ("aspell", "pypwl")
+providers = ("aspell", "hunspell", "nuspell")
 
 # File containing test cases, and the language they are in
-# A suitable file can be found at http://aspell.net/test/batch0.tab
+# A suitable file can be found at http://aspell.net/test/cur/batch0.tab
 datafile = "batch0.tab"
 lang = "en_US"
 # wordsfile = "/usr/share/dict/words"
