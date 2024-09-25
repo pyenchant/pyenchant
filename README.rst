@@ -32,7 +32,7 @@ languages.
 
 More information is available on the Enchant website:
 
-    https://abiword.github.io/enchant/
+    https://rrthomas.github.io/enchant/
 
 
 How do I use PyEnchant ?
