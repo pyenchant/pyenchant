@@ -1,13 +1,13 @@
 Changelog
 =========
 
-3.3.0 (unreleased)
+3.3.0 (2025-09-14)
 ------------------
 
 * Add tokenizer for the German language
 * Improve support for macOS M1 architecture
-* Add support for Python 3.11
-* Remove support for Python 3.6
+* Add support for Python 3.11, 3.12 and 3.13
+* Bump minimum required Python version to 3.9
 * Numerous documentation updates
 * Start adding type annotations (still a work in progress)
 * For the `enchant.checker` package: always setup SpellChecker.
@@ -18,6 +18,7 @@ Changelog
 * Windows wheels:
    * Use ``enchant`` archive generated from GitHub Actions
    * Bmup ``enchant`` from 2.2.7 to 3.4.4
+* Publish packages from GitHub Actions
 
 3.2.2 (2021-10-05)
 ------------------
