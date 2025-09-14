@@ -97,7 +97,7 @@ See the :ref:`provider-ordering` section of the tutorial.
 How can I use a custom location for storing Enchant dictionaries ?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If you are using ``hunspell`` or ``nuspel`` providers, then Enchant will
+If you are using ``hunspell`` or ``nuspell`` providers, then Enchant will
 look in ``<user_config_dir>/<provider>`` for additional dictionaries.
 
 ``user_config_dir`` is set by a call to ``enchant_get_user_config_dir()``.
