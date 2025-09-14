@@ -106,7 +106,7 @@ for testcase in testcases:
     cor = words[1].strip()
     mis = words[0].strip()
     # Make any custom corrections
-    for (old, new) in corrections:
+    for old, new in corrections:
         if old == cor:
             cor = new
             break

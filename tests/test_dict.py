@@ -2,6 +2,7 @@
 These tests assume that there is at least one working provider
 with a dictionary for the "en_US" language.
 """
+
 import pickle
 
 import pytest

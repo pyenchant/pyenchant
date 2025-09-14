@@ -29,11 +29,11 @@
 #
 """
 
-    enchant.checker.CmdLineChecker:  Command-Line spell checker
+enchant.checker.CmdLineChecker:  Command-Line spell checker
 
-    This module provides the class :py:class:`CmdLineChecker`, which interactively
-    spellchecks a piece of text by interacting with the user on the
-    command line.  It can also be run as a script to spellcheck a file.
+This module provides the class :py:class:`CmdLineChecker`, which interactively
+spellchecks a piece of text by interacting with the user on the
+command line.  It can also be run as a script to spellcheck a file.
 
 """
 

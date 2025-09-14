@@ -30,22 +30,22 @@
 
 """
 
-    enchant._enchant:  ctypes-based wrapper for enchant C library
+enchant._enchant:  ctypes-based wrapper for enchant C library
 
-    This module implements the low-level interface to the underlying
-    C library for enchant.  The interface is based on ctypes and tries
-    to do as little as possible while making the higher-level components
-    easier to write.
+This module implements the low-level interface to the underlying
+C library for enchant.  The interface is based on ctypes and tries
+to do as little as possible while making the higher-level components
+easier to write.
 
-    The following conveniences are provided that differ from the underlying
-    C API:
+The following conveniences are provided that differ from the underlying
+C API:
 
-        * the "enchant" prefix has been removed from all functions, since
-          python has a proper module system
-        * callback functions do not take a user_data argument, since
-          python has proper closures that can manage this internally
-        * string lengths are not passed into functions such as dict_check,
-          since python strings know how long they are
+    * the "enchant" prefix has been removed from all functions, since
+      python has a proper module system
+    * callback functions do not take a user_data argument, since
+      python has proper closures that can manage this internally
+    * string lengths are not passed into functions such as dict_check,
+      since python strings know how long they are
 
 """
 

@@ -19,7 +19,7 @@ def test_all_langs_are_available(broker):
 
 def test_provs_are_available(broker):
     """Test whether all advertised providers are in fact available."""
-    for (lang, prov) in broker.list_dicts():
+    for lang, prov in broker.list_dicts():
         assert broker.dict_exists(lang)
         if not broker.dict_exists(lang):
             assert False, "language '" + lang + "' advertised but non-existent"
@@ -32,7 +32,7 @@ def test_prov_ordering(broker):
     langs = {}
     provs = []
     # Find the providers for each language, and a list of all providers
-    for (tag, prov) in broker.list_dicts():
+    for tag, prov in broker.list_dicts():
         # Skip hyphenation dictionaries installed by OOo
         if tag.startswith("hyph_") and prov.name == "myspell":
             continue

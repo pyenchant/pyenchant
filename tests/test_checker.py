@@ -185,7 +185,7 @@ def test_chararray():
     text = "I wll be stord in an aray"
     txtarr = array.array(atype, text)
     chkr = SpellChecker("en_US", txtarr)
-    for (n, err) in enumerate(chkr):
+    for n, err in enumerate(chkr):
         if n == 0:
             assert err.word == "wll"
             assert err.word.__class__ == str
