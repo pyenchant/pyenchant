@@ -27,6 +27,3 @@ search = "version = {current_version}"
 src = "enchant/__init__.py"
 search = '__version__ = "{current_version}"'
 
-[[after_push]]
-name = "Publish release on pypi.org"
-cmd = "tox -e release"
