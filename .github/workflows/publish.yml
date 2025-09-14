@@ -1,6 +1,8 @@
-name: Publish to TestPyPI
+name: publish
 
-on: push
+on:
+  push:
+    tags: ["v*"]
 
 jobs:
   build:
@@ -25,15 +27,15 @@ jobs:
           name: python-package-distributions
           path: dist/
 
-  publish-to-testpypi:
-    name: Publish tp TestPyPI
+  publish:
+    name: Publish
     needs:
       - build
     runs-on: ubuntu-latest
 
     environment:
-      name: testpypi
-      url: https://test.pypi.org/p/pyenchant
+      name: pypi
+      url: https://pypi.org/p/pyenchant
 
     permissions:
       id-token: write
@@ -44,7 +46,5 @@ jobs:
         with:
           name: python-package-distributions
           path: dist/
-      - name: Publish to TestPypi
+      - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          repository-url: https://test.pypi.org/legacy/
