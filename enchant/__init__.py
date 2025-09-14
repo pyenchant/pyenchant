@@ -72,7 +72,7 @@ of :py:exc:`~.errors.Error`.
 """
 _DOC_ERRORS = ["enchnt", "enchnt", "incant", "fr"]
 
-__version__ = "3.3.0rc4"
+__version__ = "3.3.0"
 
 import os
 import warnings
