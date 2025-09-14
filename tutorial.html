@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
@@ -5,19 +7,15 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tutorial &mdash; PyEnchant 3.3.0rc1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=f4ee2b9d"></script>
-        <script src="_static/doctools.js?v=9a2dae69"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=f4ee2b9d"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -36,9 +34,6 @@
           <a href="index.html" class="icon icon-home">
             PyEnchant
           </a>
-              <div class="version">
-                3.3.0rc1
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -114,7 +109,7 @@
 <section id="creating-and-using-dictionary-objects">
 <h3>Creating and Using Dictionary Objects<a class="headerlink" href="#creating-and-using-dictionary-objects" title="Link to this heading"></a></h3>
 <p>The most important object in the PyEnchant module is the Dict object, which represents a dictionary. These objects are used to check the spelling of words and to get suggestions for misspelled words. The following shows how to construct a simple <a class="reference internal" href="api/enchant.html#enchant.Dict" title="enchant.Dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a> and use it to check some words:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">enchant</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">enchant</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">enchant</span><span class="o">.</span><span class="n">Dict</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">)</span>
 <span class="go">True</span>
@@ -193,7 +188,7 @@
 <h3>Checking entire blocks of text<a class="headerlink" href="#checking-entire-blocks-of-text" title="Link to this heading"></a></h3>
 <p>While the <a class="reference internal" href="api/enchant.html#enchant.Dict" title="enchant.Dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">enchant.Dict</span></code></a> objects are useful for spellchecking individual words, they cannot be used directly to check, for example, an entire paragraph. The module <a class="reference internal" href="api/enchant.checker.html#module-enchant.checker" title="enchant.checker"><code class="xref py py-mod docutils literal notranslate"><span class="pre">enchant.checker</span></code></a> provides a class <a class="reference internal" href="api/enchant.checker.html#enchant.checker.SpellChecker" title="enchant.checker.SpellChecker"><code class="xref py py-class docutils literal notranslate"><span class="pre">SpellChecker</span></code></a> which is designed to handle this task.</p>
 <p><cite>SpellChecker</cite> objects are created in the same way as <cite>Dict</cite> objects - by passing a language tag to the constructor. The method <a class="reference internal" href="api/enchant.checker.html#enchant.checker.SpellChecker.set_text" title="enchant.checker.SpellChecker.set_text"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_text()</span></code></a> is used to set the text which is to be checked. Once this is done, the SpellChecker object can be used as an iterator over the spelling mistakes in the text. This is best illustrated by a simple example. The following code will print out the errors encountered in a string:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">enchant.checker</span> <span class="kn">import</span> <span class="n">SpellChecker</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">enchant.checker</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpellChecker</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">chkr</span> <span class="o">=</span> <span class="n">SpellChecker</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">chkr</span><span class="o">.</span><span class="n">set_text</span><span class="p">(</span><span class="s2">&quot;This is sme sample txt with erors.&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">err</span> <span class="ow">in</span> <span class="n">chkr</span><span class="p">:</span>
@@ -205,8 +200,8 @@
 </pre></div>
 </div>
 <p>The <cite>SpellChecker</cite> can use filters to ignore certain word forms, by passing a list of filters in as a keyword argument:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">enchant.checker</span> <span class="kn">import</span> <span class="n">SpellChecker</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">enchant.tokenize</span> <span class="kn">import</span> <span class="n">EmailFilter</span><span class="p">,</span> <span class="n">URLFilter</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">enchant.checker</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpellChecker</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">enchant.tokenize</span><span class="w"> </span><span class="kn">import</span> <span class="n">EmailFilter</span><span class="p">,</span> <span class="n">URLFilter</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">chkr</span> <span class="o">=</span> <span class="n">SpellChecker</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">,</span><span class="n">filters</span><span class="o">=</span><span class="p">[</span><span class="n">EmailFilter</span><span class="p">,</span><span class="n">URLFilter</span><span class="p">])</span>
 </pre></div>
 </div>
@@ -225,9 +220,9 @@
 <li><p>Add: add the word to the user’s personal dictionary</p></li>
 </ul>
 </div></blockquote>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">wx</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">enchant.checker</span> <span class="kn">import</span> <span class="n">SpellChecker</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">enchant.checker.wxSpellCheckerDialog</span> <span class="kn">import</span> <span class="n">wxSpellCheckerDialog</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">wx</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">enchant.checker</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpellChecker</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">enchant.checker.wxSpellCheckerDialog</span><span class="w"> </span><span class="kn">import</span> <span class="n">wxSpellCheckerDialog</span>
 <span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">app</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">PySimpleApp</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;This is sme text with a fw speling errors in it. Here are a fw more to tst it ut.&quot;</span>
@@ -242,9 +237,9 @@
 <section id="cmdlinechecker">
 <h3>CmdLineChecker<a class="headerlink" href="#cmdlinechecker" title="Link to this heading"></a></h3>
 <p>The module <code class="xref py py-mod docutils literal notranslate"><span class="pre">enchant.checker.CmdLineChecker</span></code> provides the class <code class="xref py py-class docutils literal notranslate"><span class="pre">CmdLineChecker</span></code> which can be used to interactively check the spelling of some text. It uses standard input and standard output to interact with the user through a command-line interface. The code below shows how to create and use this class from within a python application, along with a short sample checking session:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">enchant</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">enchant.checker</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">enchant.checker.CmdLineChecker</span> <span class="kn">import</span> <span class="n">CmdLineChecker</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">enchant</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">enchant.checker</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">enchant.checker.CmdLineChecker</span><span class="w"> </span><span class="kn">import</span> <span class="n">CmdLineChecker</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">chkr</span> <span class="o">=</span> <span class="n">enchant</span><span class="o">.</span><span class="n">checker</span><span class="o">.</span><span class="n">SpellChecker</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">chkr</span><span class="o">.</span><span class="n">set_text</span><span class="p">(</span><span class="s2">&quot;this is sme example txt&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cmdln</span> <span class="o">=</span> <span class="n">CmdLineChecker</span><span class="p">()</span>
@@ -279,7 +274,7 @@
 <section id="tokenization-splitting-text-into-words">
 <h3>Tokenization: splitting text into words<a class="headerlink" href="#tokenization-splitting-text-into-words" title="Link to this heading"></a></h3>
 <p>An important task in spellchecking is splitting a body of text up into its constitutive words, each of which is then passed to a <a class="reference internal" href="api/enchant.html#enchant.Dict" title="enchant.Dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a> object for checking. PyEnchant provides the <a class="reference internal" href="api/enchant.tokenize.html#module-enchant.tokenize" title="enchant.tokenize"><code class="xref py py-mod docutils literal notranslate"><span class="pre">enchant.tokenize</span></code></a> module to assist with this task. The purpose of this module is to provide an appropriate tokenization function which can be used to split the text. Usually, all that is required is the function <a class="reference internal" href="api/enchant.tokenize.html#enchant.tokenize.get_tokenizer" title="enchant.tokenize.get_tokenizer"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_tokenizer()</span></code></a>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">enchant.tokenize</span> <span class="kn">import</span> <span class="n">get_tokenizer</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">enchant.tokenize</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_tokenizer</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tknzr</span> <span class="o">=</span> <span class="n">get_tokenizer</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tknzr</span>
 <span class="go">&lt;class enchant.tokenize.en.tokenize at 0x2aaaaab531d0&gt;</span>
@@ -293,7 +288,7 @@
 <h4>Chunkers<a class="headerlink" href="#chunkers" title="Link to this heading"></a></h4>
 <p>In many applications, checkable text may be intermingled with some sort of markup (e.g. HTML tags) which does not need to be checked. To have the tokenizer return only those words that should be checked, it can be augmented with one or more chunkers.</p>
 <p>A chunker is simply a special tokenizer function that breaks text up into large chunks rather than individual tokens. They are typically used by passing a list of chunkers to the function <a class="reference internal" href="api/enchant.tokenize.html#enchant.tokenize.get_tokenizer" title="enchant.tokenize.get_tokenizer"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_tokenizer()</span></code></a>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">enchant.tokenize</span> <span class="kn">import</span> <span class="n">get_tokenizer</span><span class="p">,</span> <span class="n">HTMLChunker</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">enchant.tokenize</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_tokenizer</span><span class="p">,</span> <span class="n">HTMLChunker</span>
 <span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tknzr</span> <span class="o">=</span> <span class="n">get_tokenizer</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">tknzr</span><span class="p">(</span><span class="s2">&quot;this is &lt;span class=&#39;important&#39;&gt;really important&lt;/span&gt; text&quot;</span><span class="p">)]</span>
@@ -312,7 +307,7 @@
 <h4>Filters<a class="headerlink" href="#filters" title="Link to this heading"></a></h4>
 <p>In many applications, it is common for spellchecking to ignore words that have a certain form. For example, when spellchecking an email it is customary to ignore email addresses and URLs. This can be achieved by augmenting the tokenization process with filters.</p>
 <p>A filter is simply a wrapper around a tokenizer that can (1) drop certain words from the stream, and (2) further split words into sub-tokens. They are typically used by passing a list of filters to the function <a class="reference internal" href="api/enchant.tokenize.html#enchant.tokenize.get_tokenizer" title="enchant.tokenize.get_tokenizer"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_tokenizer()</span></code></a>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">enchant.tokenize</span> <span class="kn">import</span> <span class="n">get_tokenizer</span><span class="p">,</span> <span class="n">EmailFilter</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">enchant.tokenize</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_tokenizer</span><span class="p">,</span> <span class="n">EmailFilter</span>
 <span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tknzr</span> <span class="o">=</span> <span class="n">get_tokenizer</span><span class="p">(</span><span class="s2">&quot;en_US&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">tknzr</span><span class="p">(</span><span class="s2">&quot;send an email to fake@example.com please&quot;</span><span class="p">)]</span>
