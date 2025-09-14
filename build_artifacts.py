@@ -7,11 +7,12 @@ Generate the source distribution and 3 wheels
 
 """
 
-from argparse import ArgumentParser
 import os
 import shutil
 import subprocess
 import tomllib
+from argparse import ArgumentParser
+
 from bootstrap import bootstrap_windows
 
 
