@@ -499,6 +499,7 @@ class URLFilter(Filter):
 
     That is, any words that are URLs.
     """
+
     _DOC_ERRORS = ["zA"]
     _pattern = re.compile(r"^[a-zA-Z]+:\/\/[^\s].*")
 
@@ -516,6 +517,7 @@ class WikiWordFilter(Filter):
 
     That is, any words that are WikiWords.
     """
+
     _pattern = re.compile(r"^([A-Z]\w+[A-Z]+\w+)")
 
     def _skip(self, word: str) -> bool:
@@ -532,6 +534,7 @@ class EmailFilter(Filter):
 
     That is, any words that resemble email addresses.
     """
+
     _pattern = re.compile(r"^.+@[^\.].*\.[a-z]{2,}$")
 
     def _skip(self, word: str) -> bool:
@@ -548,6 +551,7 @@ class MentionFilter(Filter):
 
     That is, any words that are @mention.
     """
+
     _DOC_ERRORS = ["zA"]
     _pattern = re.compile(r"(\A|\s)@(\w+)")
 
@@ -565,6 +569,7 @@ class HashtagFilter(Filter):
 
     That is, any words that are #hashtag.
     """
+
     _DOC_ERRORS = ["zA"]
     _pattern = re.compile(r"(\A|\s)#(\w+)")
 

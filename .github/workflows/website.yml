@@ -3,35 +3,34 @@ name: website
 on:
   push:
     branches: [main]
-    tags: v*
+    tags: ["v*"]
   pull_request:
 
 jobs:
   website:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2.3.3
+      - uses: actions/checkout@v5
 
-    - name: Set up Python
-      uses: actions/setup-python@v2.3.1
-      with:
-        python-version: "3.10"
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
 
-    - name: Install tox
-      run: |
-        pip install tox
+      - name: Install tox
+        run: |
+          pip install tox
 
-    - name: Build website
-      run: |
-        tox -e website
+      - name: Build website
+        run: |
+          tox -e website
 
-    - name: Deploy (if main)
-      if: github.ref == 'refs/heads/main'
-      uses: JamesIves/github-pages-deploy-action@releases/v3
-      with:
-        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-        BASE_BRANCH: main
-        BRANCH: gh-pages
-        FOLDER: website/html/
+      - name: Deploy (if main)
+        if: github.ref == 'refs/heads/main'
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          BASE_BRANCH: main
+          BRANCH: gh-pages
+          FOLDER: website/html/

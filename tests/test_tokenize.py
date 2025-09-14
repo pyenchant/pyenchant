@@ -108,7 +108,7 @@ def test_wrap_tokenizer():
     tknzr = tknzr(input)
     assert tknzr._tokenizer.__class__ == basic_tokenize
     assert tknzr._tokenizer.offset == 0
-    for (n, (word, pos)) in enumerate(tknzr):
+    for n, (word, pos) in enumerate(tknzr):
         if n == 0:
             assert pos == 0
             assert word == "this"
@@ -336,7 +336,7 @@ def test_unicode_basic():
     input = "Ik ben geïnteresseerd in de coördinatie van mijn knieën, maar kan niet één à twee enquêtes vinden die recht doet aan mijn carrière op Curaçao"
     output = input.split(" ")
     output[8] = output[8][0:-1]
-    for (itm_o, itm_v) in zip(output, tokenize_en(input)):
+    for itm_o, itm_v in zip(output, tokenize_en(input)):
         assert itm_o == itm_v[0]
         assert input[itm_v[1] :].startswith(itm_o)
 

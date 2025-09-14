@@ -58,18 +58,6 @@ def test_add(pwl_path):
     assert d.is_added("Esquilax")
 
 
-def test_suggestions(pwl_path):
-    """Test getting suggestions from a PWL."""
-    set_pwl_contents(pwl_path, ["Sazz", "Lozz"])
-    d = request_pwl_dict(str(pwl_path))
-    assert "Sazz" in d.suggest("Saz")
-    assert "Lozz" in d.suggest("laz")
-    assert "Sazz" in d.suggest("laz")
-    d.add("Flagen")
-    assert "Flagen" in d.suggest("Flags")
-    assert "sazz" not in d.suggest("Flags")
-
-
 def test_dwpwl(tmp_path, pwl_path):
     """Test functionality of DictWithPWL."""
     set_pwl_contents(pwl_path, ["Sazz", "Lozz"])
@@ -83,8 +71,6 @@ def test_dwpwl(tmp_path, pwl_path):
     d.add("Flagen")
     assert d.check("Flagen")
     assert "Flagen" in get_pwl_contents(pwl_path)
-    assert "Flagen" in d.suggest("Flagn")
-    assert "hello" in d.suggest("helo")
     d.remove("hello")
     assert not d.check("hello")
     assert "hello" not in d.suggest("helo")

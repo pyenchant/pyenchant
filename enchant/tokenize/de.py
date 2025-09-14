@@ -29,10 +29,10 @@
 #
 """
 
-    enchant.tokenize.de:    Tokenizer for the German language
+enchant.tokenize.de:    Tokenizer for the German language
 
-    This module implements a PyEnchant text tokenizer for the German
-    language, based on very simple rules.
+This module implements a PyEnchant text tokenizer for the German
+language, based on very simple rules.
 
 """
 

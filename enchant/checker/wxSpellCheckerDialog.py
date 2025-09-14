@@ -31,18 +31,18 @@
 #
 """
 
-    enchant.checker.wxSpellCheckerDialog: wxPython spellchecker interface
+enchant.checker.wxSpellCheckerDialog: wxPython spellchecker interface
 
-    This module provides the class :py:class:`wxSpellCheckerDialog`, which provides
-    a wxPython dialog that can be used as an interface to a spell checking
-    session.  Currently it is intended as a proof-of-concept and demonstration
-    class, but it should be suitable for general-purpose use in a program.
+This module provides the class :py:class:`wxSpellCheckerDialog`, which provides
+a wxPython dialog that can be used as an interface to a spell checking
+session.  Currently it is intended as a proof-of-concept and demonstration
+class, but it should be suitable for general-purpose use in a program.
 
-    The class must be given an :py:class:`enchant.checker.SpellChecker` object with
-    which to operate.  It can (in theory...) be used in modal and non-modal
-    modes.  Use `Show()` when operating on an array of characters as it will
-    modify the array in place, meaning other work can be done at the same
-    time.  Use `ShowModal()` when operating on a static string.
+The class must be given an :py:class:`enchant.checker.SpellChecker` object with
+which to operate.  It can (in theory...) be used in modal and non-modal
+modes.  Use `Show()` when operating on an array of characters as it will
+modify the array in place, meaning other work can be done at the same
+time.  Use `ShowModal()` when operating on a static string.
 
 """
 _DOC_ERRORS = ["ShowModal"]

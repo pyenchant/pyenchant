@@ -253,7 +253,7 @@ class Broker(_EnchantObject):
         if self._this is not None:
             # During shutdown, this finalizer may be called before
             # some Dict finalizers.  Ensure all pointers are freed.
-            for (dict, count) in list(self._live_dicts.items()):
+            for dict, count in list(self._live_dicts.items()):
                 while count:
                     self._free_dict_data(dict)
                     count -= 1
@@ -427,7 +427,7 @@ class Broker(_EnchantObject):
         dictionary is available.
         """
         langs = []
-        for (tag, prov) in self.list_dicts():
+        for tag, prov in self.list_dicts():
             if tag not in langs:
                 langs.append(tag)
         return langs
@@ -908,6 +908,7 @@ list_dicts = _broker.list_dicts
 list_languages = _broker.list_languages
 get_param = _broker.get_param
 set_param = _broker.set_param
+
 
 #  Expose the "get_version" function.
 def get_enchant_version() -> str:

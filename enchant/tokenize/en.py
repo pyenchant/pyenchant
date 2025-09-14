@@ -29,10 +29,10 @@
 #
 """
 
-    enchant.tokenize.en:    Tokenizer for the English language
+enchant.tokenize.en:    Tokenizer for the English language
 
-    This module implements a PyEnchant text tokenizer for the English
-    language, based on very simple rules.
+This module implements a PyEnchant text tokenizer for the English
+language, based on very simple rules.
 
 """
 
