@@ -118,6 +118,8 @@ from enchant.errors import TokenizerNotFoundError
 
 Token = Tuple[str, int]
 
+_UNICODE_ARRAY_TYPECODES = {"u", "w"}
+
 #  For backwards-compatibility.  This will eventually be removed, but how
 #  does one mark a module-level constant as deprecated?
 Error = TokenizerNotFoundError
@@ -447,10 +449,9 @@ class Filter:
 
         def _to_string(self, word) -> str:
             if type(word) is array.array:
-                if word.typecode == "u":
+                if word.typecode in _UNICODE_ARRAY_TYPECODES:
                     return word.tounicode()
-                elif word.typecode == "c":
-                    return word.tostring()
+                return word.tobytes().decode()
             return word
 
         # Pass on access to 'offset' to the underlying tokenizer.

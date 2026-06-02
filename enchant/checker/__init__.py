@@ -57,8 +57,17 @@ from enchant.errors import (
     DictNotFoundError,
     TokenizerNotFoundError,
 )
-from enchant.tokenize import Chunker, Filter, get_tokenizer, tokenize
+from enchant.tokenize import (
+    _UNICODE_ARRAY_TYPECODES,
+    Chunker,
+    Filter,
+    get_tokenizer,
+    tokenize,
+)
 from enchant.utils import get_default_language
+
+# Python 3.13 added "w" as the non-deprecated replacement for "u".
+_UNICODE_ARRAY_TYPECODE = "w" if "w" in array.typecodes else "u"
 
 
 class SpellChecker:
@@ -169,7 +178,7 @@ class SpellChecker:
         self._ignore_words = {}
         self._replace_words = {}
         # Default to the empty string as the text to be checked
-        self._text = array.array("u")
+        self._text = array.array(_UNICODE_ARRAY_TYPECODE)
         self._use_tostring = False
         self._tokens = iter([])
 
@@ -189,7 +198,7 @@ class SpellChecker:
         # Convert to an array object if necessary
         if isinstance(text, (str, bytes)):
             if type(text) is str:
-                self._text = array.array("u", text)
+                self._text = array.array(_UNICODE_ARRAY_TYPECODE, text)
             else:
                 self._text = array.array("c", text)
             self._use_tostring = True
@@ -206,9 +215,9 @@ class SpellChecker:
 
     def _array_to_string(self, text):
         """Format an internal array as a standard string."""
-        if text.typecode == "u":
+        if text.typecode in _UNICODE_ARRAY_TYPECODES:
             return text.tounicode()
-        return text.tostring()
+        return text.tobytes().decode()
 
     def wants_unicode(self) -> bool:
         """Check whether the checker wants unicode strings.
@@ -217,7 +226,7 @@ class SpellChecker:
         as input, `False` if it wants normal strings.  It's important to
         provide the correct type of string to the checker.
         """
-        return self._text.typecode == "u"
+        return self._text.typecode in _UNICODE_ARRAY_TYPECODES
 
     def coerce_string(self, text: str, enc: Optional[str] = None) -> str:
         """Coerce string into the required type.
