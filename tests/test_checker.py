@@ -33,7 +33,7 @@ import pytest
 
 import enchant
 import enchant.tokenize
-from enchant.checker import SpellChecker
+from enchant.checker import _UNICODE_ARRAY_TYPECODE, SpellChecker
 from enchant.errors import DefaultLanguageNotFoundError
 from enchant.utils import get_default_language
 
@@ -181,7 +181,7 @@ def test_unicode():
 
 def test_chararray():
     """Test SpellChecker with a character array as input."""
-    atype = "u"
+    atype = _UNICODE_ARRAY_TYPECODE
     text = "I wll be stord in an aray"
     txtarr = array.array(atype, text)
     chkr = SpellChecker("en_US", txtarr)
@@ -200,6 +200,12 @@ def test_chararray():
             chkr.replace("array")
     assert n == 2
     assert txtarr.tounicode() == "I wll be stored in an array"
+
+
+def test_array_to_string_decodes_byte_arrays():
+    """Test SpellChecker byte array conversion returns text."""
+    chkr = SpellChecker.__new__(SpellChecker)
+    assert chkr._array_to_string(array.array("B", b"text")) == "text"
 
 
 def test_pwl():

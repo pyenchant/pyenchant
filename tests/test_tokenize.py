@@ -27,12 +27,14 @@
 # file, but you are not obligated to do so.  If you do not wish to
 # do so, delete this exception statement from your version.
 #
+import array
 import textwrap
 
 import pytest
 
 from enchant.tokenize import (
     EmailFilter,
+    Filter,
     HTMLChunker,
     URLFilter,
     WikiWordFilter,
@@ -42,6 +44,21 @@ from enchant.tokenize import (
     wrap_tokenizer,
 )
 from enchant.tokenize.en import tokenize as tokenize_en
+
+
+def test_filter_skip_decodes_byte_arrays():
+    """Test Filter skip checks see byte arrays as text."""
+
+    def tokenize_byte_array(_text):
+        return iter([(array.array("B", b"skip"), 0), (array.array("B", b"keep"), 5)])
+
+    class SkipFilter(Filter):
+        def _skip(self, word):
+            return word == "skip"
+
+    assert list(SkipFilter(tokenize_byte_array)("ignored")) == [
+        (array.array("B", b"keep"), 5)
+    ]
 
 
 def test_basic_tokenize():
