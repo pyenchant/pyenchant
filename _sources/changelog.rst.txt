@@ -5,6 +5,8 @@ Changelog
 ------------------
 
 * Supported Python versions: remove 3.9, add 3.14
+* Avoid deprecated ``array("u")`` usage in ``enchant.checker`` on Python versions
+  that support the replacement Unicode array typecode
 
 3.3.0 (2025-09-14)
 ------------------
